@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,12 +15,19 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     KeyCode _destroyKey = KeyCode.D;
+
+
+    [Header("Saving - Details")]
+    [SerializeField]
+    string _saveFileName = "NewFile";
+
     #endregion
 
 
     #region Run Time
 
     List<Transform> _allObjects = default;
+    string _applicationSavePath = default;
 
     #endregion
 
@@ -28,6 +36,8 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         _allObjects = new List<Transform>();
+        _applicationSavePath = Path.Combine(Application.persistentDataPath, "Game", _saveFileName);
+        Debug.Log(_applicationSavePath);
     }
 
     private void OnEnable()
@@ -73,6 +83,9 @@ public class Game : MonoBehaviour
         t.localScale = Vector3.one * Random.Range(0.1f, 1f);
         _allObjects.Add(t);
     }
+
+
+
 
 
 }
