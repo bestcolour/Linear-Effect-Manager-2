@@ -16,6 +16,13 @@ public class Game : MonoBehaviour
     [SerializeField]
     KeyCode _destroyKey = KeyCode.D;
 
+    [SerializeField]
+    KeyCode _saveKey = KeyCode.S;
+
+
+    [SerializeField]
+    KeyCode _loadKey = KeyCode.L;
+
 
     [Header("Saving - Details")]
     [SerializeField]
@@ -36,8 +43,7 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         _allObjects = new List<Transform>();
-        _applicationSavePath = Path.Combine(Application.persistentDataPath, "Game", _saveFileName);
-        Debug.Log(_applicationSavePath);
+        InitializeApplicationPath();
     }
 
     private void OnEnable()
@@ -51,13 +57,21 @@ public class Game : MonoBehaviour
     {
         if (Input.GetKeyDown(_createKey))
         {
-            Debug.Log("Hi");
             CreateObject();
         }
         else if (Input.GetKeyDown(_destroyKey))
         {
             StartNewGame();
         }
+        else if (Input.GetKeyDown(_saveKey))
+        {
+            Save();
+        }
+        else if (Input.GetKeyDown(_loadKey))
+        {
+            Load();
+        }
+
 
 
     }
@@ -84,7 +98,46 @@ public class Game : MonoBehaviour
         _allObjects.Add(t);
     }
 
+    #region Read & Write Methods
 
+    void InitializeApplicationPath()
+    {
+        _applicationSavePath = Path.Combine(Application.persistentDataPath, "Game");
+
+        if (!Directory.Exists(_applicationSavePath))
+        {
+            //Create directory folder
+            Directory.CreateDirectory(_applicationSavePath);
+        }
+
+        //Append the rest of the savefile name to ensure that the file will exist
+        _applicationSavePath = Path.Combine(_applicationSavePath, _saveFileName);
+
+
+        Debug.Log(_applicationSavePath);
+    }
+
+    void Save()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.Open(_applicationSavePath, FileMode.Create)))
+        {
+            writer.Write(_allObjects.Count);
+        }
+
+
+
+    }
+
+    void Load()
+    {
+        using (BinaryReader reader = new BinaryReader(File.Open(_applicationSavePath, FileMode.Open)))
+        {
+            int count = reader.Read();
+            Debug.Log(count);
+        }
+
+    }
+    #endregion
 
 
 
