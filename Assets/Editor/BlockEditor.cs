@@ -35,7 +35,7 @@ namespace LinearCommandsEditor
 
             _list.drawHeaderCallback = DrawHeaderCallBack;
             _list.drawElementCallback = DrawElementCallBack;
-            // _list.elementHeightCallback += ElementHeightCallBack;
+            _list.elementHeightCallback += ElementHeightCallBack;
 
 
 
@@ -57,10 +57,10 @@ namespace LinearCommandsEditor
         }
 
 
-        // private float ElementHeightCallBack(int index)
-        // {
-
-        // }
+        private float ElementHeightCallBack(int index)
+        {
+            return EditorGUIUtility.singleLineHeight *2f;
+        }
 
         private void DrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
@@ -79,7 +79,8 @@ namespace LinearCommandsEditor
 
             //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
             GUIContent content = new GUIContent(dummyProperty.stringValue);
-            var style = GUI.skin.label;
+            var style = EditorStyles.label;
+
             Vector2 sizeOfContent = style.CalcSize(content);
 
             //Modify rect
@@ -87,6 +88,7 @@ namespace LinearCommandsEditor
             rect.width = sizeOfContent.x;
             rect.height = sizeOfContent.y;
             rect.x += 10;
+            rect.y += 10;
 
             //Draw the Type of Command first
             EditorGUI.LabelField(rect, dummyProperty.stringValue);
@@ -96,12 +98,15 @@ namespace LinearCommandsEditor
             //Modify rect again
             //Shift rect 10 units to give space between errorlog and type of command
             rect.x += rect.width + 10;
+            rect.y -= 5;
 
             if (!TryGetProperty(currentElement, COMMANDLABEL_ERRORLOG_PROPERTY, out dummyProperty)) return;
 
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
+            style.fontStyle = FontStyle.Italic;
             //Draw Errorlog
             EditorGUI.LabelField(rect, dummyProperty.stringValue);
+            style.fontStyle = FontStyle.Normal;
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
         }
 
