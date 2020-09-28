@@ -256,7 +256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aae48ab32a45444f821bfd5bc428053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _randomBool: 0
+  _settings:
+    _randomBool: 0
   _commandLabels:
   - _label: 
     _errorMessage: 
