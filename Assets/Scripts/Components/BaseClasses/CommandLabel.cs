@@ -7,8 +7,8 @@ namespace LinearCommands
     [System.Serializable]
     public class CommandLabel
     {
-        public string _label = default;
-        public string _errorMessage = default;
+        public string _commandType = "Hello NaGRAAAAAAAA";
+        public string _errorLog = "MeePo";
     }
 
 }
