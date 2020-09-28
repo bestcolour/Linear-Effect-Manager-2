@@ -14,11 +14,6 @@
         ;
         #endregion
 
-        public BlockEditor_CommandList(SerializedObject serializedObject)
-        {
-            this.serializedObject = serializedObject;
-        }
-
 
         SerializedObject serializedObject = default;
         ReorderableList _list = default;
@@ -28,12 +23,14 @@
 
         #region LifeTime Methods
 
-        public void OnEnable()
+        public void OnEnable(SerializedObject serializedObject)
         {
-            _commandLabelsProperty = serializedObject.FindProperty("_commandLabels");
-            _settingsProperty = serializedObject.FindProperty(SETTINGS_PROPERTY);
+            this.serializedObject = serializedObject;
 
-            _list = new ReorderableList(serializedObject, _commandLabelsProperty, displayAddButton: true, displayHeader: true, displayRemoveButton: true, draggable: true);
+            _commandLabelsProperty = this.serializedObject.FindProperty("_commandLabels");
+            _settingsProperty = this.serializedObject.FindProperty(SETTINGS_PROPERTY);
+
+            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: true, displayHeader: true, displayRemoveButton: true, draggable: true);
 
 
             _list.drawHeaderCallback = DrawHeaderCallBack;
@@ -55,15 +52,12 @@
         //Calll the reorderable list to update itself
         public void OnInspectorGUI()
         {
-            serializedObject.Update();
 
-            // DrawDebugButton();
             EditorGUILayout.Space();
             DrawSettings();
             EditorGUILayout.Space(20f);
             DrawReOrderableList();
 
-            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion
