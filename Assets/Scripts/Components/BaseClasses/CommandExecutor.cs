@@ -15,10 +15,10 @@ namespace LinearCommands
         #region Runtime Methods
 
         //Executes the command using the info at the inputted index
-        public void ExecuteCommand(int infoIndex)
+        public bool ExecuteCommand(int infoIndex)
         {
             T commandInfo = _infoList[infoIndex];
-            commandInfo.ExecuteCommand();
+            return commandInfo.UpdateCommand();
         }
 
 
