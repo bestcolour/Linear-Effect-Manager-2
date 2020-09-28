@@ -1,15 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-namespace LinearCommandsEditor
+﻿namespace LinearCommandsEditor
 {
+    using UnityEngine;
     using UnityEditor;
     using UnityEditorInternal;
     using LinearCommands;
-    using System.Text;
 
-    [CustomEditor(typeof(Block))]
-    public class BlockEditor : Editor
+    public class BlockEditor_CommandList
     {
         #region CONSTANT VALUES
         const string SETTINGS_PROPERTY = "_settings",
@@ -18,14 +14,21 @@ namespace LinearCommandsEditor
         ;
         #endregion
 
+        public BlockEditor_CommandList(SerializedObject serializedObject)
+        {
+            this.serializedObject = serializedObject;
+        }
 
+
+        SerializedObject serializedObject = default;
         ReorderableList _list = default;
         SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
 
 
+        #region LifeTime Methods
 
-        private void OnEnable()
+        public void OnEnable()
         {
             _commandLabelsProperty = serializedObject.FindProperty("_commandLabels");
             _settingsProperty = serializedObject.FindProperty(SETTINGS_PROPERTY);
@@ -42,12 +45,28 @@ namespace LinearCommandsEditor
         }
 
 
-        private void OnDisable()
+        public void OnDisable()
         {
             _commandLabelsProperty = null;
             _list = null;
         }
 
+
+        //Calll the reorderable list to update itself
+        public void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            // DrawDebugButton();
+            EditorGUILayout.Space();
+            DrawSettings();
+            EditorGUILayout.Space(20f);
+            DrawReOrderableList();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        #endregion
 
 
         #region Event Handlers
@@ -59,7 +78,7 @@ namespace LinearCommandsEditor
 
         private float ElementHeightCallBack(int index)
         {
-            return EditorGUIUtility.singleLineHeight *2f;
+            return EditorGUIUtility.singleLineHeight * 2f;
         }
 
         private void DrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
@@ -75,7 +94,7 @@ namespace LinearCommandsEditor
             GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
 
             //<================ DRAWING COMMAND TYPE=========================>
-            if (!TryGetProperty(currentElement, COMMANDLABEL_TYPE_PROPERTY, out SerializedProperty dummyProperty)) return;
+            if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_TYPE_PROPERTY, out SerializedProperty dummyProperty)) return;
 
             //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
             GUIContent content = new GUIContent(dummyProperty.stringValue);
@@ -100,7 +119,7 @@ namespace LinearCommandsEditor
             rect.x += rect.width + 10;
             rect.y -= 5;
 
-            if (!TryGetProperty(currentElement, COMMANDLABEL_ERRORLOG_PROPERTY, out dummyProperty)) return;
+            if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_ERRORLOG_PROPERTY, out dummyProperty)) return;
 
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
             style.fontStyle = FontStyle.Italic;
@@ -112,23 +131,6 @@ namespace LinearCommandsEditor
 
 
         #endregion
-
-
-
-        //Calll the reorderable list to update itself
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            // DrawDebugButton();
-            EditorGUILayout.Space();
-            DrawSettings();
-            EditorGUILayout.Space(20f);
-            DrawReOrderableList();
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
 
         #region  Draw Methods
         void DrawSettings()
@@ -147,47 +149,12 @@ namespace LinearCommandsEditor
         {
             _list.DoLayoutList();
         }
-
-
-
         #endregion
 
 
-
-        #region  Debug
-        //Just a debug method
-        void PrintAllProperties()
-        {
-            SerializedProperty firstP = serializedObject.GetIterator();
-            while (firstP.NextVisible(true))
-            {
-                Debug.Log(firstP.name);
-            };
-        }
-
-
-        void DrawDebugButton()
-        {
-            if (GUILayout.Button("Debug"))
-            {
-                PrintAllProperties();
-            }
-        }
-
-        bool TryGetProperty(SerializedProperty p, string propertyName, out SerializedProperty propertyFound)
-        {
-            propertyFound = p.FindPropertyRelative(propertyName);
-            if (propertyFound != null)
-            {
-                return true;
-            }
-
-            Debug.LogWarning($"The property named: {propertyName} inside the Block class has been renamed to something else or it doesnt exist anymore!");
-            return false;
-        }
-        #endregion
 
 
 
     }
+
 }

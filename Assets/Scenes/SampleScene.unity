@@ -259,10 +259,20 @@ MonoBehaviour:
   _settings:
     _randomBool: 0
   _commandLabels:
-  - _label: 
-    _errorMessage: 
-  - _label: 
-    _errorMessage: 
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
+  - _commandType: Hello NaGRAAAAAAAA
+    _errorLog: MeePo
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
