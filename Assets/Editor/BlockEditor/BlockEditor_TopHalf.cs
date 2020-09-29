@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEditor;
     using UnityEditorInternal;
+    using System;
 
     //The top half class will render the settings & command list
     public class BlockEditor_TopHalf
@@ -20,6 +21,7 @@
         ReorderableList _list = default;
         SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
+        Vector2 _scrollPosition = default;
 
         #endregion
 
@@ -49,14 +51,14 @@
 
 
         //Calll the reorderable list to update itself
-        public void OnInspectorGUI()
+        public void OnInspectorGUI(Vector2 windowSize)
         {
-
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
             EditorGUILayout.Space();
             DrawSettings();
             EditorGUILayout.Space(20f);
             DrawReOrderableList();
-
+            EditorGUILayout.EndScrollView();
         }
 
         #endregion
@@ -67,7 +69,6 @@
         {
             EditorGUI.LabelField(rect, "Command List");
         }
-
 
         private float ElementHeightCallBack(int index)
         {
