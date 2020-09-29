@@ -46,8 +46,8 @@
         public void OnDisable()
         {
             _commandLabelsProperty = null;
-            _list = null;
              _list.elementHeightCallback -= ElementHeightCallBack;
+            _list = null;
         }
 
 

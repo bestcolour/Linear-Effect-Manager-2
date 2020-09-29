@@ -2,9 +2,7 @@
 {
     using UnityEngine;
     using UnityEditor;
-    using UnityEditorInternal;
     using LinearCommands;
-    using System;
 
     [CustomEditor(typeof(Block))]
     public class BlockEditor : Editor
@@ -55,6 +53,7 @@
 
             _topHalf.OnInspectorGUI(topHalfSize);
 
+            CenterDiv();
 
             _bottomHalf.OnInspectorUpdate(bottomHalfSize);
 
@@ -64,7 +63,24 @@
 
 
         #endregion
+        #region DrawCenterDiv
 
+        void CenterDiv()
+        {
+            //==================DRAW AN EMPTY DUMMY LAYOUT BOX====================
+            Color prevColor = GUIExtensions.Start_GUI_ColourChange(Color.clear);
+            EditorGUILayout.LabelField(string.Empty);
+
+            //============DRAW THE REAL SEPARATOR USING THE LAYOUT BOX'S RECT====================
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            lastRect.x = 0;
+            lastRect.width = Screen.width;
+            GUIExtensions.Start_GUI_ColourChange(Color.white);
+            EditorGUI.LabelField(lastRect, string.Empty, GUI.skin.horizontalSlider);
+            GUIExtensions.End_GUI_ColourChange(prevColor);
+
+        }
+        #endregion
 
 
 
