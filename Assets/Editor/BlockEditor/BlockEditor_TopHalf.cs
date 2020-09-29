@@ -3,9 +3,9 @@
     using UnityEngine;
     using UnityEditor;
     using UnityEditorInternal;
-    using LinearCommands;
 
-    public class BlockEditor_CommandList
+    //The top half class will render the settings & command list
+    public class BlockEditor_TopHalf
     {
         #region CONSTANT VALUES
         const string SETTINGS_PROPERTY = "_settings",
@@ -14,12 +14,14 @@
         ;
         #endregion
 
+        #region Cached Variable
 
         SerializedObject serializedObject = default;
         ReorderableList _list = default;
         SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
 
+        #endregion
 
         #region LifeTime Methods
 
@@ -36,9 +38,6 @@
             _list.drawHeaderCallback = DrawHeaderCallBack;
             _list.drawElementCallback = DrawElementCallBack;
             _list.elementHeightCallback += ElementHeightCallBack;
-
-
-
         }
 
 
@@ -144,10 +143,6 @@
             _list.DoLayoutList();
         }
         #endregion
-
-
-
-
 
     }
 

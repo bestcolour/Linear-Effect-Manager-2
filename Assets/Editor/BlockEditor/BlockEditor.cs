@@ -8,8 +8,7 @@
     [CustomEditor(typeof(Block))]
     public class BlockEditor : Editor
     {
-
-        BlockEditor_CommandList _commandList = new BlockEditor_CommandList();
+        BlockEditor_TopHalf _commandList = new BlockEditor_TopHalf();
 
 
 
