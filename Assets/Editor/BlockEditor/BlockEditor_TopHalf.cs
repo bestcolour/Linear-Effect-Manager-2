@@ -34,7 +34,7 @@
             _commandLabelsProperty = this.serializedObject.FindProperty("_commandLabels");
             _settingsProperty = this.serializedObject.FindProperty(SETTINGS_PROPERTY);
 
-            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: true, displayHeader: true, displayRemoveButton: true, draggable: true);
+            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
 
 
             _list.drawHeaderCallback = DrawHeaderCallBack;
@@ -47,6 +47,7 @@
         {
             _commandLabelsProperty = null;
             _list = null;
+             _list.elementHeightCallback -= ElementHeightCallBack;
         }
 
 
