@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _settings:
-    _randomBool: 0
+    _randomBool: 1
   _commandLabels:
   - _commandType: Hello NaGRAAAAAAAA
     _errorLog: MeePo

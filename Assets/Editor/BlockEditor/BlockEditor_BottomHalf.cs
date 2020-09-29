@@ -27,7 +27,8 @@
         }
 
 
-        public void OnInspectorUpdate(Vector2 windowSize)
+        // public void OnInspectorUpdate(Vector2 windowSize)
+        public void OnInspectorGUI()
         {
             // _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
 
