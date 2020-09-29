@@ -5,7 +5,7 @@
     using LinearCommands;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
-    public class BlockEditor_BottomHalf 
+    public class BlockEditor_BottomHalf
     {
         #region Cached Variables
         SerializedObject serializedObject = default;
@@ -27,18 +27,74 @@
         }
 
 
-        // public void OnInspectorUpdate(Vector2 windowSize)
-        public void OnInspectorGUI()
+        public void OnInspectorGUI(float inspectorWidth)
         {
-            // _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
+            DrawToolBar();
+            DrawObservedCommand(inspectorWidth);
 
-            EditorGUILayout.HelpBox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et cursus libero. Nunc ac scelerisque sapien, eget vestibulum dui. Quisque sed congue nibh. Ut hendrerit, lectus id tempor elementum, velit leo interdum ex, in gravida lectus magna ac leo. Suspendisse potenti. Praesent a nibh id magna bibendum pellentesque quis sed mauris. Ut et elit dui. Sed at pulvinar libero. Duis et ex purus. Morbi sit amet odio et massa aliquam porttitor vitae vitae justo. Quisque elementum felis sit amet ipsum dictum, in laoreet tellus fringilla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tortor mauris, consectetur at libero in, ultrices pharetra velit. Proin rhoncus, augue non tristique luctus, arcu lorem scelerisque ipsum, vitae suscipit augue elit vel risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce eget ante placerat, auctor massa vel, sodales urna.", MessageType.Info);
-            EditorGUILayout.HelpBox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et cursus libero. Nunc ac scelerisque sapien, eget vestibulum dui. Quisque sed congue nibh. Ut hendrerit, lectus id tempor elementum, velit leo interdum ex, in gravida lectus magna ac leo. Suspendisse potenti. Praesent a nibh id magna bibendum pellentesque quis sed mauris. Ut et elit dui. Sed at pulvinar libero. Duis et ex purus. Morbi sit amet odio et massa aliquam porttitor vitae vitae justo. Quisque elementum felis sit amet ipsum dictum, in laoreet tellus fringilla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tortor mauris, consectetur at libero in, ultrices pharetra velit. Proin rhoncus, augue non tristique luctus, arcu lorem scelerisque ipsum, vitae suscipit augue elit vel risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce eget ante placerat, auctor massa vel, sodales urna.", MessageType.Info);
-            EditorGUILayout.HelpBox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et cursus libero. Nunc ac scelerisque sapien, eget vestibulum dui. Quisque sed congue nibh. Ut hendrerit, lectus id tempor elementum, velit leo interdum ex, in gravida lectus magna ac leo. Suspendisse potenti. Praesent a nibh id magna bibendum pellentesque quis sed mauris. Ut et elit dui. Sed at pulvinar libero. Duis et ex purus. Morbi sit amet odio et massa aliquam porttitor vitae vitae justo. Quisque elementum felis sit amet ipsum dictum, in laoreet tellus fringilla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tortor mauris, consectetur at libero in, ultrices pharetra velit. Proin rhoncus, augue non tristique luctus, arcu lorem scelerisque ipsum, vitae suscipit augue elit vel risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce eget ante placerat, auctor massa vel, sodales urna.", MessageType.Info);
-            EditorGUILayout.HelpBox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et cursus libero. Nunc ac scelerisque sapien, eget vestibulum dui. Quisque sed congue nibh. Ut hendrerit, lectus id tempor elementum, velit leo interdum ex, in gravida lectus magna ac leo. Suspendisse potenti. Praesent a nibh id magna bibendum pellentesque quis sed mauris. Ut et elit dui. Sed at pulvinar libero. Duis et ex purus. Morbi sit amet odio et massa aliquam porttitor vitae vitae justo. Quisque elementum felis sit amet ipsum dictum, in laoreet tellus fringilla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tortor mauris, consectetur at libero in, ultrices pharetra velit. Proin rhoncus, augue non tristique luctus, arcu lorem scelerisque ipsum, vitae suscipit augue elit vel risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce eget ante placerat, auctor massa vel, sodales urna.", MessageType.Info);
-            // EditorGUILayout.EndScrollView();
         }
         #endregion
+
+
+        #region ToolBar
+
+        const float BUTTON_SIZE = 35f;
+
+        void DrawToolBar()
+        {
+            EditorGUILayout.BeginHorizontal();
+            // //============DRAW PARENT BOX=====================
+            // EditorGUILayout.LabelField(string.Empty);
+
+            //================DRAW NEXT/PREV COMMAND BUTTONS===============
+            if (GUILayout.Button("【↑】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            {
+
+            }
+            else if (GUILayout.Button("【↓】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            {
+
+            }
+
+            //================DRAW SPACE===============
+
+            EditorGUILayout.Space();
+
+            //================DRAW ADD COPY & DELETE BUTTONS===============
+            // EditorGUILayout.LabelField(string.Empty);
+
+
+            if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            {
+
+            }
+            else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            {
+
+            }
+            else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            {
+
+            }
+
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        #endregion
+
+        #region Observed Command
+
+        void DrawObservedCommand(float inspectorWidth)
+        {
+            Color prevColor = GUIExtensions.Start_GUI_ColourChange(Color.grey);
+            GUILayout.Box(string.Empty, GUILayout.Height(50f),GUILayout.MaxWidth(inspectorWidth));
+            GUIExtensions.End_GUI_ColourChange(prevColor);
+
+        }
+
+        #endregion
+
     }
 
 }

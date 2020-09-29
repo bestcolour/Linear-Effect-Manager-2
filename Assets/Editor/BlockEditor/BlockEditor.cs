@@ -59,7 +59,7 @@
 
             _centerDivision.OnInspectorGUI(Screen.width);
 
-            _bottomHalf.OnInspectorGUI();
+            _bottomHalf.OnInspectorGUI(Screen.width);
 
             EditorGUILayout.EndVertical();
             serializedObject.ApplyModifiedProperties();
