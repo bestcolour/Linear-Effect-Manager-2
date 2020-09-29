@@ -15,10 +15,12 @@
         #endregion
 
         #region Constants
+        const string EDITORPREFS_HEIGHTRATIO = "TopHalf_To_Height";
+        const float DEFAULT_HEIGHTRATIO = 0.5f;
         #endregion
 
 
-        float _ratioOfTopHalfToInspectorHeight = 0.5f;
+        float _ratioOfTopHalfToInspectorHeight = DEFAULT_HEIGHTRATIO;
 
         #region LifeTime Methods
         private void OnEnable()
@@ -27,6 +29,8 @@
             _bottomHalf.OnEnable(serializedObject);
             _centerDivision.OnEnable();
             _centerDivision.OnDrag += HandleDivisonDrag;
+
+            Load();
         }
 
         private void OnDisable()
@@ -36,6 +40,7 @@
             _centerDivision.OnDisable();
             _centerDivision.OnDrag -= HandleDivisonDrag;
 
+            Save();
         }
 
         //Calll the reorderable list to update itself
@@ -72,6 +77,27 @@
             mouseDeltaY *= scaleMultiplier;
             _ratioOfTopHalfToInspectorHeight += mouseDeltaY;
             _ratioOfTopHalfToInspectorHeight = Mathf.Clamp(_ratioOfTopHalfToInspectorHeight, 0.1f, 0.9f);
+        }
+        #endregion
+
+
+        #region Saving
+        void Load()
+        {
+
+            if (!EditorPrefs.HasKey(EDITORPREFS_HEIGHTRATIO))
+            {
+                EditorPrefs.SetFloat(EDITORPREFS_HEIGHTRATIO, DEFAULT_HEIGHTRATIO);
+                _ratioOfTopHalfToInspectorHeight = DEFAULT_HEIGHTRATIO;
+                return;
+            }
+
+            _ratioOfTopHalfToInspectorHeight = EditorPrefs.GetFloat(EDITORPREFS_HEIGHTRATIO);
+        }
+
+        void Save()
+        {
+            EditorPrefs.SetFloat(EDITORPREFS_HEIGHTRATIO, _ratioOfTopHalfToInspectorHeight);
         }
         #endregion
 
