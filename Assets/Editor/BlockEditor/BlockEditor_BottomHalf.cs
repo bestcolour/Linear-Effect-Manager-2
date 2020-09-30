@@ -89,7 +89,7 @@
             }
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-
+                _target.EditorUse_RemoveEffect(0);
             }
 
 
