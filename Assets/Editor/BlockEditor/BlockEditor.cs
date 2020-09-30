@@ -20,13 +20,16 @@
         #endregion
 
 
+        Block _target = null;
         float _ratioOfTopHalfToInspectorHeight = DEFAULT_HEIGHTRATIO;
 
         #region LifeTime Methods
         private void OnEnable()
         {
+            _target = (Block)target;
+
             _topHalf.OnEnable(serializedObject);
-            _bottomHalf.OnEnable(serializedObject);
+            _bottomHalf.OnEnable(_target);
             _centerDivision.OnEnable();
             _centerDivision.OnDrag += HandleDivisonDrag;
 
@@ -81,7 +84,7 @@
         #endregion
 
 
-        #region Saving
+        #region Saving Editor's Preferences
         void Load()
         {
 

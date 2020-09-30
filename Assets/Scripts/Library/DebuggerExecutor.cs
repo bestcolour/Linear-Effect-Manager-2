@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using LinearEffects;
 using UnityEngine;
 
-public class DebuggerExecutor : BaseEffectExecutor<DebuggerEffect> { }
+public class DebuggerExecutor : UpdateEffectExecutor<DebuggerEffect>
+{
+    protected override bool ExecuteEffect(DebuggerEffect effectData)
+    {
+        effectData.Lol = true;
+        return effectData.Lol;
+    }
+}
 
 //Step 2) Add System.Serializable attribute to your new command
 [System.Serializable]
-public class DebuggerEffect : BaseEffect
+public class DebuggerEffect : Effect
 {
-    [SerializeField]
-    bool _bool = default;
+    public bool Lol = default;
 
-    public override BaseEffectType Type => BaseEffectType.Instant;
 
-    public override bool ExecuteEffect()
-    {
-        Debug.Log("HelloWord");
-        return false;
-    }
+    // public override bool ExecuteEffect()
+    // {
+    //     Debug.Log("HelloWord");
+    //     return true;
+    // }
 }

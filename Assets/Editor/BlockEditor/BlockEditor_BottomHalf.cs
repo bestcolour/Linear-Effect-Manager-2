@@ -2,28 +2,32 @@
 {
     using UnityEngine;
     using UnityEditor;
+    using System;
     using LinearEffects;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
     public class BlockEditor_BottomHalf
     {
         #region Cached Variables
-        SerializedObject serializedObject = default;
+        // SerializedObject serializedObject = default;
 
-        Vector2 _scrollPosition = default;
+        Block _target = null;
+
+        // Vector2 _scrollPosition = default;
         #endregion
 
 
         #region LifeTime Method
-        public void OnEnable(SerializedObject serializedObject)
+        public void OnEnable(Block target)
         {
-            this.serializedObject = serializedObject;
+            _target = target;
+            // this.serializedObject = serializedObject;
         }
 
 
         public void OnDisable()
         {
-            serializedObject = null;
+            // serializedObject = null;
         }
 
 
@@ -66,7 +70,12 @@
 
             if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                if (CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
+                {
+                    return;
+                }
 
+                _target.gameObject.AddComponent(type);
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
@@ -88,7 +97,7 @@
         void DrawObservedCommand(float inspectorWidth)
         {
             Color prevColor = GUIExtensions.Start_GUI_ColourChange(Color.grey);
-            GUILayout.Box(string.Empty, GUILayout.Height(50f),GUILayout.MaxWidth(inspectorWidth));
+            GUILayout.Box(string.Empty, GUILayout.Height(50f), GUILayout.MaxWidth(inspectorWidth));
             GUIExtensions.End_GUI_ColourChange(prevColor);
 
         }
