@@ -27,6 +27,7 @@
 
         public void OnDisable()
         {
+            _target = null;
             // serializedObject = null;
         }
 
@@ -70,12 +71,12 @@
 
             if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                if (CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
+                if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
                 {
                     return;
                 }
 
-                _target.gameObject.AddComponent(type);
+                _target.EditorUse_AddEffect(type);
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {

@@ -17,11 +17,4 @@ public class DebuggerExecutor : UpdateEffectExecutor<DebuggerEffect>
 public class DebuggerEffect : Effect
 {
     public bool Lol = default;
-
-
-    // public override bool ExecuteEffect()
-    // {
-    //     Debug.Log("HelloWord");
-    //     return true;
-    // }
 }
