@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using LinearEffects;
 using UnityEngine;
 
-public class DebuggerExecutor : UpdateEffectExecutor<DebuggerEffect>
+public class DebuggerExecutor : UpdateEffectExecutor<DebuggerExecutor.DebuggerEffect>
 {
+
+    //Step 2) Add System.Serializable attribute to your new command
+    [System.Serializable]
+    public class DebuggerEffect : Effect
+    {
+        public bool Lol = default;
+    }
+
     protected override bool ExecuteEffect(DebuggerEffect effectData)
     {
         effectData.Lol = true;
@@ -12,9 +20,4 @@ public class DebuggerExecutor : UpdateEffectExecutor<DebuggerEffect>
     }
 }
 
-//Step 2) Add System.Serializable attribute to your new command
-[System.Serializable]
-public class DebuggerEffect : Effect
-{
-    public bool Lol = default;
-}
+

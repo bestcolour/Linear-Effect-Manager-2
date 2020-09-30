@@ -24,6 +24,7 @@
         static readonly Dictionary<string, Type> CommandLabel_To_CommandExecutor = new Dictionary<string, Type>()
         {
             {"DebuggerExecutor", typeof(DebuggerExecutor)},
+            {"TestUpdateExecutor", typeof(TestUpdateExecutor)},
         };
 
 

@@ -22,13 +22,25 @@ namespace LinearEffects
         {
             public BaseEffectExecutor Executor;
             public int[] Indices;
-            // public List<int> Indices;
             public ExecutorDataSet(BaseEffectExecutor executor)
             {
                 Executor = executor;
                 Indices = new int[0];
             }
         }
+
+        [Serializable]
+        class EffectsOrderDataSet
+        {
+            public int IndexOf_ExecutorDataSet;
+            public int ExecutorDataSet_Effect_Index;
+            public EffectsOrderDataSet(int indexOfExecutorDataSet, int elementIndexOfIndicesArray)
+            {
+                IndexOf_ExecutorDataSet = indexOfExecutorDataSet;
+                ExecutorDataSet_Effect_Index = elementIndexOfIndicesArray;
+            }
+        }
+
         #endregion
 
         #region Cached Variables
@@ -39,12 +51,11 @@ namespace LinearEffects
 
         //This list organises Executor type with the indices of elements called by this block in which the executor
         [SerializeField]
-        ExecutorDataSet[] _effectIndices = new ExecutorDataSet[0];
+        ExecutorDataSet[] _executor_and_effectIndices = new ExecutorDataSet[0];
 
 
         [SerializeField]
-        int[] _orderOfEffects = new int[0];
-        // List<int> _orderOfEffects = new List<int>();
+        EffectsOrderDataSet[] _orderOfEffects = new EffectsOrderDataSet[0];
 
         #endregion
 
@@ -58,28 +69,33 @@ namespace LinearEffects
 
         public void EditorUse_AddEffect(Type type)
         {
-            ExecutorDataSet executorSet = _effectIndices.Find(x => x.Executor.GetType() == type);
+            //Check if there is an existing type of executor
+            int indexOfExecutorSet = _executor_and_effectIndices.FindIndex(x => x.Executor.GetType() == type);
 
-            //Check if current list has recorded this type of Executor. If not, addcomponent
-            if (executorSet == null)
+            //If not, addcomponent
+            if (indexOfExecutorSet == -1)
             {
-                BaseEffectExecutor newExecutor = (BaseEffectExecutor)gameObject.AddComponent(type);
-                //Update list
-                executorSet = new ExecutorDataSet(newExecutor);
-                ArrayExtension.Add(ref _effectIndices, executorSet);
+                //====================UPDATE EXECUTOR DATASET ARR=================
+                indexOfExecutorSet = ArrayExtension.AddReturn(ref _executor_and_effectIndices, new ExecutorDataSet((BaseEffectExecutor)gameObject.AddComponent(type)));
             }
 
-            int newIndex = executorSet.Executor.EditorUse_AddEffect();
-            ArrayExtension.Add(ref executorSet.Indices, newIndex);
+            ExecutorDataSet executorSet = _executor_and_effectIndices[indexOfExecutorSet];
 
-            UpdateEffectOrder();
+            //Update the Executor by adding new effect entry
+            int newIndex = executorSet.Executor.EditorUse_AddNewEffectEntry();
+
+            //Add a new index entry into the executorSet's indices array
+            //also reuse newIndex to record the index in which this newIndex has been added at
+            //==================UPDATE EXECUTOR DATASET ARR'S INDICES ARR=================
+            newIndex = ArrayExtension.AddReturn(ref executorSet.Indices, newIndex);
+
+            //====================UPDATE EFFECTS ORDER DATASET ARR==========================
+            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, newIndex));
+
         }
 
 
-        public void UpdateEffectOrder()
-        {
-
-        }
+       
 
 #endif
 

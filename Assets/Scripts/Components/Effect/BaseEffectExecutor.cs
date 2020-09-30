@@ -11,10 +11,14 @@
 
         //===================FOR EDITOR TIME=======================
 #if UNITY_EDITOR
-        //Returns the index of the newlyadded effect element
-        public abstract int EditorUse_AddEffect();
+        ///<Summary>
+        ///Returns the index of the newly added effect element
+        ///</Summary>
+        public abstract int EditorUse_AddNewEffectEntry();
 
-        //needs to update the block due to list changing
+        ///<Summary>
+        ///needs to update the block due to list changing
+        ///</Summary>
         public abstract void EditorUse_RemoveEffectAt(int i, Block caller);
 #endif
     }

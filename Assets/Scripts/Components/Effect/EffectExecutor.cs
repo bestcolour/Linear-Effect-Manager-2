@@ -30,12 +30,10 @@
 
         //===================FOR EDITOR TIME=======================
 #if UNITY_EDITOR
-        public override int EditorUse_AddEffect()
+        public override int EditorUse_AddNewEffectEntry()
         {
             T newEffectData = new T();
-
-            ArrayExtension.Add(ref _effects, newEffectData);
-            return (_effects.Length - 1);
+            return ArrayExtension.AddReturn(ref _effects, newEffectData);
         }
 
         //needs to update the block due to list changing

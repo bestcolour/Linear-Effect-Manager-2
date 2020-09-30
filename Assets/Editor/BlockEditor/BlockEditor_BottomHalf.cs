@@ -80,6 +80,11 @@
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                if (!CommandData.TryGetExecutor("TestUpdateExecutor", out Type type))
+                {
+                    return;
+                }
+                _target.EditorUse_AddEffect(type);
 
             }
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
