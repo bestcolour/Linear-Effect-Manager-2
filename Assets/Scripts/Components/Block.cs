@@ -21,12 +21,12 @@ namespace LinearEffects
         class ExecutorDataSet
         {
             public BaseEffectExecutor Executor;
-            public List<int> Indices;
+            public int[] Indices;
             // public List<int> Indices;
             public ExecutorDataSet(BaseEffectExecutor executor)
             {
                 Executor = executor;
-                Indices = new List<int>();
+                Indices = new int[0];
             }
         }
         #endregion
@@ -39,11 +39,12 @@ namespace LinearEffects
 
         //This list organises Executor type with the indices of elements called by this block in which the executor
         [SerializeField]
-        List<ExecutorDataSet> _effectIndices = new List<ExecutorDataSet>();
+        ExecutorDataSet[] _effectIndices = new ExecutorDataSet[0];
 
 
         [SerializeField]
-        List<int> _orderOfEffects = new List<int>();
+        int[] _orderOfEffects = new int[0];
+        // List<int> _orderOfEffects = new List<int>();
 
         #endregion
 
@@ -65,11 +66,12 @@ namespace LinearEffects
                 BaseEffectExecutor newExecutor = (BaseEffectExecutor)gameObject.AddComponent(type);
                 //Update list
                 executorSet = new ExecutorDataSet(newExecutor);
-                _effectIndices.Add(executorSet);
+                ArrayExtension.Add(ref _effectIndices, executorSet);
             }
 
             int newIndex = executorSet.Executor.EditorUse_AddEffect();
-            executorSet.Indices.Add(newIndex);
+            ArrayExtension.Add(ref executorSet.Indices, newIndex);
+
             UpdateEffectOrder();
         }
 

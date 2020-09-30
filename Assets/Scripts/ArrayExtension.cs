@@ -31,6 +31,17 @@ namespace LinearEffects
             array = tempList.ToArray();
         }
 
+        public static T Find<T>(this T[] array, System.Predicate<T> match)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (match.Invoke(array[i]))
+                {
+                    return array[i];
+                }
+            }
+            return default;
+        }
 
     }
 
