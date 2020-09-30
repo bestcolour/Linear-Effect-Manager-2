@@ -13,33 +13,35 @@
         //=============================FOR RUN TIME==============================
         protected abstract bool ExecuteEffect(T effectData);
 
+        // [SerializeField]
+        // protected List<T> _list = new List<T>();
+
         [SerializeField]
-        protected List<T> _list = new List<T>();
+        protected T[] _effects = new T[0];
 
         public override void ExecuteEffectAtIndex(int index)
         {
 #if UNITY_EDITOR
             Debug.Assert(index >= 0, $"Name of EffectExecutor is {this.GetType().ToString()} Index passed in is {index}");
 #endif
-            ExecuteEffect(_list[index]);
+            ExecuteEffect(_effects[index]);
         }
 
 
         //===================FOR EDITOR TIME=======================
 #if UNITY_EDITOR
-        public override void EditorUse_AddEffect()
+        public override int EditorUse_AddEffect()
         {
             T newEffectData = new T();
-            _list.Add(newEffectData);
+
+            ArrayExtension.Add(ref _effects, newEffectData);
+            return (_effects.Length - 1);
         }
 
         //needs to update the block due to list changing
         public override void EditorUse_RemoveEffectAt(int i, Block caller)
         {
-            int lastIndex = _list.Count - 1;
-            T lastEffect = _list[lastIndex];
-            _list[i] = lastEffect;
-            _list.RemoveAt(lastIndex);
+            ArrayExtension.RemoveAt(ref _effects, i);
         }
 #endif
 

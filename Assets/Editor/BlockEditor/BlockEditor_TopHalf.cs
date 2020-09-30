@@ -34,19 +34,23 @@
             _commandLabelsProperty = this.serializedObject.FindProperty("_commandLabels");
             _settingsProperty = this.serializedObject.FindProperty(SETTINGS_PROPERTY);
 
-            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
+            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: true, displayHeader: true, displayRemoveButton: true, draggable: true);
 
 
-            _list.drawHeaderCallback = DrawHeaderCallBack;
-            _list.drawElementCallback = DrawElementCallBack;
-            _list.elementHeightCallback += ElementHeightCallBack;
+            _list.drawHeaderCallback = HandleDrawHeaderCallBack;
+            _list.drawElementCallback = HandleDrawElementCallBack;
+            _list.elementHeightCallback += HandleElementHeightCallBack;
+            _list.onChangedCallback += HandleOnChange;
         }
+
 
 
         public void OnDisable()
         {
+            _list.elementHeightCallback -= HandleElementHeightCallBack;
+            _list.onChangedCallback -= HandleOnChange;
+
             _commandLabelsProperty = null;
-             _list.elementHeightCallback -= ElementHeightCallBack;
             _list = null;
         }
 
@@ -66,17 +70,17 @@
 
 
         #region Event Handlers
-        private void DrawHeaderCallBack(Rect rect)
+        private void HandleDrawHeaderCallBack(Rect rect)
         {
             EditorGUI.LabelField(rect, "Command List");
         }
 
-        private float ElementHeightCallBack(int index)
+        private float HandleElementHeightCallBack(int index)
         {
             return EditorGUIUtility.singleLineHeight * 2f;
         }
 
-        private void DrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
+        private void HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty currentElement = _list.serializedProperty.GetArrayElementAtIndex(index);
 
@@ -124,6 +128,10 @@
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
         }
 
+        private void HandleOnChange(ReorderableList list)
+        {
+            //Call the recalibration of effect order here in the block
+        }
 
         #endregion
 

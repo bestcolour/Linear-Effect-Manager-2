@@ -10,41 +10,46 @@ namespace LinearEffects
     public class Block : MonoBehaviour
     {
         #region Definitions
-        [System.Serializable]
+        [Serializable]
         class Settings
         {
             [SerializeField]
             bool _randomBool = default;
         }
 
-        class EffectIndices
+        [Serializable]
+        class ExecutorDataSet
         {
             public BaseEffectExecutor Executor;
             public List<int> Indices;
-            public EffectIndices(BaseEffectExecutor executor)
+            // public List<int> Indices;
+            public ExecutorDataSet(BaseEffectExecutor executor)
             {
                 Executor = executor;
                 Indices = new List<int>();
             }
-
         }
-
-
         #endregion
 
+        #region Cached Variables
         [Header("Some Settings")]
         [SerializeField]
         Settings _settings = default;
 
 
-        List<EffectIndices> _effectIndices = new List<EffectIndices>();
+        //This list organises Executor type with the indices of elements called by this block in which the executor
+        [SerializeField]
+        List<ExecutorDataSet> _effectIndices = new List<ExecutorDataSet>();
 
 
+        [SerializeField]
+        List<int> _orderOfEffects = new List<int>();
+
+        #endregion
 
 
 
 #if UNITY_EDITOR
-
         //This should be drawn as a reorderable list
         [SerializeField]
         CommandLabel[] _commandLabels = default;
@@ -52,20 +57,27 @@ namespace LinearEffects
 
         public void EditorUse_AddEffect(Type type)
         {
-            EffectIndices executorToFind = _effectIndices.Find(x => x.Executor.GetType() == type);
+            ExecutorDataSet executorSet = _effectIndices.Find(x => x.Executor.GetType() == type);
 
             //Check if current list has recorded this type of Executor. If not, addcomponent
-            if (executorToFind == null)
+            if (executorSet == null)
             {
                 BaseEffectExecutor newExecutor = (BaseEffectExecutor)gameObject.AddComponent(type);
                 //Update list
-                executorToFind = new EffectIndices(newExecutor);
-                _effectIndices.Add(executorToFind);
+                executorSet = new ExecutorDataSet(newExecutor);
+                _effectIndices.Add(executorSet);
             }
 
-            executorToFind.Executor.EditorUse_AddEffect();
+            int newIndex = executorSet.Executor.EditorUse_AddEffect();
+            executorSet.Indices.Add(newIndex);
+            UpdateEffectOrder();
         }
 
+
+        public void UpdateEffectOrder()
+        {
+
+        }
 
 #endif
 

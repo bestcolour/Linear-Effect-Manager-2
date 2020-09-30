@@ -87,7 +87,6 @@
         #region Saving Editor's Preferences
         void Load()
         {
-
             if (!EditorPrefs.HasKey(EDITORPREFS_HEIGHTRATIO))
             {
                 EditorPrefs.SetFloat(EDITORPREFS_HEIGHTRATIO, DEFAULT_HEIGHTRATIO);
