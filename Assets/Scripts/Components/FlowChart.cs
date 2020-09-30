@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LinearCommands
+namespace LinearEffects
 {
     //Flow chart is the class which holds/creates blocks
     // which can be called at different times (ie when game starts, game ends , )

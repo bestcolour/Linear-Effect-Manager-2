@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace LinearCommands
+namespace LinearEffects
 {
     //This class will draw what commands are being displayed in the command list
     [System.Serializable]

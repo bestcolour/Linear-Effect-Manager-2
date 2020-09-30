@@ -1,8 +1,8 @@
-﻿namespace LinearCommandsEditor
+﻿namespace LinearEffectsEditor
 {
     using UnityEngine;
     using UnityEditor;
-    using LinearCommands;
+    using LinearEffects;
     using System;
 
     public class BlockEditor_CenterDivision

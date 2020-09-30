@@ -1,4 +1,4 @@
-﻿namespace LinearCommandsEditor
+﻿namespace LinearEffectsEditor
 {
     using UnityEngine;
     using UnityEditor;

@@ -1,8 +1,8 @@
-﻿namespace LinearCommandsEditor
+﻿namespace LinearEffectsEditor
 {
     using UnityEngine;
     using UnityEditor;
-    using LinearCommands;
+    using LinearEffects;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
     public class BlockEditor_BottomHalf

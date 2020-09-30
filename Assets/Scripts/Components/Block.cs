@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace LinearCommands
+namespace LinearEffects
 {
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
