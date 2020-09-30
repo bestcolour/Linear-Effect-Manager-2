@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LinearEffects;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class DebuggerExecutor : UpdateEffectExecutor<DebuggerExecutor.DebuggerEffect>
 {
 

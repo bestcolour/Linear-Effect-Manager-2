@@ -17,9 +17,9 @@
         public abstract int EditorUse_AddNewEffectEntry();
 
         ///<Summary>
-        ///needs to update the block due to list changing
+        ///Removes the index from the effect list. Returns the ints
         ///</Summary>
-        public abstract void EditorUse_RemoveEffectAt(int i, Block caller);
+        public abstract void EditorUse_RemoveEffectAt(int i);
 #endif
     }
 

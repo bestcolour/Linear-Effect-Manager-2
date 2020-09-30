@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 910949407}
   - component: {fileID: 910949408}
+  - component: {fileID: 910949410}
   - component: {fileID: 910949409}
   m_Layer: 0
   m_Name: GameObject
@@ -258,23 +259,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _settings:
-    _randomBool: 1
-  _commandLabels:
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
-  - _commandType: Hello NaGRAAAAAAAA
-    _errorLog: MeePo
+    _randomBool: 0
+  _executor_and_effectIndices:
+  - Executor: {fileID: 910949410}
+    Indices: 0000000001000000
+  - Executor: {fileID: 910949409}
+    Indices: 0000000001000000
+  _orderOfEffects:
+  - IndexOf_ExecutorDataSet: 0
+    ExecutorDataSet_Effect_Index: 0
+  - IndexOf_ExecutorDataSet: 1
+    ExecutorDataSet_Effect_Index: 0
+  - IndexOf_ExecutorDataSet: 1
+    ExecutorDataSet_Effect_Index: 1
+  - IndexOf_ExecutorDataSet: 0
+    ExecutorDataSet_Effect_Index: 1
+  _commandLabels: []
 --- !u!114 &910949409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effects:
+  - _myAwesomeName: DDDD
+  - _myAwesomeName: DDDD
+--- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,9 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _list:
-  - Lol: 0
-  - Lol: 0
+  _effects:
   - Lol: 0
   - Lol: 0
 --- !u!1 &963194225

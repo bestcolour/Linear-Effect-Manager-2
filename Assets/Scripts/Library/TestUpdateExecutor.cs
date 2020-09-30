@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
+    [DisallowMultipleComponent]
     public class TestUpdateExecutor : UpdateEffectExecutor<TestUpdateExecutor.TestUpdateEffect>
     {
         [System.Serializable]

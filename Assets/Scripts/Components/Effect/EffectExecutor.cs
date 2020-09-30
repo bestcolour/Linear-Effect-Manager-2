@@ -37,7 +37,7 @@
         }
 
         //needs to update the block due to list changing
-        public override void EditorUse_RemoveEffectAt(int i, Block caller)
+        public override void EditorUse_RemoveEffectAt(int i)
         {
             ArrayExtension.RemoveAt(ref _effects, i);
         }
