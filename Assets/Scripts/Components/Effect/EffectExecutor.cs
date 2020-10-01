@@ -40,6 +40,12 @@
         public override void EditorUse_RemoveEffectAt(int i)
         {
             ArrayExtension.RemoveAt(ref _effects, i);
+
+            //If there is no more effects in this, remove this
+            if (_effects.Length <= 0)
+            {
+                DestroyImmediate(this);
+            }
         }
 #endif
 

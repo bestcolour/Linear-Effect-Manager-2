@@ -17,27 +17,55 @@ namespace LinearEffects
             bool _randomBool = default;
         }
 
+        #region  ExecutorDataSet Methods
         [Serializable]
         class ExecutorDataSet
         {
             public BaseEffectExecutor Executor;
             public int[] Indices;
+
             public ExecutorDataSet(BaseEffectExecutor executor)
             {
                 Executor = executor;
                 Indices = new int[0];
             }
+
+
+#if UNITY_EDITOR
+            ///<Summary>
+            ///Adds a new entry to the dataset's Executor and Indices list. Returns index of the newly added integer in the Indices list.
+            ///</Summary>
+            public int Editor_AddToIndicesList()
+            {
+                int i = Executor.EditorUse_AddNewEffectEntry();
+                return ArrayExtension.AddReturn(ref Indices, i);
+            }
+
+
+
+#endif
+
+
         }
+
+
+
+
+
+
+        #endregion
+
+
 
         [Serializable]
         class EffectsOrderDataSet
         {
-            public int IndexOf_ExecutorDataSet;
-            public int ExecutorDataSet_IndexOf_EffectElement;
+            public int IndexFor_ExecutorDataList;
+            public int IndexFor_IndicesList;
             public EffectsOrderDataSet(int indexOfExecutorDataSet, int elementIndexOfIndicesArray)
             {
-                IndexOf_ExecutorDataSet = indexOfExecutorDataSet;
-                ExecutorDataSet_IndexOf_EffectElement = elementIndexOfIndicesArray;
+                IndexFor_ExecutorDataList = indexOfExecutorDataSet;
+                IndexFor_IndicesList = elementIndexOfIndicesArray;
             }
         }
 
@@ -76,21 +104,21 @@ namespace LinearEffects
             if (!TryFindExecutorSet(type, out int indexOfExecutorSet))
             {
                 //====================UPDATE EXECUTOR DATASET LIST=================
-                indexOfExecutorSet = ArrayExtension.AddReturn(ref _executor_and_effectIndices, new ExecutorDataSet((BaseEffectExecutor)gameObject.AddComponent(type)));
+                indexOfExecutorSet = ArrayExtension.AddReturn
+                (
+                    ref _executor_and_effectIndices,
+                    new ExecutorDataSet
+                        (
+                            (BaseEffectExecutor)gameObject.AddComponent(type)
+                        )
+                    );
+
             }
-
-            ExecutorDataSet executorSet = _executor_and_effectIndices[indexOfExecutorSet];
-
-            //Update the Executor by adding new effect entry
-            int newIndex = executorSet.Executor.EditorUse_AddNewEffectEntry();
-
-            //Add a new index entry into the executorSet's indices array
-            //also reuse newIndex to record the index in which this newIndex has been added at
-            //==================UPDATE EXECUTOR DATASET LIST'S INDICES LIST=================
-            newIndex = ArrayExtension.AddReturn(ref executorSet.Indices, newIndex);
+            //====================UPDATE EXECUTOR & INDICES LISTS==========================
+            int indicesListIndex = _executor_and_effectIndices[indexOfExecutorSet].Editor_AddToIndicesList();
 
             //====================UPDATE EFFECTS ORDER DATASET LIST==========================
-            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, newIndex));
+            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, indicesListIndex));
         }
 
         ///<Summary>
@@ -101,7 +129,6 @@ namespace LinearEffects
             //If order of effects does not hold indexOfEffectInOrder
             if (i >= _orderOfEffects.Length)
             {
-                Debug.LogError($"Index out of bounds in the _orderOfEffects array. Index:{i}");
                 return;
             }
 
@@ -116,11 +143,11 @@ namespace LinearEffects
 
 
             //====================UPDATE EXECUTOR DATASET LIST==========================
-            ExecutorDataSet executorSet = _executor_and_effectIndices[orderDataSet.IndexOf_ExecutorDataSet];
+            ExecutorDataSet executorSet = _executor_and_effectIndices[orderDataSet.IndexFor_ExecutorDataList];
 
             //Get and remove the effect index from the indices list
-            int effectIndex = executorSet.Indices[orderDataSet.ExecutorDataSet_IndexOf_EffectElement];
-            ArrayExtension.RemoveAt(ref executorSet.Indices, orderDataSet.IndexOf_ExecutorDataSet);
+            int effectIndex = executorSet.Indices[orderDataSet.IndexFor_IndicesList];
+            ArrayExtension.RemoveAt(ref executorSet.Indices, orderDataSet.IndexFor_ExecutorDataList);
 
             //If there are no more effects being called by this block on that executor, remove this executorset from the list of executorSets
             if (executorSet.Indices.Length <= 0)
@@ -131,9 +158,9 @@ namespace LinearEffects
             {
                 //ISSUE: When i have multiple blocks, this will not work because i will have to update all blocks
                 //Update all the indices' elements above the removed index. (Assuming that all the indices' elements are greater than the removed index's element)
-                for (int indexAboveRemovedIndex = orderDataSet.IndexOf_ExecutorDataSet; indexAboveRemovedIndex < executorSet.Indices.Length; indexAboveRemovedIndex++)
+                for (int indexAboveRemovedIndex = orderDataSet.IndexFor_ExecutorDataList; indexAboveRemovedIndex < executorSet.Indices.Length; indexAboveRemovedIndex++)
                 {
-                    executorSet.Indices[indexAboveRemovedIndex] += 1;
+                    executorSet.Indices[indexAboveRemovedIndex] -= 1;
                 }
             }
 
@@ -142,8 +169,7 @@ namespace LinearEffects
         }
 
 
-
-        #region  Supporting Methods
+        #region Supporting Methods
         bool TryFindExecutorSet(Type type, out int indexOfExecutorSet)
         {
             indexOfExecutorSet = _executor_and_effectIndices.FindIndex(x => x.Executor.GetType() == type);
@@ -155,6 +181,7 @@ namespace LinearEffects
 
             return true;
         }
+
         #endregion
 
 
