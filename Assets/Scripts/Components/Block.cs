@@ -98,33 +98,25 @@ namespace LinearEffects
         ///<Summary>
         /// Adds a new effect to the block. This will update the 2 sets of arrays in order to have accurate serialized values.
         ///</Summary>
-        public void EditorUse_AddEffect(Type type)
+        public void Editor_AddEffect(Type type)
         {
             //Check if there is an existing type of executor. If not, addcomponent
-            if (!TryFindExecutorSet(type, out int indexOfExecutorSet))
+            if (!Editor_TryFind_ExecutorSet(type, out int indexOfExecutorSet))
             {
                 //====================UPDATE EXECUTOR DATASET LIST=================
-                indexOfExecutorSet = ArrayExtension.AddReturn
-                (
-                    ref _executor_and_effectIndices,
-                    new ExecutorDataSet
-                        (
-                            (BaseEffectExecutor)gameObject.AddComponent(type)
-                        )
-                    );
-
+                indexOfExecutorSet = Editor_Add_ExecutorSet(type);
             }
             //====================UPDATE EXECUTOR & INDICES LISTS==========================
             int indicesListIndex = _executor_and_effectIndices[indexOfExecutorSet].Editor_AddToIndicesList();
 
             //====================UPDATE EFFECTS ORDER DATASET LIST==========================
-            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, indicesListIndex));
+            Editor_Add_EffectsOrderSet(indexOfExecutorSet, indicesListIndex);
         }
 
         ///<Summary>
         /// Removes an effect at its index on the reorderable list from the block. This will update the 2 sets of arrays in order to have accurate serialized values.
         ///</Summary>
-        public void EditorUse_RemoveEffect(int i)
+        public void Editor_RemoveEffect(int i)
         {
             //If order of effects does not hold indexOfEffectInOrder
             if (i >= _orderOfEffects.Length)
@@ -169,8 +161,8 @@ namespace LinearEffects
         }
 
 
-        #region Supporting Methods
-        bool TryFindExecutorSet(Type type, out int indexOfExecutorSet)
+        #region _executor_and_effectIndices ExecutorDataSet[] Supporting Methods
+        bool Editor_TryFind_ExecutorSet(Type type, out int indexOfExecutorSet)
         {
             indexOfExecutorSet = _executor_and_effectIndices.FindIndex(x => x.Executor.GetType() == type);
 
@@ -180,6 +172,40 @@ namespace LinearEffects
             }
 
             return true;
+        }
+
+        int Editor_Add_ExecutorSet(Type type)
+        {
+            return ArrayExtension.AddReturn
+                  (
+                      ref _executor_and_effectIndices,
+                      new ExecutorDataSet
+                          (
+                              (BaseEffectExecutor)gameObject.AddComponent(type)
+                          )
+                      );
+
+        }
+
+        void Editor_Remove_ExecutorSet(ExecutorDataSet executorSet)
+        {
+            ArrayExtension.Remove(ref _executor_and_effectIndices, executorSet);
+        }
+
+        #endregion
+
+        #region _orderOfEffects OrderOfEffects[] Supporting Methods
+
+        void Editor_Add_EffectsOrderSet(int indexOfExecutorSet, int indicesListIndex)
+        {
+            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, indicesListIndex));
+        }
+
+
+        void Editor_RemoveAt_EffectsOrderSet(int index)
+        {
+            ArrayExtension.RemoveAt(ref _orderOfEffects, index);
+
         }
 
         #endregion
