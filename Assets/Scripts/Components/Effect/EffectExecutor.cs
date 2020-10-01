@@ -19,12 +19,12 @@
         [SerializeField]
         protected T[] _effects = new T[0];
 
-        public override void ExecuteEffectAtIndex(int index)
+        public override bool ExecuteEffectAtIndex(int index)
         {
 #if UNITY_EDITOR
             Debug.Assert(index >= 0, $"Name of EffectExecutor is {this.GetType().ToString()} Index passed in is {index}");
 #endif
-            ExecuteEffect(_effects[index]);
+            return ExecuteEffect(_effects[index]);
         }
 
 
@@ -34,6 +34,12 @@
         {
             T newEffectData = new T();
             return ArrayExtension.AddReturn(ref _effects, newEffectData);
+        }
+
+        public override void EditorUse_InsertNewEffectEntry(int index)
+        {
+            T newEffectData = new T();
+            ArrayExtension.Insert(ref _effects, index, newEffectData);
         }
 
         //needs to update the block due to list changing

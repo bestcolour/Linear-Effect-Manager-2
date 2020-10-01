@@ -89,9 +89,7 @@ namespace LinearEffects
                     _executorEffectIndex--;
                 }
             }
-
 #endif
-
 
         }
 
@@ -123,14 +121,20 @@ namespace LinearEffects
 
         public void Editor_AddEffect(Type type)
         {
-            BaseEffectExecutor executor = GetExecutor(type);
-            ArrayExtension.Add(ref _orderOfEffects, new EffectOrder(executor));
+            ArrayExtension.Add(ref _orderOfEffects, new EffectOrder(GetExecutor(type)));
+        }
+
+        public void Editor_InsertEffect(Type type, int index)
+        {
+            ArrayExtension.Insert(ref _orderOfEffects, index, new EffectOrder(GetExecutor(type)));
         }
 
         public void Editor_RemoveEffectOrder(int index)
         {
             if (index >= _orderOfEffects.Length)
+            {
                 return;
+            }
 
 
             _orderOfEffects[index].OnRemove(index);
@@ -138,6 +142,14 @@ namespace LinearEffects
 
             //Remove order effects after it is done
             ArrayExtension.RemoveAt(ref _orderOfEffects, index);
+        }
+
+        public void Editor_ReArrangeEffectOrder(int effectA, int effectB)
+        {
+            EffectOrder a = _orderOfEffects[effectA], b = _orderOfEffects[effectB];
+
+            _orderOfEffects[effectA] = b;
+            _orderOfEffects[effectB] = a;
         }
 
 

@@ -29,6 +29,17 @@ namespace LinearEffects
         }
 
         ///<Summary>
+        ///Adds a new element to the array at a index (This method is meant to be used in Editor Code, do not use this during runtime code, use a list instead! )
+        ///</Summary>
+        public static void Insert<T>(ref T[] array, int index, T elementToAdd)
+        {
+            List<T> tempList = new List<T>(array);
+            tempList.Insert(index, elementToAdd);
+            array = tempList.ToArray();
+        }
+
+
+        ///<Summary>
         ///Removes a element from the array.(This method is meant to be used in Editor Code, do not use this during runtime code, use a list instead! )
         ///</Summary>
         public static void Remove<T>(ref T[] array, T elementToRemove)
