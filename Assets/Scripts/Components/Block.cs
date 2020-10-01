@@ -17,56 +17,50 @@ namespace LinearEffects
             bool _randomBool = default;
         }
 
-        #region  ExecutorDataSet Methods
         [Serializable]
-        class ExecutorDataSet
+        class ExecutorData
         {
-            public BaseEffectExecutor Executor;
-            public int[] Indices;
-
-            public ExecutorDataSet(BaseEffectExecutor executor)
-            {
-                Executor = executor;
-                Indices = new int[0];
-            }
+            BaseEffectExecutor _executor;
+            int[] _effectIndicesCalledInExecutor;
 
 
+
+            //This class should only be initialized/edited inside editor, not during gameplay
 #if UNITY_EDITOR
-            ///<Summary>
-            ///Adds a new entry to the dataset's Executor and Indices list. Returns index of the newly added integer in the Indices list.
-            ///</Summary>
-            public int Editor_AddToIndicesList()
+            public ExecutorData(Block block, Type executorType)
             {
-                int i = Executor.EditorUse_AddNewEffectEntry();
-                return ArrayExtension.AddReturn(ref Indices, i);
+                _executor = (BaseEffectExecutor)block.gameObject.AddComponent(executorType);
+                _effectIndicesCalledInExecutor = new int[0];
             }
 
+            ///<Summary>
+            ///(Editor Only) Returns the index of the newly added Effect Index called In the Executor when you add a new effect.
+            ///</Summary>
+            public int AddEffect()
+            {
+                return ArrayExtension.AddReturn(ref _effectIndicesCalledInExecutor, _executor.EditorUse_AddNewEffectEntry());
+            }
 
+            ///<Summary>
+            ///(Editor Only) Removes the effect from the executor with the inputted effect index. An Order update is necessary after calling this function
+            ///</Summary>
+            public void RemoveEffectAt(int i)
+            {
+                //Get effect index
+                i = GetEffectIndex(i);
+                _executor.EditorUse_RemoveEffectAt(i);
+            }
+
+            int GetEffectIndex(int i)
+            {
+                return _effectIndicesCalledInExecutor[i];
+            }
 
 #endif
 
 
-        }
 
 
-
-
-
-
-        #endregion
-
-
-
-        [Serializable]
-        class EffectsOrderDataSet
-        {
-            public int IndexFor_ExecutorDataList;
-            public int IndexFor_IndicesList;
-            public EffectsOrderDataSet(int indexOfExecutorDataSet, int elementIndexOfIndicesArray)
-            {
-                IndexFor_ExecutorDataList = indexOfExecutorDataSet;
-                IndexFor_IndicesList = elementIndexOfIndicesArray;
-            }
         }
 
         #endregion
@@ -77,148 +71,32 @@ namespace LinearEffects
         Settings _settings = default;
 
 
-        //This list organises Executor type with the indices of elements called by this block in which the executor
-        [SerializeField]
-        ExecutorDataSet[] _executor_and_effectIndices = new ExecutorDataSet[0];
 
-
-        [SerializeField]
-        EffectsOrderDataSet[] _orderOfEffects = new EffectsOrderDataSet[0];
 
         #endregion
 
 
 
+
+
+
 #if UNITY_EDITOR
+        //======================================================= EDITOR ZONE =======================================================================
         //This should be drawn as a reorderable list
         [SerializeField]
         CommandLabel[] _commandLabels = default;
 
 
-        ///<Summary>
-        /// Adds a new effect to the block. This will update the 2 sets of arrays in order to have accurate serialized values.
-        ///</Summary>
-        public void Editor_AddEffect(Type type)
-        {
-            //Check if there is an existing type of executor. If not, addcomponent
-            if (!Editor_TryFind_ExecutorSet(type, out int indexOfExecutorSet))
-            {
-                //====================UPDATE EXECUTOR DATASET LIST=================
-                indexOfExecutorSet = Editor_Add_ExecutorSet(type);
-            }
-            //====================UPDATE EXECUTOR & INDICES LISTS==========================
-            int indicesListIndex = _executor_and_effectIndices[indexOfExecutorSet].Editor_AddToIndicesList();
-
-            //====================UPDATE EFFECTS ORDER DATASET LIST==========================
-            Editor_Add_EffectsOrderSet(indexOfExecutorSet, indicesListIndex);
-        }
-
-        ///<Summary>
-        /// Removes an effect at its index on the reorderable list from the block. This will update the 2 sets of arrays in order to have accurate serialized values.
-        ///</Summary>
-        public void Editor_RemoveEffect(int i)
-        {
-            //If order of effects does not hold indexOfEffectInOrder
-            if (i >= _orderOfEffects.Length)
-            {
-                return;
-            }
 
 
-            //Due to the removal of an element from a list, we need to ensure that everything is updated
-            //Updated means that values which are removed should cause other dependent values to -1, etc
-
-            //====================UPDATE EFFECTS ORDER DATASET LIST==========================
-            //Get and remove the orderDataSet we are current oberving
-            EffectsOrderDataSet orderDataSet = _orderOfEffects[i];
-            ArrayExtension.RemoveAt(ref _orderOfEffects, i);
 
 
-            //====================UPDATE EXECUTOR DATASET LIST==========================
-            ExecutorDataSet executorSet = _executor_and_effectIndices[orderDataSet.IndexFor_ExecutorDataList];
-
-            //Get and remove the effect index from the indices list
-            int effectIndex = executorSet.Indices[orderDataSet.IndexFor_IndicesList];
-            ArrayExtension.RemoveAt(ref executorSet.Indices, orderDataSet.IndexFor_ExecutorDataList);
-
-            //If there are no more effects being called by this block on that executor, remove this executorset from the list of executorSets
-            if (executorSet.Indices.Length <= 0)
-            {
-                ArrayExtension.Remove(ref _executor_and_effectIndices, executorSet);
-            }
-            else
-            {
-                //ISSUE: When i have multiple blocks, this will not work because i will have to update all blocks
-                //Update all the indices' elements above the removed index. (Assuming that all the indices' elements are greater than the removed index's element)
-                for (int indexAboveRemovedIndex = orderDataSet.IndexFor_ExecutorDataList; indexAboveRemovedIndex < executorSet.Indices.Length; indexAboveRemovedIndex++)
-                {
-                    executorSet.Indices[indexAboveRemovedIndex] -= 1;
-                }
-            }
-
-            //====================REMOVE EFFECT FROM EXECUTOR USING INDEX==========================
-            executorSet.Executor.EditorUse_RemoveEffectAt(effectIndex);
-        }
 
 
-        #region _executor_and_effectIndices ExecutorDataSet[] Supporting Methods
-        bool Editor_TryFind_ExecutorSet(Type type, out int indexOfExecutorSet)
-        {
-            indexOfExecutorSet = _executor_and_effectIndices.FindIndex(x => x.Executor.GetType() == type);
-
-            if (indexOfExecutorSet == -1)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        int Editor_Add_ExecutorSet(Type type)
-        {
-            return ArrayExtension.AddReturn
-                  (
-                      ref _executor_and_effectIndices,
-                      new ExecutorDataSet
-                          (
-                              (BaseEffectExecutor)gameObject.AddComponent(type)
-                          )
-                      );
-
-        }
-
-        void Editor_Remove_ExecutorSet(ExecutorDataSet executorSet)
-        {
-            ArrayExtension.Remove(ref _executor_and_effectIndices, executorSet);
-        }
-
-        #endregion
-
-        #region _orderOfEffects OrderOfEffects[] Supporting Methods
-
-        void Editor_Add_EffectsOrderSet(int indexOfExecutorSet, int indicesListIndex)
-        {
-            ArrayExtension.Add(ref _orderOfEffects, new EffectsOrderDataSet(indexOfExecutorSet, indicesListIndex));
-        }
 
 
-        void Editor_RemoveAt_EffectsOrderSet(int index)
-        {
-            ArrayExtension.RemoveAt(ref _orderOfEffects, index);
-
-        }
-
-        #endregion
 
 
 #endif
-
-
-
-
-
-
-
     }
-
 }
