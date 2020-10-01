@@ -12,12 +12,12 @@
         //===================FOR EDITOR TIME=======================
 #if UNITY_EDITOR
         ///<Summary>
-        ///Returns the index of the newly added effect element
+        ///Returns the element index of the newly added effect element
         ///</Summary>
         public abstract int EditorUse_AddNewEffectEntry();
 
         ///<Summary>
-        ///Removes the index from the effect list. Returns the ints
+        ///Removes the element represented by the given index from the effect list.
         ///</Summary>
         public abstract void EditorUse_RemoveEffectAt(int i);
 #endif

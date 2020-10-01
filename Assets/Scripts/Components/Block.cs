@@ -17,51 +17,84 @@ namespace LinearEffects
             bool _randomBool = default;
         }
 
+        // [Serializable]
+        // class ExecutorData
+        // {
+        //     BaseEffectExecutor _executor;
+        //     int[] _effectIndicesCalledInExecutor;
+        //                 //This class should only be initialized/edited inside editor, not during gameplay
+        //     #if UNITY_EDITOR
+        //                 public ExecutorData(Block block, Type executorType)
+        //                 {
+        //                     _executor = (BaseEffectExecutor)block.gameObject.AddComponent(executorType);
+        //                     _effectIndicesCalledInExecutor = new int[0];
+        //                 }
+
+        //                 ///<Summary>
+        //                 ///(Editor Only) Returns the index of the newly added Effect Index called In the Executor when you add a new effect.
+        //                 ///</Summary>
+        //                 public int AddEffect()
+        //                 {
+        //                     return ArrayExtension.AddReturn(ref _effectIndicesCalledInExecutor, _executor.EditorUse_AddNewEffectEntry());
+        //                 }
+
+        //                 ///<Summary>
+        //                 ///(Editor Only) Removes the effect from the executor with the inputted effect index. An Order update is necessary after calling this function
+        //                 ///</Summary>
+        //                 public void RemoveEffectAt(int i)
+        //                 {
+        //                     //Get effect index
+        //                     i = GetEffectIndex(i);
+        //                     _executor.EditorUse_RemoveEffectAt(i);
+        //                 }
+
+        //                 int GetEffectIndex(int i)
+        //                 {
+        //                     return _effectIndicesCalledInExecutor[i];
+        //                 }
+
+        //     #endif
+        // }
+
         [Serializable]
-        class ExecutorData
+        class EffectOrder
         {
+            [SerializeField]
             BaseEffectExecutor _executor;
-            int[] _effectIndicesCalledInExecutor;
 
+            [SerializeField]
+            int _executorEffectIndex;
 
-
-            //This class should only be initialized/edited inside editor, not during gameplay
 #if UNITY_EDITOR
-            public ExecutorData(Block block, Type executorType)
+            public BaseEffectExecutor GetExecutor() { return _executor; }
+
+            //Initializable during only editor time
+            public EffectOrder(BaseEffectExecutor executor)
             {
-                _executor = (BaseEffectExecutor)block.gameObject.AddComponent(executorType);
-                _effectIndicesCalledInExecutor = new int[0];
+                _executor = executor;
+                _executorEffectIndex = executor.EditorUse_AddNewEffectEntry();
             }
 
-            ///<Summary>
-            ///(Editor Only) Returns the index of the newly added Effect Index called In the Executor when you add a new effect.
-            ///</Summary>
-            public int AddEffect()
+            public void OnRemove(int index)
             {
-                return ArrayExtension.AddReturn(ref _effectIndicesCalledInExecutor, _executor.EditorUse_AddNewEffectEntry());
+                _executor.EditorUse_RemoveEffectAt(index);
+
             }
 
-            ///<Summary>
-            ///(Editor Only) Removes the effect from the executor with the inputted effect index. An Order update is necessary after calling this function
-            ///</Summary>
-            public void RemoveEffectAt(int i)
+            public void UpdateAfterEffectRemoval(int indexRemoved)
             {
-                //Get effect index
-                i = GetEffectIndex(i);
-                _executor.EditorUse_RemoveEffectAt(i);
-            }
-
-            int GetEffectIndex(int i)
-            {
-                return _effectIndicesCalledInExecutor[i];
+                //Update the effect index due to the removal of a element in the executor
+                if (_executorEffectIndex > indexRemoved)
+                {
+                    _executorEffectIndex--;
+                }
             }
 
 #endif
 
 
-
-
         }
+
 
         #endregion
 
@@ -71,6 +104,7 @@ namespace LinearEffects
         Settings _settings = default;
 
 
+        EffectOrder[] _orderOfEffects = new EffectOrder[0];
 
 
         #endregion
@@ -81,21 +115,57 @@ namespace LinearEffects
 
 
 #if UNITY_EDITOR
-        //======================================================= EDITOR ZONE =======================================================================
+        //====================================================== EDITOR ZONE=================================================================
         //This should be drawn as a reorderable list
         [SerializeField]
         CommandLabel[] _commandLabels = default;
 
 
+        public void Editor_AddEffect(Type type)
+        {
+            BaseEffectExecutor executor = GetExecutor(type);
+            ArrayExtension.Add(ref _orderOfEffects, new EffectOrder(executor));
+        }
+
+        public void Editor_RemoveEffectOrder(int index)
+        {
+            if (index >= _orderOfEffects.Length)
+                return;
 
 
+            _orderOfEffects[index].OnRemove(index);
+            AfterEffectRemoval_Update(_orderOfEffects[index].GetExecutor(), index);
+
+            //Remove order effects after it is done
+            ArrayExtension.RemoveAt(ref _orderOfEffects, index);
+        }
 
 
+        #region  Support Methods for Effect Order
+        BaseEffectExecutor GetExecutor(Type type)
+        {
+            //For now we use getcomponent
+            if (!TryGetComponent(type, out Component component))
+            {
+                //No component found, add new one
+                //for now we add component to the block
+                return (BaseEffectExecutor)gameObject.AddComponent(type);
+            }
 
+            return (BaseEffectExecutor)component;
+        }
 
+        void AfterEffectRemoval_Update(BaseEffectExecutor executorReference, int effectIndex)
+        {
+            EffectOrder[] effectsAffected = _orderOfEffects.FindAll(x => x.GetExecutor() == executorReference);
 
+            for (int i = 0; i < effectsAffected.Length; i++)
+            {
+                effectsAffected[i].UpdateAfterEffectRemoval(effectIndex);
+            }
+        }
 
-
+        #endregion
 
 #endif
     }

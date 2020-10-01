@@ -60,17 +60,31 @@ namespace LinearEffects
             array = tempList.ToArray();
         }
 
-        public static T Find<T>(this T[] array, System.Predicate<T> match)
+        public static T[] FindAll<T>(this T[] array, System.Predicate<T> match) where T : class
         {
+            List<T> list = new List<T>();
             for (int i = 0; i < array.Length; i++)
             {
                 if (match.Invoke(array[i]))
                 {
-                    return array[i];
+                    list.Add(array[i]);
                 }
             }
-            return default;
+
+            return list.ToArray();
         }
+
+        //     public static T Find<T>(this T[] array, System.Predicate<T> match)
+        //     {
+        //         for (int i = 0; i < array.Length; i++)
+        //         {
+        //             if (match.Invoke(array[i]))
+        //             {
+        //                 return array[i];
+        //             }
+        //         }
+        //         return default;
+        //     }
 
         public static int FindIndex<T>(this T[] array, System.Predicate<T> match)
         {
