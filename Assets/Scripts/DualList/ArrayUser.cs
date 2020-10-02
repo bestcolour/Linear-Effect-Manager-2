@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
 public class ArrayUser<OData, Holder, Data> : MonoBehaviour
 where OData : OrderData<Holder, Data>, new()
 where Holder : ArrayHolder<Data>
@@ -12,7 +13,7 @@ where Data : new()
     ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
     ///</Summary>
     [SerializeField]
-    OData[] _orderArray = default;
+    OData[] _orderArray = new OData[0];
 
 
 

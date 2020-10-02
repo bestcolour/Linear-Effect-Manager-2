@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class ArrayHolder<Data> : MonoBehaviour where Data : new()
 {
     [SerializeField]
-    Data[] _array = default;
+    Data[] _array = new Data[0];
 
     public delegate void ChangeObjectArrayCallBack(int objectIndex);
     public event ChangeObjectArrayCallBack OnRemoveObject = null;

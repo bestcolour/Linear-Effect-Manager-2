@@ -10,7 +10,7 @@ public abstract class OrderData<Holder, Data>
     [SerializeField]
     Holder _refHolder;
     [SerializeField]
-    int _dataElementIndex;
+    int _dataElmtIndex;
 
 
     //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
@@ -19,7 +19,7 @@ public abstract class OrderData<Holder, Data>
     public virtual void Initialize(Holder holder, bool isInsert)
     {
         _refHolder = holder;
-        _dataElementIndex = _refHolder.AddNewObject(isInsert);
+        _dataElmtIndex = _refHolder.AddNewObject(isInsert);
         _refHolder.OnRemoveObject += HandleRemoveObject;
         _refHolder.OnInsertObject += HandleInsertObject;
     }
@@ -27,7 +27,7 @@ public abstract class OrderData<Holder, Data>
     //To be called before removing the order intsance from the list
     public virtual void OnRemove()
     {
-        _refHolder.RemoveObjectAt(_dataElementIndex);
+        _refHolder.RemoveObjectAt(_dataElmtIndex);
     }
 
 
@@ -35,18 +35,18 @@ public abstract class OrderData<Holder, Data>
     //Compares with the removed object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
     protected virtual void HandleRemoveObject(int removedIndex)
     {
-        if (_dataElementIndex > removedIndex)
+        if (_dataElmtIndex > removedIndex)
         {
-            _dataElementIndex--;
+            _dataElmtIndex--;
         }
     }
 
     //Compares with the inserted object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
     protected virtual void HandleInsertObject(int insertedIndex)
     {
-        if (_dataElementIndex > insertedIndex)
+        if (_dataElmtIndex > insertedIndex)
         {
-            _dataElementIndex++;
+            _dataElmtIndex++;
         }
     }
 

@@ -8,5 +8,5 @@ public class HolderObject
     [SerializeField, HideInInspector]
     string _name = "HolderObject";
     [SerializeField]
-    int _someValue = 0;
+    string _someValue = "";
 }
