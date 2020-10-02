@@ -9,7 +9,7 @@ public class Holder : MonoBehaviour
     HolderObject[] _array = default;
 
 
-    public delegate void ChangeObjectArrayCallBack(int removedIndex);
+    public delegate void ChangeObjectArrayCallBack(int objectIndex);
     public event ChangeObjectArrayCallBack OnRemoveObject = null;
     public event ChangeObjectArrayCallBack OnInsertObject = null;
 
