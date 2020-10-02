@@ -386,11 +386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcbb7c98d5944634db68f24217f64dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _order:
-  - _refHolder: {fileID: 1305354372}
-    _holderElementIndex: 0
-  - _refHolder: {fileID: 1305354372}
-    _holderElementIndex: 1
+  _targetIndex: 0
+  _order: []
 --- !u!114 &1305354372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,6 +400,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4f2adc35e1c4c41a31c0991dfa5f2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _array:
-  - _name: HolderObject
-    _someValue: 0
+  _array: []

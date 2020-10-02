@@ -98,12 +98,4 @@ public class User : MonoBehaviour
         return new OrderClass(holder, isForInsert);
     }
     #endregion
-
-
-
-
-
-
-
-
 }
