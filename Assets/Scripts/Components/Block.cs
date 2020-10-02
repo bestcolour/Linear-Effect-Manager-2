@@ -5,8 +5,6 @@ namespace LinearEffects
 {
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
-    // [RequireComponent(typeof(FlowChart))]
-    // [ExecuteInEditMode]
     public class Block : MonoBehaviour
     {
         #region Definitions
@@ -118,7 +116,7 @@ namespace LinearEffects
         [SerializeField]
         CommandLabel[] _commandLabels = default;
 
-
+        #region Editor Methods 
         public void Editor_AddEffect(Type type)
         {
             ArrayExtension.Add(ref _orderOfEffects, new EffectOrder(GetExecutor(type)));
@@ -151,6 +149,7 @@ namespace LinearEffects
             _orderOfEffects[effectA] = b;
             _orderOfEffects[effectB] = a;
         }
+        #endregion
 
 
         #region  Support Methods for Effect Order
