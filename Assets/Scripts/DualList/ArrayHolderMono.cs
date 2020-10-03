@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Please ensure that T has the System.Serializable attribute
-[System.Serializable]
-public abstract class ArrayHolder<Data>  where Data : new()
+public abstract class ArrayHolderMono<Data> : MonoBehaviour where Data : new()
 {
     [SerializeField]
     Data[] _array = new Data[0];

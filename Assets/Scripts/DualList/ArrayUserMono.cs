@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-[System.Serializable]
-public class ArrayUser<OData, Holder, Data>
+public class ArrayUserMono<OData, Holder, Data> : MonoBehaviour
 where OData : OrderData<Holder, Data>, new()
 where Holder : ArrayHolder<Data>
 where Data : new()
@@ -20,9 +17,9 @@ where Data : new()
 
     #region Editor Commands
 
-    public void Add(GameObject gameObject)
+    public void Add()
     {
-        ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd(gameObject));
+        ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd());
     }
 
     public void RemoveAt(int index)
@@ -34,11 +31,11 @@ where Data : new()
     }
 
     //I assume this is for copy pasting
-    public void Insert(GameObject gameObject, int index)
+    public void Insert(int index)
     {
         if (index > _orderArray.Length) return;
 
-        OData newOrderClass = GetOrderData_ForInsert(gameObject);
+        OData newOrderClass = GetOrderData_ForInsert();
         ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
     }
 
@@ -48,14 +45,12 @@ where Data : new()
 
 
     #region Get OrderData
-    OData GetOrderData_ForAdd(GameObject gameObject) => GetOrderData(gameObject, false);
-    OData GetOrderData_ForInsert(GameObject gameObject) => GetOrderData(gameObject, true);
+    OData GetOrderData_ForAdd() => GetOrderData(false);
+    OData GetOrderData_ForInsert() => GetOrderData(true);
 
-    //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-    OData GetOrderData(GameObject gameObject, bool isForInsert)
+    OData GetOrderData(bool isForInsert)
     {
-        // Holder holder = GetComponent<Holder>();
-        Holder holder = gameObject.GetComponent<Holder>();
+        Holder holder = GetComponent<Holder>();
         OData o = new OData();
         o.Initialize(holder, isForInsert);
         return o;
