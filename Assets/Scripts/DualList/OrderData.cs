@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 public abstract class OrderData<Holder, Data>
- where Holder : ArrayHolder<Data>
+ where Holder : IArrayHolder
  where Data : new()
 {
     Holder _refHolder;

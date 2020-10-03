@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-namespace LinearEffects
+﻿namespace LinearEffects
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
     public class Block : MonoBehaviour

@@ -3,7 +3,7 @@
 //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
 public class ArrayUserMono<OData, Holder, Data> : MonoBehaviour
 where OData : OrderData<Holder, Data>, new()
-where Holder : ArrayHolder<Data>
+where Holder : IArrayHolder
 where Data : new()
 {
 

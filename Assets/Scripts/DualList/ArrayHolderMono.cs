@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Please ensure that T has the System.Serializable attribute
-public abstract class ArrayHolderMono<Data> : MonoBehaviour where Data : new()
+public abstract class ArrayHolderMono<Data> : MonoBehaviour, IArrayHolder
+ where Data : new()
 {
     [SerializeField]
     Data[] _array = new Data[0];
 
-    #if UNITY_EDITOR
-    public delegate void ChangeObjectArrayCallBack(int objectIndex);
+#if UNITY_EDITOR
     public event ChangeObjectArrayCallBack OnRemoveObject = null;
     public event ChangeObjectArrayCallBack OnInsertObject = null;
 
@@ -31,5 +31,5 @@ public abstract class ArrayHolderMono<Data> : MonoBehaviour where Data : new()
         ArrayExtension.RemoveAt(ref _array, index);
         OnRemoveObject?.Invoke(index);
     }
-    #endif
+#endif
 }

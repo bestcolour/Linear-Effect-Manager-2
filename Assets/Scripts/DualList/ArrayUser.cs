@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class ArrayUser<OData, Holder, Data>
 where OData : OrderData<Holder, Data>, new()
-where Holder : ArrayHolder<Data>
+where Holder : IArrayHolder
 where Data : new()
 {
 
@@ -18,7 +18,7 @@ where Data : new()
 
 
 
- #if UNITY_EDITOR
+#if UNITY_EDITOR
     #region Editor Commands
 
     public void Add(GameObject gameObject)
@@ -61,7 +61,7 @@ where Data : new()
     #endregion
 
 
- #endif
+#endif
 
 
 }
