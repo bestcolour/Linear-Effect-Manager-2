@@ -3,6 +3,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using DualList;
 
     public abstract class BaseEffectExecutor<T> : ArrayHolderMono<T>
     where T : new()

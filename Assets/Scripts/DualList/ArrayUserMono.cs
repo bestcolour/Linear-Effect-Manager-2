@@ -1,62 +1,63 @@
-﻿using UnityEngine;
-
-//This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-public class ArrayUserMono<OData, Holder, Data> : MonoBehaviour
-where OData : OrderData<Holder, Data>, new()
-where Holder : IArrayHolder
-where Data : new()
+﻿namespace DualList
 {
+    using UnityEngine;
 
-    ///<Summary>
-    ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
-    ///</Summary>
-    [SerializeField]
-    OData[] _orderArray = new OData[0];
+    //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
+    public class ArrayUserMono<OData, Holder, Data> : MonoBehaviour
+    where OData : OrderData<Holder, Data>, new()
+    where Holder : IArrayHolder
+    where Data : new()
+    {
 
-
+        ///<Summary>
+        ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
+        ///</Summary>
+        [SerializeField]
+        OData[] _orderArray = new OData[0];
 
 #if UNITY_EDITOR
-    #region Editor Commands
+        #region Editor Commands
 
-    public void Add()
-    {
-        ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd());
-    }
+        public void Add()
+        {
+            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd());
+        }
 
-    public void RemoveAt(int index)
-    {
-        if (index >= _orderArray.Length) return;
+        public void RemoveAt(int index)
+        {
+            if (index >= _orderArray.Length) return;
 
-        _orderArray[index].OnRemove();
-        ArrayExtension.RemoveAt(ref _orderArray, index);
-    }
+            _orderArray[index].OnRemove();
+            ArrayExtension.RemoveAt(ref _orderArray, index);
+        }
 
-    //I assume this is for copy pasting
-    public void Insert(int index)
-    {
-        if (index > _orderArray.Length) return;
+        //I assume this is for copy pasting
+        public void Insert(int index)
+        {
+            if (index > _orderArray.Length) return;
 
-        OData newOrderClass = GetOrderData_ForInsert();
-        ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
-    }
+            OData newOrderClass = GetOrderData_ForInsert();
+            ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
+        }
 
 
-    #region Get OrderData
-    OData GetOrderData_ForAdd() => GetOrderData(false);
-    OData GetOrderData_ForInsert() => GetOrderData(true);
+        #region Get OrderData
+        OData GetOrderData_ForAdd() => GetOrderData(false);
+        OData GetOrderData_ForInsert() => GetOrderData(true);
 
-    OData GetOrderData(bool isForInsert)
-    {
-        Holder holder = GetComponent<Holder>();
-        OData o = new OData();
-        o.Initialize(holder, isForInsert);
-        return o;
-    }
-    #endregion
-    #endregion
+        OData GetOrderData(bool isForInsert)
+        {
+            Holder holder = GetComponent<Holder>();
+            OData o = new OData();
+            o.Initialize(holder, isForInsert);
+            return o;
+        }
+        #endregion
+        #endregion
 
 #endif
 
 
 
+    }
 }
