@@ -5,31 +5,30 @@
     using LinearEffects;
     using System;
 
-    public class BlockEditor_CenterDivision
+    public partial class BlockEditor : Editor
     {
 
         #region Definitions
-
-
-        public delegate void DragCenterDivisionCallback(float mouseDeltaY);
-        public event DragCenterDivisionCallback OnDrag = null;
+        delegate void DragCenterDivisionCallback(float mouseDeltaY);
         #endregion
 
+        event DragCenterDivisionCallback OnDrag = null;
         bool _isDragging = false;
 
 
-        public void OnEnable()
+        void CenterDiv_OnEnable()
         {
             _isDragging = false;
+            OnDrag += HandleDivisonDrag;
         }
 
 
-
-        public void OnDisable()
+        void CenterDiv_OnDisable()
         {
+            OnDrag -= HandleDivisonDrag;
         }
 
-        public void OnInspectorGUI(float inspectorWidth)
+         void CenterDiv_OnInspectorGUI()
         {
             //==================DRAW AN EMPTY DUMMY LAYOUT BOX====================
             EditorGUILayout.LabelField(string.Empty);
@@ -37,7 +36,7 @@
             //============DRAW THE REAL SEPARATOR USING THE LAYOUT BOX'S RECT====================
             Rect lastRect = GUILayoutUtility.GetLastRect();
             lastRect.x = 0;
-            lastRect.width = inspectorWidth;
+            lastRect.width = Screen.width;
             EditorGUI.LabelField(lastRect, string.Empty, GUI.skin.horizontalSlider);
 
 

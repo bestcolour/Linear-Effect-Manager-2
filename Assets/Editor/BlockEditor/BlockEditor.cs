@@ -6,12 +6,12 @@
     using System;
 
     [CustomEditor(typeof(Block))]
-    public class BlockEditor : Editor
+    public partial class BlockEditor : Editor
     {
         #region Components
-        BlockEditor_TopHalf _topHalf = new BlockEditor_TopHalf();
-        BlockEditor_BottomHalf _bottomHalf = new BlockEditor_BottomHalf();
-        BlockEditor_CenterDivision _centerDivision = new BlockEditor_CenterDivision();
+        // BlockEditor_TopHalf _topHalf = new BlockEditor_TopHalf();
+        // BlockEditor_BottomHalf _bottomHalf = new BlockEditor_BottomHalf();
+        // BlockEditor_CenterDivision _centerDivision = new BlockEditor_CenterDivision();
         #endregion
 
         #region Constants
@@ -28,23 +28,23 @@
         {
             _target = (Block)target;
 
-            _topHalf.OnEnable(serializedObject);
-            _bottomHalf.OnEnable(_target);
-            _centerDivision.OnEnable();
-            _centerDivision.OnDrag += HandleDivisonDrag;
+            TopHalf_OnEnable();
+            CenterDiv_OnEnable();
+            BottomHalf_OnEnable();
 
             Load();
         }
 
+
         private void OnDisable()
         {
-            _topHalf.OnDisable();
-            _bottomHalf.OnDisable();
-            _centerDivision.OnDisable();
-            _centerDivision.OnDrag -= HandleDivisonDrag;
+            TopHalf_OnDisable();
+            CenterDiv_OnDisable();
+            BottomHalf_OnDisable();
 
             Save();
         }
+
 
         //Calll the reorderable list to update itself
         public override void OnInspectorGUI()
@@ -58,15 +58,16 @@
             serializedObject.Update();
             EditorGUILayout.BeginVertical();
 
-            _topHalf.OnInspectorGUI(topHalfSize);
+            //Draw top half
+            TopHalf_OnInspectorGUI(topHalfSize);
+            CenterDiv_OnInspectorGUI();
+            BottomHalf_OnInspectorGUI();
 
-            _centerDivision.OnInspectorGUI(Screen.width);
-
-            _bottomHalf.OnInspectorGUI(Screen.width);
 
             EditorGUILayout.EndVertical();
             serializedObject.ApplyModifiedProperties();
         }
+
 
 
         #endregion

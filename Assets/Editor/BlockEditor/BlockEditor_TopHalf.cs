@@ -6,7 +6,7 @@
     using System;
 
     //The top half class will render the settings & command list
-    public class BlockEditor_TopHalf
+    public partial class BlockEditor : Editor
     {
         #region CONSTANT VALUES
         const string SETTINGS_PROPERTY = "_settings",
@@ -17,7 +17,7 @@
 
         #region Cached Variable
 
-        SerializedObject serializedObject = default;
+        // SerializedObject serializedObject = default;
         ReorderableList _list = default;
         SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
@@ -27,25 +27,23 @@
 
         #region LifeTime Methods
 
-        public void OnEnable(SerializedObject serializedObject)
+        void TopHalf_OnEnable()
         {
-            this.serializedObject = serializedObject;
 
-            _commandLabelsProperty = this.serializedObject.FindProperty("_commandLabels");
-            _settingsProperty = this.serializedObject.FindProperty(SETTINGS_PROPERTY);
+            _commandLabelsProperty = serializedObject.FindProperty("_commandLabels");
+            _settingsProperty = serializedObject.FindProperty(SETTINGS_PROPERTY);
 
-            _list = new ReorderableList(this.serializedObject, _commandLabelsProperty, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
+            _list = new ReorderableList(serializedObject, _commandLabelsProperty, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
 
 
             _list.drawHeaderCallback = HandleDrawHeaderCallBack;
             _list.drawElementCallback = HandleDrawElementCallBack;
             _list.elementHeightCallback += HandleElementHeightCallBack;
             _list.onChangedCallback += HandleOnChange;
+
         }
 
-
-
-        public void OnDisable()
+        void TopHalf_OnDisable()
         {
             _list.elementHeightCallback -= HandleElementHeightCallBack;
             _list.onChangedCallback -= HandleOnChange;
@@ -56,7 +54,7 @@
 
 
         //Calll the reorderable list to update itself
-        public void OnInspectorGUI(Vector2 windowSize)
+        void TopHalf_OnInspectorGUI(Vector2 windowSize)
         {
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
             EditorGUILayout.Space();

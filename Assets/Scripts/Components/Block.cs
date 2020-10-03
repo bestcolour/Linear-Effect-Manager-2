@@ -15,45 +15,6 @@ namespace LinearEffects
             bool _randomBool = default;
         }
 
-        // [Serializable]
-        // class ExecutorData
-        // {
-        //     BaseEffectExecutor _executor;
-        //     int[] _effectIndicesCalledInExecutor;
-        //                 //This class should only be initialized/edited inside editor, not during gameplay
-        //     #if UNITY_EDITOR
-        //                 public ExecutorData(Block block, Type executorType)
-        //                 {
-        //                     _executor = (BaseEffectExecutor)block.gameObject.AddComponent(executorType);
-        //                     _effectIndicesCalledInExecutor = new int[0];
-        //                 }
-
-        //                 ///<Summary>
-        //                 ///(Editor Only) Returns the index of the newly added Effect Index called In the Executor when you add a new effect.
-        //                 ///</Summary>
-        //                 public int AddEffect()
-        //                 {
-        //                     return ArrayExtension.AddReturn(ref _effectIndicesCalledInExecutor, _executor.EditorUse_AddNewEffectEntry());
-        //                 }
-
-        //                 ///<Summary>
-        //                 ///(Editor Only) Removes the effect from the executor with the inputted effect index. An Order update is necessary after calling this function
-        //                 ///</Summary>
-        //                 public void RemoveEffectAt(int i)
-        //                 {
-        //                     //Get effect index
-        //                     i = GetEffectIndex(i);
-        //                     _executor.EditorUse_RemoveEffectAt(i);
-        //                 }
-
-        //                 int GetEffectIndex(int i)
-        //                 {
-        //                     return _effectIndicesCalledInExecutor[i];
-        //                 }
-
-        //     #endif
-        // }
-
         [Serializable]
         class EffectOrder
         {

@@ -6,36 +6,24 @@
     using LinearEffects;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
-    public class BlockEditor_BottomHalf
+    public partial class BlockEditor : Editor
     {
-        #region Cached Variables
-        // SerializedObject serializedObject = default;
-
-        Block _target = null;
-
-        // Vector2 _scrollPosition = default;
-        #endregion
-
-
         #region LifeTime Method
-        public void OnEnable(Block target)
+
+        void BottomHalf_OnEnable()
         {
-            _target = target;
-            // this.serializedObject = serializedObject;
+
         }
 
-
-        public void OnDisable()
+        void BottomHalf_OnDisable()
         {
-            _target = null;
-            // serializedObject = null;
+
         }
 
-
-        public void OnInspectorGUI(float inspectorWidth)
+        void BottomHalf_OnInspectorGUI()
         {
             DrawToolBar();
-            DrawObservedCommand(inspectorWidth);
+            DrawObservedCommand(Screen.width);
 
         }
         #endregion
