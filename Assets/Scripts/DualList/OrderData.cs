@@ -7,7 +7,7 @@ public abstract class OrderData<Holder, Data>
  where Holder : ArrayHolder<Data>
  where Data : new()
 {
-    protected abstract Holder RefHolder { get; }
+    Holder _refHolder;
     [SerializeField]
     int _dataElmtIndex;
 
@@ -17,16 +17,16 @@ public abstract class OrderData<Holder, Data>
 #if UNITY_EDITOR
     public virtual void Initialize(Holder holder, bool isInsert)
     {
-        // RefHolder = holder;
-        _dataElmtIndex = RefHolder.AddNewObject(isInsert);
-        RefHolder.OnRemoveObject += HandleRemoveObject;
-        RefHolder.OnInsertObject += HandleInsertObject;
+        _refHolder = holder;
+        _dataElmtIndex = _refHolder.AddNewObject(isInsert);
+        _refHolder.OnRemoveObject += HandleRemoveObject;
+        _refHolder.OnInsertObject += HandleInsertObject;
     }
 
     //To be called before removing the order intsance from the list
     public virtual void OnRemove()
     {
-        RefHolder.RemoveObjectAt(_dataElmtIndex);
+        _refHolder.RemoveObjectAt(_dataElmtIndex);
     }
 
 
