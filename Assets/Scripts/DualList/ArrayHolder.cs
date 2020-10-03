@@ -4,11 +4,12 @@ using UnityEngine;
 
 //Please ensure that T has the System.Serializable attribute
 [System.Serializable]
-public abstract class ArrayHolder<Data>  where Data : new()
+public abstract class ArrayHolder<Data> where Data : new()
 {
     [SerializeField]
     Data[] _array = new Data[0];
 
+#if UNITY_EDITOR
     public delegate void ChangeObjectArrayCallBack(int objectIndex);
     public event ChangeObjectArrayCallBack OnRemoveObject = null;
     public event ChangeObjectArrayCallBack OnInsertObject = null;
@@ -31,4 +32,5 @@ public abstract class ArrayHolder<Data>  where Data : new()
         ArrayExtension.RemoveAt(ref _array, index);
         OnRemoveObject?.Invoke(index);
     }
+#endif
 }

@@ -18,6 +18,7 @@ where Data : new()
 
 
 
+ #if UNITY_EDITOR
     #region Editor Commands
 
     public void Add(GameObject gameObject)
@@ -43,10 +44,6 @@ where Data : new()
     }
 
 
-    #endregion
-
-
-
     #region Get OrderData
     OData GetOrderData_ForAdd(GameObject gameObject) => GetOrderData(gameObject, false);
     OData GetOrderData_ForInsert(GameObject gameObject) => GetOrderData(gameObject, true);
@@ -61,5 +58,10 @@ where Data : new()
         return o;
     }
     #endregion
+    #endregion
+
+
+ #endif
+
 
 }

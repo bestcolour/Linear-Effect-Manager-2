@@ -15,6 +15,7 @@ where Data : new()
 
 
 
+#if UNITY_EDITOR
     #region Editor Commands
 
     public void Add()
@@ -40,10 +41,6 @@ where Data : new()
     }
 
 
-    #endregion
-
-
-
     #region Get OrderData
     OData GetOrderData_ForAdd() => GetOrderData(false);
     OData GetOrderData_ForInsert() => GetOrderData(true);
@@ -56,5 +53,10 @@ where Data : new()
         return o;
     }
     #endregion
+    #endregion
+
+#endif
+
+
 
 }
