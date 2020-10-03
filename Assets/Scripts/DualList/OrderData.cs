@@ -1,11 +1,10 @@
 ﻿namespace DualList
 {
     using UnityEngine;
-
+#if UNITY_EDITOR
     [System.Serializable]
-    public abstract class OrderData<Holder, Data>
+    public abstract class OrderData<Holder>
      where Holder : IArrayHolder
-     where Data : new()
     {
         Holder _refHolder;
         [SerializeField]
@@ -14,7 +13,6 @@
 
         //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
         //none of these will be used in the actual build except for the variables stored
-#if UNITY_EDITOR
         public virtual void Initialize(Holder holder, bool isInsert)
         {
             _refHolder = holder;
@@ -50,10 +48,18 @@
         }
 
         #endregion
-#endif
 
     }
-
+#else
+   [System.Serializable]
+    public abstract class OrderData<Holder>
+     where Holder : IArrayHolder
+    {
+        Holder _refHolder;
+        [SerializeField]
+        int _dataElmtIndex;
+    }
+#endif
 
 
 }

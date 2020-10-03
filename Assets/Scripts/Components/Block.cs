@@ -19,7 +19,7 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>, Effect>
+        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>
         { }
 
 

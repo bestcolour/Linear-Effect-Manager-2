@@ -1,11 +1,11 @@
 ﻿namespace DualList
 {
     using UnityEngine;
-
+#if UNITY_EDITOR
     //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
     [System.Serializable]
     public class ArrayUser<OData, Holder, Data>
-    where OData : OrderData<Holder, Data>, new()
+    where OData : OrderData<Holder>, new()
     where Holder : IArrayHolder
     where Data : new()
     {
@@ -16,7 +16,6 @@
         [SerializeField]
         OData[] _orderArray = new OData[0];
 
-#if UNITY_EDITOR
         #region Editor Commands
 
         public void Add(GameObject gameObject)
@@ -58,6 +57,21 @@
         #endregion
         #endregion
 
+
+#else
+ //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
+    [System.Serializable]
+    public class ArrayUser<OData, Holder, Data>
+    where OData : OrderData<Holder>, new()
+    where Holder : IArrayHolder
+    where Data : new()
+    {
+
+        ///<Summary>
+        ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
+        ///</Summary>
+        [SerializeField]
+        OData[] _orderArray = new OData[0];
 
 #endif
 
