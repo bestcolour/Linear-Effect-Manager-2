@@ -64,7 +64,7 @@
                     return;
                 }
 
-                _target.Editor_AddEffect(type);
+                // _target.Editor_AddEffect(type);
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
@@ -72,12 +72,12 @@
                 {
                     return;
                 }
-                _target.Editor_AddEffect(type);
+                // _target.Editor_AddEffect(type);
 
             }
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                _target.Editor_RemoveEffectOrder(0);
+                // _target.Editor_RemoveEffectOrder(0);
             }
 
 

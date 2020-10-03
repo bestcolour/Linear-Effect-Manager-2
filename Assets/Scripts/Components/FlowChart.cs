@@ -8,6 +8,7 @@ namespace LinearEffects
     // which can be called at different times (ie when game starts, game ends , )
     public class FlowChart : MonoBehaviour
     {
+        [SerializeField]
         Block[] _blocks = default;
 
 

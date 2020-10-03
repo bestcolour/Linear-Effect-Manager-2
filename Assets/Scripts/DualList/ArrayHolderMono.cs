@@ -7,7 +7,7 @@ public abstract class ArrayHolderMono<Data> : MonoBehaviour, IArrayHolder
  where Data : new()
 {
     [SerializeField]
-    Data[] _array = new Data[0];
+    protected Data[] _array = new Data[0];
 
 #if UNITY_EDITOR
     public event ChangeObjectArrayCallBack OnRemoveObject = null;

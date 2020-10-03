@@ -26,7 +26,7 @@
         #region LifeTime Methods
         private void OnEnable()
         {
-            _target = (Block)target;
+            _target = new Block();
 
             TopHalf_OnEnable();
             CenterDiv_OnEnable();
