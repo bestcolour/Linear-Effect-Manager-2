@@ -5,15 +5,9 @@
     using LinearEffects;
     using System;
 
-    [CustomEditor(typeof(Block))]
+    // [CustomEditor(typeof(Block))]
     public partial class BlockEditor : Editor
     {
-        #region Components
-        // BlockEditor_TopHalf _topHalf = new BlockEditor_TopHalf();
-        // BlockEditor_BottomHalf _bottomHalf = new BlockEditor_BottomHalf();
-        // BlockEditor_CenterDivision _centerDivision = new BlockEditor_CenterDivision();
-        #endregion
-
         #region Constants
         const string EDITORPREFS_HEIGHTRATIO = "TopHalf_To_Height";
         const float DEFAULT_HEIGHTRATIO = 0.5f;

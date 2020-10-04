@@ -11,10 +11,17 @@ namespace LinearEffects
         [SerializeField]
         Block[] _blocks = default;
 
+        [System.Serializable]
+        class Settings
+        {
+            [SerializeField]
+            bool _someSetting = default;
+        }
 
+        [Header("Settings")]
+        [SerializeField]
+        Settings _settings = default;
 
-
-        
     }
 }
 
