@@ -10,8 +10,20 @@
         protected Data[] _array = new Data[0];
 
 #if UNITY_EDITOR
-        public event ChangeObjectArrayCallBack OnRemoveObject = null;
-        public event ChangeObjectArrayCallBack OnInsertObject = null;
+          event ChangeObjectArrayCallBack _onRemoveObject = null;
+        event ChangeObjectArrayCallBack _onInsertObject = null;
+
+        public event ChangeObjectArrayCallBack OnRemoveObject
+        {
+            add { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
+            remove { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
+        }
+        public event ChangeObjectArrayCallBack OnInsertObject
+        {
+            add { _onInsertObject += new ChangeObjectArrayCallBack(value); }
+            remove { _onInsertObject += new ChangeObjectArrayCallBack(value); }
+        }
+
 
         //Although we do not care if DataUser class is inserting a new orderclass, we still want to call the event to update all the necessary order instances
         public int AddNewObject(bool isInsert)
@@ -20,7 +32,7 @@
 
             if (isInsert)
             {
-                OnInsertObject?.Invoke(elementIndex);
+                _onInsertObject?.Invoke(elementIndex);
             }
 
             return elementIndex;
@@ -29,7 +41,7 @@
         public void RemoveObjectAt(int index)
         {
             ArrayExtension.RemoveAt(ref _array, index);
-            OnRemoveObject?.Invoke(index);
+            _onRemoveObject?.Invoke(index);
         }
 #endif
     }
