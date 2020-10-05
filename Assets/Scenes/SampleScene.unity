@@ -291,7 +291,7 @@ MonoBehaviour:
     - _dataElmtIndex: 0
     - _dataElmtIndex: 0
     _settings:
-      _randomBool: 0
+      _randomBool: 1
   _settings:
     _someSetting: 0
 --- !u!1 &963194225

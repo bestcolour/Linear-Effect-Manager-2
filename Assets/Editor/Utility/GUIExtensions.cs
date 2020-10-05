@@ -65,6 +65,18 @@
 
 
         #region Colour Changes
+        public static Color Start_Handles_ColourChange(Color newColour)
+        {
+            Color prevColour = Handles.color;
+            Handles.color = newColour;
+            return prevColour;
+        }
+        public static void End_Handles_ColourChange(Color prevColour)
+        {
+            Handles.color = prevColour;
+        }
+
+
         public static Color Start_GUI_ColourChange(Color guiColour)
         {
             Color prevColour = GUI.color;
