@@ -72,7 +72,7 @@
                 {
                     return;
                 }
-                // _target.Editor_AddEffect(type);
+                // _target.Editor_AddEffect(type);S
 
             }
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))

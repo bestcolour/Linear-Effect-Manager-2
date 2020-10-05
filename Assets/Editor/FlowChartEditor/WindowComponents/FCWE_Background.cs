@@ -7,21 +7,21 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
         //https://www.rapidtables.com/web/color/gray-color.html
-        static readonly Color GRIDLINE1_LIGHT_COLOUR = new Color(0.66f, 0.66f, 0.66f);
-        static readonly Color GRIDLINE2_LIGHT_COLOUR = new Color(.41f, .41f, .41f);
+        static readonly Color LIGHT_GRIDLINE1_COLOUR = new Color(0.66f, 0.66f, 0.66f, 0.5f);
+        static readonly Color LIGHT_GRIDLINE2_COLOUR = new Color(0.41f, 0.41f, 0.41f, 0.5f);
 
-        static readonly Color GRIDLINE1_DARK_COLOUR = new Color(0.66f, 0.66f, 0.66f);
-        static readonly Color GRIDLINE2_DARK_COLOUR = new Color(0.66f, 0.66f, 0.66f);
+        static readonly Color DARK_GRIDLINE1_COLOUR = new Color(0.41f, 0.41f, 0.41f, 0.5f);
+        static readonly Color DARK_GRIDLINE2_COLOUR = new Color(0.75f, 0.75f, 0.75f, 0.5f);
 
 
         Color GetGrid1Colour()
         {
-            return !EditorGUIUtility.isProSkin ? GRIDLINE1_LIGHT_COLOUR : GRIDLINE1_LIGHT_COLOUR;
+            return !EditorGUIUtility.isProSkin ? LIGHT_GRIDLINE1_COLOUR : DARK_GRIDLINE1_COLOUR;
         }
 
         Color GetGrid2Colour()
         {
-            return !EditorGUIUtility.isProSkin ? GRIDLINE2_LIGHT_COLOUR : GRIDLINE2_LIGHT_COLOUR;
+            return !EditorGUIUtility.isProSkin ? LIGHT_GRIDLINE2_COLOUR : DARK_GRIDLINE2_COLOUR;
         }
 
         #region Draw
@@ -40,7 +40,6 @@
                     startV.y += 10;
                     endV.y += 10;
                     Handles.DrawLine(startV, endV);
-
                 }
 
                 startV.y += 10;
@@ -52,31 +51,28 @@
 
             }
 
-            // //=======================DRAW VERTICAL LINES===========================
-            // startV = Vector3.zero;
-            // endV = Screen.height * Vector3.up;
-            // numberOfLines = Screen.width / 10;
-            // for (int i = 0; i < numberOfLines; i++)
-            // {
-            //     for (int g = 0; g < 4; g++)
-            //     {
-            //         startV.x += 10;
-            //         endV.x += 10;
-            //         Handles.DrawLine(startV, endV);
+            //=======================DRAW VERTICAL LINES===========================
+            startV = Vector3.zero;
+            endV = Screen.height * Vector3.up;
+            numberOfLines = Screen.width / 10;
+            for (int i = 0; i < numberOfLines; i++)
+            {
+                for (int g = 0; g < 4; g++)
+                {
+                    startV.x += 10;
+                    endV.x += 10;
+                    Handles.DrawLine(startV, endV);
+                }
 
-            //     }
+                startV.x += 10;
+                endV.x += 10;
 
-            //     startV.x += 10;
-            //     endV.x += 10;
-
-            //     Handles.color = grid2Colour;
-            //     Handles.DrawLine(startV, endV);
-            //     Handles.color = grid1Colour;
-            // }
+                Handles.color = grid2Colour;
+                Handles.DrawLine(startV, endV);
+                Handles.color = grid1Colour;
+            }
 
             GUIExtensions.End_GUI_ColourChange(prevColour);
-
-
         }
         #endregion
     }
