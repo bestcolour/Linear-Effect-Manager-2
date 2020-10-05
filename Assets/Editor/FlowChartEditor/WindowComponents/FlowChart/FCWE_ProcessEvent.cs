@@ -17,13 +17,11 @@
         void ProcessEvent_OnEnable()
         {
             _isPanning = false;
-
         }
 
         void ProcessEvent_OnDisable()
         {
             OnPan = null;
-
         }
 
 
@@ -34,7 +32,7 @@
             if (e.type == (EventType.Repaint | EventType.Layout)) return;
 
             //=============== PROCESS PANNING ==================
-            if (_isPanning )
+            if (_isPanning)
             {
                 OnPan?.Invoke(e.delta);
 
@@ -47,7 +45,6 @@
                 return;
             }
 
-
             if (e.alt)
             {
                 if (e.type == EventType.MouseDown)
@@ -56,6 +53,10 @@
                 }
 
             }
+
+
+            //===================== COMMANDS ==========================
+
 
 
 

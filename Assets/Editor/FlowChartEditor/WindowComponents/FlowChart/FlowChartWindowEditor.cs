@@ -57,7 +57,7 @@
         void General_Update_OnGUI()
         {
             //=========== DRAW ORDER===============
-            Background_Draw();
+            Background_OnGUI();
 
             ProcessEvents();
 
