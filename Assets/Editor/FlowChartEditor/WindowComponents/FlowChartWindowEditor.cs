@@ -13,13 +13,16 @@
 
         #endregion
 
-        #region Events
-
-        static System.Action _onGUI = null;
-
+        #region Definition
+        delegate void UpdateGUICallback();
         #endregion
 
-        #region  LifeTime
+
+        #region Events
+        static UpdateGUICallback _onGUI = null;
+        #endregion
+
+        #region Unity LifeTime
         public static void OpenWindow(FlowChart flowChart)
         {
             var window = GetWindow<FlowChartWindowEditor>();
@@ -32,11 +35,13 @@
         void OnEnable()
         {
             _onGUI = General_Init_OnGUI;
+            ProcessEvent_OnEnable();
         }
 
         void OnDisable()
         {
             _onGUI = null;
+            ProcessEvent_OnDisable();
         }
 
         void OnGUI()
@@ -46,8 +51,12 @@
 
         #endregion
 
+        #region GUI Call
         void General_Update_OnGUI()
         {
+            ProcessEvents();
+
+            //=========== DRAW ORDER===============
             Background_Draw();
         }
 
@@ -55,11 +64,16 @@
         {
             //Initialize code
 
+            //End of Init
             _onGUI = General_Update_OnGUI;
         }
 
-     
+      
+
+        #endregion
+
+
+
 
     }
-
 }
