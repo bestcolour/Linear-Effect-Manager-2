@@ -34,15 +34,16 @@
             if (e.type == (EventType.Repaint | EventType.Layout)) return;
 
             //=============== PROCESS PANNING ==================
-            if (_isPanning)
+            if (_isPanning )
             {
                 OnPan?.Invoke(e.delta);
-
 
                 if (e.type == EventType.MouseUp)
                 {
                     _isPanning = false;
                 }
+
+                Repaint();
                 return;
             }
 

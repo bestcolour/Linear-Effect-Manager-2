@@ -27,6 +27,7 @@
             mouseDelta *= 0.5f;
             _background_Offset.x += mouseDelta.x;
             _background_Offset.y += mouseDelta.y;
+
         }
 
         #region Draw
@@ -86,45 +87,6 @@
                 Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
                 Handles.color = grid1Colour;
             }
-
-            // for (int i = 0; i < numberOfLines / 5; i++)
-            // {
-            //     for (int g = 0; g < 4; g++)
-            //     {
-            //         startV.y += GRID_SPACE;
-            //         endV.y += GRID_SPACE;
-            //         Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
-            //     }
-
-            //     startV.y += GRID_SPACE;
-            //     endV.y += GRID_SPACE;
-
-            //     Handles.color = grid2Colour;
-            //     Handles.DrawLine(startV+adjustedOffset, endV+adjustedOffset);
-            //     Handles.color = grid1Colour;
-
-            // }
-
-            // //=======================DRAW VERTICAL LINES===========================
-            // startV = Vector3.zero;
-            // endV = Screen.height * Vector3.up;
-            // numberOfLines = Screen.width / GRID_SPACE;
-            // for (int i = 0; i < numberOfLines; i++)
-            // {
-            //     for (int g = 0; g < 4; g++)
-            //     {
-            //         startV.x += GRID_SPACE;
-            //         endV.x += GRID_SPACE;
-            //         Handles.DrawLine(startV, endV);
-            //     }
-
-            //     startV.x += GRID_SPACE;
-            //     endV.x += GRID_SPACE;
-
-            //     Handles.color = grid2Colour;
-            //     Handles.DrawLine(startV, endV);
-            //     Handles.color = grid1Colour;
-            // }
 
             GUIExtensions.End_GUI_ColourChange(prevColour);
             Handles.EndGUI();
