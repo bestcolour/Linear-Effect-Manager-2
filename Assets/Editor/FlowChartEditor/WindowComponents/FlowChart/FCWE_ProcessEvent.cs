@@ -29,40 +29,66 @@
         {
             Event e = Event.current;
 
-            if (e.type == (EventType.Repaint | EventType.Layout)) return;
-
-            //=============== PROCESS PANNING ==================
-            if (_isPanning)
+            switch (e.type)
             {
-                OnPan?.Invoke(e.delta);
+                case EventType.Repaint | EventType.Layout:
+                    return;
 
-                if (e.type == EventType.MouseUp)
-                {
-                    _isPanning = false;
-                }
 
-                Repaint();
-                return;
+                //======================== MOUSE DOWN ============================
+                case EventType.MouseDown:
+
+                    switch (e.button)
+                    {
+                        case 0:
+
+                            if (e.alt)
+                            {
+                                _isPanning = true;
+                                return;
+                            }
+
+                            break;
+
+                        case 1:
+
+
+                            break;
+
+
+
+                        default: return;
+                    }
+                    break;
+
+                //======================== MOUSE UP ============================
+                case EventType.MouseUp:
+                    if (_isPanning)
+                    {
+                        _isPanning = false;
+                        return;
+                    }
+
+                    break;
+
+                //======================== MOUSE DRAG ============================
+                case EventType.MouseDrag:
+                    if (_isPanning)
+                    {
+                        OnPan?.Invoke(e.delta);
+                        Repaint();
+                    }
+                    break;
+
+
+
+
+
             }
-
-            if (e.alt)
-            {
-                if (e.type == EventType.MouseDown)
-                {
-                    _isPanning = true;
-                }
-
-            }
-
-
-            //===================== COMMANDS ==========================
-
-
 
 
 
         }
-
 
 
 

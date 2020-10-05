@@ -1,9 +1,7 @@
 ﻿namespace LinearEffectsEditor
 {
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
-    using System;
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
@@ -25,12 +23,11 @@
 
         void Background_HandlePan(Vector2 mouseDelta)
         {
-            mouseDelta *= 0.3f;
+            mouseDelta *= 0.5f;
             _background_Offset.x += mouseDelta.x;
             _background_Offset.y += mouseDelta.y;
 
         }
-
 
         void Background_OnGUI()
         {
@@ -70,49 +67,6 @@
                 startV.x = endV.x = gridspacing * i;
                 Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
             }
-
-            // int numberOfLines = Mathf.CeilToInt((position.height / GRID_SPACE) * 0.2f) + 1;
-            // for (int i = 1, totalLinesDrawn = 0; i < numberOfLines; i++)
-            // {
-            //     //Draw the first 4 lines
-            //     for (int g = 1; g < 5; g++)
-            //     {
-            //         startV.y = endV.y = GRID_SPACE * (g + totalLinesDrawn);
-            //         Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
-            //     }
-
-            //     //Draw the fifth line
-            //     startV.y = endV.y = GRID_SPACE * (5 + totalLinesDrawn);
-
-
-            //     totalLinesDrawn += 5;
-            //     Handles.color = grid2Colour;
-            //     Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
-            //     Handles.color = grid1Colour;
-            // }
-
-            // //Ensure that startV & endV is at least one Gridspace behind the screen's actual starting point
-            // startV = Vector3.down * GRID_SPACE;
-            // endV = Vector3.up * (position.height + GRID_SPACE);
-            // numberOfLines = Mathf.CeilToInt((position.width / GRID_SPACE) * 0.2f) + 1;
-            // for (int i = 1, totalLinesDrawn = 0; i < numberOfLines; i++)
-            // {
-            //     //Draw the first 4 lines
-            //     for (int g = 1; g < 5; g++)
-            //     {
-            //         startV.x = endV.x = GRID_SPACE * (g + totalLinesDrawn);
-            //         Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
-            //     }
-
-            //     //Draw the fifth line
-            //     startV.x = endV.x = GRID_SPACE * (5 + totalLinesDrawn);
-
-
-            //     totalLinesDrawn += 5;
-            //     Handles.color = grid2Colour;
-            //     Handles.DrawLine(startV + adjustedOffset, endV + adjustedOffset);
-            //     Handles.color = grid1Colour;
-            // }
 
             GUIExtensions.End_GUI_ColourChange(prevColour);
             Handles.EndGUI();
