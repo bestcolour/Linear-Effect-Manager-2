@@ -35,12 +35,14 @@
         void OnEnable()
         {
             _onGUI = General_Init_OnGUI;
+            Background_OnEnable();
             ProcessEvent_OnEnable();
         }
 
         void OnDisable()
         {
             _onGUI = null;
+            Background_OnDisable();
             ProcessEvent_OnDisable();
         }
 
@@ -54,10 +56,12 @@
         #region GUI Call
         void General_Update_OnGUI()
         {
-            ProcessEvents();
-
             //=========== DRAW ORDER===============
             Background_Draw();
+
+            ProcessEvents();
+
+
         }
 
         void General_Init_OnGUI()
@@ -68,7 +72,7 @@
             _onGUI = General_Update_OnGUI;
         }
 
-      
+
 
         #endregion
 
