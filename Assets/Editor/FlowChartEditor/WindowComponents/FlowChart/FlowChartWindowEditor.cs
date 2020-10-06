@@ -37,6 +37,7 @@
             _onGUI = General_Init_OnGUI;
             Background_OnEnable();
             ProcessEvent_OnEnable();
+            NodeManager_OnEnable();
             ToolBar_OnEnable();
         }
 
@@ -45,6 +46,7 @@
             _onGUI = null;
             Background_OnDisable();
             ProcessEvent_OnDisable();
+            NodeManager_OnDisable();
             ToolBar_OnDisable();
         }
 
@@ -52,6 +54,8 @@
         {
             _onGUI?.Invoke();
         }
+
+
 
         #endregion
 
@@ -63,6 +67,7 @@
             ToolBar_OnGUI();
 
 
+            NodeManager_OnGUI();
             ProcessEvents();
 
 

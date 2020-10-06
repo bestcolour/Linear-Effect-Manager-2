@@ -20,7 +20,7 @@
         void ProcessEvent_OnEnable()
         {
             _isPanning = false;
-            // ProcessEvent_InitializeNodeMenu();
+            ProcessEvent_InitializeNodeMenu();
 
         }
 
@@ -54,13 +54,13 @@
                                 return;
                             }
 
-                            Debug.Log($"Mouse Position is : {e.mousePosition}");
+                            // Debug.Log($"Mouse Position is : {e.mousePosition}");
                             break;
 
                         //========== MOUSE DOWN - RIGHTCLICK =================
                         case 1:
 
-                            // _nodeMenu.ShowAsContext();
+                            _nodeMenu.ShowAsContext();
                             break;
 
                         //No intention of calling other mouse clicks
@@ -97,29 +97,17 @@
 
         }
 
-        #region Node Menu
 
-        // GenericMenu _nodeMenu = null;
+        #region  Node Menu
 
-        // void ProcessEvent_InitializeNodeMenu()
-        // {
-        //     _nodeMenu = new GenericMenu();
-        //     _nodeMenu.AddItem(new GUIContent("New Block"), false, () => ProcessEvent_NewBlock());
-        // }
+        GenericMenu _nodeMenu = null;
 
-        //================= NODE MENU FUNCTIONS =================
-        void ProcessEvent_NewBlock()
+        void ProcessEvent_InitializeNodeMenu()
         {
-            BlockNode b = new BlockNode();
-            Debug.Log($"Is b null? Check here:{b == null}");
+            _nodeMenu = new GenericMenu();
+            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_CreateNewBlock());
         }
-
-
-
         #endregion
-
-
-
     }
 
 }
