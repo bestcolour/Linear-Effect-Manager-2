@@ -10,16 +10,20 @@
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
         const float NODEBLOCK_SELECTION_THICKNESS = 5f;
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
+
         // #endregion
 
         #region Variables
         string _label;
         Rect _rect;
+        public string _id;
         #endregion
 
         #region Properties
         public bool IsSelected { private set; get; }
         #endregion
+
+
 
         public BlockNode(Vector2 position)
         {
@@ -27,6 +31,7 @@
             _rect.position = position;
             _label = "New Block";
             IsSelected = false;
+            _id = System.Guid.NewGuid().ToString();
         }
 
 
@@ -59,14 +64,9 @@
         {
             Event e = Event.current;
 
-            if (_rect.Contains(e.mousePosition, true))
-            {
-                IsSelected = true;
-                return true;
-            }
-
-            IsSelected = false;
-            return false;
+            IsSelected = _rect.Contains(e.mousePosition, true);
+            Debug.Log($"Block id : {_id} \n IsSelected: { IsSelected}");
+            return IsSelected;
         }
 
         public void ProcessMouseUp()

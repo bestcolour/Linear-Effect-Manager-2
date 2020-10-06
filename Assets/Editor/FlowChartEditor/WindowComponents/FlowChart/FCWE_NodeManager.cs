@@ -126,6 +126,7 @@
             //Since selected block will usally be at the last index of _allBlock, looping it from 0 to count will ensure that all other blocks gets a chance to consider itself as the newly selected block before the previous selected block
             for (int i = 0; i < _allBlocks.Count; i++)
             {
+
                 if (_allBlocks[i].ProcessMouseDown())
                 {
                     NodeManager_SelectBlock(i);
@@ -153,7 +154,6 @@
             {
                 case AddNewBlockFrom.ContextMenu:
                     b = new BlockNode(Event.current.mousePosition);
-
                     break;
 
                 case AddNewBlockFrom.ToolBar:
@@ -163,8 +163,13 @@
                 default: b = new BlockNode(CenterScreen); break;
             }
 
-
             _allBlocks.Add(b);
+            string description = "";
+            foreach (var item in _allBlocks)
+            {
+                description += $"Block ID: {item._id}";
+            }
+            Debug.Log(description);
             _newBlockFromEnum = AddNewBlockFrom.None;
         }
 
