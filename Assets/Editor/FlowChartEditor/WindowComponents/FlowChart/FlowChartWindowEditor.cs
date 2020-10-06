@@ -37,6 +37,7 @@
             _onGUI = General_Init_OnGUI;
             Background_OnEnable();
             ProcessEvent_OnEnable();
+            ToolBar_OnEnable();
         }
 
         void OnDisable()
@@ -44,6 +45,7 @@
             _onGUI = null;
             Background_OnDisable();
             ProcessEvent_OnDisable();
+            ToolBar_OnDisable();
         }
 
         void OnGUI()
@@ -58,6 +60,8 @@
         {
             //=========== DRAW ORDER===============
             Background_OnGUI();
+            ToolBar_OnGUI();
+
 
             ProcessEvents();
 
@@ -67,6 +71,7 @@
         void General_Init_OnGUI()
         {
             //Initialize code
+            //init styles here
 
             //End of Init
             _onGUI = General_Update_OnGUI;
