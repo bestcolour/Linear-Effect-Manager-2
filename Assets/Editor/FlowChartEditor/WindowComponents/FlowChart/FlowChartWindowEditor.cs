@@ -42,18 +42,18 @@
         {
             _onGUI = General_Init_OnGUI;
             Background_OnEnable();
-            ProcessEvent_OnEnable();
             NodeManager_OnEnable();
             ToolBar_OnEnable();
+            ProcessEvent_OnEnable();
         }
 
         void OnDisable()
         {
             _onGUI = null;
             Background_OnDisable();
-            ProcessEvent_OnDisable();
             NodeManager_OnDisable();
             ToolBar_OnDisable();
+            ProcessEvent_OnDisable();
         }
 
         void OnGUI()

@@ -14,27 +14,29 @@
 
         List<BlockNode> _allBlocks;
         HashSet<BlockNode> _selectedBlocks;
+        bool? _isDraggingBlocks;
 
-
+        #region LifeCycle Method
         private void NodeManager_OnEnable()
         {
             _allBlocks = new List<BlockNode>();
             _selectedBlocks = new HashSet<BlockNode>();
             _newBlockFromEnum = AddNewBlockFrom.None;
+            _isDraggingBlocks = null;
+
             OnPan += NodeManager_HandlePan;
             OnLeftMouseDownInGraph += NodeManager_HandleLeftMouseDownInGraph;
-
+            OnMouseDrag += NodeManager_HandleMouseDrag;
+            OnLeftMouseUpInGraph += NodeManager_HandleLeftmouseUpInGraph;
         }
-
-
 
         private void NodeManager_OnDisable()
         {
             OnLeftMouseDownInGraph -= NodeManager_HandleLeftMouseDownInGraph;
             OnPan -= NodeManager_HandlePan;
+            OnMouseDrag -= NodeManager_HandleMouseDrag;
+            OnLeftMouseUpInGraph -= NodeManager_HandleLeftmouseUpInGraph;
         }
-
-
 
         private void NodeManager_OnGUI()
         {
@@ -50,10 +52,10 @@
 
             NodeManager_Draw();
             NodeManager_DrawDebugger();
-            NodeManager_ProcessEvent();
 
 
         }
+        #endregion
 
         void NodeManager_Draw()
         {
@@ -81,32 +83,10 @@
             );
         }
 
-        void NodeManager_ProcessEvent()
-        {
-            // Event e = Event.current;
 
-            // switch (Event.current.type)
-            // {
-            //     //================== MOUSE UP ======================
-            //     case EventType.MouseUp:
-
-
-
-            //         break;
-
-
-            //     //================== MOUSE DOWN ======================
-            //     case EventType.MouseDown:
-
-
-            //         break;
-
-            // }
-
-        }
 
         #region Event Handlers
-        private void NodeManager_HandlePan(Vector2 mouseDelta)
+        void NodeManager_HandlePan(Vector2 mouseDelta)
         {
             for (int i = 0; i < _allBlocks.Count; i++)
             {
@@ -114,11 +94,82 @@
             }
         }
 
-        private void NodeManager_HandleLeftMouseDownInGraph()
+        void NodeManager_HandleMouseDrag(Vector2 mouseDelta)
+        {
+            switch (_isDraggingBlocks)
+            {
+                //================= IS DRAGGING HAS NOT BEEN DECIDED ===================
+                case null:
+                    _isDraggingBlocks = _selectedBlocks.Count > 0;
+                    break;
+
+                //================= IS DRAGGING BLOCKS ===================
+                case true:
+                    foreach (BlockNode node in _selectedBlocks)
+                    {
+                        node.ProcessMouseDrag(mouseDelta);
+                    }
+                    break;
+
+                //================= IS NOT DRAGGING BLOCKS ===================
+                default: break;
+            }
+
+        }
+
+        void NodeManager_HandleLeftMouseDownInGraph()
+        {
+
+
+            // Event e = Event.current;
+
+            // //================== SHIFT HELD ====================
+            // if (e.shift)
+            // {
+            //     for (int i = 0; i < _allBlocks.Count; i++)
+            //     {
+            //         if (_allBlocks[i].UpdateIfClicked())
+            //         {
+            //             //Stop loop once node has been found
+            //             NodeManager_ToggleBlockSelection(i);
+            //             Repaint();
+            //             return;
+            //         }
+            //     }
+            //     return;
+            // }
+
+            // //================== NO SHIFT HELD ==========================
+            // _selectedBlocks.Clear();
+
+            // int selectedNodeIndex = -1;
+
+            // //Since selected block will usally be at the last index of _allBlock, looping it from 0 to count will ensure that all other blocks gets a chance to consider itself as the newly selected block before the previous selected block
+            // for (int i = 0; i < _allBlocks.Count; i++)
+            // {
+            //     if (_allBlocks[i].UpdateIsSelected(selectedNodeIndex != -1))
+            //     {
+            //         selectedNodeIndex = i;
+            //     }
+            // }
+
+            // NodeManager_SelectBlockNode(selectedNodeIndex);
+            // Repaint();
+        }
+
+        void NodeManager_HandleLeftmouseUpInGraph()
         {
             Event e = Event.current;
-            //Return if panning
-            if (e.alt) return;
+
+            //Reset IsDragging
+            if (_isDraggingBlocks == true)
+            {
+
+            }
+            else
+            {
+
+            }
 
 
             //================== SHIFT HELD ====================
@@ -154,6 +205,8 @@
             NodeManager_SelectBlockNode(selectedNodeIndex);
             Repaint();
         }
+
+
         #endregion
 
 
@@ -184,10 +237,10 @@
             _allBlocks.Add(b);
             _newBlockFromEnum = AddNewBlockFrom.None;
         }
-
-
         #endregion
 
+
+        #region Selecting Block
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
         ///</Summary>
@@ -227,11 +280,9 @@
                 _allBlocks[lastIndex] = selectedBlock;
                 _allBlocks[i] = lastBlock;
             }
-
-
-
         }
 
+        #endregion
 
 
 

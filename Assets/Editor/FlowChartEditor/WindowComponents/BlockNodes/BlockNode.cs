@@ -76,14 +76,6 @@
             return true;
         }
 
-        public void ProcessMouseUp()
-        {
-
-
-
-
-        }
-
         public void ProcessMouseDrag(Vector2 mouseDelta)
         {
             _rect.position += mouseDelta;

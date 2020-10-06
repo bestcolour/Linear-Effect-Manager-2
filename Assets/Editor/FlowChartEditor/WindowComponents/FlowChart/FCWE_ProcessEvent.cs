@@ -9,11 +9,13 @@
     {
 
         #region  Events
-        delegate void PanCallback(Vector2 mouseDelta);
-        static event PanCallback OnPan = null;
+        delegate void DragCallback(Vector2 mouseDelta);
+        static event DragCallback OnPan = null;
 
         //Is called when mouse is clicked in a area which is not covered by: Toolbar
         static event Action OnLeftMouseDownInGraph = null;
+        static event Action OnLeftMouseUpInGraph = null;
+        static event DragCallback OnMouseDrag = null;
 
 
         #endregion
@@ -32,6 +34,8 @@
         void ProcessEvent_OnDisable()
         {
             OnPan = null;
+            OnMouseDrag = null;
+            OnLeftMouseUpInGraph = null;
         }
 
 
@@ -57,15 +61,13 @@
                                 return;
                             }
 
-                            OnLeftMouseDownInGraph?.Invoke();
-
                             if (e.alt)
                             {
                                 _isPanning = true;
                                 return;
                             }
 
-                            // Debug.Log($"Mouse Position is : {e.mousePosition}");
+                            OnLeftMouseDownInGraph?.Invoke();
                             break;
 
                         //========== MOUSE DOWN - RIGHTCLICK =================
@@ -86,7 +88,9 @@
                         _isPanning = false;
                         return;
                     }
-
+                    
+                    //Else invoke the event of mouseup inside of the graph
+                    OnLeftMouseUpInGraph?.Invoke();
                     break;
 
                 //======================== MOUSE DRAG ============================
@@ -95,11 +99,16 @@
                     {
                         OnPan?.Invoke(e.delta * 0.5f);
                         e.Use();
+                        return;
+                    }
+
+                    //Else it is likely that user is attempting to drag
+                    if (OnMouseDrag != null)
+                    {
+                        OnMouseDrag.Invoke(e.delta);
+                        e.Use();
                     }
                     break;
-
-
-
 
 
             }
