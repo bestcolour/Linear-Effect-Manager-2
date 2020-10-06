@@ -22,6 +22,12 @@
         static UpdateGUICallback _onGUI = null;
         #endregion
 
+
+        #region  Properties
+        Vector2 CenterScreen => new Vector2(Screen.width , Screen.height) * 0.35f;
+        #endregion
+
+
         #region Unity LifeTime
         public static void OpenWindow(FlowChart flowChart)
         {
@@ -68,7 +74,7 @@
 
 
             NodeManager_OnGUI();
-            ProcessEvents();
+            ProcessEvent_OnGUI();
 
 
         }

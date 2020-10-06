@@ -1,6 +1,6 @@
 ﻿namespace LinearEffectsEditor
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
@@ -8,18 +8,19 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
 
+       
         const float TOOLBAR_HEIGHT = 30f;
         static readonly Vector2 BUTTONSIZE = new Vector2(20f, 20f);
 
         Rect _toolBarRect;
-        bool _toolBarHidden;
+        // bool _toolBarHidden;
 
         public void ToolBar_OnEnable()
         {
             _toolBarRect = new Rect();
             _toolBarRect.height = TOOLBAR_HEIGHT;
 
-            _toolBarHidden = false;
+            // _toolBarHidden = false;
         }
 
         public void ToolBar_OnDisable()
@@ -45,7 +46,7 @@
             rect.x += 5f;
             if (GUI.Button(rect, "＋"))
             {
-                NodeManager_CreateNewBlock();
+                NodeManager_TriggerCreateNewBlock(AddNewBlockFrom.ToolBar);
             }
 
             //================== DRAW COPY BUTTON ======================
@@ -65,26 +66,26 @@
             }
 
 
-            rect.size = BUTTONSIZE;
-            rect.x = position.width - BUTTONSIZE.x - 5f;
-            switch (_toolBarHidden)
-            {
-                case true:
-                    if (GUI.Button(rect, "˅"))
-                    {
-                        //Hide toolbar
-                        _toolBarHidden = false;
-                    }
-                    break;
+            // rect.size = BUTTONSIZE;
+            // rect.x = position.width - BUTTONSIZE.x - 5f;
+            // switch (_toolBarHidden)
+            // {
+            //     case true:
+            //         if (GUI.Button(rect, "˅"))
+            //         {
+            //             //Hide toolbar
+            //             _toolBarHidden = false;
+            //         }
+            //         break;
 
-                case false:
-                    if (GUI.Button(rect, "˄"))
-                    {
-                        //Hide toolbar
-                        _toolBarHidden = true;
-                    }
-                    break;
-            }
+            //     case false:
+            //         if (GUI.Button(rect, "˄"))
+            //         {
+            //             //Hide toolbar
+            //             _toolBarHidden = true;
+            //         }
+            //         break;
+            // }
 
 
 

@@ -11,6 +11,11 @@
         #region  Events
         delegate void PanCallback(Vector2 mouseDelta);
         static event PanCallback OnPan = null;
+
+        //Is called when mouse is clicked in a area which is not covered by: Toolbar
+        static event Action OnLeftMouseDownInGraph = null;
+
+
         #endregion
 
 
@@ -30,7 +35,7 @@
         }
 
 
-        void ProcessEvents()
+        void ProcessEvent_OnGUI()
         {
             Event e = Event.current;
 
@@ -47,6 +52,12 @@
                     {
                         //========== MOUSE DOWN - LEFTCLICK =================
                         case 0:
+                            if (_toolBarRect.Contains(e.mousePosition, true))
+                            {
+                                return;
+                            }
+
+                            OnLeftMouseDownInGraph?.Invoke();
 
                             if (e.alt)
                             {
@@ -82,7 +93,7 @@
                 case EventType.MouseDrag:
                     if (_isPanning)
                     {
-                        OnPan?.Invoke(e.delta);
+                        OnPan?.Invoke(e.delta * 0.5f);
                         e.Use();
                     }
                     break;
@@ -105,7 +116,7 @@
         void ProcessEvent_InitializeNodeMenu()
         {
             _nodeMenu = new GenericMenu();
-            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_CreateNewBlock());
+            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_TriggerCreateNewBlock(AddNewBlockFrom.ContextMenu));
         }
         #endregion
     }

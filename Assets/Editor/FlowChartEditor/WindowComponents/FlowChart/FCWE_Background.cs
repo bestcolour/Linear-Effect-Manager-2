@@ -23,7 +23,7 @@
 
         void Background_HandlePan(Vector2 mouseDelta)
         {
-            mouseDelta *= 0.5f;
+            // mouseDelta *= 0.5f;
             _background_Offset.x += mouseDelta.x;
             _background_Offset.y += mouseDelta.y;
 
