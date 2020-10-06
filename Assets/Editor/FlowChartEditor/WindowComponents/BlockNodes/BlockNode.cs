@@ -6,20 +6,30 @@
     using UnityEditor;
     using System;
 
-    public class Node
+    public class BlockNode
     {
         #region Constants
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 200f));
         #endregion
 
 
-        string _label = "New Block";
-        Rect _rect = NODEBLOCK_SIZE;
+        string _label;
+        Rect _rect;
 
-        public void Initialize(Vector2 position)
+        public BlockNode(Vector2 position)
         {
+            Debug.Log("Creatin new node");
+            _label = "New Block";
+            _rect = NODEBLOCK_SIZE;
             _rect.position = position;
         }
+
+        // public void Initialize(Vector2 position)
+        // {
+        //     _label = "New Block";
+        //     _rect = NODEBLOCK_SIZE;
+        //     _rect.position = position;
+        // }
 
         public void OnGUI()
         {
@@ -28,7 +38,7 @@
 
         private void Draw()
         {
-            
+
             GUI.Box(_rect, _label);
 
         }
