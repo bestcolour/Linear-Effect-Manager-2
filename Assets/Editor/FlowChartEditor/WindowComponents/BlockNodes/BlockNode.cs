@@ -60,13 +60,20 @@
         }
 
 
-        public bool ProcessMouseDown()
+        public bool UpdateIsSelected(bool hasSelectedNodeBeenFound)
         {
-            Event e = Event.current;
-
-            IsSelected = _rect.Contains(e.mousePosition, true);
-            Debug.Log($"Block id : {_id} \n IsSelected: { IsSelected}");
+            IsSelected = hasSelectedNodeBeenFound ? false : _rect.Contains(Event.current.mousePosition, true);
             return IsSelected;
+        }
+
+        public bool UpdateIfClicked()
+        {
+            //If  node hasnt been clicked
+            if (!_rect.Contains(Event.current.mousePosition, true))
+                return false;
+
+            IsSelected = !IsSelected;
+            return true;
         }
 
         public void ProcessMouseUp()

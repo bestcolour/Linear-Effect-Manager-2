@@ -120,20 +120,38 @@
             //Return if panning
             if (e.alt) return;
 
-            //Else if no shift key is pressed,
+
+            //================== SHIFT HELD ====================
+            if (e.shift)
+            {
+                for (int i = 0; i < _allBlocks.Count; i++)
+                {
+                    if (_allBlocks[i].UpdateIfClicked())
+                    {
+                        //Stop loop once node has been found
+                        NodeManager_ToggleBlockSelection(i);
+                        Repaint();
+                        return;
+                    }
+                }
+                return;
+            }
+
+            //================== NO SHIFT HELD ==========================
             _selectedBlocks.Clear();
+
+            int selectedNodeIndex = -1;
 
             //Since selected block will usally be at the last index of _allBlock, looping it from 0 to count will ensure that all other blocks gets a chance to consider itself as the newly selected block before the previous selected block
             for (int i = 0; i < _allBlocks.Count; i++)
             {
-
-                if (_allBlocks[i].ProcessMouseDown())
+                if (_allBlocks[i].UpdateIsSelected(selectedNodeIndex != -1))
                 {
-                    NodeManager_SelectBlock(i);
+                    selectedNodeIndex = i;
                 }
             }
 
-
+            NodeManager_SelectBlockNode(selectedNodeIndex);
             Repaint();
         }
         #endregion
@@ -164,20 +182,20 @@
             }
 
             _allBlocks.Add(b);
-            string description = "";
-            foreach (var item in _allBlocks)
-            {
-                description += $"Block ID: {item._id}";
-            }
-            Debug.Log(description);
             _newBlockFromEnum = AddNewBlockFrom.None;
         }
 
 
         #endregion
 
-        void NodeManager_SelectBlock(int i)
+        ///<Summary>
+        /// Is called to select one and only one block node with the rest all cleared
+        ///</Summary>
+        void NodeManager_SelectBlockNode(int i)
         {
+            //Return if no blocks were selected
+            if (i < 0) return;
+
             _selectedBlocks.Add(_allBlocks[i]);
 
             //Send the selected block to the end of the list so that it will be rendered on top
@@ -188,15 +206,30 @@
             _allBlocks[i] = lastBlock;
         }
 
-        void NodeManager_ToggleBlockSelection(BlockNode block)
+        void NodeManager_ToggleBlockSelection(int i)
         {
-            if (_selectedBlocks.Contains(block))
+            //Return if no blocks were selected
+            if (i < 0) return;
+
+            //Send the selected block to the end of the list so that it will be rendered on top
+            int lastIndex = _allBlocks.Count - 1;
+            BlockNode selectedBlock = _allBlocks[i];
+
+            if (_selectedBlocks.Contains(selectedBlock))
             {
-                _selectedBlocks.Remove(block);
-                return;
+                _selectedBlocks.Remove(selectedBlock);
+            }
+            else
+            {
+                _selectedBlocks.Add(selectedBlock);
+
+                BlockNode lastBlock = _allBlocks[lastIndex];
+                _allBlocks[lastIndex] = selectedBlock;
+                _allBlocks[i] = lastBlock;
             }
 
-            _selectedBlocks.Add(block);
+
+
         }
 
 
