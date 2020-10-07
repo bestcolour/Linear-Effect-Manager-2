@@ -10,7 +10,7 @@
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
         const float NODEBLOCK_SELECTION_THICKNESS = 5f;
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
-
+static readonly Color SELECTION_COLOUR = new Color(.486f,.99f,0,0.5f);
         // #endregion
 
         #region Variables
@@ -48,7 +48,7 @@
                 rectCopy.x -= NODEBLOCK_SELECTION_THICKNESS;
                 rectCopy.y -= NODEBLOCK_SELECTION_THICKNESS;
 
-                prevColour = GUIExtensions.Start_GUI_ColourChange(Color.red);
+                prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
                 GUI.Box(rectCopy, string.Empty);
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }

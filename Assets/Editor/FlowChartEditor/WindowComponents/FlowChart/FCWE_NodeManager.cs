@@ -16,7 +16,9 @@
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent;
         #endregion
-
+        #region Constants
+        static readonly Color SELECTIONBOX_COLOUR = new Color(.75f,.93f,.93f,0.5f);
+        #endregion
 
 
         List<BlockNode> _allBlocks;
@@ -100,7 +102,9 @@
                 _selectionBox.width = e.mousePosition.x - _selectionBox.x;
                 _selectionBox.height = e.mousePosition.y - _selectionBox.y;
 
+                Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTIONBOX_COLOUR);
                 GUI.Box(_selectionBox, string.Empty);
+                GUIExtensions.End_GUI_ColourChange(prevColour);
             }
 
         }
