@@ -11,7 +11,7 @@
         #region Definitions
         //Gets triggered whenever NodeManager_CreateNewBlock() gets called since genericmenu doesnt allow creation of a new class type within the function
         enum AddNewBlockFrom { None, ToolBar, ContextMenu }
-        enum DragState { Default, DrawSelection_Start, DragBlocks_NoPotential, DragBlocks_HasPotential, DragBlocks_HadDraggedBlock }
+        enum DragState { Default, DrawSelection_HasPotential, DrawSelection_HadDragged, DragBlocks_HasPotential, DragBlocks_HadDraggedBlock }
         #endregion
 
         #region Statics
@@ -98,7 +98,7 @@
             }
 
             //Draw Selection box
-            if (_dragState == DragState.DrawSelection_Start)
+            if (_dragState == DragState.DrawSelection_HadDragged)
             {
                 Event e = Event.current;
                 _selectionBox.width = e.mousePosition.x - _selectionBox.x;
@@ -146,8 +146,31 @@
         {
             switch (_dragState)
             {
-                //================= HAS NO POTENTIAL OF EVER HAPPENING ===================
-                case DragState.DragBlocks_NoPotential:
+                //============== HAS NO POTENTIAL OF EITHER DRAGBLOCK OR SELECTIONBOX EVER HAPPENING ===================
+                case DragState.Default:
+                    break;
+
+                //======================= HANDLE SELECTION BOX LOGIC ==========================
+                case DragState.DrawSelection_HasPotential:
+                    //If code flows here, _selectedBlockIndex == -1
+                    _dragState = DragState.DrawSelection_HadDragged;
+                    break;
+
+                case DragState.DrawSelection_HadDragged:
+
+                    for (int i = 0; i < _allBlocks.Count; i++)
+                    {
+                        if (_allBlocks[i].CheckRectOverlap(_selectionBox))
+                        {
+                            _allBlocks[i].IsSelected = true;
+                            _selectedBlocks.Add(_allBlocks[i]);
+                        }
+                        else
+                        {
+                            _allBlocks[i].IsSelected = false;
+                            _selectedBlocks.Remove(_allBlocks[i]);
+                        }
+                    }
                     break;
 
                 //================= HAS POTENTIAL OF HAPPENING ===================
@@ -187,17 +210,10 @@
                 }
             }
 
-            // //Dont update potential if there is no block selected.
-            // if (_selectedBlockIndex == -1)
-            // {
-            //     return;
-            // }
-
             //Start Drawing Selection box
             _selectionBox.position = Event.current.mousePosition;
-            // _selectionBoxStart = Event.current.mousePosition;
 
-            _dragState = DragState.DrawSelection_Start;
+            _dragState = DragState.DrawSelection_HasPotential;
 
             //If selected block was not alrady selected,
             if (_selectedBlockIndex == -1 || !_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
@@ -207,33 +223,28 @@
             //===================== DETERMINE DRAGBLOCKS POTENTIAL ===========================
             // false = yes, there is potential
             // null = no, there is no potential
-            _dragState = _selectedBlocks.Count > 0 ? DragState.DragBlocks_HasPotential : DragState.DragBlocks_NoPotential;
-            // _isDraggingBlocks = _selectedBlocks.Count > 0 ? (bool?)false : null;
-
+            _dragState = _selectedBlocks.Count > 0 ? DragState.DragBlocks_HasPotential : DragState.Default;
         }
 
         void NodeManager_HandleLeftmouseUpInGraph()
         {
+            Event e = Event.current;
+
             switch (_dragState)
             {
                 //Previously had used the potential to dragg blocks
                 case DragState.DragBlocks_HadDraggedBlock:
                     _dragState = DragState.Default;
-                    break;
+                    return;
 
-                case DragState.DrawSelection_Start:
+                case DragState.DrawSelection_HadDragged:
                     _dragState = DragState.Default;
-                    break;
+                    e.Use();
+                    return;
 
-                default: break;
+                default: _dragState = DragState.Default; break;
             }
 
-            // if (_dragState == DragState.DragBlocks_HadDraggedBlock)
-            // {
-            //     return;
-            // }
-
-            Event e = Event.current;
             //================== SHIFT HELD ====================
             if (e.shift)
             {
