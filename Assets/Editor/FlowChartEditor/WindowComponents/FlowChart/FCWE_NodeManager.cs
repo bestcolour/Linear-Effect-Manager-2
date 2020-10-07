@@ -210,40 +210,26 @@
                 }
             }
 
-            //Start Drawing Selection box
-            _selectionBox.position = Event.current.mousePosition;
+            //==================== NO CLICKED NODE FOUND ======================
 
-            _dragState = DragState.DrawSelection_HasPotential;
-
-            //If selected block was not alrady selected,
-            if (_selectedBlockIndex == -1 || !_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
-                return;
-
-
-            //===================== DETERMINE DRAGBLOCKS POTENTIAL ===========================
-            // false = yes, there is potential
-            // null = no, there is no potential
-            _dragState = _selectedBlocks.Count > 0 ? DragState.DragBlocks_HasPotential : DragState.Default;
-        }
-
-        void NodeManager_HandleLeftmouseUpInGraph()
-        {
-            Event e = Event.current;
-
-            switch (_dragState)
+            if (_selectedBlockIndex == -1)
             {
-                //Previously had used the potential to dragg blocks
-                case DragState.DragBlocks_HadDraggedBlock:
-                    _dragState = DragState.Default;
-                    Repaint();
-                    return;
+                //Start Drawing Selection box
+                _selectionBox.position = Event.current.mousePosition;
+                _dragState = DragState.DrawSelection_HasPotential;
 
-                case DragState.DrawSelection_HadDragged:
-                    _dragState = DragState.Default;
-                    Repaint();
-                    return;
+                return;
+            }
 
-                default: _dragState = DragState.Default; break;
+
+            //==================== CLICKED NODE FOUND ======================
+            Event e = Event.current;
+            _dragState = DragState.DragBlocks_HasPotential;
+
+            //==================== DRAGGING MULTIPLE NODES ======================
+            if (_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
+            {
+                return;
             }
 
             //================== SHIFT HELD ====================
@@ -254,18 +240,61 @@
                 return;
             }
 
-            //================== NO SHIFT HELD ==========================
-            _selectedBlocks.Clear();
-
+            //================== NO SHIFT HELD =================
             //Reset all block's select state
-            for (int i = 0; i < _allBlocks.Count; i++)
-            {
-                _allBlocks[i].IsSelected = false;
-            }
+            NodeManager_ClearAllSelectedBlocks();
 
             //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
             NodeManager_SelectBlockNode();
             Repaint();
+        }
+
+        void NodeManager_HandleLeftmouseUpInGraph()
+        {
+
+            switch (_dragState)
+            {
+                //Previously had used the potential to dragg blocks
+                case DragState.DragBlocks_HadDraggedBlock:
+                    _dragState = DragState.Default;
+                    break;
+
+                case DragState.DrawSelection_HadDragged:
+                    _dragState = DragState.Default;
+                    break;
+
+                case DragState.DragBlocks_HasPotential:
+                    _dragState = DragState.Default;
+                    break;
+
+
+                default:
+                    _dragState = DragState.Default;
+                    NodeManager_ClearAllSelectedBlocks();
+                    break;
+            }
+
+            Repaint();
+
+            // //================== SHIFT HELD ====================
+            // if (e.shift)
+            // {
+            //     NodeManager_ToggleBlockSelection();
+            //     Repaint();
+            //     return;
+            // }
+
+            // //================== NO SHIFT HELD ==========================
+            // //Reset all block's select state
+            // foreach (var item in _selectedBlocks)
+            // {
+            //      item.IsSelected = false;
+            // }
+            // _selectedBlocks.Clear();
+
+            // //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
+            // NodeManager_SelectBlockNode();
+            // Repaint();
         }
 
 
@@ -302,9 +331,6 @@
         #endregion
 
         #region Selecting Block
-
-
-
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
         ///</Summary>
@@ -350,6 +376,14 @@
             }
         }
 
+        void NodeManager_ClearAllSelectedBlocks()
+        {
+            foreach (var item in _selectedBlocks)
+            {
+                item.IsSelected = false;
+            }
+            _selectedBlocks.Clear();
+        }
         #endregion
 
 
