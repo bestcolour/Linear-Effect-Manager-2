@@ -37,6 +37,7 @@
             _selectedBlocks = new HashSet<BlockNode>();
             _newBlockFromEnum = AddNewBlockFrom.None;
             _isDraggingBlocks = null;
+            _selectedBlockIndex = -1;
 
             OnPan += NodeManager_HandlePan;
             OnLeftMouseDownInGraph += NodeManager_HandleLeftMouseDownInGraph;
@@ -169,10 +170,13 @@
                 }
             }
 
-            //Dont update selectedBlockIndex if there is no block selected.
+            //Dont update potential if there is no block selected.
             if (_selectedBlockIndex == -1)
                 return;
 
+            //If selected block was not alrady selected,
+            if (!_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
+                return;
 
 
             //===================== DETERMINE DRAGBLOCKS POTENTIAL ===========================
@@ -197,7 +201,7 @@
             if (e.shift)
             {
 
-                NodeManager_ToggleBlockSelection(_selectedBlockIndex);
+                NodeManager_ToggleBlockSelection();
                 Repaint();
                 return;
 
@@ -224,7 +228,7 @@
             }
 
             //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
-            NodeManager_SelectBlockNode(_selectedBlockIndex);
+            NodeManager_SelectBlockNode();
             Repaint();
 
 
@@ -282,31 +286,31 @@
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
         ///</Summary>
-        void NodeManager_SelectBlockNode(int i)
+        void NodeManager_SelectBlockNode()
         {
             //Return if no blocks were selected
-            if (i < 0) return;
+            if (_selectedBlockIndex < 0) return;
 
-            _selectedBlocks.Add(_allBlocks[i]);
+            _selectedBlocks.Add(_allBlocks[_selectedBlockIndex]);
 
 
             //Send the selected block to the end of the list so that it will be rendered on top
             int lastIndex = _allBlocks.Count - 1;
-            BlockNode selectedBlock = _allBlocks[i], lastBlock = _allBlocks[lastIndex];
+            BlockNode selectedBlock = _allBlocks[_selectedBlockIndex], lastBlock = _allBlocks[lastIndex];
 
             selectedBlock.IsSelected = true;
             _allBlocks[lastIndex] = selectedBlock;
-            _allBlocks[i] = lastBlock;
+            _allBlocks[_selectedBlockIndex] = lastBlock;
         }
 
-        void NodeManager_ToggleBlockSelection(int i)
+        void NodeManager_ToggleBlockSelection()
         {
             //Return if no blocks were selected
-            if (i < 0) return;
+            if (_selectedBlockIndex < 0) return;
 
             //Send the selected block to the end of the list so that it will be rendered on top
             int lastIndex = _allBlocks.Count - 1;
-            BlockNode selectedBlock = _allBlocks[i];
+            BlockNode selectedBlock = _allBlocks[_selectedBlockIndex];
 
             if (_selectedBlocks.Contains(selectedBlock))
             {
@@ -320,7 +324,7 @@
 
                 BlockNode lastBlock = _allBlocks[lastIndex];
                 _allBlocks[lastIndex] = selectedBlock;
-                _allBlocks[i] = lastBlock;
+                _allBlocks[_selectedBlockIndex] = lastBlock;
             }
         }
 
