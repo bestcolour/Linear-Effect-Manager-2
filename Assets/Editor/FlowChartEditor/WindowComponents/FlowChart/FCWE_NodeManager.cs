@@ -11,7 +11,7 @@
         #region Definitions
         //Gets triggered whenever NodeManager_CreateNewBlock() gets called since genericmenu doesnt allow creation of a new class type within the function
         enum AddNewBlockFrom { None, ToolBar, ContextMenu }
-        enum DragBlockState { None, HasPotential, HadDragged }
+        enum DragState { Default, DrawSelection_Start, DragBlocks_NoPotential, DragBlocks_HasPotential, DragBlocks_HadDraggedBlock }
         #endregion
 
         #region Statics
@@ -26,7 +26,12 @@
 
         #region States
         AddNewBlockFrom _newBlockFromEnum;
-        bool? _isDraggingBlocks;
+        DragState _dragState;
+        #endregion
+
+        #region Var
+        // Vector2 _selectionBoxStart;
+        Rect _selectionBox;
         #endregion
 
         #region LifeCycle Method
@@ -36,8 +41,10 @@
             _allBlocks = new List<BlockNode>();
             _selectedBlocks = new HashSet<BlockNode>();
             _newBlockFromEnum = AddNewBlockFrom.None;
-            _isDraggingBlocks = null;
             _selectedBlockIndex = -1;
+            _dragState = DragState.Default;
+            // _selectionBoxStart = Vector2.zero;
+            _selectionBox = Rect.zero;
 
             OnPan += NodeManager_HandlePan;
             OnLeftMouseDownInGraph += NodeManager_HandleLeftMouseDownInGraph;
@@ -90,6 +97,16 @@
                 _allBlocks[i].Draw();
             }
 
+            //Draw Selection box
+            if (_dragState == DragState.DrawSelection_Start)
+            {
+                Event e = Event.current;
+                _selectionBox.width = e.mousePosition.x - _selectionBox.x;
+                _selectionBox.height = e.mousePosition.y - _selectionBox.y;
+
+                GUI.Box(_selectionBox, string.Empty);
+            }
+
         }
 
         void NodeManager_DrawDebugger()
@@ -99,7 +116,7 @@
             rect.x = 5f;
             rect.y = TOOLBAR_HEIGHT;
 
-            string debugStatement = $"Number of selected blocks: {_selectedBlocks.Count} \n ";
+            string debugStatement = $"Number of selected blocks: {_selectedBlocks.Count} \n Drag State: {_dragState}";
 
 
             DebugGUIContent.text = debugStatement;
@@ -127,21 +144,21 @@
 
         void NodeManager_HandleMouseDrag(Vector2 mouseDelta)
         {
-            switch (_isDraggingBlocks)
+            switch (_dragState)
             {
                 //================= HAS NO POTENTIAL OF EVER HAPPENING ===================
-                case null:
+                case DragState.DragBlocks_NoPotential:
                     break;
 
                 //================= HAS POTENTIAL OF HAPPENING ===================
-                case false:
+                case DragState.DragBlocks_HasPotential:
                     //It has been decided that user wants to use this potential to drag blocks
-                    _isDraggingBlocks = true;
+                    _dragState = DragState.DragBlocks_HadDraggedBlock;
 
                     break;
 
                 //================= IS USING POTENTIAL TO DRAG BLOCKS ===================
-                case true:
+                case DragState.DragBlocks_HadDraggedBlock:
                     foreach (BlockNode node in _selectedBlocks)
                     {
                         node.ProcessMouseDrag(mouseDelta);
@@ -170,56 +187,63 @@
                 }
             }
 
-            //Dont update potential if there is no block selected.
-            if (_selectedBlockIndex == -1)
-                return;
+            // //Dont update potential if there is no block selected.
+            // if (_selectedBlockIndex == -1)
+            // {
+            //     return;
+            // }
+
+            //Start Drawing Selection box
+            _selectionBox.position = Event.current.mousePosition;
+            // _selectionBoxStart = Event.current.mousePosition;
+
+            _dragState = DragState.DrawSelection_Start;
 
             //If selected block was not alrady selected,
-            if (!_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
+            if (_selectedBlockIndex == -1 || !_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
                 return;
 
 
             //===================== DETERMINE DRAGBLOCKS POTENTIAL ===========================
             // false = yes, there is potential
             // null = no, there is no potential
-            _isDraggingBlocks = _selectedBlocks.Count > 0 ? (bool?)false : null;
+            _dragState = _selectedBlocks.Count > 0 ? DragState.DragBlocks_HasPotential : DragState.DragBlocks_NoPotential;
+            // _isDraggingBlocks = _selectedBlocks.Count > 0 ? (bool?)false : null;
 
         }
 
         void NodeManager_HandleLeftmouseUpInGraph()
         {
-            //Previously had used the potential to dragg blocks
-            if (_isDraggingBlocks == true)
+            switch (_dragState)
             {
-                _isDraggingBlocks = null;
-                return;
+                //Previously had used the potential to dragg blocks
+                case DragState.DragBlocks_HadDraggedBlock:
+                    _dragState = DragState.Default;
+                    break;
+
+                case DragState.DrawSelection_Start:
+                    _dragState = DragState.Default;
+                    break;
+
+                default: break;
             }
 
+            // if (_dragState == DragState.DragBlocks_HadDraggedBlock)
+            // {
+            //     return;
+            // }
 
             Event e = Event.current;
             //================== SHIFT HELD ====================
             if (e.shift)
             {
-
                 NodeManager_ToggleBlockSelection();
                 Repaint();
                 return;
-
-                // for (int i = 0; i < _allBlocks.Count; i++)
-                // {
-                //     if (_allBlocks[i].UpdateIfClicked())
-                //     {
-                //         //Stop loop once node has been found
-                //         NodeManager_ToggleBlockSelection(i);
-                //         Repaint();
-                //         return;
-                //     }
-                // }
             }
 
             //================== NO SHIFT HELD ==========================
             _selectedBlocks.Clear();
-
 
             //Reset all block's select state
             for (int i = 0; i < _allBlocks.Count; i++)
@@ -230,22 +254,6 @@
             //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
             NodeManager_SelectBlockNode();
             Repaint();
-
-
-
-            // int selectedNodeIndex = -1;
-
-            // //Since selected block will usally be at the last index of _allBlock, looping it from 0 to count will ensure that all other blocks gets a chance to consider itself as the newly selected block before the previous selected block
-            // for (int i = 0; i < _allBlocks.Count; i++)
-            // {
-            //     if (_allBlocks[i].UpdateIsSelected(selectedNodeIndex != -1))
-            //     {
-            //         selectedNodeIndex = i;
-            //     }
-            // }
-
-            // NodeManager_SelectBlockNode(selectedNodeIndex);
-            // Repaint();
         }
 
 
@@ -281,8 +289,10 @@
         }
         #endregion
 
-
         #region Selecting Block
+
+
+
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
         ///</Summary>
