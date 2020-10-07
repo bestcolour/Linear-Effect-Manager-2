@@ -20,7 +20,7 @@
         #endregion
 
         #region Properties
-        public bool IsSelected { private set; get; }
+        public bool IsSelected { set; private get; }
         #endregion
 
 
@@ -60,21 +60,28 @@
         }
 
 
-        public bool UpdateIsSelected(bool hasSelectedNodeBeenFound)
+
+        public bool CheckIfClicked()
         {
-            IsSelected = hasSelectedNodeBeenFound ? false : _rect.Contains(Event.current.mousePosition, true);
-            return IsSelected;
+            return _rect.Contains(Event.current.mousePosition, true);
         }
 
-        public bool UpdateIfClicked()
-        {
-            //If  node hasnt been clicked
-            if (!_rect.Contains(Event.current.mousePosition, true))
-                return false;
 
-            IsSelected = !IsSelected;
-            return true;
-        }
+        // public bool UpdateIsSelected(bool hasSelectedNodeBeenFound)
+        // {
+        //     IsSelected = hasSelectedNodeBeenFound ? false : _rect.Contains(Event.current.mousePosition, true);
+        //     return IsSelected;
+        // }
+
+        // public bool UpdateIfClicked()
+        // {
+        //     //If  node hasnt been clicked
+        //     if (!_rect.Contains(Event.current.mousePosition, true))
+        //         return false;
+
+        //     IsSelected = !IsSelected;
+        //     return true;
+        // }
 
         public void ProcessMouseDrag(Vector2 mouseDelta)
         {

@@ -52,15 +52,15 @@
                 //======================== MOUSE DOWN ============================
                 case EventType.MouseDown:
 
+                    if (_toolBarRect.Contains(e.mousePosition, true))
+                    {
+                        return;
+                    }
+
                     switch (e.button)
                     {
                         //========== MOUSE DOWN - LEFTCLICK =================
                         case 0:
-                            if (_toolBarRect.Contains(e.mousePosition, true))
-                            {
-                                return;
-                            }
-
                             if (e.alt)
                             {
                                 _isPanning = true;
@@ -83,12 +83,17 @@
 
                 //======================== MOUSE UP ============================
                 case EventType.MouseUp:
+                    if (_toolBarRect.Contains(e.mousePosition, true))
+                    {
+                        return;
+                    }
+
                     if (_isPanning)
                     {
                         _isPanning = false;
                         return;
                     }
-                    
+
                     //Else invoke the event of mouseup inside of the graph
                     OnLeftMouseUpInGraph?.Invoke();
                     break;
