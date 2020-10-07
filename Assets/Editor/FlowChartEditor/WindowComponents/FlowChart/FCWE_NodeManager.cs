@@ -1,10 +1,8 @@
 ﻿namespace LinearEffectsEditor
 {
-    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
-    using System;
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
@@ -30,7 +28,6 @@
         #endregion
 
         #region Var
-        // Vector2 _selectionBoxStart;
         Rect _selectionBox;
         #endregion
 
@@ -43,7 +40,6 @@
             _newBlockFromEnum = AddNewBlockFrom.None;
             _selectedBlockIndex = -1;
             _dragState = DragState.Default;
-            // _selectionBoxStart = Vector2.zero;
             _selectionBox = Rect.zero;
 
             OnPan += NodeManager_HandlePan;
@@ -130,9 +126,6 @@
             );
         }
         #endregion
-
-
-
         #region Event Handlers
         void NodeManager_HandlePan(Vector2 mouseDelta)
         {
@@ -275,34 +268,13 @@
             }
 
             Repaint();
-
-            // //================== SHIFT HELD ====================
-            // if (e.shift)
-            // {
-            //     NodeManager_ToggleBlockSelection();
-            //     Repaint();
-            //     return;
-            // }
-
-            // //================== NO SHIFT HELD ==========================
-            // //Reset all block's select state
-            // foreach (var item in _selectedBlocks)
-            // {
-            //      item.IsSelected = false;
-            // }
-            // _selectedBlocks.Clear();
-
-            // //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
-            // NodeManager_SelectBlockNode();
-            // Repaint();
         }
 
 
         #endregion
 
 
-        //================================================= BLOCK FUNCTIONS ==================================================
-
+        //================================================= SUPPORTING FUNCTIONS ==================================================
         #region Creating Blocks
         void NodeManager_TriggerCreateNewBlock(AddNewBlockFrom from)
         {
@@ -329,7 +301,6 @@
             _newBlockFromEnum = AddNewBlockFrom.None;
         }
         #endregion
-
         #region Selecting Block
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
@@ -385,10 +356,6 @@
             _selectedBlocks.Clear();
         }
         #endregion
-
-
-
-
     }
 
 }
