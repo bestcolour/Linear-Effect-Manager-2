@@ -235,11 +235,12 @@
                 //Previously had used the potential to dragg blocks
                 case DragState.DragBlocks_HadDraggedBlock:
                     _dragState = DragState.Default;
+                    Repaint();
                     return;
 
                 case DragState.DrawSelection_HadDragged:
                     _dragState = DragState.Default;
-                    e.Use();
+                    Repaint();
                     return;
 
                 default: _dragState = DragState.Default; break;
