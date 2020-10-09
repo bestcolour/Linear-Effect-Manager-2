@@ -284,7 +284,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d496c865bfb9842a7815da02762d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks: []
+  _blocks:
+  - _orderArray: []
+    _settings:
+      _randomBool: 0
+    BlockName: New String
+    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+    BlockPosition: {x: 200, y: 246}
+  - _orderArray: []
+    _settings:
+      _randomBool: 0
+    BlockName: New String
+    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+    BlockPosition: {x: 516, y: 122}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
