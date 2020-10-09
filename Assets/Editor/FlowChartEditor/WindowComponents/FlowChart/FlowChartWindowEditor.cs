@@ -1,5 +1,6 @@
 ﻿namespace LinearEffectsEditor
 {
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
@@ -47,6 +48,8 @@
             ProcessEvent_OnEnable();
             BlockEditor_OnEnable();
         }
+
+      
 
         void OnDisable()
         {

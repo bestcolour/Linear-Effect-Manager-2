@@ -222,16 +222,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 910949407}
-  - component: {fileID: 910949410}
   - component: {fileID: 910949409}
   - component: {fileID: 910949408}
+  - component: {fileID: 910949410}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &910949407
 Transform:
   m_ObjectHideFlags: 0
@@ -258,8 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _array:
-  - _myAwesomeName: 
+  _array: []
 --- !u!114 &910949409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,8 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _array:
-  - Lol: 0
+  _array: []
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0

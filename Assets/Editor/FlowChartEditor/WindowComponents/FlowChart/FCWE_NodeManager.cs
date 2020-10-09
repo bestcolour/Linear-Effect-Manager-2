@@ -51,10 +51,9 @@
         #region LifeCycle Method
         private void NodeManager_OnEnable()
         {
+            _selectedBlocks = new HashSet<BlockNode>();
             InitializeDebugger();
             NodeManager_LoadCachedBlockNodes();
-            _selectedBlocks = new HashSet<BlockNode>();
-            _newBlockFromEnum = AddNewBlockFrom.None;
             _selectedBlockIndex = -1;
             _dragState = DragState.Default;
             _selectionBox = Rect.zero;
@@ -298,12 +297,15 @@
         void NodeManager_LoadCachedBlockNodes()
         {
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
+            _newBlockFromEnum = AddNewBlockFrom.None;
             _allBlocks = _target.BlocksArray;
-            _allBlockNodes = new List<BlockNode>(_allBlocks.Length);
+            _allBlockNodes = new List<BlockNode>();
 
             for (int i = 0; i < _allBlocks.Length; i++)
             {
-                NodeManager_CreateNewNode().LoadFrom(_allBlocks[i]);
+                BlockNode b = NodeManager_CreateNewNode();
+                b.LoadFrom(_allBlocks[i]);
+                _allBlockNodes.Add(b);
             }
         }
         #endregion
@@ -321,18 +323,22 @@
                 case AddNewBlockFrom.ContextMenu:
                     b = new BlockNode(Event.current.mousePosition);
                     ArrayExtension.Add(ref _allBlocks, new Block());
+                    _allBlockNodes.Add(b);
+                    _newBlockFromEnum = AddNewBlockFrom.None;
                     break;
 
                 case AddNewBlockFrom.ToolBar:
                     b = new BlockNode(CenterScreen);
                     ArrayExtension.Add(ref _allBlocks, new Block());
+                    _allBlockNodes.Add(b);
+                    _newBlockFromEnum = AddNewBlockFrom.None;
                     break;
 
-                default: b = new BlockNode(CenterScreen); break;
+                default:
+                    b = new BlockNode(CenterScreen);
+                    break;
             }
 
-            _allBlockNodes.Add(b);
-            _newBlockFromEnum = AddNewBlockFrom.None;
             return b;
         }
         #endregion

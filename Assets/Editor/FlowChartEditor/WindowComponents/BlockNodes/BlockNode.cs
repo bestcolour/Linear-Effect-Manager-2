@@ -65,7 +65,7 @@
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }
 
-            prevColour = GUIExtensions.Start_GUI_ColourChange(Color.white);
+            prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
             GUI.Box(_rect, _label);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 

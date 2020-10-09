@@ -19,10 +19,7 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>
-        { }
-
-
+        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>> { }
         #endregion
 
         #region Runtime Cached Variables
@@ -39,7 +36,7 @@
         #region Editor Time Cached Variables
 
         #region Constants
-        static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f);
+        static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
         #endregion
 
         [field: SerializeField]
@@ -48,6 +45,14 @@
         public Color BlockColour = DEFAULT_BLOCK_COLOUR;
         [field: SerializeField]
         public Vector2 BlockPosition = Vector2.zero;
+
+        // public Block()
+        // {
+        //     BlockName = "New String";
+        //     BlockColour = DEFAULT_BLOCK_COLOUR;
+        //     BlockPosition = Vector2.zero;
+        // }
+
 
         #endregion
 #endif
