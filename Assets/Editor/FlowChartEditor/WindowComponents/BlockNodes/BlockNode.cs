@@ -1,25 +1,28 @@
 ﻿namespace LinearEffectsEditor
 {
-    using System.Collections;
-    using System.Collections.Generic;
+    using LinearEffects;
     using UnityEngine;
 
+    //Graphical representations of block in the flowchart window editor
     public class BlockNode
     {
         // #region Constants
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
         const float NODEBLOCK_SELECTION_THICKNESS = 5f;
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
-static readonly Color SELECTION_COLOUR = new Color(.486f,.99f,0,0.5f);
+        static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
         // #endregion
 
         #region Variables
-        string _label;
         Rect _rect;
-        public string _id;
+
+        //=============== SERIALIZED VARIABLES ===================
+        string _label;
+        Color _blockColour;
         #endregion
 
         #region Properties
+        public string ID { get; private set; }
         public bool IsSelected { set; private get; }
         #endregion
 
@@ -31,7 +34,16 @@ static readonly Color SELECTION_COLOUR = new Color(.486f,.99f,0,0.5f);
             _rect.position = position;
             _label = "New Block";
             IsSelected = false;
-            _id = System.Guid.NewGuid().ToString();
+            ID = System.Guid.NewGuid().ToString();
+
+        }
+
+        //Loads the block's editor cached variables into this node 
+        public void LoadFrom(Block block)
+        {
+            _label = block.BlockName;
+            _blockColour = block.BlockColour;
+            _rect.position = block.BlockPosition;
         }
 
 
@@ -66,7 +78,7 @@ static readonly Color SELECTION_COLOUR = new Color(.486f,.99f,0,0.5f);
 
         public bool CheckRectOverlap(Rect selectionBox)
         {
-            return _rect.Overlaps(selectionBox,true);
+            return _rect.Overlaps(selectionBox, true);
         }
 
         public void ProcessMouseDrag(Vector2 mouseDelta)

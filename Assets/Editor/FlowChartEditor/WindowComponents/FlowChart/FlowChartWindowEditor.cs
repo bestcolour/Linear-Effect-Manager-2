@@ -24,7 +24,7 @@
 
 
         #region  Properties
-        Vector2 CenterScreen => new Vector2(Screen.width , Screen.height) * 0.35f;
+        Vector2 CenterScreen => new Vector2(Screen.width, Screen.height) * 0.35f;
         #endregion
 
 
@@ -45,6 +45,7 @@
             NodeManager_OnEnable();
             ToolBar_OnEnable();
             ProcessEvent_OnEnable();
+            BlockEditor_OnEnable();
         }
 
         void OnDisable()
@@ -54,6 +55,7 @@
             NodeManager_OnDisable();
             ToolBar_OnDisable();
             ProcessEvent_OnDisable();
+            BlockEditor_OnDisable();
         }
 
         void OnGUI()

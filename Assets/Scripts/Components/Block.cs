@@ -12,7 +12,7 @@
     {
         #region Definitions
         [Serializable]
-        class Settings
+        class BlockSettings
         {
             [SerializeField]
             bool _randomBool = default;
@@ -25,12 +25,35 @@
 
         #endregion
 
-        #region Cached Variables
+        #region Runtime Cached Variables
         [Header("Some Settings")]
         [SerializeField]
-        Settings _settings = default;
+        BlockSettings _settings = default;
 
 
         #endregion
+
+
+
+#if UNITY_EDITOR
+        #region Editor Time Cached Variables
+
+        #region Constants
+        static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f);
+        #endregion
+
+        [field: SerializeField]
+        public string BlockName = "New Block";
+        [field: SerializeField]
+        public Color BlockColour = DEFAULT_BLOCK_COLOUR;
+        [field: SerializeField]
+        public Vector2 BlockPosition = Vector2.zero;
+
+        #endregion
+#endif
+
+
+
+
     }
 }

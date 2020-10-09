@@ -286,12 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d496c865bfb9842a7815da02762d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks:
-  - _orderArray:
-    - _dataElmtIndex: 0
-    - _dataElmtIndex: 0
-    _settings:
-      _randomBool: 1
+  _blocks: []
   _settings:
     _someSetting: 0
 --- !u!1 &963194225

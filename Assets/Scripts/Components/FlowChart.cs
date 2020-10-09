@@ -11,8 +11,13 @@ namespace LinearEffects
         [SerializeField]
         Block[] _blocks = default;
 
+//For editor usage only
+#if UNITY_EDITOR
+        public Block[] BlocksArray => _blocks;
+#endif
+
         [System.Serializable]
-        class Settings
+        class FlowChartSettings
         {
             [SerializeField]
             bool _someSetting = default;
@@ -20,7 +25,8 @@ namespace LinearEffects
 
         [Header("Settings")]
         [SerializeField]
-        Settings _settings = default;
+        FlowChartSettings _settings = default;
+
 
     }
 }

@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 #if UNITY_EDITOR
-    //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
+    //This is the non-monobehaviour version of the ArrayUser class. 
     [System.Serializable]
     public class ArrayUser<OData, Holder, Data>
     where OData : OrderData<Holder>, new()

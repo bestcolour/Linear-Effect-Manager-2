@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
+    using LinearEffects;
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
@@ -10,19 +11,23 @@
         //Gets triggered whenever NodeManager_CreateNewBlock() gets called since genericmenu doesnt allow creation of a new class type within the function
         enum AddNewBlockFrom { None, ToolBar, ContextMenu }
         enum DragState { Default, DrawSelection_HasPotential, DrawSelection_HadDragged, DragBlocks_HasPotential, DragBlocks_HadDraggedBlock }
+        public delegate void ClickOnBlockNodeCallback(BlockNode block);
         #endregion
 
         #region Statics
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent;
         #endregion
+
         #region Constants
-        static readonly Color SELECTIONBOX_COLOUR = new Color(.75f,.93f,.93f,0.5f);
+        static readonly Color SELECTIONBOX_COLOUR = new Color(.75f, .93f, .93f, 0.5f);
+        const string BLOCKARRAY_PROPERTY_NAME = "_blocks";
         #endregion
 
+        #region Events
+        public event ClickOnBlockNodeCallback OnSelectBlockNode = null;
+        #endregion
 
-        List<BlockNode> _allBlocks;
-        HashSet<BlockNode> _selectedBlocks;
 
         #region States
         AddNewBlockFrom _newBlockFromEnum;
@@ -31,13 +36,23 @@
 
         #region Var
         Rect _selectionBox;
+
+
+        //Optimise drawcalls later by doing occulsion culling
+        //because this script isnt gunna get compiledi into the final build, ill use list instead of array
+        List<BlockNode> _allBlockNodes;
+        Block[] _allBlocks;
+
+        HashSet<BlockNode> _selectedBlocks;
         #endregion
+
+
 
         #region LifeCycle Method
         private void NodeManager_OnEnable()
         {
             InitializeDebugger();
-            _allBlocks = new List<BlockNode>();
+            NodeManager_LoadCachedBlockNodes();
             _selectedBlocks = new HashSet<BlockNode>();
             _newBlockFromEnum = AddNewBlockFrom.None;
             _selectedBlockIndex = -1;
@@ -66,7 +81,7 @@
 
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
-                NodeManager_CreateNewBlock();
+                NodeManager_CreateNewNode();
                 return;
             }
 
@@ -90,9 +105,9 @@
         void NodeManager_Draw()
         {
             //Draw from the bottom up
-            for (int i = 0; i < _allBlocks.Count; i++)
+            for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                _allBlocks[i].Draw();
+                _allBlockNodes[i].Draw();
             }
 
             //Draw Selection box
@@ -116,7 +131,7 @@
             rect.x = 5f;
             rect.y = TOOLBAR_HEIGHT;
 
-            string debugStatement = $"Number of selected blocks: {_selectedBlocks.Count} \n Drag State: {_dragState}";
+            string debugStatement = $"Number of selected blocks: {_selectedBlocks.Count} \n Drag State: {_dragState} ";
 
 
             DebugGUIContent.text = debugStatement;
@@ -133,9 +148,9 @@
         #region Event Handlers
         void NodeManager_HandlePan(Vector2 mouseDelta)
         {
-            for (int i = 0; i < _allBlocks.Count; i++)
+            for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                _allBlocks[i].ProcessMouseDrag(mouseDelta);
+                _allBlockNodes[i].ProcessMouseDrag(mouseDelta);
             }
         }
 
@@ -155,17 +170,17 @@
 
                 case DragState.DrawSelection_HadDragged:
 
-                    for (int i = 0; i < _allBlocks.Count; i++)
+                    for (int i = 0; i < _allBlockNodes.Count; i++)
                     {
-                        if (_allBlocks[i].CheckRectOverlap(_selectionBox))
+                        if (_allBlockNodes[i].CheckRectOverlap(_selectionBox))
                         {
-                            _allBlocks[i].IsSelected = true;
-                            _selectedBlocks.Add(_allBlocks[i]);
+                            _allBlockNodes[i].IsSelected = true;
+                            _selectedBlocks.Add(_allBlockNodes[i]);
                         }
                         else
                         {
-                            _allBlocks[i].IsSelected = false;
-                            _selectedBlocks.Remove(_allBlocks[i]);
+                            _allBlockNodes[i].IsSelected = false;
+                            _selectedBlocks.Remove(_allBlockNodes[i]);
                         }
                     }
                     break;
@@ -198,9 +213,9 @@
             //================= FINDING CLICKED NODE ======================
             _selectedBlockIndex = -1;
 
-            for (int i = 0; i < _allBlocks.Count; i++)
+            for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                if (_allBlocks[i].CheckIfClicked())
+                if (_allBlockNodes[i].CheckIfClicked())
                 {
                     _selectedBlockIndex = i;
                     break;
@@ -224,7 +239,7 @@
             _dragState = DragState.DragBlocks_HasPotential;
 
             //==================== DRAGGING MULTIPLE NODES ======================
-            if (_selectedBlocks.Contains(_allBlocks[_selectedBlockIndex]))
+            if (_selectedBlocks.Contains(_allBlockNodes[_selectedBlockIndex]))
             {
                 return;
             }
@@ -232,17 +247,17 @@
             //================== SHIFT HELD ====================
             if (e.shift)
             {
-                NodeManager_ToggleBlockSelection();
+                NodeManager_ToggleNodeSelection();
                 Repaint();
                 return;
             }
 
             //================== NO SHIFT HELD =================
             //Reset all block's select state
-            NodeManager_ClearAllSelectedBlocks();
+            NodeManager_ClearAllSelectedNodes();
 
             //Select the selected block if there is one. This causes the selectedblock to be sent to the end of the list
-            NodeManager_SelectBlockNode();
+            NodeManager_SelectNode();
             Repaint();
         }
 
@@ -267,7 +282,7 @@
 
                 default:
                     _dragState = DragState.Default;
-                    NodeManager_ClearAllSelectedBlocks();
+                    NodeManager_ClearAllSelectedNodes();
                     break;
             }
 
@@ -279,61 +294,79 @@
 
 
         //================================================= SUPPORTING FUNCTIONS ==================================================
+        #region Loading Blocks
+        void NodeManager_LoadCachedBlockNodes()
+        {
+            //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
+            _allBlocks = _target.BlocksArray;
+            _allBlockNodes = new List<BlockNode>(_allBlocks.Length);
+
+            for (int i = 0; i < _allBlocks.Length; i++)
+            {
+                NodeManager_CreateNewNode().LoadFrom(_allBlocks[i]);
+            }
+        }
+        #endregion
         #region Creating Blocks
-        void NodeManager_TriggerCreateNewBlock(AddNewBlockFrom from)
+        void NodeManager_TriggerCreateNewNode(AddNewBlockFrom from)
         {
             _newBlockFromEnum = from;
         }
 
-        void NodeManager_CreateNewBlock()
+        BlockNode NodeManager_CreateNewNode()
         {
             BlockNode b;
             switch (_newBlockFromEnum)
             {
                 case AddNewBlockFrom.ContextMenu:
                     b = new BlockNode(Event.current.mousePosition);
+                    ArrayExtension.Add(ref _allBlocks, new Block());
                     break;
 
                 case AddNewBlockFrom.ToolBar:
                     b = new BlockNode(CenterScreen);
+                    ArrayExtension.Add(ref _allBlocks, new Block());
                     break;
 
                 default: b = new BlockNode(CenterScreen); break;
             }
 
-            _allBlocks.Add(b);
+            _allBlockNodes.Add(b);
             _newBlockFromEnum = AddNewBlockFrom.None;
+            return b;
         }
         #endregion
         #region Selecting Block
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
         ///</Summary>
-        void NodeManager_SelectBlockNode()
+        void NodeManager_SelectNode()
         {
             //Return if no blocks were selected
             if (_selectedBlockIndex < 0) return;
 
-            _selectedBlocks.Add(_allBlocks[_selectedBlockIndex]);
+            _selectedBlocks.Add(_allBlockNodes[_selectedBlockIndex]);
 
 
             //Send the selected block to the end of the list so that it will be rendered on top
-            int lastIndex = _allBlocks.Count - 1;
-            BlockNode selectedBlock = _allBlocks[_selectedBlockIndex], lastBlock = _allBlocks[lastIndex];
+            int lastIndex = _allBlockNodes.Count - 1;
+            BlockNode selectedBlock = _allBlockNodes[_selectedBlockIndex], lastBlock = _allBlockNodes[lastIndex];
 
             selectedBlock.IsSelected = true;
-            _allBlocks[lastIndex] = selectedBlock;
-            _allBlocks[_selectedBlockIndex] = lastBlock;
+            _allBlockNodes[lastIndex] = selectedBlock;
+            _allBlockNodes[_selectedBlockIndex] = lastBlock;
+
+            OnSelectBlockNode?.Invoke(selectedBlock);
         }
 
-        void NodeManager_ToggleBlockSelection()
+        void NodeManager_ToggleNodeSelection()
         {
             //Return if no blocks were selected
             if (_selectedBlockIndex < 0) return;
 
             //Send the selected block to the end of the list so that it will be rendered on top
-            int lastIndex = _allBlocks.Count - 1;
-            BlockNode selectedBlock = _allBlocks[_selectedBlockIndex];
+            int lastIndex = _allBlockNodes.Count - 1;
+            BlockNode selectedBlock = _allBlockNodes[_selectedBlockIndex];
 
             if (_selectedBlocks.Contains(selectedBlock))
             {
@@ -345,13 +378,13 @@
                 _selectedBlocks.Add(selectedBlock);
                 selectedBlock.IsSelected = true;
 
-                BlockNode lastBlock = _allBlocks[lastIndex];
-                _allBlocks[lastIndex] = selectedBlock;
-                _allBlocks[_selectedBlockIndex] = lastBlock;
+                BlockNode lastBlock = _allBlockNodes[lastIndex];
+                _allBlockNodes[lastIndex] = selectedBlock;
+                _allBlockNodes[_selectedBlockIndex] = lastBlock;
             }
         }
 
-        void NodeManager_ClearAllSelectedBlocks()
+        void NodeManager_ClearAllSelectedNodes()
         {
             foreach (var item in _selectedBlocks)
             {
