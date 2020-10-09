@@ -11,6 +11,7 @@
         #region Current Cached Variable
         // static FlowChart _target = default;
         static SerializedObject _target = default;
+        static FlowChart _flowChart = default;
 
 
         #endregion
@@ -37,6 +38,7 @@
 
             window.titleContent = new GUIContent("FlowChartEditor");
 
+            _flowChart = flowChart;
             _target = new SerializedObject(flowChart);
             window.ProxyOnEnable();
         }

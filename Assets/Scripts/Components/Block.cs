@@ -57,14 +57,14 @@
 
         public Block(Vector2 position)
         {
-            BlockName = "New String";
+            BlockName = "New Block";
             BlockColour = DEFAULT_BLOCK_COLOUR;
             BlockPosition = position;
         }
 
         public Block()
         {
-            BlockName = "New String";
+            BlockName = "New Block";
             BlockColour = DEFAULT_BLOCK_COLOUR;
         }
         #endregion

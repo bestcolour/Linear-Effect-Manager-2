@@ -8,23 +8,84 @@
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
+        #region Constants
+        const string PREVIOUS_FLOWCHART_SCENEPATH_EDITORPREFS = "FlowChartPath";
+        #endregion
+
         SerializedProperty _allBlocksArrayProperty;
 
         #region LifeTime
         void NodeManager_SaveManager_OnEnable()
         {
             NodeManager_LoadCachedBlockNodes();
+            EditorApplication.playModeStateChanged += NodeManager_SaveManager_HandlePlayModeStateChange;
+            NodeManager_SaveManager_SaveFlowChartPath();
         }
+
 
 
         void NodeManager_SaveManager_OnDisable()
         {
             NodeManager_SaveManager_SaveAllNodes();
+            Debug.Log("Disabling");
+            EditorApplication.playModeStateChanged -= NodeManager_SaveManager_HandlePlayModeStateChange;
         }
         #endregion
 
+        void NodeManager_SaveManager_HandlePlayModeStateChange(PlayModeStateChange obj)
+        {
+            //For now runtime debugging will not be shown.
+            Debug.Log(obj);
+            switch (obj)
+            {
+                case PlayModeStateChange.EnteredEditMode:
+                    break;
+                case PlayModeStateChange.EnteredPlayMode:
+                    break;
+                case PlayModeStateChange.ExitingEditMode:
+                    NodeManager_SaveManager_SaveFlowChartPath();
+                    NodeManager_SaveManager_SaveAllNodes();
+                    break;
+                case PlayModeStateChange.ExitingPlayMode:
+                    NodeManager_SaveManager_LoadFlowChartPath();
+                    break;
+            }
+        }
+
+
+        #region Save Load
+        void NodeManager_SaveManager_SaveFlowChartPath()
+        {
+            Transform t = _flowChart.transform;
+            string path = t.name;
+
+            while (t.parent != null)
+            {
+                path = path.Insert(0, $"{t.parent.name}/");
+                t = t.parent;
+            }
+
+            //Append scene name
+            path = path.Insert(0, $"{t.root.gameObject.scene.name}/");
+            Debug.Log(path);
+
+
+            EditorPrefs.SetString(PREVIOUS_FLOWCHART_SCENEPATH_EDITORPREFS, path);
+        }
+
+        void NodeManager_SaveManager_LoadFlowChartPath()
+        {
+            Debug.Log(_flowChart);
+        }
+
         void NodeManager_SaveManager_SaveAllNodes()
         {
+            if (_allBlockNodes == null)
+            {
+                Debug.Log($"For some reason _allBlockNodes was null. This is probably due to the window being open during recompilation");
+                return;
+            }
+
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
                 //Save to their 
@@ -47,7 +108,7 @@
                 _allBlockNodes.Add(b);
             }
         }
-
+        #endregion
     }
 
 }
