@@ -4,6 +4,7 @@
     using UnityEngine;
     using UnityEditor;
     using LinearEffects;
+    using System;
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
@@ -62,7 +63,10 @@
             OnLeftMouseDownInGraph += NodeManager_HandleLeftMouseDownInGraph;
             OnMouseDrag += NodeManager_HandleMouseDrag;
             OnLeftMouseUpInGraph += NodeManager_HandleLeftmouseUpInGraph;
+            EditorApplication.playModeStateChanged += HandlePlayModeStateChanged;
+
         }
+
 
         private void NodeManager_OnDisable()
         {
@@ -70,6 +74,8 @@
             OnPan -= NodeManager_HandlePan;
             OnMouseDrag -= NodeManager_HandleMouseDrag;
             OnLeftMouseUpInGraph -= NodeManager_HandleLeftmouseUpInGraph;
+            EditorApplication.playModeStateChanged -= HandlePlayModeStateChanged;
+
         }
 
         private void NodeManager_OnGUI()
@@ -145,6 +151,14 @@
         }
         #endregion
         #region Event Handlers
+        //Handles all of the window node's current cache whenever recompilation occurs
+        private void HandlePlayModeStateChanged(PlayModeStateChange obj)
+        {
+            Debug.Log(obj);
+
+        }
+
+
         void NodeManager_HandlePan(Vector2 mouseDelta)
         {
             for (int i = 0; i < _allBlockNodes.Count; i++)

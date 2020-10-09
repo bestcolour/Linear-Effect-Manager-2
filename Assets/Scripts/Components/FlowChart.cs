@@ -10,21 +10,18 @@ namespace LinearEffects
     public class FlowChart : MonoBehaviour
     {
         [SerializeField]
-        Block[] _blocks;
+        Block[] _blocks = new Block[0];
 
         //For editor usage only
 #if UNITY_EDITOR
-        public Block[] BlocksArray => _blocks;
-
-        void Awake()
+        public Block[] BlocksArray
         {
-            if (_blocks == null)
+            get
             {
-                _blocks = new Block[0];
+                _blocks = _blocks == null ? new Block[0] : _blocks;
+                return _blocks;
             }
-
         }
-
 
 #endif
 

@@ -37,9 +37,10 @@
             window.titleContent = new GUIContent("FlowChartEditor");
 
             _target = flowChart;
+            window.ProxyOnEnable();
         }
 
-        void OnEnable()
+        void ProxyOnEnable()
         {
             _onGUI = General_Init_OnGUI;
             Background_OnEnable();
@@ -49,7 +50,7 @@
             BlockEditor_OnEnable();
         }
 
-      
+
 
         void OnDisable()
         {
