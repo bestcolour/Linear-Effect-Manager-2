@@ -34,9 +34,9 @@
 
 
 #if UNITY_EDITOR
-        #region Editor Time Cached Variables
 
         #region Constants
+        //All the default and propertypath name constants will be stored here in the Unity_editor section
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
 
         //========================= BLOCK PROPERTYNAMES CONSTANTS =========================================
@@ -44,6 +44,9 @@
         public const string PROPERTYNAME_BLOCKCOLOUR = "BlockColour";
         public const string PROPERTYNAME_BLOCKPOSITION = "BlockPosition";
         #endregion
+
+
+        #region Editor Time Cached Variables
 
         [field: SerializeField]
         public string BlockName;
@@ -59,15 +62,15 @@
             BlockPosition = position;
         }
 
-          public Block()
+        public Block()
         {
             BlockName = "New String";
             BlockColour = DEFAULT_BLOCK_COLOUR;
         }
-
-
-
         #endregion
+
+
+
 #endif
 
 
