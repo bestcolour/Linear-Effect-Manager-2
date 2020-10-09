@@ -41,7 +41,6 @@
         //Optimise drawcalls later by doing occulsion culling
         //because this script isnt gunna get compiledi into the final build, ill use list instead of array
         List<BlockNode> _allBlockNodes;
-        SerializedProperty _allBlocksArrayProperty;
 
         HashSet<BlockNode> _selectedBlocks;
         #endregion
@@ -53,7 +52,7 @@
         {
             _selectedBlocks = new HashSet<BlockNode>();
             InitializeDebugger();
-            NodeManager_LoadCachedBlockNodes();
+            NodeManager_SaveManager_OnEnable();
             _selectedBlockIndex = -1;
             _dragState = DragState.Default;
             _selectionBox = Rect.zero;
@@ -62,18 +61,17 @@
             OnLeftMouseDownInGraph += NodeManager_HandleLeftMouseDownInGraph;
             OnMouseDrag += NodeManager_HandleMouseDrag;
             OnLeftMouseUpInGraph += NodeManager_HandleLeftmouseUpInGraph;
-            EditorApplication.playModeStateChanged += HandlePlayModeStateChanged;
-
         }
 
 
         private void NodeManager_OnDisable()
         {
+            NodeManager_SaveManager_OnDisable();
+
             OnLeftMouseDownInGraph -= NodeManager_HandleLeftMouseDownInGraph;
             OnPan -= NodeManager_HandlePan;
             OnMouseDrag -= NodeManager_HandleMouseDrag;
             OnLeftMouseUpInGraph -= NodeManager_HandleLeftmouseUpInGraph;
-            EditorApplication.playModeStateChanged -= HandlePlayModeStateChanged;
 
         }
 
@@ -150,14 +148,6 @@
         }
         #endregion
         #region Event Handlers
-        //Handles all of the window node's current cache whenever recompilation occurs
-        private void HandlePlayModeStateChanged(PlayModeStateChange obj)
-        {
-            Debug.Log(obj);
-
-        }
-
-
         void NodeManager_HandlePan(Vector2 mouseDelta)
         {
             for (int i = 0; i < _allBlockNodes.Count; i++)
@@ -306,23 +296,6 @@
 
 
         //================================================= SUPPORTING FUNCTIONS ==================================================
-        #region Loading Blocks
-        void NodeManager_LoadCachedBlockNodes()
-        {
-            //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
-            _newBlockFromEnum = AddNewBlockFrom.None;
-            _allBlocksArrayProperty = _target.FindProperty(FlowChart.BLOCKARRAY_PROPERTYNAME);
-            _allBlockNodes = new List<BlockNode>();
-
-            for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
-            {
-                BlockNode b = NodeManager_GetNewNode();
-                SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                b.LoadFrom(e);
-                _allBlockNodes.Add(b);
-            }
-        }
-        #endregion
         #region Creating Blocks
         void NodeManager_TriggerCreateNewNode(AddNewBlockFrom from)
         {

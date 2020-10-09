@@ -32,6 +32,7 @@
         #endregion
 
 
+        #region Saving & Initialization
 
         public BlockNode(Vector2 position)
         {
@@ -66,7 +67,18 @@
             _rect.position = block.BlockPosition;
         }
 
+        public void SaveTo(SerializedProperty blockProperty)
+        {
+            blockProperty.serializedObject.Update();
+            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = _label;
+            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = _blockColour;
+            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = _rect.position;
+            blockProperty.serializedObject.ApplyModifiedProperties();
+        }
 
+        #endregion
+
+        #region Window Functions
         public void Draw()
         {
             Color prevColour;
@@ -105,6 +117,7 @@
         {
             _rect.position += mouseDelta;
         }
+        #endregion
     }
 
 }

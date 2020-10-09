@@ -112,6 +112,8 @@
             blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = blockToCopyFrom.BlockColour;
             blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = blockToCopyFrom.BlockName;
             blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = blockToCopyFrom.BlockPosition;
+
+
         }
 
 
