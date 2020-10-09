@@ -2,16 +2,21 @@
 {
     using LinearEffects;
     using UnityEngine;
+    using UnityEditor;
 
     //Graphical representations of block in the flowchart window editor
     public class BlockNode
     {
-        // #region Constants
+        #region Constants
+        //========================= NODE CONSTANTS =========================================
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
         const float NODEBLOCK_SELECTION_THICKNESS = 5f;
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
-        // #endregion
+
+
+
+        #endregion
 
         #region Variables
         Rect _rect;
@@ -32,10 +37,25 @@
         {
             _rect = NODEBLOCK_SIZE;
             _rect.position = position;
-            _label = "New Block";
+            _label = string.Empty;
             IsSelected = false;
             ID = System.Guid.NewGuid().ToString();
+        }
 
+        public BlockNode()
+        {
+            _rect = NODEBLOCK_SIZE;
+            _label = string.Empty;
+            IsSelected = false;
+            ID = System.Guid.NewGuid().ToString();
+        }
+
+        //Loads the block's editor cached variables into this node 
+        public void LoadFrom(SerializedProperty blockProperty)
+        {
+            _label = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue;
+            _blockColour = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue;
+            _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value;
         }
 
         //Loads the block's editor cached variables into this node 

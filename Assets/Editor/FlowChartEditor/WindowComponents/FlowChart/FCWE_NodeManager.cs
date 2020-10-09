@@ -22,7 +22,6 @@
 
         #region Constants
         static readonly Color SELECTIONBOX_COLOUR = new Color(.75f, .93f, .93f, 0.5f);
-        const string BLOCKARRAY_PROPERTY_NAME = "_blocks";
         #endregion
 
         #region Events
@@ -42,7 +41,7 @@
         //Optimise drawcalls later by doing occulsion culling
         //because this script isnt gunna get compiledi into the final build, ill use list instead of array
         List<BlockNode> _allBlockNodes;
-        Block[] _allBlocks;
+        SerializedProperty _allBlocksArrayProperty;
 
         HashSet<BlockNode> _selectedBlocks;
         #endregion
@@ -86,7 +85,7 @@
 
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
-                NodeManager_CreateNewNode();
+                NodeManager_GetNewNode();
                 return;
             }
 
@@ -312,13 +311,14 @@
         {
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
             _newBlockFromEnum = AddNewBlockFrom.None;
-            _allBlocks = _target.BlocksArray;
+            _allBlocksArrayProperty = _target.FindProperty(FlowChart.BLOCKARRAY_PROPERTYNAME);
             _allBlockNodes = new List<BlockNode>();
 
-            for (int i = 0; i < _allBlocks.Length; i++)
+            for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
-                BlockNode b = NodeManager_CreateNewNode();
-                b.LoadFrom(_allBlocks[i]);
+                BlockNode b = NodeManager_GetNewNode();
+                SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
+                b.LoadFrom(e);
                 _allBlockNodes.Add(b);
             }
         }
@@ -329,32 +329,42 @@
             _newBlockFromEnum = from;
         }
 
-        BlockNode NodeManager_CreateNewNode()
+        BlockNode NodeManager_GetNewNode()
         {
-            BlockNode b;
+            BlockNode node;
             switch (_newBlockFromEnum)
             {
                 case AddNewBlockFrom.ContextMenu:
-                    b = new BlockNode(Event.current.mousePosition);
-                    ArrayExtension.Add(ref _allBlocks, new Block());
-                    _allBlockNodes.Add(b);
-                    _newBlockFromEnum = AddNewBlockFrom.None;
+                    node = NodeManager_CreateNewNode(Event.current.mousePosition);
                     break;
 
                 case AddNewBlockFrom.ToolBar:
-                    b = new BlockNode(CenterScreen);
-                    ArrayExtension.Add(ref _allBlocks, new Block());
-                    _allBlockNodes.Add(b);
-                    _newBlockFromEnum = AddNewBlockFrom.None;
+                    node = NodeManager_CreateNewNode(CenterScreen);
                     break;
 
+                //Code runs thru here when loading nodes
                 default:
-                    b = new BlockNode(CenterScreen);
+                    node = new BlockNode(CenterScreen);
                     break;
             }
 
-            return b;
+            return node;
         }
+
+        BlockNode NodeManager_CreateNewNode(Vector2 position)
+        {
+            BlockNode node = new BlockNode();
+            Block b = new Block(position);
+
+            //Newly created node should load from a newly created block to get all the default values
+            node.LoadFrom(b);
+
+            _allBlocksArrayProperty.AddToBlockPropertyArray(b);
+            _allBlockNodes.Add(node);
+            _newBlockFromEnum = AddNewBlockFrom.None;
+            return node;
+        }
+
         #endregion
         #region Selecting Block
         ///<Summary>

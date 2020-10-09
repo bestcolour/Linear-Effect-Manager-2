@@ -12,16 +12,17 @@ namespace LinearEffects
         [SerializeField]
         Block[] _blocks = new Block[0];
 
-        //For editor usage only
 #if UNITY_EDITOR
-        public Block[] BlocksArray
-        {
-            get
-            {
-                _blocks = _blocks == null ? new Block[0] : _blocks;
-                return _blocks;
-            }
-        }
+        public const string BLOCKARRAY_PROPERTYNAME = "_blocks";
+
+        // public Block[] BlocksArray
+        // {
+        //     get
+        //     {
+        //         _blocks = _blocks == null ? new Block[0] : _blocks;
+        //         return _blocks;
+        //     }
+        // }
 
 #endif
 

@@ -9,7 +9,8 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Current Cached Variable
-        static FlowChart _target = default;
+        // static FlowChart _target = default;
+        static SerializedObject _target = default;
 
 
         #endregion
@@ -36,7 +37,7 @@
 
             window.titleContent = new GUIContent("FlowChartEditor");
 
-            _target = flowChart;
+            _target = new SerializedObject(flowChart);
             window.ProxyOnEnable();
         }
 
