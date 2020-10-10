@@ -49,6 +49,38 @@
             return null;
 
         }
+
+        FlowChart SaveManager_TryLoadFlowChartPath_Runtime()
+        {
+            string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
+            if (path == string.Empty)
+            {
+                return null;
+            }
+
+
+
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene loadedScene = SceneManager.GetSceneAt(i);
+                if (!loadedScene.GetTransform(path, out Transform flowChartTransform))
+                {
+                    continue;
+                }
+
+                if (!flowChartTransform.TryGetComponent<FlowChart>(out FlowChart flowChart))
+                {
+                    continue;
+                }
+
+                return flowChart;
+            }
+
+
+            //Else if no flowchart is found
+            return null;
+
+        }
     }
 
 }

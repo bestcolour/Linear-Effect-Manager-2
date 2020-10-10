@@ -47,7 +47,6 @@
         private void OnEnable()
         {
             _state = EditorState.INITIALIZE;
-            // SaveManager_OnEnable();
         }
 
         #region Initializations
@@ -91,6 +90,9 @@
             //======================= WINDOW OPEN VIA PLAYMODE CHANGE ===========================
             if (EditorApplication.isPlaying)
             {
+                //Get the flow chart during runtime then
+                _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
+
                 _state = EditorState.RUNTIME_DEBUG;
                 RUNTIME_DEBUG_OnEnable();
                 return;
@@ -118,7 +120,6 @@
                     break;
             }
             SaveManager_SaveFlowChartPath();
-            // SaveManager_OnDisable();
         }
 
         void OnGUI()
