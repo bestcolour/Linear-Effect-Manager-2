@@ -10,6 +10,7 @@
     {
         #region Constants
         const string PREVIOUS_FLOWCHART_SCENEPATH_EDITORPREFS = "FlowChartPath";
+       
         #endregion
 
         SerializedProperty _allBlocksArrayProperty;
@@ -18,7 +19,7 @@
         void NodeManager_SaveManager_OnEnable()
         {
             NodeManager_LoadCachedBlockNodes();
-            EditorApplication.playModeStateChanged += NodeManager_SaveManager_HandlePlayModeStateChange;
+            AssemblyReloadEvents.beforeAssemblyReload += HandleBeforeAssemblyReload;
             NodeManager_SaveManager_SaveFlowChartPath();
         }
 
@@ -26,32 +27,45 @@
 
         void NodeManager_SaveManager_OnDisable()
         {
+            Debug.Log("Disable");
             NodeManager_SaveManager_SaveAllNodes();
-            Debug.Log("Disabling");
-            EditorApplication.playModeStateChanged -= NodeManager_SaveManager_HandlePlayModeStateChange;
+            AssemblyReloadEvents.beforeAssemblyReload -= HandleBeforeAssemblyReload;
         }
         #endregion
+        #region Handle Events
 
-        void NodeManager_SaveManager_HandlePlayModeStateChange(PlayModeStateChange obj)
+        // void NodeManager_SaveManager_HandlePlayModeStateChange(PlayModeStateChange obj)
+        // {
+        //     //For now runtime debugging will not be shown.
+        //     Debug.Log(obj);
+        //     // switch (obj)
+        //     // {
+        //     //     case PlayModeStateChange.EnteredEditMode:
+        //     //         break;
+        //     //     case PlayModeStateChange.EnteredPlayMode:
+        //     //         break;
+        //     //     case PlayModeStateChange.ExitingEditMode:
+        //     //         NodeManager_SaveManager_SaveFlowChartPath();
+        //     //         NodeManager_SaveManager_SaveAllNodes();
+        //     //         break;
+        //     //     case PlayModeStateChange.ExitingPlayMode:
+        //     //         NodeManager_SaveManager_LoadFlowChartPath();
+        //     //         break;
+        //     // }
+        // }
+
+        private void HandleBeforeAssemblyReload()
         {
-            //For now runtime debugging will not be shown.
-            Debug.Log(obj);
-            switch (obj)
-            {
-                case PlayModeStateChange.EnteredEditMode:
-                    break;
-                case PlayModeStateChange.EnteredPlayMode:
-                    break;
-                case PlayModeStateChange.ExitingEditMode:
-                    NodeManager_SaveManager_SaveFlowChartPath();
-                    NodeManager_SaveManager_SaveAllNodes();
-                    break;
-                case PlayModeStateChange.ExitingPlayMode:
-                    NodeManager_SaveManager_LoadFlowChartPath();
-                    break;
-            }
+            Debug.Log("Before Assembly");
         }
 
+        private void HandleAfterAssemblyReload()
+        {
+            Debug.Log("After Assembly");
+
+        }
+
+        #endregion
 
         #region Save Load
         void NodeManager_SaveManager_SaveFlowChartPath()
@@ -75,7 +89,7 @@
 
         void NodeManager_SaveManager_LoadFlowChartPath()
         {
-            Debug.Log(_flowChart);
+
         }
 
         void NodeManager_SaveManager_SaveAllNodes()

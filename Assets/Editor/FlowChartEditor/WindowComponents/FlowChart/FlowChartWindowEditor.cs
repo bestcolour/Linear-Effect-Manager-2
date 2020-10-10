@@ -12,17 +12,22 @@
         // static FlowChart _target = default;
         static SerializedObject _target = default;
         static FlowChart _flowChart = default;
-
+        static int _state;
 
         #endregion
 
-        #region Definition
-        delegate void UpdateGUICallback();
-        #endregion
 
+
+        #region Constants
+        struct FLOWCHART_EDITOR_STATES
+        {
+            public const int INITIALIZATION = -1, UNLOADED = 0, LOADED = 1, RUNTIME_DEBUG = 2;
+        }
+        #endregion
 
         #region Events
-        static UpdateGUICallback _onGUI = null;
+        // static UpdateGUICallback _onGUI = null;
+        static Action _onEnterPlayMode = null;
         #endregion
 
 
@@ -32,20 +37,102 @@
 
 
         #region Unity LifeTime
-        public static void OpenWindow(FlowChart flowChart)
+        [MenuItem(itemName: "Window/FlowChart Editor")]
+        public static void OpenWindow()
         {
             var window = GetWindow<FlowChartWindowEditor>();
-
             window.titleContent = new GUIContent("FlowChartEditor");
-
-            _flowChart = flowChart;
-            _target = new SerializedObject(flowChart);
-            window.ProxyOnEnable();
         }
 
-        void ProxyOnEnable()
+
+        public static void OpenWindow(FlowChart flowChart)
         {
-            _onGUI = General_Init_OnGUI;
+            _flowChart = flowChart;
+            var window = GetWindow<FlowChartWindowEditor>();
+            window.titleContent = new GUIContent("FlowChartEditor");
+        }
+
+        private void OnEnable()
+        {
+            _state = FLOWCHART_EDITOR_STATES.INITIALIZATION;
+        }
+
+        //I dont put the code in OnEnable because if i want to intialize styles, i have to do in during OnGUI calls
+        void Initialize()
+        {
+            //============================== WINDOW OPEN VIA BUTTON PRESS ==============================
+            if (_flowChart != null)
+            {
+                _state = FLOWCHART_EDITOR_STATES.LOADED;
+                LOADED_OnEnable();
+                return;
+            }
+
+            //======================= WINDOW OPEN VIA PLAYMODE CHANGE ===========================
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                _state = FLOWCHART_EDITOR_STATES.RUNTIME_DEBUG;
+                RUNTIME_DEBUG_OnEnable();
+                return;
+            }
+
+            //======================= WINDOW OPEN VIA MENU ===========================
+            _state = FLOWCHART_EDITOR_STATES.UNLOADED;
+            UNLOADED_OnEnable();
+        }
+
+        void OnDisable()
+        {
+            switch (_state)
+            {
+                case FLOWCHART_EDITOR_STATES.UNLOADED:
+                    UNLOADED_OnDisable();
+                    break;
+                case FLOWCHART_EDITOR_STATES.LOADED:
+                    LOADED_OnDisable();
+                    break;
+                case FLOWCHART_EDITOR_STATES.RUNTIME_DEBUG:
+                    RUNTIME_DEBUG_OnDisable();
+                    break;
+            }
+        }
+
+        void OnGUI()
+        {
+            switch (_state)
+            {
+                case FLOWCHART_EDITOR_STATES.INITIALIZATION:
+                    Initialize();
+                    break;
+                case FLOWCHART_EDITOR_STATES.UNLOADED:
+                    UNLOADED_OnGUI();
+                    break;
+                case FLOWCHART_EDITOR_STATES.LOADED:
+                    LOADED_OnGUI();
+                    break;
+                case FLOWCHART_EDITOR_STATES.RUNTIME_DEBUG:
+                    RUNTIME_DEBUG_OnGUI();
+                    break;
+            }
+
+
+        }
+        #endregion
+
+        #region Enable Disable Proxy Calls
+        void UNLOADED_OnEnable()
+        {
+
+        }
+
+        void UNLOADED_OnDisable()
+        {
+
+        }
+
+        void LOADED_OnEnable()
+        {
+            _target = new SerializedObject(_flowChart);
             Background_OnEnable();
             NodeManager_OnEnable();
             ToolBar_OnEnable();
@@ -53,11 +140,8 @@
             BlockEditor_OnEnable();
         }
 
-
-
-        void OnDisable()
+        void LOADED_OnDisable()
         {
-            _onGUI = null;
             Background_OnDisable();
             NodeManager_OnDisable();
             ToolBar_OnDisable();
@@ -65,40 +149,36 @@
             BlockEditor_OnDisable();
         }
 
-        void OnGUI()
+        void RUNTIME_DEBUG_OnEnable()
         {
-            _onGUI?.Invoke();
+            Debug.Log("Entering playmode");
         }
 
-
-
+        void RUNTIME_DEBUG_OnDisable()
+        {
+            
+        }
         #endregion
 
-        #region GUI Call
-        void General_Update_OnGUI()
+        #region GUI Proxy Calls
+        void LOADED_OnGUI()
         {
             //=========== DRAW ORDER===============
             Background_OnGUI();
             ToolBar_OnGUI();
-
-
             NodeManager_OnGUI();
             ProcessEvent_OnGUI();
-
-
         }
 
-        void General_Init_OnGUI()
+        void UNLOADED_OnGUI()
         {
-            //Initialize code
-            //init styles here
-
-            //End of Init
-            _onGUI = General_Update_OnGUI;
+            EmptyBackground_OnGUI();
         }
 
+        void RUNTIME_DEBUG_OnGUI()
+        {
 
-
+        }
         #endregion
 
 
