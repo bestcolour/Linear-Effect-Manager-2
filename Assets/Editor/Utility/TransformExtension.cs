@@ -21,7 +21,9 @@ public static class TransformExtension
 
     public static bool GetTransform(this Scene scene, string path, out Transform transform)
     {
+#if UNITY_EDITOR
         string originalPath = string.Copy(path);
+#endif
         //Checking if there is a scene name in the path
         int slashFound = path.IndexOf("/");
         if (slashFound == -1)
@@ -39,7 +41,9 @@ public static class TransformExtension
         //Check if the scene name in path matches the Scene.name
         if (currentName != scene.name)
         {
+#if UNITY_EDITOR
             Debug.Log($"The scene in {originalPath} is not the same scene as {scene.name}");
+#endif
             transform = null;
             return false;
         }
