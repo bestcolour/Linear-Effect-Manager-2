@@ -11,19 +11,13 @@
     {
         void EmptyBackground_OnGUI()
         {
-            EditorGUILayout.BeginVertical();
-
-            EditorGUILayout.LabelField(string.Empty);
+            EditorGUILayout.BeginVertical();EditorGUILayout.LabelField(string.Empty);EditorGUILayout.EndVertical();
             Rect rect = GUILayoutUtility.GetLastRect();
             _flowChart = (FlowChart)EditorGUI.ObjectField(rect, "Target FlowChart", _flowChart, typeof(FlowChart), true);
-
             if (_flowChart != null)
             {
                 REINITIALIZE();
             }
-
-            EditorGUILayout.EndVertical();
-
         }
     }
 

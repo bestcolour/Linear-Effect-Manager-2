@@ -6,6 +6,7 @@
     using LinearEffects;
     using System;
 
+    //Handles the processes and rendering of nodes
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Definitions

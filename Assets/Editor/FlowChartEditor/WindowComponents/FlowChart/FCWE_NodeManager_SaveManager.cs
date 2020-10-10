@@ -6,87 +6,24 @@
     using LinearEffects;
     using System;
 
+    //Hanldes the saving and loading of the nodes 
     public partial class FlowChartWindowEditor : EditorWindow
     {
-        #region Constants
-        const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
-       
-        #endregion
-
         SerializedProperty _allBlocksArrayProperty;
 
         #region LifeTime
         void NodeManager_SaveManager_OnEnable()
         {
             NodeManager_LoadCachedBlockNodes();
-            AssemblyReloadEvents.beforeAssemblyReload += HandleBeforeAssemblyReload;
-            NodeManager_SaveManager_SaveFlowChartPath();
         }
-
-
 
         void NodeManager_SaveManager_OnDisable()
         {
             NodeManager_SaveManager_SaveAllNodes();
-            AssemblyReloadEvents.beforeAssemblyReload -= HandleBeforeAssemblyReload;
         }
         #endregion
-        #region Handle Events
-
-        // void NodeManager_SaveManager_HandlePlayModeStateChange(PlayModeStateChange obj)
-        // {
-        //     //For now runtime debugging will not be shown.
-        //     Debug.Log(obj);
-        //     // switch (obj)
-        //     // {
-        //     //     case PlayModeStateChange.EnteredEditMode:
-        //     //         break;
-        //     //     case PlayModeStateChange.EnteredPlayMode:
-        //     //         break;
-        //     //     case PlayModeStateChange.ExitingEditMode:
-        //     //         NodeManager_SaveManager_SaveFlowChartPath();
-        //     //         NodeManager_SaveManager_SaveAllNodes();
-        //     //         break;
-        //     //     case PlayModeStateChange.ExitingPlayMode:
-        //     //         NodeManager_SaveManager_LoadFlowChartPath();
-        //     //         break;
-        //     // }
-        // }
-
-        private void HandleBeforeAssemblyReload()
-        {
-            Debug.Log("Before Assembly");
-        }
-
-        private void HandleAfterAssemblyReload()
-        {
-            Debug.Log("After Assembly");
-
-        }
-
-        #endregion
-
-        #region Save Load
-        void NodeManager_SaveManager_SaveFlowChartPath()
-        {
-            Transform t = _flowChart.transform;
-            string path = t.name;
-
-            while (t.parent != null)
-            {
-                path = path.Insert(0, $"{t.parent.name}/");
-                t = t.parent;
-            }
-
-            //Append scene name
-            path = path.Insert(0, $"{t.root.gameObject.scene.name}/");
-            EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
-        }
-
-        void NodeManager_SaveManager_LoadFlowChartPath()
-        {
-
-        }
+      
+        #region Saving Loading Nodes
 
         void NodeManager_SaveManager_SaveAllNodes()
         {
