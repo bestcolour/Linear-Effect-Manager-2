@@ -1,10 +1,10 @@
 ﻿namespace LinearEffectsEditor
 {
-    using System;
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
     using LinearEffects;
+    using UnityEditor.SceneManagement;
+    using UnityEngine.SceneManagement;
 
     //Handles the saving and loading of FlowChartWindow level data ie. FlowChart _target variable
     public partial class FlowChartWindowEditor : EditorWindow
@@ -13,19 +13,6 @@
         const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
 
         #endregion
-
-        #region  Lifetime
-        void SaveManager_OnEnable()
-        {
-
-        }
-
-        void SaveManager_OnDisable()
-        {
-
-        }
-        #endregion
-
 
         #region Handle Events
         private void HandleBeforeAssemblyReload()
@@ -41,14 +28,40 @@
 
         #endregion
 
-        void NodeManager_SaveManager_SaveFlowChartPath()
+        void SaveManager_SaveFlowChartPath()
         {
-            EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, _flowChart.transform.GetFullPath());
+            string path = _flowChart == null ? string.Empty : _flowChart.transform.GetFullPath();
+            EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
         }
 
-        void NodeManager_SaveManager_LoadFlowChartPath()
+        FlowChart SaveManager_TryLoadFlowChartPath()
         {
-            string s = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
+            string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
+            if (path == string.Empty)
+            {
+                return null;
+            }
+
+
+            for (int i = 0; i < EditorSceneManager.loadedSceneCount; i++)
+            {
+                Scene loadedScene = EditorSceneManager.GetSceneAt(i);
+                if (!loadedScene.GetTransform(path, out Transform flowChartTransform))
+                {
+                    continue;
+                }
+
+                if (!flowChartTransform.TryGetComponent<FlowChart>(out FlowChart flowChart))
+                {
+                    continue;
+                }
+
+                return flowChart;
+            }
+
+
+            //Else if no flowchart is found
+            return null;
 
         }
     }

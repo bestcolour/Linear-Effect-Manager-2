@@ -21,6 +21,8 @@ public static class TransformExtension
 
     public static bool GetTransform(this Scene scene, string path, out Transform transform)
     {
+        string originalPath = string.Copy(path);
+        //Checking if there is a scene name in the path
         int slashFound = path.IndexOf("/");
         if (slashFound == -1)
         {
@@ -29,50 +31,40 @@ public static class TransformExtension
             return false;
         }
 
-        //===================== SCENE NAME ===========================
+        //===================== CURRENTNAME = SCENE NAME ===========================
         string currentName = path.Substring(0, slashFound);
+        //Remove the everything to the slash (inclusive of slash)
+        path = path.Remove(0, slashFound + 1);
 
+        //Check if the scene name in path matches the Scene.name
         if (currentName != scene.name)
         {
-            Debug.Log($"The scene in {path} is not the same scene as {scene.name}");
+            Debug.Log($"The scene in {originalPath} is not the same scene as {scene.name}");
             transform = null;
             return false;
         }
 
-        path = path.Remove(0, slashFound);
+        //=================== CURRENTNAME = ROOT GAMEOBJECT ==========================
         slashFound = path.IndexOf("/");
+        currentName = path.Substring(0, slashFound);
+        path = path.Remove(0, slashFound + 1);
 
-        //if slash cant be found, that might mean that the current string is the root already
-        GameObject rootGO;
-        if (slashFound == -1)
+        GameObject[] rootObjects = scene.GetRootGameObjects();
+        for (int i = 0; i < rootObjects.Length; i++)
         {
-            rootGO = GameObject.Find(path);
-
-            if (rootGO == null)
+            if (rootObjects[i].name != currentName)
             {
-                Debug.Log($"There is no GameObject with the name {path}!");
-                transform = null;
-                return false;
+                continue;
             }
 
-            transform = rootGO.transform;
+            //Find the transform with the rest of the path
+            transform = rootObjects[i].transform.Find(path);
             return true;
         }
 
-        //===================== ROOT NAME ===========================
-        currentName = path.Substring(0, slashFound);
-        path = path.Remove(0, slashFound);
-        rootGO = GameObject.Find(currentName);
-
-        if (rootGO == null)
-        {
-            Debug.Log($"There is no GameObject with the name {currentName}!");
-            transform = null;
-            return false;
-        }
-
-        transform = rootGO.transform.Find(path);
-        return true;
+        //Else if none of the root object's names matched,
+        transform = null;
+        return false;
     }
 
 

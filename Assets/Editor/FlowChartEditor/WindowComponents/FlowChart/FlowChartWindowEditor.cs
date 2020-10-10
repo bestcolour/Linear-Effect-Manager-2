@@ -73,11 +73,17 @@
 
         void AssignNewState()
         {
-            //============================== WINDOW OPEN VIA BUTTON PRESS ==============================
-            if (_flowChart != null)
+            //====================== ATTEMPT TO GET PREVIOUS FLOWCHART ============================
+            if (_flowChart == null)
             {
-                _state = EditorState.LOADED;
-                LOADED_OnEnable();
+                _flowChart = SaveManager_TryLoadFlowChartPath();
+            }
+
+            //======================= WINDOW OPEN VIA MENU ===========================
+            if (_flowChart == null)
+            {
+                _state = EditorState.UNLOADED;
+                UNLOADED_OnEnable();
                 return;
             }
 
@@ -89,9 +95,10 @@
                 return;
             }
 
-            //======================= WINDOW OPEN VIA MENU ===========================
-            _state = EditorState.UNLOADED;
-            UNLOADED_OnEnable();
+
+            //============================== WINDOW OPEN VIA BUTTON PRESS ==============================
+            _state = EditorState.LOADED;
+            LOADED_OnEnable();
         }
         #endregion
 
@@ -109,6 +116,7 @@
                     RUNTIME_DEBUG_OnDisable();
                     break;
             }
+            SaveManager_SaveFlowChartPath();
         }
 
         void OnGUI()

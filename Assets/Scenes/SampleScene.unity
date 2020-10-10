@@ -383,25 +383,25 @@ MonoBehaviour:
       _randomBool: 0
     BlockName: New String
     BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: -109.5, y: 453.5}
+    BlockPosition: {x: 229.5, y: 252.5}
   - _orderArray: []
     _settings:
       _randomBool: 0
     BlockName: New String
     BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: -39.5, y: 580.5}
+    BlockPosition: {x: 299.5, y: 379.5}
   - _orderArray: []
     _settings:
       _randomBool: 0
     BlockName: New Block
     BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 77, y: 395}
+    BlockPosition: {x: 527, y: 273}
   - _orderArray: []
     _settings:
       _randomBool: 0
     BlockName: New Block
     BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 336, y: 283.5}
+    BlockPosition: {x: 310, y: 146.5}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
