@@ -51,7 +51,7 @@
         private void NodeManager_OnEnable()
         {
             _selectedBlocks = new HashSet<BlockNode>();
-            InitializeDebugger();
+            NodeManager_InitializeDebugger();
             NodeManager_SaveManager_OnEnable();
             _selectedBlockIndex = -1;
             _dragState = DragState.Default;
@@ -77,7 +77,6 @@
 
         private void NodeManager_OnGUI()
         {
-
             //Idk why but i cant create a new instance of custom class inside of Update/InspectorUpdate/Genric Menu callbac. So im addign it here
             Event e = Event.current;
 
@@ -89,11 +88,9 @@
 
             NodeManager_Draw();
             NodeManager_DrawDebugger();
-
-
         }
 
-        void InitializeDebugger()
+        void NodeManager_InitializeDebugger()
         {
             DebugStyle = new GUIStyle();
             DebugStyle.wordWrap = true;

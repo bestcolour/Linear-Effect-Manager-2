@@ -19,7 +19,7 @@
 
             if (_flowChart != null)
             {
-                LOADED_OnEnable();
+                REINITIALIZE();
             }
 
             EditorGUILayout.EndVertical();

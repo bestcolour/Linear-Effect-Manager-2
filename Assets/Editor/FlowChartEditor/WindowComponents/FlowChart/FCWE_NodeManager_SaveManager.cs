@@ -9,7 +9,7 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Constants
-        const string PREVIOUS_FLOWCHART_SCENEPATH_EDITORPREFS = "FlowChartPath";
+        const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
        
         #endregion
 
@@ -27,7 +27,6 @@
 
         void NodeManager_SaveManager_OnDisable()
         {
-            Debug.Log("Disable");
             NodeManager_SaveManager_SaveAllNodes();
             AssemblyReloadEvents.beforeAssemblyReload -= HandleBeforeAssemblyReload;
         }
@@ -81,10 +80,7 @@
 
             //Append scene name
             path = path.Insert(0, $"{t.root.gameObject.scene.name}/");
-            Debug.Log(path);
-
-
-            EditorPrefs.SetString(PREVIOUS_FLOWCHART_SCENEPATH_EDITORPREFS, path);
+            EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
         }
 
         void NodeManager_SaveManager_LoadFlowChartPath()
