@@ -68,7 +68,7 @@
         void INITIALIZE()
         {
             //Initalize whatever styles here 
-            
+
             AssignNewState();
         }
 
@@ -151,7 +151,7 @@
         void LOADED_OnEnable()
         {
             _target = new SerializedObject(_flowChart);
-            Background_OnEnable();
+            LoadedBackground_OnEnable();
             NodeManager_OnEnable();
             ToolBar_OnEnable();
             ProcessEvent_OnEnable();
@@ -160,7 +160,7 @@
 
         void LOADED_OnDisable()
         {
-            Background_OnDisable();
+            LoadedBackground_OnDisable();
             NodeManager_OnDisable();
             ToolBar_OnDisable();
             ProcessEvent_OnDisable();
@@ -182,7 +182,7 @@
         void LOADED_OnGUI()
         {
             //=========== DRAW ORDER===============
-            Background_OnGUI();
+            LoadedBackground_OnGUI();
             ToolBar_OnGUI();
             NodeManager_OnGUI();
             ProcessEvent_OnGUI();
@@ -190,7 +190,7 @@
 
         void UNLOADED_OnGUI()
         {
-            EmptyBackground_OnGUI();
+            UnloadedBackground_OnGUI();
         }
 
         void RUNTIME_DEBUG_OnGUI()

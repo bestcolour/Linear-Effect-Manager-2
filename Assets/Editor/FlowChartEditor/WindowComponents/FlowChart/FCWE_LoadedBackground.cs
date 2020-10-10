@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEditor;
 
+    //Handles drawing and processing events for the background when editor is loaded
     public partial class FlowChartWindowEditor : EditorWindow
     {
         const int GRID_SMALL_SPACE = 10;
@@ -10,18 +11,18 @@
 
         Vector3 _background_Offset;
 
-        void Background_OnEnable()
+        void LoadedBackground_OnEnable()
         {
-            OnPan += Background_HandlePan;
+            OnPan += LoadedBackground_HandlePan;
             _background_Offset = Vector3.zero;
         }
 
-        void Background_OnDisable()
+        void LoadedBackground_OnDisable()
         {
-            OnPan -= Background_HandlePan;
+            OnPan -= LoadedBackground_HandlePan;
         }
 
-        void Background_HandlePan(Vector2 mouseDelta)
+        void LoadedBackground_HandlePan(Vector2 mouseDelta)
         {
             // mouseDelta *= 0.5f;
             _background_Offset.x += mouseDelta.x;
@@ -29,14 +30,14 @@
 
         }
 
-        void Background_OnGUI()
+        void LoadedBackground_OnGUI()
         {
-            Background_DrawGrid(GRID_SMALL_SPACE, GetGrid1Colour());
-            Background_DrawGrid(GRID_LARGE_SPACE, GetGrid2Colour());
+            LoadedBackground_DrawGrid(GRID_SMALL_SPACE, GetGrid1Colour());
+            LoadedBackground_DrawGrid(GRID_LARGE_SPACE, GetGrid2Colour());
         }
 
         #region Draw
-        void Background_DrawGrid(float gridspacing, Color lineColour)
+        void LoadedBackground_DrawGrid(float gridspacing, Color lineColour)
         {
             Handles.BeginGUI();
             // Color grid1Colour = GetGrid1Colour(), grid2Colour = GetGrid2Colour();

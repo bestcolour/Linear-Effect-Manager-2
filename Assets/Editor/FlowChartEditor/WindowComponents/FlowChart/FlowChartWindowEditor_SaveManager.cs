@@ -6,32 +6,11 @@
     using UnityEditor.SceneManagement;
     using UnityEngine.SceneManagement;
 
-    //Handles the saving and loading of FlowChartWindow level data ie. FlowChart _target variable
+    //Handles the saving and loading of FlowChartWindow level data ie. FlowChart _flowChart variable
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Constants
         const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
-        const string EDITORPREFS_WAS_EDITOR_LOADED = "WasEditorLoaded";
-        #endregion
-
-        // void SaveManager_OnEnable()
-        // {
-        //     // AssemblyReloadEvents.beforeAssemblyReload += HandleBeforeAssemblyReload;
-
-        // }
-
-        // void SaveManager_OnDisable()
-        // {
-        //     // AssemblyReloadEvents.beforeAssemblyReload -= HandleBeforeAssemblyReload;
-        // }
-
-        #region Handle Events
-        private void HandleBeforeAssemblyReload()
-        {
-            Debug.Log("Before Assembly");
-            // EditorPrefs.SetBool(EDITORPREFS_WAS_EDITOR_LOADED, _state == EditorState.LOADED);
-        }
-
         #endregion
 
         void SaveManager_SaveFlowChartPath()
