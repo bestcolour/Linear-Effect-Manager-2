@@ -11,19 +11,25 @@
     {
         #region Constants
         const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
-
+        const string EDITORPREFS_WAS_EDITOR_LOADED = "WasEditorLoaded";
         #endregion
+
+        // void SaveManager_OnEnable()
+        // {
+        //     // AssemblyReloadEvents.beforeAssemblyReload += HandleBeforeAssemblyReload;
+
+        // }
+
+        // void SaveManager_OnDisable()
+        // {
+        //     // AssemblyReloadEvents.beforeAssemblyReload -= HandleBeforeAssemblyReload;
+        // }
 
         #region Handle Events
         private void HandleBeforeAssemblyReload()
         {
             Debug.Log("Before Assembly");
-        }
-
-        private void HandleAfterAssemblyReload()
-        {
-            Debug.Log("After Assembly");
-
+            // EditorPrefs.SetBool(EDITORPREFS_WAS_EDITOR_LOADED, _state == EditorState.LOADED);
         }
 
         #endregion

@@ -47,6 +47,7 @@
         private void OnEnable()
         {
             _state = EditorState.INITIALIZE;
+            // SaveManager_OnEnable();
         }
 
         #region Initializations
@@ -67,7 +68,7 @@
         void INITIALIZE()
         {
             //Initalize whatever styles here 
-
+            
             AssignNewState();
         }
 
@@ -117,6 +118,7 @@
                     break;
             }
             SaveManager_SaveFlowChartPath();
+            // SaveManager_OnDisable();
         }
 
         void OnGUI()
