@@ -15,7 +15,8 @@
 
         void SaveManager_SaveFlowChartPath()
         {
-            string path = _flowChart == null ? string.Empty : _flowChart.transform.GetFullPath();
+            if (_flowChart == null) return;
+            string path =  _flowChart.transform.GetFullPath();
             EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
         }
 
@@ -26,7 +27,6 @@
             {
                 return null;
             }
-
 
             for (int i = 0; i < EditorSceneManager.loadedSceneCount; i++)
             {
@@ -58,8 +58,6 @@
                 return null;
             }
 
-
-
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 Scene loadedScene = SceneManager.GetSceneAt(i);
@@ -75,7 +73,6 @@
 
                 return flowChart;
             }
-
 
             //Else if no flowchart is found
             return null;

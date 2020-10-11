@@ -73,35 +73,42 @@
 
         void AssignNewState()
         {
-            //====================== ATTEMPT TO GET PREVIOUS FLOWCHART ============================
-            if (_flowChart == null)
+            switch (EditorApplication.isPlaying)
             {
-                _flowChart = SaveManager_TryLoadFlowChartPath();
+                //============================ RUNTIME =======================
+                case true:
+                    //Get the flow chart during runtime then
+                    _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
+
+                    _state = EditorState.RUNTIME_DEBUG;
+                    RUNTIME_DEBUG_OnEnable();
+
+
+
+                    break;
+                //============================ EDITOR TIME ==========================
+                case false:
+                    //Try get previous flowchart
+                    if (_flowChart == null)
+                    {
+                        _flowChart = SaveManager_TryLoadFlowChartPath();
+                    }
+
+                    //This means user has opened flowchart editor from menu context
+                    if (_flowChart == null)
+                    {
+                        _state = EditorState.UNLOADED;
+                        UNLOADED_OnEnable();
+                        return;
+                    }
+
+                     //This means user has opened flowchart editor via button press 
+                    _state = EditorState.LOADED;
+                    LOADED_OnEnable();
+
+                    break;
             }
 
-            //======================= WINDOW OPEN VIA MENU ===========================
-            if (_flowChart == null)
-            {
-                _state = EditorState.UNLOADED;
-                UNLOADED_OnEnable();
-                return;
-            }
-
-            //======================= WINDOW OPEN VIA PLAYMODE CHANGE ===========================
-            if (EditorApplication.isPlaying)
-            {
-                //Get the flow chart during runtime then
-                _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
-
-                _state = EditorState.RUNTIME_DEBUG;
-                RUNTIME_DEBUG_OnEnable();
-                return;
-            }
-
-
-            //============================== WINDOW OPEN VIA BUTTON PRESS ==============================
-            _state = EditorState.LOADED;
-            LOADED_OnEnable();
         }
         #endregion
 
