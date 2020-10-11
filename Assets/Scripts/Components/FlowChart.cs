@@ -13,7 +13,7 @@ namespace LinearEffects
         Block[] _blocks = new Block[0];
 
 #if UNITY_EDITOR
-        public const string BLOCKARRAY_PROPERTYNAME = "_blocks";
+        public const string PROPERTYNAME_BLOCKARRAY = "_blocks";
 
 #endif
 

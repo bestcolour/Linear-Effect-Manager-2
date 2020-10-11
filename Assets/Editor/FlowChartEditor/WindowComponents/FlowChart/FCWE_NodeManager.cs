@@ -294,7 +294,7 @@
 
 
         //================================================= SUPPORTING FUNCTIONS ==================================================
-        #region Creating Blocks
+        #region Creating NodeBlocks
         void NodeManager_TriggerCreateNewNode(AddNewBlockFrom from)
         {
             _newBlockFromEnum = from;
