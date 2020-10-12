@@ -66,21 +66,13 @@
             _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value;
         }
 
-        // //Loads the block's editor cached variables into this node 
-        // void LoadFrom(Block block)
-        // {
-        //     _label = block.BlockName;
-        //     _blockColour = block.BlockColour;
-        //     _rect.position = block.BlockPosition;
-        // }
-
-        public void SaveTo(SerializedProperty blockProperty)
+        public void Save()
         {
-            blockProperty.serializedObject.Update();
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = _label;
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = _blockColour;
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = _rect.position;
-            blockProperty.serializedObject.ApplyModifiedProperties();
+            BlockProperty.serializedObject.Update();
+            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = _label;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = _blockColour;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = _rect.position;
+            BlockProperty.serializedObject.ApplyModifiedProperties();
         }
 
         #endregion

@@ -35,8 +35,7 @@
 
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                //Save to their 
-                _allBlockNodes[i].SaveTo(_allBlocksArrayProperty.GetArrayElementAtIndex(i));
+                _allBlockNodes[i].Save();
             }
         }
 
