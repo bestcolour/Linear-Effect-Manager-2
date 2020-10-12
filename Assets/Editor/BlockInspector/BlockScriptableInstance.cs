@@ -9,23 +9,6 @@ namespace LinearEffectsEditor
     //The job of this class is to link the BlockNode and FlowChart's Block custom class together using a custom scriptable object inspector
     public class BlockScriptableInstance : ScriptableObject
     {
-        [SerializeField]
-        Color _blockColour;
-
-        [SerializeField]
-        string _blockName;
-
-        //Reset all values to default
-        public void Initialize(BlockNode block)
-        {
-            // _blockColour = block.;
-            _blockName = default;
-        }
-
-        void LinkNodeToBlock()
-        {
-
-        }
 
 
     }
