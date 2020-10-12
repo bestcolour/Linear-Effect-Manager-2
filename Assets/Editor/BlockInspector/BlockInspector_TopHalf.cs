@@ -6,7 +6,7 @@
     using System;
 
     //The top half class will render the settings & command list
-    public partial class BlockEditor : Editor
+    public partial class BlockInspector : Editor
     {
         #region CONSTANT VALUES
         const string SETTINGS_PROPERTY = "_settings",

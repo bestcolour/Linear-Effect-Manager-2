@@ -6,7 +6,7 @@
     using System;
 
     // [CustomEditor(typeof(Block))]
-    public partial class BlockEditor : Editor
+    public partial class BlockInspector : Editor
     {
         #region Constants
         const string EDITORPREFS_HEIGHTRATIO = "TopHalf_To_Height";

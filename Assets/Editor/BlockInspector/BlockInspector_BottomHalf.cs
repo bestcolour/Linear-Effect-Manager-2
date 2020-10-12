@@ -6,7 +6,7 @@
     using LinearEffects;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
-    public partial class BlockEditor : Editor
+    public partial class BlockInspector : Editor
     {
         #region LifeTime Method
 
