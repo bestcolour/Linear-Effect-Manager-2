@@ -13,15 +13,13 @@
         const float DEFAULT_HEIGHTRATIO = 0.5f;
         #endregion
 
-
-        Block _target = null;
+        BlockScriptableInstance _target = null;
         float _ratioOfTopHalfToInspectorHeight = DEFAULT_HEIGHTRATIO;
 
         #region LifeTime Methods
         private void OnEnable()
         {
-            _target = new Block();
-
+            _target = (BlockScriptableInstance)target;
             TopHalf_OnEnable();
             CenterDiv_OnEnable();
             BottomHalf_OnEnable();
@@ -59,7 +57,10 @@
 
 
             EditorGUILayout.EndVertical();
-            serializedObject.ApplyModifiedProperties();
+            if (serializedObject.ApplyModifiedProperties())
+            {
+                _target.SaveModifiedProperties();
+            }
         }
 
 

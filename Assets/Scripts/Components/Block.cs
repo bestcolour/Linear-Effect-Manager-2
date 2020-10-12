@@ -27,14 +27,35 @@
         {
 #if UNITY_EDITOR
             #region Constants
-            public const string PROPERTYNAME_EFFECTNAME = "EffectName";
-            public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
+            public const string PROPERTYNAME_EFFECTNAME = "_effectName";
+            public const string PROPERTYNAME_ERRORLOG = "_errorLog";
+            public const string PROPERTYNAME_REFHOLDER = "_refHolder";
+            public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
 
-            public string EffectName = "New Effect";
-            public string ErrorLog = "Error";
+            [SerializeField]
+            protected string _effectName = "New Effect";
+            [SerializeField]
+            public string _errorLog = "Error";
 #endif
+
+            public void SavePropertiesTo(SerializedProperty property)
+            {
+                property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
+                property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
+                property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = _errorLog;
+                property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = _effectName;
+            }
+
+            public void LoadPropertiesFrom(SerializedProperty property)
+            {
+                _refHolder = (BaseEffectExecutor<Effect>)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
+                _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
+                _errorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
+                _effectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
+            }
+
         }
         #endregion
 
@@ -86,7 +107,7 @@
         }
 
         //Add all your future variables inside here for saving from a block to a serializedProperty
-        public void CopyBlockPropertiesTo(SerializedProperty blockProperty)
+        public void SaveBlockPropertiesTo(SerializedProperty blockProperty)
         {
             if (blockProperty.type != typeof(Block).Name)
             {
@@ -99,6 +120,15 @@
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
 
 
+            //============= SAVING ORDER ARRAY =====================
+            SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+            orderArrayProperty.ClearArray();
+            for (int i = 0; i < _orderArray.Length; i++)
+            {
+                orderArrayProperty.InsertArrayElementAtIndex(i);
+                SerializedProperty currentElement = orderArrayProperty.GetArrayElementAtIndex(i);
+                _orderArray[i].SavePropertiesTo(currentElement);
+            }
         }
 
         //Add all your future variables inside here for loading from a serializedProperty to a block
@@ -113,6 +143,15 @@
             _blockSettings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockSettings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+
+            //============= LOADING ORDER ARRAY =====================
+            SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+            _orderArray = new EffectOrder[orderArrayProperty.arraySize];
+            for (int i = 0; i < _orderArray.Length; i++)
+            {
+                SerializedProperty currentElement = orderArrayProperty.GetArrayElementAtIndex(i);
+                _orderArray[i].LoadPropertiesFrom(currentElement);
+            }
 
         }
 
@@ -139,9 +178,7 @@
             blockArray.arraySize++;
 
             SerializedProperty lastElement = blockArray.GetArrayElementAtIndex(blockArray.arraySize - 1);
-            // lastElement.CopyBlockProperties(newBlock);
-
-            newBlock.CopyBlockPropertiesTo(lastElement);
+            newBlock.SaveBlockPropertiesTo(lastElement);
             blockArray.serializedObject.ApplyModifiedProperties();
             return lastElement;
         }

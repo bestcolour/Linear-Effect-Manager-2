@@ -14,7 +14,7 @@
         ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
         ///</Summary>
         [SerializeField]
-        OData[] _orderArray = new OData[0];
+        protected OData[] _orderArray = new OData[0];
 
         #region Editor Commands
 
@@ -71,7 +71,7 @@
         ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
         ///</Summary>
         [SerializeField]
-        OData[] _orderArray = new OData[0];
+        protected  OData[] _orderArray = new OData[0];
 
 #endif
 

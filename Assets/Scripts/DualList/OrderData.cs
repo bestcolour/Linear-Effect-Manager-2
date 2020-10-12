@@ -6,9 +6,10 @@
     public abstract class OrderData<Holder>
      where Holder : IArrayHolder
     {
-        Holder _refHolder;
         [SerializeField]
-        int _dataElmtIndex;
+        protected Holder _refHolder;
+        [SerializeField]
+        protected int _dataElmtIndex;
 
 
         //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself

@@ -32,6 +32,11 @@ namespace LinearEffectsEditor
             _block.LoadBlockPropertiesFrom(blockProperty);
         }
 
+        public void SaveModifiedProperties()
+        {
+            _block.SaveBlockPropertiesTo(_blockProperty);
+        }
+
     }
 
     //=============================ORIGINAL BLOCK CODE=========================================================

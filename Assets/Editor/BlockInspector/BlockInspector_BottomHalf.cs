@@ -9,7 +9,6 @@
     public partial class BlockInspector : Editor
     {
         #region LifeTime Method
-
         void BottomHalf_OnEnable()
         {
 
@@ -54,9 +53,6 @@
             EditorGUILayout.Space();
 
             //================DRAW ADD COPY & DELETE BUTTONS===============
-            // EditorGUILayout.LabelField(string.Empty);
-
-
             if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
