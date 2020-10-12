@@ -8,17 +8,10 @@
     //The top half class will render the settings & command list
     public partial class BlockInspector : Editor
     {
-        #region CONSTANT VALUES
-        // const string SETTINGS_PROPERTY = "_settings",
-        // COMMANDLABEL_TYPE_PROPERTY = "_commandType",
-        // COMMANDLABEL_ERRORLOG_PROPERTY = "_errorLog"
-        // ;
-        #endregion
 
         #region Cached Variable
 
         ReorderableList _list = default;
-        // SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
         Vector2 _scrollPosition = default;
 
@@ -30,7 +23,7 @@
         {
             SerializedProperty orderArray = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_ORDERARRAY);
             _settingsProperty = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_SETTINGS);
-            _list = new ReorderableList(serializedObject, orderArray, displayAddButton: true, displayHeader: true, displayRemoveButton: true, draggable: true);
+            _list = new ReorderableList(serializedObject, orderArray, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
 
 
             _list.drawHeaderCallback = HandleDrawHeaderCallBack;
