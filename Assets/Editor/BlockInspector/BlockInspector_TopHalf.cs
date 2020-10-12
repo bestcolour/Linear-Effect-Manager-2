@@ -9,17 +9,16 @@
     public partial class BlockInspector : Editor
     {
         #region CONSTANT VALUES
-        const string SETTINGS_PROPERTY = "_settings",
-        COMMANDLABEL_TYPE_PROPERTY = "_commandType",
-        COMMANDLABEL_ERRORLOG_PROPERTY = "_errorLog"
-        ;
+        // const string SETTINGS_PROPERTY = "_settings",
+        // COMMANDLABEL_TYPE_PROPERTY = "_commandType",
+        // COMMANDLABEL_ERRORLOG_PROPERTY = "_errorLog"
+        // ;
         #endregion
 
         #region Cached Variable
 
-        // SerializedObject serializedObject = default;
         ReorderableList _list = default;
-        SerializedProperty _commandLabelsProperty = default;
+        // SerializedProperty _commandLabelsProperty = default;
         SerializedProperty _settingsProperty = default;
         Vector2 _scrollPosition = default;
 
@@ -29,11 +28,9 @@
 
         void TopHalf_OnEnable()
         {
-
-            _commandLabelsProperty = serializedObject.FindProperty("_commandLabels");
-            _settingsProperty = serializedObject.FindProperty(SETTINGS_PROPERTY);
-
-            _list = new ReorderableList(serializedObject, _commandLabelsProperty, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
+            SerializedProperty orderArray = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_ORDERARRAY);
+            _settingsProperty = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_SETTINGS);
+            _list = new ReorderableList(serializedObject, orderArray, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
 
 
             _list.drawHeaderCallback = HandleDrawHeaderCallBack;
@@ -48,7 +45,6 @@
             _list.elementHeightCallback -= HandleElementHeightCallBack;
             _list.onChangedCallback -= HandleOnChange;
 
-            _commandLabelsProperty = null;
             _list = null;
         }
 
@@ -70,7 +66,7 @@
         #region Event Handlers
         private void HandleDrawHeaderCallBack(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Command List");
+            EditorGUI.LabelField(rect, "Effect List");
         }
 
         private float HandleElementHeightCallBack(int index)
@@ -80,50 +76,50 @@
 
         private void HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty currentElement = _list.serializedProperty.GetArrayElementAtIndex(index);
+            // SerializedProperty currentElement = _list.serializedProperty.GetArrayElementAtIndex(index);
 
 
-            //<================ DRAWING MAIN BG =========================>
-            //Draw a bg for the entire list rect before we start modifying the rect
-            Color colourOfBg = isActive ? Color.green : Color.blue;
-            Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
-            GUI.Box(rect, string.Empty);
-            GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
+            // //<================ DRAWING MAIN BG =========================>
+            // //Draw a bg for the entire list rect before we start modifying the rect
+            // Color colourOfBg = isActive ? Color.green : Color.blue;
+            // Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
+            // GUI.Box(rect, string.Empty);
+            // GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
 
-            //<================ DRAWING COMMAND TYPE=========================>
-            if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_TYPE_PROPERTY, out SerializedProperty dummyProperty)) return;
+            // //<================ DRAWING COMMAND TYPE=========================>
+            // if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_TYPE_PROPERTY, out SerializedProperty dummyProperty)) return;
 
-            //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
-            GUIContent content = new GUIContent(dummyProperty.stringValue);
-            var style = EditorStyles.label;
+            // //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
+            // GUIContent content = new GUIContent(dummyProperty.stringValue);
+            // var style = EditorStyles.label;
 
-            Vector2 sizeOfContent = style.CalcSize(content);
+            // Vector2 sizeOfContent = style.CalcSize(content);
 
-            //Modify rect
-            //Shift rect 10units to avoid overlapping the stroke bullet points
-            rect.width = sizeOfContent.x;
-            rect.height = sizeOfContent.y;
-            rect.x += 10;
-            rect.y += 10;
+            // //Modify rect
+            // //Shift rect 10units to avoid overlapping the stroke bullet points
+            // rect.width = sizeOfContent.x;
+            // rect.height = sizeOfContent.y;
+            // rect.x += 10;
+            // rect.y += 10;
 
-            //Draw the Type of Command first
-            EditorGUI.LabelField(rect, dummyProperty.stringValue);
+            // //Draw the Type of Command first
+            // EditorGUI.LabelField(rect, dummyProperty.stringValue);
 
 
-            //<================ DRAWING ERROR LOG =========================>
-            //Modify rect again
-            //Shift rect 10 units to give space between errorlog and type of command
-            rect.x += rect.width + 10;
-            rect.y -= 5;
+            // //<================ DRAWING ERROR LOG =========================>
+            // //Modify rect again
+            // //Shift rect 10 units to give space between errorlog and type of command
+            // rect.x += rect.width + 10;
+            // rect.y -= 5;
 
-            if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_ERRORLOG_PROPERTY, out dummyProperty)) return;
+            // if (!EditorDebugExtension.TryGetProperty(currentElement, COMMANDLABEL_ERRORLOG_PROPERTY, out dummyProperty)) return;
 
-            Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
-            style.fontStyle = FontStyle.Italic;
-            //Draw Errorlog
-            EditorGUI.LabelField(rect, dummyProperty.stringValue);
-            style.fontStyle = FontStyle.Normal;
-            GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
+            // Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
+            // style.fontStyle = FontStyle.Italic;
+            // //Draw Errorlog
+            // EditorGUI.LabelField(rect, dummyProperty.stringValue);
+            // style.fontStyle = FontStyle.Normal;
+            // GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
         }
 
         private void HandleOnChange(ReorderableList list)
@@ -138,12 +134,18 @@
         {
             if (_settingsProperty == null)
             {
-                string debug = $"The property named: {SETTINGS_PROPERTY} inside the Block class has been renamed to something else or it doesnt exist anymore!";
+                string debug = $"The property named: {BlockScriptableInstance.PROPERTYPATH_ORDERARRAY} inside the Block class has been renamed to something else or it doesnt exist anymore!";
                 Debug.LogWarning(debug);
                 return;
             }
 
-            EditorGUILayout.PropertyField(_settingsProperty, includeChildren: true);
+            // EditorGUILayout.PropertyField(_settingsProperty, includeChildren: true);
+            while (_settingsProperty.NextVisible(true))
+            {
+                EditorGUILayout.PropertyField(_settingsProperty, includeChildren: false);
+            }
+
+            _settingsProperty.Reset();
         }
 
         void DrawReOrderableList()

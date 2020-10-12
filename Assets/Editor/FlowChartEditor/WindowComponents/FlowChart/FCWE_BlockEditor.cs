@@ -25,11 +25,12 @@
 
         #endregion
 
-        private void HandleSelectBlockNode(BlockNode block)
+        private void HandleSelectBlockNode(BlockNode node)
         {
-            Debug.Log($"Block is: {block.ID}");
+            Debug.Log($"Block is: {node.ID}");
+            _blockEditor.Initialize(node.BlockProperty);
             Selection.activeObject = _blockEditor;
-            
+
         }
 
 

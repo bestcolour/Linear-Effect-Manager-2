@@ -5,7 +5,7 @@
     using LinearEffects;
     using System;
 
-    // [CustomEditor(typeof(Block))]
+    [CustomEditor(typeof(BlockScriptableInstance))]
     public partial class BlockInspector : Editor
     {
         #region Constants
@@ -23,8 +23,8 @@
             _target = new Block();
 
             TopHalf_OnEnable();
-            CenterDiv_OnEnable();
-            BottomHalf_OnEnable();
+            // CenterDiv_OnEnable();
+            // BottomHalf_OnEnable();
 
             Load();
         }
@@ -33,8 +33,8 @@
         private void OnDisable()
         {
             TopHalf_OnDisable();
-            CenterDiv_OnDisable();
-            BottomHalf_OnDisable();
+            // CenterDiv_OnDisable();
+            // BottomHalf_OnDisable();
 
             Save();
         }
@@ -54,8 +54,8 @@
 
             //Draw top half
             TopHalf_OnInspectorGUI(topHalfSize);
-            CenterDiv_OnInspectorGUI();
-            BottomHalf_OnInspectorGUI();
+            // CenterDiv_OnInspectorGUI();
+            // BottomHalf_OnInspectorGUI();
 
 
             EditorGUILayout.EndVertical();

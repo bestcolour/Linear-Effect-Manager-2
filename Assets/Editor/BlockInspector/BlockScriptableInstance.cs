@@ -4,12 +4,32 @@ namespace LinearEffectsEditor
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEditor;
+    using LinearEffects;
 
     //This class will be instantiated whenever you start up the flowchart editor window and destroyed whenver unity recompiles.
     //The job of this class is to link the BlockNode and FlowChart's Block custom class together using a custom scriptable object inspector
     public class BlockScriptableInstance : ScriptableObject
     {
 
+        #region Constants
+        const string PROPERTYNAME_BLOCKPROPERTY = "_block";
+        public const string PROPERTYPATH_SETTINGS = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_SETTINGS;
+        public const string PROPERTYPATH_ORDERARRAY = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
+
+        #endregion
+
+        [SerializeField]
+        Block _block;
+
+        SerializedProperty _blockProperty;
+
+        public void Initialize(SerializedProperty blockProperty)
+        {
+            _blockProperty = blockProperty;
+            _block = new Block();
+            _block.LoadBlockPropertiesFrom(blockProperty);
+        }
 
     }
 

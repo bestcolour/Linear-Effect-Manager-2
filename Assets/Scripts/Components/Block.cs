@@ -15,8 +15,11 @@
         [Serializable]
         class BlockSettings
         {
-            [SerializeField]
-            bool _randomBool = default;
+#if UNITY_EDITOR
+            public string BlockName;
+            public Color BlockColour;
+            public Vector2 BlockPosition;
+#endif
         }
 
         [Serializable]
@@ -26,7 +29,7 @@
         #region Runtime Cached Variables
         [Header("Some Settings")]
         [SerializeField]
-        BlockSettings _settings = default;
+        BlockSettings _settings;
 
 
         #endregion
@@ -40,32 +43,37 @@
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
 
         //========================= BLOCK PROPERTYNAMES CONSTANTS =========================================
-        public const string PROPERTYNAME_BLOCKNAME = "BlockName";
-        public const string PROPERTYNAME_BLOCKCOLOUR = "BlockColour";
-        public const string PROPERTYNAME_BLOCKPOSITION = "BlockPosition";
+        public const string PROPERTYNAME_SETTINGS = "_settings";
+        public const string PROPERTYPATH_BLOCKNAME = PROPERTYNAME_SETTINGS + ".BlockName";
+        public const string PROPERTYPATH_BLOCKCOLOUR = PROPERTYNAME_SETTINGS + ".BlockColour";
+        public const string PROPERTYPATH_BLOCKPOSITION = PROPERTYNAME_SETTINGS + ".BlockPosition";
+
+        public const string PROPERTYNAME_ORDERARRAY = "_orderArray";
         #endregion
 
 
         #region Editor Time Cached Variables
 
-        public string BlockName;
-        public Color BlockColour;
-        public Vector2 BlockPosition;
+        // public string BlockName;
+        // public Color BlockColour;
+        // public Vector2 BlockPosition;
 
         public Block(Vector2 position)
         {
-            BlockName = "New Block";
-            BlockColour = DEFAULT_BLOCK_COLOUR;
-            BlockPosition = position;
+            _settings = new BlockSettings();
+            _settings.BlockName = "New Block";
+            _settings.BlockColour = DEFAULT_BLOCK_COLOUR;
+            _settings.BlockPosition = position;
         }
 
         public Block()
         {
-            BlockName = "New Block";
-            BlockColour = DEFAULT_BLOCK_COLOUR;
+            _settings = new BlockSettings();
+            _settings.BlockName = "New Block";
+            _settings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
-        //Add all your future variables inside here for saving
+        //Add all your future variables inside here for saving from a block to a serializedProperty
         public void CopyBlockPropertiesTo(SerializedProperty blockProperty)
         {
             if (blockProperty.type != typeof(Block).Name)
@@ -74,10 +82,25 @@
                 return;
             }
 
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = BlockColour;
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = BlockName;
-            blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = BlockPosition;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _settings.BlockColour;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _settings.BlockName;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _settings.BlockPosition;
 
+
+        }
+
+        //Add all your future variables inside here for loading from a serializedProperty to a block
+        public void LoadBlockPropertiesFrom(SerializedProperty blockProperty)
+        {
+            if (blockProperty.type != typeof(Block).Name)
+            {
+                Debug.Log($"The serializedProperty {blockProperty} is not of Block class! Property trying to be copied to: {blockProperty.type}");
+                return;
+            }
+
+            _settings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _settings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+            _settings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
 
         }
 
@@ -110,24 +133,6 @@
             blockArray.serializedObject.ApplyModifiedProperties();
             return lastElement;
         }
-
-        // public static void CopyBlockProperties(this SerializedProperty blockProperty, Block blockToCopyFrom)
-        // {
-        //     if (blockProperty.type != typeof(Block).Name)
-        //     {
-        //         Debug.Log($"The serializedProperty {blockProperty} is not of Block class! Property trying to be copied to: {blockProperty.type}");
-        //         return;
-        //     }
-
-        //     blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = blockToCopyFrom.BlockColour;
-        //     blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = blockToCopyFrom.BlockName;
-        //     blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = blockToCopyFrom.BlockPosition;
-
-
-        // }
-
-
-
     }
     #endregion
 #endif

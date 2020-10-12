@@ -61,17 +61,17 @@
         //Loads the block's editor cached variables into this node 
         void LoadFrom(SerializedProperty blockProperty)
         {
-            _label = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue;
-            _blockColour = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue;
-            _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value;
+            _label = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
         }
 
         public void Save()
         {
             BlockProperty.serializedObject.Update();
-            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue = _label;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue = _blockColour;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value = _rect.position;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _label;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockColour;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
             BlockProperty.serializedObject.ApplyModifiedProperties();
         }
 
