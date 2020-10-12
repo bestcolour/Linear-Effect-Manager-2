@@ -83,7 +83,7 @@
 
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
-                NodeManager_GetNewNode();
+                NodeManager_AddNewNode();
                 return;
             }
 
@@ -300,37 +300,34 @@
             _newBlockFromEnum = from;
         }
 
-        BlockNode NodeManager_GetNewNode()
+        BlockNode NodeManager_AddNewNode()
         {
             BlockNode node;
             switch (_newBlockFromEnum)
             {
                 case AddNewBlockFrom.ContextMenu:
-                    node = NodeManager_CreateNewNode(Event.current.mousePosition);
+                    node = NodeManager_AddNewNode(Event.current.mousePosition);
                     break;
 
                 case AddNewBlockFrom.ToolBar:
-                    node = NodeManager_CreateNewNode(CenterScreen);
+                    node = NodeManager_AddNewNode(CenterScreen);
                     break;
 
-                //Code runs thru here when loading nodes
+                //Fall back code
                 default:
-                    node = new BlockNode(CenterScreen);
+                    node = NodeManager_AddNewNode(Vector2.zero);
                     break;
             }
 
             return node;
         }
 
-        BlockNode NodeManager_CreateNewNode(Vector2 position)
+        BlockNode NodeManager_AddNewNode(Vector2 position)
         {
-            BlockNode node = new BlockNode();
             Block b = new Block(position);
+            SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToBlockPropertyArray(b);
+            BlockNode node = new BlockNode(newBlockProperty);
 
-            //Newly created node should load from a newly created block to get all the default values
-            node.LoadFrom(b);
-
-            _allBlocksArrayProperty.AddToBlockPropertyArray(b);
             _allBlockNodes.Add(node);
             _newBlockFromEnum = AddNewBlockFrom.None;
             return node;

@@ -32,8 +32,8 @@
 
         private void HandleSelectBlockNode(BlockNode block)
         {
-            Debug.Log($"Block is: {block.ID}");
-            Selection.activeObject = _blockEditor;
+            // Debug.Log($"Block is: {block.ID}");
+            // Selection.activeObject = _blockEditor;
         }
 
 

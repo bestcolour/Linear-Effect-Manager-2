@@ -48,11 +48,8 @@
 
         #region Editor Time Cached Variables
 
-        [field: SerializeField]
         public string BlockName;
-        [field: SerializeField]
         public Color BlockColour;
-        [field: SerializeField]
         public Vector2 BlockPosition;
 
         public Block(Vector2 position)
@@ -83,22 +80,23 @@
 #if UNITY_EDITOR
 
     //============================== SERIALIZED PROPERTY EXTENSIONS ================================
-    public static class BlockPropertyExtension
+    public static class BlockSerializedPropertyExtension
     {
-        public static void AddToBlockPropertyArray(this SerializedProperty blockArray, Block newBlockElement)
+        public static SerializedProperty AddToBlockPropertyArray(this SerializedProperty blockArray, Block newBlock)
         {
             if (!blockArray.isArray)
             {
                 Debug.Log($"Serialized Property {blockArray.name} is not an array!");
-                return;
+                return null;
             }
 
             blockArray.serializedObject.Update();
             blockArray.arraySize++;
 
             SerializedProperty lastElement = blockArray.GetArrayElementAtIndex(blockArray.arraySize - 1);
-            lastElement.CopyBlockProperties(newBlockElement);
+            lastElement.CopyBlockProperties(newBlock);
             blockArray.serializedObject.ApplyModifiedProperties();
+            return lastElement;
         }
 
         public static void CopyBlockProperties(this SerializedProperty blockProperty, Block blockToCopyFrom)

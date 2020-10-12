@@ -20,52 +20,59 @@
 
         #region Variables
         Rect _rect;
-
-        //=============== SERIALIZED VARIABLES ===================
-        string _label;
-        Color _blockColour;
         #endregion
 
         #region Properties
+        public SerializedProperty BlockProperty { get; private set; }
         public string ID { get; private set; }
         public bool IsSelected { set; private get; }
         #endregion
 
 
+        //==================== RUNTIME VARIABLES FROM BLOCK PROPERTY ============================
+        string _label;
+        Color _blockColour;
+
+
+
         #region Saving & Initialization
 
-        public BlockNode(Vector2 position)
+        public BlockNode(SerializedProperty blockProperty, Vector2 position)
         {
+            BlockProperty = blockProperty;
             _rect = NODEBLOCK_SIZE;
-            _rect.position = position;
-            _label = string.Empty;
-            IsSelected = false;
             ID = System.Guid.NewGuid().ToString();
+            IsSelected = false;
+
+            LoadFrom(BlockProperty);
+            _rect.position = position;
         }
 
-        public BlockNode()
+        public BlockNode(SerializedProperty blockProperty)
         {
+            BlockProperty = blockProperty;
             _rect = NODEBLOCK_SIZE;
-            _label = string.Empty;
-            IsSelected = false;
             ID = System.Guid.NewGuid().ToString();
+            IsSelected = false;
+
+            LoadFrom(BlockProperty);
         }
 
         //Loads the block's editor cached variables into this node 
-        public void LoadFrom(SerializedProperty blockProperty)
+        void LoadFrom(SerializedProperty blockProperty)
         {
             _label = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKNAME).stringValue;
             _blockColour = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKCOLOUR).colorValue;
             _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_BLOCKPOSITION).vector2Value;
         }
 
-        //Loads the block's editor cached variables into this node 
-        public void LoadFrom(Block block)
-        {
-            _label = block.BlockName;
-            _blockColour = block.BlockColour;
-            _rect.position = block.BlockPosition;
-        }
+        // //Loads the block's editor cached variables into this node 
+        // void LoadFrom(Block block)
+        // {
+        //     _label = block.BlockName;
+        //     _blockColour = block.BlockColour;
+        //     _rect.position = block.BlockPosition;
+        // }
 
         public void SaveTo(SerializedProperty blockProperty)
         {

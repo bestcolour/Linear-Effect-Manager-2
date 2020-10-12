@@ -22,7 +22,7 @@
             NodeManager_SaveManager_SaveAllNodes();
         }
         #endregion
-      
+
         #region Saving Loading Nodes
 
         void NodeManager_SaveManager_SaveAllNodes()
@@ -49,10 +49,9 @@
 
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
-                BlockNode b = NodeManager_GetNewNode();
                 SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                b.LoadFrom(e);
-                _allBlockNodes.Add(b);
+                BlockNode node = new BlockNode(e);
+                _allBlockNodes.Add(node);
             }
         }
         #endregion
