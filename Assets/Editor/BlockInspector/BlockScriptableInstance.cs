@@ -29,12 +29,14 @@ namespace LinearEffectsEditor
         {
             _blockProperty = blockProperty;
             _block = new Block();
-            _block.LoadBlockPropertiesFrom(blockProperty);
+            _block.LoadFromSerializedProperty(blockProperty);
         }
 
         public void SaveModifiedProperties()
         {
-            _block.SaveBlockPropertiesTo(_blockProperty);
+            _blockProperty.serializedObject.Update();
+            _block.SaveToSerializedProperty(_blockProperty);
+            _blockProperty.serializedObject.ApplyModifiedProperties();
         }
 
     }

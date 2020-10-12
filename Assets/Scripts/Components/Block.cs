@@ -9,7 +9,7 @@
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
     [System.Serializable]
-    public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor<Effect>, Effect>
+    public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor<Effect>, Effect>, ISavableData
     {
         #region Definitions
         [Serializable]
@@ -23,7 +23,7 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>
+        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>, ISavableData
         {
 #if UNITY_EDITOR
             #region Constants
@@ -38,9 +38,8 @@
             protected string _effectName = "New Effect";
             [SerializeField]
             public string _errorLog = "Error";
-#endif
 
-            public void SavePropertiesTo(SerializedProperty property)
+            public void SaveToSerializedProperty(SerializedProperty property)
             {
                 property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
                 property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
@@ -48,14 +47,14 @@
                 property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = _effectName;
             }
 
-            public void LoadPropertiesFrom(SerializedProperty property)
+            public void LoadFromSerializedProperty(SerializedProperty property)
             {
                 _refHolder = (BaseEffectExecutor<Effect>)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
                 _errorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 _effectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
             }
-
+#endif
         }
         #endregion
 
@@ -87,9 +86,6 @@
 
         #region Editor Time Cached Variables
 
-        // public string BlockName;
-        // public Color BlockColour;
-        // public Vector2 BlockPosition;
 
         public Block(Vector2 position)
         {
@@ -107,7 +103,7 @@
         }
 
         //Add all your future variables inside here for saving from a block to a serializedProperty
-        public void SaveBlockPropertiesTo(SerializedProperty blockProperty)
+        public void SaveToSerializedProperty(SerializedProperty blockProperty)
         {
             if (blockProperty.type != typeof(Block).Name)
             {
@@ -125,14 +121,13 @@
             orderArrayProperty.ClearArray();
             for (int i = 0; i < _orderArray.Length; i++)
             {
-                orderArrayProperty.InsertArrayElementAtIndex(i);
-                SerializedProperty currentElement = orderArrayProperty.GetArrayElementAtIndex(i);
-                _orderArray[i].SavePropertiesTo(currentElement);
+                orderArrayProperty.AddToSerializedPropertyArray(_orderArray[i]);
             }
+
         }
 
         //Add all your future variables inside here for loading from a serializedProperty to a block
-        public void LoadBlockPropertiesFrom(SerializedProperty blockProperty)
+        public void LoadFromSerializedProperty(SerializedProperty blockProperty)
         {
             if (blockProperty.type != typeof(Block).Name)
             {
@@ -150,40 +145,16 @@
             for (int i = 0; i < _orderArray.Length; i++)
             {
                 SerializedProperty currentElement = orderArrayProperty.GetArrayElementAtIndex(i);
-                _orderArray[i].LoadPropertiesFrom(currentElement);
+                _orderArray[i].LoadFromSerializedProperty(currentElement);
             }
-
         }
+
+
 
         #endregion
 
 #endif
     }
 
-
-#if UNITY_EDITOR
-    #region    //============================== SERIALIZED PROPERTY EXTENSIONS ================================
-    public static class BlockSerializedPropertyExtension
-    {
-        //Used wehn the window editor adds a new nodeblock 
-        public static SerializedProperty AddToBlockPropertyArray(this SerializedProperty blockArray, Block newBlock)
-        {
-            if (!blockArray.isArray)
-            {
-                Debug.Log($"Serialized Property {blockArray.name} is not an array!");
-                return null;
-            }
-
-            blockArray.serializedObject.Update();
-            blockArray.arraySize++;
-
-            SerializedProperty lastElement = blockArray.GetArrayElementAtIndex(blockArray.arraySize - 1);
-            newBlock.SaveBlockPropertiesTo(lastElement);
-            blockArray.serializedObject.ApplyModifiedProperties();
-            return lastElement;
-        }
-    }
-    #endregion
-#endif
 
 }

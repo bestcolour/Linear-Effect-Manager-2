@@ -325,7 +325,7 @@
         BlockNode NodeManager_AddNewNode(Vector2 position)
         {
             Block b = new Block(position);
-            SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToBlockPropertyArray(b);
+            SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
             BlockNode node = new BlockNode(newBlockProperty);
 
             _allBlockNodes.Add(node);
