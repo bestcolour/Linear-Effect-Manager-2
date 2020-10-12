@@ -16,6 +16,16 @@
             };
         }
 
+        //Just a debug method
+        public static void PrintAllProperties(this SerializedProperty serializedProperty)
+        {
+            while (serializedProperty.NextVisible(true))
+            {
+                Debug.Log(serializedProperty.name);
+            };
+            serializedProperty.Reset();
+        }
+
 
         public static bool TryGetProperty(this SerializedProperty p, string propertyName, out SerializedProperty propertyFound)
         {

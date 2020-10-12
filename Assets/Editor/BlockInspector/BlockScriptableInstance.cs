@@ -16,6 +16,7 @@ namespace LinearEffectsEditor
         const string PROPERTYNAME_BLOCKPROPERTY = "_block";
         public const string PROPERTYPATH_SETTINGS = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_SETTINGS;
         public const string PROPERTYPATH_ORDERARRAY = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
+        public const string PROPERTYPATH_ORDER = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
 
         #endregion
 

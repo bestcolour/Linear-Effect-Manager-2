@@ -23,13 +23,25 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>> { }
+        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>
+        {
+#if UNITY_EDITOR
+            #region Constants
+            public const string PROPERTYNAME_EFFECTNAME = "EffectName";
+            public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
+            #endregion
+
+
+            public string EffectName = "New Effect";
+            public string ErrorLog = "Error";
+#endif
+        }
         #endregion
 
         #region Runtime Cached Variables
-        [Header("Some Settings")]
+        [Header("<== Click To Open ==>")]
         [SerializeField]
-        BlockSettings _settings;
+        BlockSettings _blockSettings;
 
 
         #endregion
@@ -43,7 +55,7 @@
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
 
         //========================= BLOCK PROPERTYNAMES CONSTANTS =========================================
-        public const string PROPERTYNAME_SETTINGS = "_settings";
+        public const string PROPERTYNAME_SETTINGS = "_blockSettings";
         public const string PROPERTYPATH_BLOCKNAME = PROPERTYNAME_SETTINGS + ".BlockName";
         public const string PROPERTYPATH_BLOCKCOLOUR = PROPERTYNAME_SETTINGS + ".BlockColour";
         public const string PROPERTYPATH_BLOCKPOSITION = PROPERTYNAME_SETTINGS + ".BlockPosition";
@@ -60,17 +72,17 @@
 
         public Block(Vector2 position)
         {
-            _settings = new BlockSettings();
-            _settings.BlockName = "New Block";
-            _settings.BlockColour = DEFAULT_BLOCK_COLOUR;
-            _settings.BlockPosition = position;
+            _blockSettings = new BlockSettings();
+            _blockSettings.BlockName = "New Block";
+            _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
+            _blockSettings.BlockPosition = position;
         }
 
         public Block()
         {
-            _settings = new BlockSettings();
-            _settings.BlockName = "New Block";
-            _settings.BlockColour = DEFAULT_BLOCK_COLOUR;
+            _blockSettings = new BlockSettings();
+            _blockSettings.BlockName = "New Block";
+            _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
         //Add all your future variables inside here for saving from a block to a serializedProperty
@@ -82,9 +94,9 @@
                 return;
             }
 
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _settings.BlockColour;
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _settings.BlockName;
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _settings.BlockPosition;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.BlockColour;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
 
 
         }
@@ -98,9 +110,9 @@
                 return;
             }
 
-            _settings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            _settings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-            _settings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+            _blockSettings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockSettings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
 
         }
 

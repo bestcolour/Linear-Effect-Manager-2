@@ -380,28 +380,9 @@ MonoBehaviour:
   _blocks:
   - _orderArray: []
     _settings:
-      _randomBool: 0
-    BlockName: New String
-    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 229.5, y: 252.5}
-  - _orderArray: []
-    _settings:
-      _randomBool: 0
-    BlockName: New String
-    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 299.5, y: 379.5}
-  - _orderArray: []
-    _settings:
-      _randomBool: 0
-    BlockName: New Block
-    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 527, y: 273}
-  - _orderArray: []
-    _settings:
-      _randomBool: 0
-    BlockName: New Block
-    BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-    BlockPosition: {x: 310, y: 146.5}
+      BlockName: New Block
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 54, y: 96}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
