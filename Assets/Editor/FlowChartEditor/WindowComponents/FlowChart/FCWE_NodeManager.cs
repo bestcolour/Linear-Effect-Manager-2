@@ -27,6 +27,7 @@
 
         #region Events
         public event ClickOnBlockNodeCallback OnSelectBlockNode = null;
+        public event Action OnNoBlockNodeFound = null;
         #endregion
 
 
@@ -44,10 +45,6 @@
         List<BlockNode> _allBlockNodes;
 
         HashSet<BlockNode> _selectedBlocks;
-        #endregion
-
-        #region  Properties
-        bool HasSelectedBlockNode => _selectedBlockIndex >= 0;
         #endregion
 
 
@@ -233,7 +230,7 @@
                 //Start Drawing Selection box
                 _selectionBox.position = Event.current.mousePosition;
                 _dragState = DragState.DrawSelection_HasPotential;
-
+                OnNoBlockNodeFound?.Invoke();
                 return;
             }
 
