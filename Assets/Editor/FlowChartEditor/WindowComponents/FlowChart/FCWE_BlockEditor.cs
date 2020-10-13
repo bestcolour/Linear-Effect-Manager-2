@@ -15,17 +15,19 @@
         void BlockEditor_OnEnable()
         {
             _blockEditor = ScriptableObject.CreateInstance<BlockScriptableInstance>();
-            OnSelectBlockNode += HandleSelectBlockNode;
+            OnSelectBlockNode += BlockEditor_HandleSelectBlockNode;
+            OnLeftMouseUpInGraph += BlockEditor_OnLeftMouseUpInGraph;
         }
+
 
         void BlockEditor_OnDisable()
         {
-            OnSelectBlockNode -= HandleSelectBlockNode;
+            OnSelectBlockNode -= BlockEditor_HandleSelectBlockNode;
         }
 
         #endregion
 
-        private void HandleSelectBlockNode(BlockNode node)
+        private void BlockEditor_HandleSelectBlockNode(BlockNode node)
         {
             Debug.Log($"Block is: {node.ID}");
             _blockEditor.Initialize(node.BlockProperty);
@@ -34,6 +36,13 @@
         }
 
 
+        private void BlockEditor_OnLeftMouseUpInGraph()
+        {
+            if (!HasSelectedBlockNode)
+            {
+                Selection.activeObject = null;
+            }
+        }
 
 
     }

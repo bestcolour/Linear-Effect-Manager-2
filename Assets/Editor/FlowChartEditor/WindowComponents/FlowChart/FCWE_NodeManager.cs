@@ -46,6 +46,10 @@
         HashSet<BlockNode> _selectedBlocks;
         #endregion
 
+        #region  Properties
+        bool HasSelectedBlockNode => _selectedBlockIndex >= 0;
+        #endregion
+
 
 
         #region LifeCycle Method
@@ -238,17 +242,18 @@
             Event e = Event.current;
             _dragState = DragState.DragBlocks_HasPotential;
 
-            //==================== DRAGGING MULTIPLE NODES ======================
-            if (_selectedBlocks.Contains(_allBlockNodes[_selectedBlockIndex]))
-            {
-                return;
-            }
 
             //================== SHIFT HELD ====================
             if (e.shift)
             {
                 NodeManager_ToggleNodeSelection();
                 Repaint();
+                return;
+            }
+
+            //==================== DRAGGING MULTIPLE NODES ======================
+            if (_selectedBlocks.Contains(_allBlockNodes[_selectedBlockIndex]))
+            {
                 return;
             }
 
@@ -362,8 +367,6 @@
             //Return if no blocks were selected
             if (_selectedBlockIndex < 0) return;
 
-            //Send the selected block to the end of the list so that it will be rendered on top
-            int lastIndex = _allBlockNodes.Count - 1;
             BlockNode selectedBlock = _allBlockNodes[_selectedBlockIndex];
 
             if (_selectedBlocks.Contains(selectedBlock))
@@ -373,6 +376,8 @@
             }
             else
             {
+                //Send the selected block to the end of the list so that it will be rendered on top
+                int lastIndex = _allBlockNodes.Count - 1;
                 _selectedBlocks.Add(selectedBlock);
                 selectedBlock.IsSelected = true;
 
