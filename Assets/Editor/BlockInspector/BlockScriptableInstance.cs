@@ -23,20 +23,23 @@ namespace LinearEffectsEditor
         [SerializeField]
         Block _block;
 
-        SerializedProperty _blockProperty;
+        BlockNode _blockNode;
 
-        public void Initialize(SerializedProperty blockProperty)
+        SerializedProperty BlockProperty => _blockNode.BlockProperty;
+
+        public void Initialize(BlockNode node)
         {
-            _blockProperty = blockProperty;
+            _blockNode = node;
             _block = new Block();
-            _block.LoadFromSerializedProperty(blockProperty);
+            _block.LoadFromSerializedProperty(BlockProperty);
         }
 
         public void SaveModifiedProperties()
         {
-            _blockProperty.serializedObject.Update();
-            _block.SaveToSerializedProperty(_blockProperty);
-            _blockProperty.serializedObject.ApplyModifiedProperties();
+            BlockProperty.serializedObject.Update();
+            _block.SaveToSerializedProperty(BlockProperty);
+            BlockProperty.serializedObject.ApplyModifiedProperties();
+            _blockNode.ReloadNodeProperties();
         }
 
     }

@@ -75,6 +75,11 @@
             BlockProperty.serializedObject.ApplyModifiedProperties();
         }
 
+        public void ReloadNodeProperties()
+        {
+            LoadFrom(BlockProperty);
+        }
+
         #endregion
 
         #region Window Functions
