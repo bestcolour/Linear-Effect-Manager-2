@@ -32,32 +32,30 @@
         {
 #if UNITY_EDITOR
             #region Constants
-            public const string PROPERTYNAME_EFFECTNAME = "_effectName";
-            public const string PROPERTYNAME_ERRORLOG = "_errorLog";
+            public const string PROPERTYNAME_EFFECTNAME = "EffectName";
+            // public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
             public const string PROPERTYNAME_REFHOLDER = "_refHolder";
             public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
 
-            [SerializeField]
-            protected string _effectName = "New Effect";
-            [SerializeField]
-            public string _errorLog = "Error";
+            protected string EffectName = "New Effect";
+            // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
             {
                 property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
                 property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
-                property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = _errorLog;
-                property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = _effectName;
+                // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
+                property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = EffectName;
             }
 
             public void LoadFromSerializedProperty(SerializedProperty property)
             {
                 _refHolder = (BaseEffectExecutor<Effect>)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
-                _errorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
-                _effectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
+                // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
+                EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
             }
 #endif
         }

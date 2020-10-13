@@ -99,20 +99,21 @@
             EditorGUI.LabelField(rect, dummyProperty.stringValue);
 
 
-            //<================ DRAWING ERROR LOG =========================>
-            //Modify rect again
-            //Shift rect 10 units to give space between errorlog and type of command
-            rect.x += rect.width + 10;
-            rect.y -= 5;
+            //For now this is unneeded
+            // //<================ DRAWING ERROR LOG =========================>
+            // //Modify rect again
+            // //Shift rect 10 units to give space between errorlog and type of command
+            // rect.x += rect.width + 10;
+            // rect.y -= 5;
 
-            if (!EditorDebugExtension.TryGetProperty(orderElement, Block.EffectOrder.PROPERTYNAME_ERRORLOG, out dummyProperty)) return;
+            // if (!EditorDebugExtension.TryGetProperty(orderElement, Block.EffectOrder.PROPERTYNAME_ERRORLOG, out dummyProperty)) return;
 
-            Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
-            style.fontStyle = FontStyle.Italic;
-            //Draw Errorlog
-            EditorGUI.LabelField(rect, dummyProperty.stringValue);
-            style.fontStyle = FontStyle.Normal;
-            GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
+            // Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
+            // style.fontStyle = FontStyle.Italic;
+            // //Draw Errorlog
+            // EditorGUI.LabelField(rect, dummyProperty.stringValue);
+            // style.fontStyle = FontStyle.Normal;
+            // GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
         }
 
         private void HandleOnChange(ReorderableList list)
