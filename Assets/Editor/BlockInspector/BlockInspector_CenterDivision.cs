@@ -15,7 +15,6 @@
         event DragCenterDivisionCallback OnDrag = null;
         bool _isDragging = false;
 
-
         void CenterDiv_OnEnable()
         {
             _isDragging = false;
