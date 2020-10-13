@@ -379,10 +379,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blocks:
   - _orderArray: []
-    _settings:
-      BlockName: New Block
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 54, y: 96}
+    _blockSettings:
+      BlockName: Meme
+      BlockColour: {r: 1, g: 0, b: 0.50666666, a: 1}
+      BlockPosition: {x: 214, y: 281}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225

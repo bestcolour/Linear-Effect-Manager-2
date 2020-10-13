@@ -13,15 +13,15 @@ namespace LinearEffectsEditor
     {
 
         #region Constants
-        const string PROPERTYNAME_BLOCKPROPERTY = "_block";
+        const string PROPERTYNAME_BLOCKPROPERTY = "<Block>k__BackingField";
         public const string PROPERTYPATH_SETTINGS = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_SETTINGS;
         public const string PROPERTYPATH_ORDERARRAY = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
         public const string PROPERTYPATH_ORDER = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
 
         #endregion
 
-        [SerializeField]
-        Block _block;
+        [field: SerializeField]
+        public Block Block { get; private set; }
 
         BlockNode _blockNode;
 
@@ -30,162 +30,20 @@ namespace LinearEffectsEditor
         public void Initialize(BlockNode node)
         {
             _blockNode = node;
-            _block = new Block();
-            _block.LoadFromSerializedProperty(BlockProperty);
+            Block = new Block();
+            Block.LoadFromSerializedProperty(BlockProperty);
         }
 
         public void SaveModifiedProperties()
         {
             BlockProperty.serializedObject.Update();
-            _block.SaveToSerializedProperty(BlockProperty);
+            Block.SaveToSerializedProperty(BlockProperty);
             BlockProperty.serializedObject.ApplyModifiedProperties();
             _blockNode.ReloadNodeProperties();
         }
 
+
     }
-
-    //=============================ORIGINAL BLOCK CODE=========================================================
-    //  using System;
-    //     using System.Collections.Generic;
-    //     using UnityEngine;
-    //     //A block class will hold the order of the commands to be executed and then call
-    //     //the respective commandexecutor to execute those commands
-    //     public class Block : MonoBehaviour
-    //     {
-    //         #region Definitions
-    //         [Serializable]
-    //         class Settings
-    //         {
-    //             [SerializeField]
-    //             bool _randomBool = default;
-    //         }
-
-    //         [Serializable]
-    //         class EffectOrder
-    //         {
-    //             [SerializeField]
-    //             BaseEffectExecutor _executor;
-
-    //             [SerializeField]
-    //             int _executorEffectIndex;
-
-    // #if UNITY_EDITOR
-    //             public BaseEffectExecutor GetExecutor() { return _executor; }
-
-    //             //Initializable during only editor time
-    //             public EffectOrder(BaseEffectExecutor executor)
-    //             {
-    //                 _executor = executor;
-    //                 _executorEffectIndex = executor.EditorUse_AddNewEffectEntry();
-    //             }
-
-    //             public void OnRemove(int index)
-    //             {
-    //                 _executor.EditorUse_RemoveEffectAt(index);
-
-    //             }
-
-    //             public void UpdateAfterEffectRemoval(int indexRemoved)
-    //             {
-    //                 //Update the effect index due to the removal of a element in the executor
-    //                 if (_executorEffectIndex > indexRemoved)
-    //                 {
-    //                     _executorEffectIndex--;
-    //                 }
-    //             }
-    // #endif
-
-    //         }
-
-
-    //         #endregion
-
-    //         #region Cached Variables
-    //         [Header("Some Settings")]
-    //         [SerializeField]
-    //         Settings _settings = default;
-
-
-    //         EffectOrder[] _orderOfEffects = new EffectOrder[0];
-
-
-    //         #endregion
-
-
-
-
-
-
-    // #if UNITY_EDITOR
-    //         //====================================================== EDITOR ZONE=================================================================
-    //         //This should be drawn as a reorderable list
-    //         [SerializeField]
-    //         CommandLabel[] _commandLabels = default;
-
-    //         #region Editor Methods 
-    //         public void Editor_AddEffect(Type type)
-    //         {
-    //             ArrayExtension.Add(ref _orderOfEffects, new EffectOrder(GetExecutor(type)));
-    //         }
-
-    //         public void Editor_InsertEffect(Type type, int index)
-    //         {
-    //             ArrayExtension.Insert(ref _orderOfEffects, index, new EffectOrder(GetExecutor(type)));
-    //         }
-
-    //         public void Editor_RemoveEffectOrder(int index)
-    //         {
-    //             if (index >= _orderOfEffects.Length)
-    //             {
-    //                 return;
-    //             }
-
-
-    //             _orderOfEffects[index].OnRemove(index);
-    //             AfterEffectRemoval_Update(_orderOfEffects[index].GetExecutor(), index);
-
-    //             //Remove order effects after it is done
-    //             ArrayExtension.RemoveAt(ref _orderOfEffects, index);
-    //         }
-
-    //         public void Editor_ReArrangeEffectOrder(int effectA, int effectB)
-    //         {
-    //             EffectOrder a = _orderOfEffects[effectA], b = _orderOfEffects[effectB];
-
-    //             _orderOfEffects[effectA] = b;
-    //             _orderOfEffects[effectB] = a;
-    //         }
-    //         #endregion
-
-
-    //         #region  Support Methods for Effect Order
-    //         BaseEffectExecutor GetExecutor(Type type)
-    //         {
-    //             //For now we use getcomponent
-    //             if (!TryGetComponent(type, out Component component))
-    //             {
-    //                 //No component found, add new one
-    //                 //for now we add component to the block
-    //                 return (BaseEffectExecutor)gameObject.AddComponent(type);
-    //             }
-
-    //             return (BaseEffectExecutor)component;
-    //         }
-
-    //         void AfterEffectRemoval_Update(BaseEffectExecutor executorReference, int effectIndex)
-    //         {
-    //             EffectOrder[] effectsAffected = _orderOfEffects.FindAll(x => x.GetExecutor() == executorReference);
-
-    //             for (int i = 0; i < effectsAffected.Length; i++)
-    //             {
-    //                 effectsAffected[i].UpdateAfterEffectRemoval(effectIndex);
-    //             }
-    //         }
-
-    //         #endregion
-
-    // #endif
-
 
 }
 #endif

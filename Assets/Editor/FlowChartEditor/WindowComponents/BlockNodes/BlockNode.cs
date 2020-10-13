@@ -44,7 +44,7 @@
             ID = System.Guid.NewGuid().ToString();
             IsSelected = false;
 
-            LoadFrom(BlockProperty);
+            LoadFrom();
             _rect.position = position;
         }
 
@@ -55,15 +55,15 @@
             ID = System.Guid.NewGuid().ToString();
             IsSelected = false;
 
-            LoadFrom(BlockProperty);
+            LoadFrom();
         }
 
-        //Loads the block's editor cached variables into this node 
-        void LoadFrom(SerializedProperty blockProperty)
+        //Loads the block's cached variables into this node 
+        void LoadFrom()
         {
-            _label = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-            _blockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            _rect.position = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+            _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _rect.position = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
         }
 
         public void Save()
@@ -77,7 +77,8 @@
 
         public void ReloadNodeProperties()
         {
-            LoadFrom(BlockProperty);
+            _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
         }
 
         #endregion

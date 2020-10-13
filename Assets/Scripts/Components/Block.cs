@@ -16,8 +16,10 @@
         class BlockSettings
         {
 #if UNITY_EDITOR
+            //======================= NODE PROPERTIES (ie properties which block node uses & saves) =========================
             public string BlockName;
             public Color BlockColour;
+            [HideInInspector]
             public Vector2 BlockPosition;
 #endif
         }
