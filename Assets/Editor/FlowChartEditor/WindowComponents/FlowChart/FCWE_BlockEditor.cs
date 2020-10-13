@@ -14,11 +14,12 @@
         #region LifeTime
         void BlockEditor_OnEnable()
         {
+            //Clear selection to prevent assemblyreload errors
+            BlockEditor_OnNoBlockNodeFound();
             _blockEditor = ScriptableObject.CreateInstance<BlockScriptableInstance>();
             OnSelectBlockNode += BlockEditor_HandleSelectBlockNode;
             OnNoBlockNodeFound += BlockEditor_OnNoBlockNodeFound;
         }
-
 
         void BlockEditor_OnDisable()
         {
@@ -29,20 +30,19 @@
 
         #endregion
 
+
         private void BlockEditor_HandleSelectBlockNode(BlockNode node)
         {
-            Debug.Log($"Block is: {node.ID}");
+            // Debug.Log($"Block is: {node.ID}");
             _blockEditor.Initialize(node);
             Selection.activeObject = _blockEditor;
 
         }
 
-
-        private void BlockEditor_OnNoBlockNodeFound()
+        void BlockEditor_OnNoBlockNodeFound()
         {
             Selection.activeObject = null;
         }
-
 
     }
 

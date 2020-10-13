@@ -36,6 +36,12 @@ namespace LinearEffectsEditor
 
         public void SaveModifiedProperties()
         {
+            //That means maybe a recompliation occured
+            if(_blockNode == null)
+            {
+                Debug.LogWarning("Reselect the block!");
+                return;
+            }
             BlockProperty.serializedObject.Update();
             Block.SaveToSerializedProperty(BlockProperty);
             BlockProperty.serializedObject.ApplyModifiedProperties();

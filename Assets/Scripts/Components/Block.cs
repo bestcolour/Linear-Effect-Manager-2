@@ -21,6 +21,9 @@
             public Color BlockColour;
             [HideInInspector]
             public Vector2 BlockPosition;
+
+
+
 #endif
         }
 
@@ -67,7 +70,6 @@
 
 
         #endregion
-
 
 
 #if UNITY_EDITOR
