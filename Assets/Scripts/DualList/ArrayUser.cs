@@ -1,12 +1,12 @@
 ﻿namespace DualList
 {
     using UnityEngine;
-#if UNITY_EDITOR
+    using System;
     //This is the non-monobehaviour version of the ArrayUser class. 
     [System.Serializable]
-    public class ArrayUser<OData, Holder, Data>
-    where OData : OrderData<Holder>, new()
-    where Holder : IArrayHolder
+    public class ArrayUser<OData, BaseHolderClass, Data>
+    where OData : OrderData<BaseHolderClass>, new()
+    where BaseHolderClass : IArrayHolder
     where Data : new()
     {
 
@@ -16,14 +16,21 @@
         [SerializeField]
         protected OData[] _orderArray = new OData[0];
 
+#if UNITY_EDITOR
         #region Editor Commands
 
-        public void Add(GameObject gameObject)
+        public void OrderElement_Add(GameObject gameObject, Type type)
         {
-            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd(gameObject));
+            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
+            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd(gameObject, type));
         }
 
-        public void RemoveAt(int index)
+        public void OrderElement_RemoveAt(int index)
         {
             if (index >= _orderArray.Length) return;
 
@@ -32,49 +39,43 @@
         }
 
         //I assume this is for copy pasting
-        public void Insert(GameObject gameObject, int index)
+        public void OrderElement_Insert(GameObject gameObject, Type type, int index)
         {
+            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
             if (index > _orderArray.Length) return;
 
-            OData newOrderClass = GetOrderData_ForInsert(gameObject);
+            OData newOrderClass = GetOrderData_ForInsert(gameObject, type);
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
         }
 
 
         #region Get OrderData
-        OData GetOrderData_ForAdd(GameObject gameObject) => GetOrderData(gameObject, false);
-        OData GetOrderData_ForInsert(GameObject gameObject) => GetOrderData(gameObject, true);
+        OData GetOrderData_ForAdd(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, false);
+        OData GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, true);
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        OData GetOrderData(GameObject gameObject, bool isForInsert)
+        OData GetOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
         {
-            // Holder holder = GetComponent<Holder>();
-            Holder holder = gameObject.GetComponent<Holder>();
+            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+            {
+                component = gameObject.AddComponent(typeOfHolder);
+            }
+
+            BaseHolderClass holder =  component.GetComponent<BaseHolderClass>();
             OData o = new OData();
             o.Initialize(holder, isForInsert);
             return o;
         }
+
+
         #endregion
         #endregion
-
-
-#else
- //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-    [System.Serializable]
-    public class ArrayUser<OData, Holder, Data>
-    where OData : OrderData<Holder>, new()
-    where Holder : IArrayHolder
-    where Data : new()
-    {
-
-        ///<Summary>
-        ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
-        ///</Summary>
-        [SerializeField]
-        protected  OData[] _orderArray = new OData[0];
-
 #endif
-
-
     }
 }
+

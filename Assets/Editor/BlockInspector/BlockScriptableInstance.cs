@@ -24,8 +24,13 @@ namespace LinearEffectsEditor
         public Block Block { get; private set; }
 
         BlockNode _blockNode;
+        public GameObject BlockGameObject { get; private set; }
 
         SerializedProperty BlockProperty => _blockNode.BlockProperty;
+        public void OnCreation(GameObject go)
+        {
+            BlockGameObject = go;
+        }
 
         public void Initialize(BlockNode node)
         {
@@ -37,7 +42,7 @@ namespace LinearEffectsEditor
         public void SaveModifiedProperties()
         {
             //That means maybe a recompliation occured
-            if(_blockNode == null)
+            if (_blockNode == null)
             {
                 Debug.LogWarning("Reselect the block!");
                 return;

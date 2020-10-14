@@ -8,6 +8,8 @@
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
     public partial class BlockInspector : Editor
     {
+        GameObject BlockGameObject => _target.BlockGameObject;
+
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
@@ -60,7 +62,7 @@
                     return;
                 }
 
-                // _target.Editor_AddEffect(type);
+                _target.Block.OrderElement_Add(BlockGameObject, type);
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {

@@ -10,7 +10,7 @@
         protected Data[] _array = new Data[0];
 
 #if UNITY_EDITOR
-          event ChangeObjectArrayCallBack _onRemoveObject = null;
+        event ChangeObjectArrayCallBack _onRemoveObject = null;
         event ChangeObjectArrayCallBack _onInsertObject = null;
 
         public event ChangeObjectArrayCallBack OnRemoveObject

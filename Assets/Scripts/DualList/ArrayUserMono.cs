@@ -1,11 +1,11 @@
 ﻿namespace DualList
 {
     using UnityEngine;
-#if UNITY_EDITOR
+    using System;
     //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-    public class ArrayUserMono<OData, Holder> : MonoBehaviour
-    where OData : OrderData<Holder>, new()
-    where Holder : IArrayHolder
+    public class ArrayUserMono<OData, BaseHolderClass> : MonoBehaviour
+    where OData : OrderData<BaseHolderClass>, new()
+    where BaseHolderClass : IArrayHolder
     {
 
         ///<Summary>
@@ -14,14 +14,22 @@
         [SerializeField]
         protected OData[] _orderArray = new OData[0];
 
+#if UNITY_EDITOR
         #region Editor Commands
 
-        public void Add()
+        public void OrderElement_Add(Type type)
         {
-            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd());
+            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
+            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd(type));
         }
 
-        public void RemoveAt(int index)
+
+        public void OrderElement_RemoveAt(int index)
         {
             if (index >= _orderArray.Length) return;
 
@@ -30,44 +38,44 @@
         }
 
         //I assume this is for copy pasting
-        public void Insert(int index)
+        public void OrderElement_Insert(Type type, int index)
         {
+            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
             if (index > _orderArray.Length) return;
 
-            OData newOrderClass = GetOrderData_ForInsert();
+            OData newOrderClass = GetOrderData_ForInsert(type);
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
         }
 
 
         #region Get OrderData
-        OData GetOrderData_ForAdd() => GetOrderData(false);
-        OData GetOrderData_ForInsert() => GetOrderData(true);
+        OData GetOrderData_ForAdd(Type typeOfHolder) => GetOrderData(typeOfHolder, false);
+        OData GetOrderData_ForInsert(Type typeOfHolder) => GetOrderData(typeOfHolder, true);
 
-        OData GetOrderData(bool isForInsert)
+        //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
+        OData GetOrderData(Type typeOfHolder, bool isForInsert)
         {
-            Holder holder = GetComponent<Holder>();
+            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+            {
+                component = gameObject.AddComponent(typeOfHolder);
+            }
+
+            BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
             OData o = new OData();
             o.Initialize(holder, isForInsert);
             return o;
         }
         #endregion
         #endregion
-
-    }
-
-#else
- //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-    public class ArrayUserMono<OData, Holder> : MonoBehaviour
-    where OData : OrderData<Holder>, new()
-    where Holder : IArrayHolder
-    {
-        ///<Summary>
-        ///This array is the order in which you get your Data. For eg, let Data be a monobehaviour that stores cakes. By looping through OData, you are retrieving the cakes from the Holder class which is where the CakeData[] is being stored & serialized.
-        ///</Summary>
-        [SerializeField]
-       protected OData[] _orderArray = new OData[0];
-
-    }
 #endif
+
+    }
+
+
 
 }

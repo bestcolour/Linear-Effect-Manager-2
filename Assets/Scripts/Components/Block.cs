@@ -8,7 +8,7 @@
 
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
-    [System.Serializable]
+    [Serializable]
     public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor<Effect>, Effect>, ISavableData
     {
         #region Definitions
@@ -21,10 +21,9 @@
             public Color BlockColour;
             [HideInInspector]
             public Vector2 BlockPosition;
-
-
-
 #endif
+
+
         }
 
         [Serializable]
@@ -71,7 +70,7 @@
 
 
 #if UNITY_EDITOR
-
+        #region Editor Time 
         #region Constants
         //All the default and propertypath name constants will be stored here in the Unity_editor section
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
@@ -86,7 +85,6 @@
         #endregion
 
 
-        #region Editor Time Cached Variables
 
 
         public Block(Vector2 position)
@@ -154,7 +152,6 @@
 
 
         #endregion
-
 #endif
     }
 

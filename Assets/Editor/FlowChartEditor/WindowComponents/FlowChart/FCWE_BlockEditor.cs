@@ -17,6 +17,7 @@
             //Clear selection to prevent assemblyreload errors
             BlockEditor_OnNoBlockNodeFound();
             _blockEditor = ScriptableObject.CreateInstance<BlockScriptableInstance>();
+            _blockEditor.OnCreation(_flowChart.gameObject);
             OnSelectBlockNode += BlockEditor_HandleSelectBlockNode;
             OnNoBlockNodeFound += BlockEditor_OnNoBlockNodeFound;
         }
