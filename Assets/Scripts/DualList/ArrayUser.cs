@@ -5,8 +5,8 @@
     //This is the non-monobehaviour version of the ArrayUser class. 
     [System.Serializable]
     public class ArrayUser<OData, BaseHolderClass, Data>
-    where OData : OrderData<BaseHolderClass>, new()
-    where BaseHolderClass : IArrayHolder
+    where OData : OrderData<BaseHolderClass,Data>, new()
+    where BaseHolderClass : ArrayHolderMono<Data>
     where Data : new()
     {
 

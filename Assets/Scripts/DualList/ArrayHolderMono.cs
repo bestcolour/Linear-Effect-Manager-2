@@ -3,26 +3,27 @@
     using UnityEngine;
 
     //Please ensure that T has the System.Serializable attribute
-    public abstract class ArrayHolderMono<Data> : MonoBehaviour, IArrayHolder
+    public abstract class ArrayHolderMono<Data> : MonoBehaviour
      where Data : new()
     {
         [SerializeField]
         protected Data[] _array = new Data[0];
 
 #if UNITY_EDITOR
-        event ChangeObjectArrayCallBack _onRemoveObject = null;
-        event ChangeObjectArrayCallBack _onInsertObject = null;
+        public delegate void ChangeObjectArrayCallBack(int objectIndex);
+        public event ChangeObjectArrayCallBack OnRemoveObject = null;
+        public event ChangeObjectArrayCallBack OnInsertObject = null;
 
-        public event ChangeObjectArrayCallBack OnRemoveObject
-        {
-            add { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
-            remove { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
-        }
-        public event ChangeObjectArrayCallBack OnInsertObject
-        {
-            add { _onInsertObject += new ChangeObjectArrayCallBack(value); }
-            remove { _onInsertObject += new ChangeObjectArrayCallBack(value); }
-        }
+        // public event ChangeObjectArrayCallBack OnRemoveObject
+        // {
+        //     add { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
+        //     remove { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
+        // }
+        // public event ChangeObjectArrayCallBack OnInsertObject
+        // {
+        //     add { _onInsertObject += new ChangeObjectArrayCallBack(value); }
+        //     remove { _onInsertObject += new ChangeObjectArrayCallBack(value); }
+        // }
 
 
         //Although we do not care if DataUser class is inserting a new orderclass, we still want to call the event to update all the necessary order instances
@@ -32,7 +33,7 @@
 
             if (isInsert)
             {
-                _onInsertObject?.Invoke(elementIndex);
+                OnInsertObject?.Invoke(elementIndex);
             }
 
             return elementIndex;
@@ -41,7 +42,7 @@
         public void RemoveObjectAt(int index)
         {
             ArrayExtension.RemoveAt(ref _array, index);
-            _onRemoveObject?.Invoke(index);
+            OnRemoveObject?.Invoke(index);
         }
 #endif
     }

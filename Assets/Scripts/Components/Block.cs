@@ -27,7 +27,7 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>>, ISavableData
+        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>,Effect>, ISavableData
         {
 #if UNITY_EDITOR
             #region Constants
