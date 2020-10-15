@@ -20,7 +20,7 @@
         {
             get
             {
-                return _effectDatas.Select(x => (object)x).ToArray();
+                return _effectDatas;
             }
             set
             {
