@@ -4,7 +4,7 @@
     using System;
     //This is the non-monobehaviour version of the ArrayUser class. 
     [System.Serializable]
-    public class ArrayUser<OData, BaseHolderClass, Data>
+    public abstract class ArrayUser<OData, BaseHolderClass, Data>
     where OData : OrderData<BaseHolderClass,Data>, new()
     where BaseHolderClass : ArrayHolderMono<Data>
     where Data : new()

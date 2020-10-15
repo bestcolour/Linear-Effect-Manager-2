@@ -7,6 +7,8 @@
     [DisallowMultipleComponent]
     public class TestUpdateExecutor : UpdateEffectExecutor<TestUpdateExecutor.TestUpdateEffect>
     {
+        
+
         [System.Serializable]
         public class TestUpdateEffect : Effect
         {

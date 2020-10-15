@@ -3,7 +3,7 @@
     using UnityEngine;
     [System.Serializable]
     public abstract class OrderData<Holder, Data>
-     where Holder : ArrayHolderMono<Data>
+    where Holder : ArrayHolderMono<Data>
     where Data : new()
     {
         [SerializeField]

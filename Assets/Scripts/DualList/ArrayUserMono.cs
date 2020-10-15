@@ -3,7 +3,8 @@
     using UnityEngine;
     using System;
     //This is the monobehaviour version of the ArrayUser class. There is also basic class version where ArrayUser does not inherit from anything except for new()
-    public class ArrayUserMono<OData, BaseHolderClass, Data> : MonoBehaviour
+    [Serializable]
+    public abstract class ArrayUserMono<OData, BaseHolderClass, Data> : MonoBehaviour
     where OData : OrderData<BaseHolderClass,Data>, new()
     where BaseHolderClass : ArrayHolderMono<Data>
     where Data : new()
