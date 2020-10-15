@@ -2,6 +2,7 @@
 //This script is just a lazy man's way of resizing an array
 //NOTE: USE THIS METHODS ONLY IN INFREQUENT EDITOR CODE. USE A LIST DURING RUNTIME CODE
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 public static class ArrayExtension
 {
@@ -46,6 +47,7 @@ public static class ArrayExtension
         newArray = tempList.ToArray();
         return array.Length - 1;
     }
+
 
     ///<Summary>
     ///Adds a new element to the array at a index (This method is meant to be used in Editor Code, do not use this during runtime code, use a list instead! )

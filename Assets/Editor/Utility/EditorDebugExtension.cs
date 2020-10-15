@@ -35,7 +35,7 @@
                 return true;
             }
 
-            Debug.LogWarning($"The property named: {propertyName} inside the Block class has been renamed to something else or it doesnt exist anymore!");
+            Debug.LogWarning($"The property named: {propertyName} inside the Block class has been renamed to something else or it doesnt exist anymore! \n Property Path: {p.propertyPath}");
             return false;
         }
         #endregion

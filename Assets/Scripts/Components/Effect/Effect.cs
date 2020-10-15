@@ -1,5 +1,5 @@
 ﻿namespace LinearEffects
 {
     [System.Serializable]
-    public class Effect { }
+    public abstract class Effect { }
 }

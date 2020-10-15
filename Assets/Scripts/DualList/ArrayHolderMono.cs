@@ -1,35 +1,29 @@
 ﻿namespace DualList
 {
     using UnityEngine;
+    using System;
 
     //Please ensure that T has the System.Serializable attribute
-    public abstract class ArrayHolderMono<Data> : MonoBehaviour
-     where Data : new()
+    [System.Serializable]
+    public abstract class ArrayHolderMono : MonoBehaviour
     {
-        [SerializeField]
-        protected Data[] _array = new Data[0];
 
 #if UNITY_EDITOR
+        protected abstract object[] DataArrayObject { get; set; }
+
         public delegate void ChangeObjectArrayCallBack(int objectIndex);
         public event ChangeObjectArrayCallBack OnRemoveObject = null;
         public event ChangeObjectArrayCallBack OnInsertObject = null;
 
-        // public event ChangeObjectArrayCallBack OnRemoveObject
-        // {
-        //     add { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
-        //     remove { _onRemoveObject += new ChangeObjectArrayCallBack(value); }
-        // }
-        // public event ChangeObjectArrayCallBack OnInsertObject
-        // {
-        //     add { _onInsertObject += new ChangeObjectArrayCallBack(value); }
-        //     remove { _onInsertObject += new ChangeObjectArrayCallBack(value); }
-        // }
-
 
         //Although we do not care if DataUser class is inserting a new orderclass, we still want to call the event to update all the necessary order instances
-        public int AddNewObject(bool isInsert)
+        public int AddNewObject(bool isInsert) 
         {
-            int elementIndex = ArrayExtension.AddReturn(ref _array, new Data());
+            object[] objectArray = DataArrayObject;
+            Type dataType = objectArray.GetType().GetElementType();
+
+            // Data[] dataArray = (Data[])DataArrayObject;
+            int elementIndex = ArrayExtension.AddReturn(ref objectArray, Activator.CreateInstance(dataType));
 
             if (isInsert)
             {
@@ -39,11 +33,23 @@
             return elementIndex;
         }
 
-        public void RemoveObjectAt(int index)
+        public void RemoveObjectAt(int index) 
         {
-            ArrayExtension.RemoveAt(ref _array, index);
+            // if (DataArrayObject == null)
+            // {
+            //     DataArrayObject = new Data[0];
+            // }
+
+            object[] objectArray = DataArrayObject;
+
+            // Data[] dataArray = (Data[])DataArrayObject;
+            ArrayExtension.RemoveAt(ref objectArray, index);
+
             OnRemoveObject?.Invoke(index);
         }
+
+
+
 #endif
     }
 }

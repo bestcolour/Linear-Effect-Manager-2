@@ -9,7 +9,7 @@
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
     [Serializable]
-    public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor<Effect>, Effect>, ISavableData
+    public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor>, ISavableData
     {
         #region Definitions
         [Serializable]
@@ -27,7 +27,7 @@
         }
 
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor<Effect>,Effect>, ISavableData
+        public class EffectOrder : OrderData<BaseEffectExecutor>, ISavableData
         {
 #if UNITY_EDITOR
             #region Constants
@@ -51,7 +51,7 @@
 
             public void LoadFromSerializedProperty(SerializedProperty property)
             {
-                _refHolder = (BaseEffectExecutor<Effect>)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
+                _refHolder = (BaseEffectExecutor)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
