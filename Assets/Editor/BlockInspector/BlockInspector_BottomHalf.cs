@@ -24,7 +24,7 @@
         void BottomHalf_OnInspectorGUI()
         {
             DrawToolBar();
-            DrawObservedCommand(Screen.width);
+            DrawObservedEffect(Screen.width);
 
         }
         #endregion
@@ -54,16 +54,12 @@
 
             EditorGUILayout.Space();
 
-            //================DRAW ADD COPY & DELETE BUTTONS===============
+            //================ DRAW ADD ===============
             if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
-                {
-                    return;
-                }
-                _target.Block.OrderElement_Add(BlockGameObject, type);
-                _target.SaveModifiedProperties();
+                OpenEffectSearchBar();
             }
+            //================ DRAW COPY=========================
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 if (!CommandData.TryGetExecutor("TestUpdateExecutor", out Type type))
@@ -73,9 +69,11 @@
                 // _target.Editor_AddEffect(type);S
 
             }
+            //=================== DRAW DELETE ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 // _target.Editor_RemoveEffectOrder(0);
+                DeleteAllSelectedEffects();
             }
 
 
@@ -84,15 +82,36 @@
 
         #endregion
 
-        #region Observed Command
+        #region Commands
+        void OpenEffectSearchBar()
+        {
+            if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
+            {
+                return;
+            }
+            _target.Block.OrderElement_Add(BlockGameObject, type);
+            _target.SaveModifiedProperties();
+        }
 
-        void DrawObservedCommand(float inspectorWidth)
+        void DeleteAllSelectedEffects()
+        {
+           
+        }
+
+        #endregion
+
+        #region Observed Effect
+
+        void DrawObservedEffect(float inspectorWidth)
         {
             Color prevColor = GUIExtensions.Start_GUI_ColourChange(Color.grey);
             GUILayout.Box(string.Empty, GUILayout.Height(50f), GUILayout.MaxWidth(inspectorWidth));
             GUIExtensions.End_GUI_ColourChange(prevColor);
 
         }
+
+
+
 
         #endregion
 

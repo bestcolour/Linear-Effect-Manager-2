@@ -4,6 +4,8 @@
     using UnityEditor;
     using UnityEditorInternal;
     using LinearEffects;
+    using System.Collections.Generic;
+    using System;
 
     //The top half class will render the settings & command list
     public partial class BlockInspector : Editor
@@ -14,7 +16,9 @@
         ReorderableList _list = default;
         SerializedProperty _settingsProperty = default;
         Vector2 _scrollPosition = default;
-
+        HashSet<int> _selectedElements = default;
+        int _firstClickedIndex = -1;
+        // bool _hasSelectedElement = false;
         #endregion
 
         #region LifeTime Methods
@@ -24,19 +28,26 @@
             SerializedProperty orderArray = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_ORDERARRAY);
             _settingsProperty = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_SETTINGS);
             _list = new ReorderableList(serializedObject, orderArray, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
+            _selectedElements = new HashSet<int>();
+            _firstClickedIndex = -1;
+            // _hasSelectedElement = false;
 
-
-            _list.drawHeaderCallback = HandleDrawHeaderCallBack;
-            _list.drawElementCallback = HandleDrawElementCallBack;
-            _list.elementHeightCallback += HandleElementHeightCallBack;
-            _list.onChangedCallback += HandleOnChange;
-
+            _list.drawHeaderCallback = TopHalf_HandleDrawHeaderCallBack;
+            _list.drawElementCallback = TopHalf_HandleDrawElementCallBack;
+            _list.elementHeightCallback += TopHalf_HandleElementHeightCallBack;
+            _list.onChangedCallback += TopHalf_HandleOnChange;
+            _list.onSelectCallback += TopHalf_HandleOnSelect;
+            // _list.onMouseUpCallback += TopHalf_HandleMouseUp;
         }
+
+
 
         void TopHalf_OnDisable()
         {
-            _list.elementHeightCallback -= HandleElementHeightCallBack;
-            _list.onChangedCallback -= HandleOnChange;
+            _list.elementHeightCallback -= TopHalf_HandleElementHeightCallBack;
+            _list.onChangedCallback -= TopHalf_HandleOnChange;
+            _list.onSelectCallback -= TopHalf_HandleOnSelect;
+            // _list.onMouseUpCallback -= TopHalf_HandleMouseUp;
 
             _list = null;
         }
@@ -47,9 +58,9 @@
         {
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
             EditorGUILayout.Space();
-            DrawSettings();
+            TopHalf_DrawSettings();
             EditorGUILayout.Space(20f);
-            DrawReOrderableList();
+            TopHalf_DrawReOrderableList();
             EditorGUILayout.EndScrollView();
         }
 
@@ -57,24 +68,62 @@
 
 
         #region Event Handlers
-        private void HandleDrawHeaderCallBack(Rect rect)
+        // private void TopHalf_HandleMouseUp(ReorderableList list)
+        // {
+        //     //If handle select doesnt select any element this click cycle, reset the _firstClickedIndex
+        //     if (_hasSelectedElement) { _hasSelectedElement = false; return; }
+        //     _firstClickedIndex = -1;
+        // }
+
+        private void TopHalf_HandleOnSelect(ReorderableList list)
+        {
+            // _hasSelectedElement = true;
+            int clickedIndex = list.index;
+
+            //====================== SHIFT CLICK =========================
+            if (Event.current.shift && _firstClickedIndex != -1)
+            {
+                _selectedElements.Clear();
+
+                int diff = clickedIndex - _firstClickedIndex;
+
+                //If its positive it will move downards
+                int direction = diff > 0 ? 1 : -1;
+                diff = Mathf.Abs(diff);
+
+                Debug.Log($"Diff: {diff} Direction: {direction}");
+                for (int i = 0; i <= diff; i++)
+                {
+                    _selectedElements.Add(_firstClickedIndex + i * direction);
+                }
+
+                return;
+            }
+
+            //================= NO SHIFT CLICK ======================
+            _selectedElements.Clear();
+            _selectedElements.Add(clickedIndex);
+            _firstClickedIndex = clickedIndex;
+        }
+
+        private void TopHalf_HandleDrawHeaderCallBack(Rect rect)
         {
             EditorGUI.LabelField(rect, "Effect List");
         }
 
-        private float HandleElementHeightCallBack(int index)
+        private float TopHalf_HandleElementHeightCallBack(int index)
         {
             return EditorGUIUtility.singleLineHeight * 2f;
         }
 
-        private void HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
+        private void TopHalf_HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty orderElement = _list.serializedProperty.GetArrayElementAtIndex(index);
 
 
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
-            Color colourOfBg = isActive ? Color.green : Color.blue;
+            Color colourOfBg = _selectedElements.Contains(index) ? Color.green : Color.blue;
             Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
             GUI.Box(rect, string.Empty);
             GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
@@ -116,7 +165,7 @@
             // GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
         }
 
-        private void HandleOnChange(ReorderableList list)
+        private void TopHalf_HandleOnChange(ReorderableList list)
         {
             //Call the recalibration of effect order here in the block
             _target.SaveModifiedProperties();
@@ -125,7 +174,7 @@
         #endregion
 
         #region  Draw Methods
-        void DrawSettings()
+        void TopHalf_DrawSettings()
         {
             if (_settingsProperty == null)
             {
@@ -137,7 +186,7 @@
             EditorGUILayout.PropertyField(_settingsProperty, includeChildren: true);
         }
 
-        void DrawReOrderableList()
+        void TopHalf_DrawReOrderableList()
         {
             _list.DoLayoutList();
         }
