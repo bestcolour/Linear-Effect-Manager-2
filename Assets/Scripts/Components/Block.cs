@@ -149,6 +149,7 @@
             for (int i = 0; i < _orderArray.Length; i++)
             {
                 SerializedProperty currentElement = orderArrayProperty.GetArrayElementAtIndex(i);
+                _orderArray[i] = new EffectOrder();
                 _orderArray[i].LoadFromSerializedProperty(currentElement);
             }
         }

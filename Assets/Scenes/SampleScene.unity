@@ -350,6 +350,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effectDatas:
+  - Lol: 0
+  - Lol: 0
+  - Lol: 0
+  - Lol: 0
+  - Lol: 0
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,16 +369,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blocks:
-  - _orderArray: []
+  - _orderArray:
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 0
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 1
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 2
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 3
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 4
+      EffectName: New Effect
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 129, y: 227}
-  - _orderArray: []
-    _blockSettings:
-      BlockName: New Block
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 315, y: 229}
+      BlockPosition: {x: 228, y: 104}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
