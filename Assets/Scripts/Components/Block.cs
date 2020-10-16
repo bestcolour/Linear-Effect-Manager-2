@@ -112,6 +112,7 @@
                 return;
             }
 
+            //================ BLOCK SETTINGS ========================
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.BlockColour;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
@@ -120,7 +121,8 @@
             //============= SAVING ORDER ARRAY =====================
             SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
             orderArrayProperty.ClearArray();
-            Debug.Log(_orderArray.Length);
+            //Apply clearing the array first
+            orderArrayProperty.serializedObject.ApplyModifiedProperties();
             for (int i = 0; i < _orderArray.Length; i++)
             {
                 orderArrayProperty.AddToSerializedPropertyArray(_orderArray[i]);

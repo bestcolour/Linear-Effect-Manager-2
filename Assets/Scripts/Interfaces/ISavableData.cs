@@ -14,19 +14,19 @@
     public static class BlockSerializedPropertyExtension
     {
         //Used wehn the window editor adds a new nodeblock 
-        public static SerializedProperty AddToSerializedPropertyArray<T>(this SerializedProperty array, T instance) where T : ISavableData
+        public static SerializedProperty AddToSerializedPropertyArray<T>(this SerializedProperty arrayProperty, T instance) where T : ISavableData
         {
-            if (!array.isArray)
+            if (!arrayProperty.isArray)
             {
-                Debug.Log($"Serialized Property {array.name} is not an array!");
+                Debug.Log($"Serialized Property {arrayProperty.name} is not an array!");
                 return null;
             }
 
-            array.serializedObject.Update();
-            array.arraySize++;
-            SerializedProperty lastElement = array.GetArrayElementAtIndex(array.arraySize - 1);
+            arrayProperty.serializedObject.Update();
+            arrayProperty.arraySize++;
+            SerializedProperty lastElement = arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
             instance.SaveToSerializedProperty(lastElement);
-            array.serializedObject.ApplyModifiedProperties();
+            arrayProperty.serializedObject.ApplyModifiedProperties();
             return lastElement;
         }
     }

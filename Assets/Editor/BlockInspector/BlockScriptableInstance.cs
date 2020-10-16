@@ -47,6 +47,7 @@ namespace LinearEffectsEditor
                 Debug.LogWarning("Reselect the block!");
                 return;
             }
+            
             BlockProperty.serializedObject.Update();
             Block.SaveToSerializedProperty(BlockProperty);
             BlockProperty.serializedObject.ApplyModifiedProperties();
