@@ -36,14 +36,8 @@
 
         public void RemoveObjectAt(int index)
         {
-            // if (DataArrayObject == null)
-            // {
-            //     DataArrayObject = new Data[0];
-            // }
-
             object[] objectArray = DataArrayObject;
 
-            // Data[] dataArray = (Data[])DataArrayObject;
             ArrayExtension.RemoveAt(ref objectArray, index);
             DataArrayObject = objectArray;
 

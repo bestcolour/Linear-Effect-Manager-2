@@ -15,6 +15,8 @@
         [SerializeField]
         protected OData[] _orderArray = new OData[0];
 
+        public OData[] RemoveMe => _orderArray;
+
 #if UNITY_EDITOR
         #region Editor Commands
 
@@ -65,7 +67,7 @@
                 component = gameObject.AddComponent(typeOfHolder);
             }
 
-            BaseHolderClass holder =  component.GetComponent<BaseHolderClass>();
+            BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
             OData o = new OData();
             o.Initialize(holder, isForInsert);
             return o;

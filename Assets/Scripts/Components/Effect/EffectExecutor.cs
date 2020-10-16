@@ -13,8 +13,6 @@
     where T : Effect, new()
     {
 
-        protected T[] _effectDatas = new T[0];
-
 #if UNITY_EDITOR
         protected override object[] DataArrayObject
         {
@@ -30,13 +28,10 @@
 #endif
 
         //=============================FOR RUN TIME==============================
+        [SerializeField]
+        protected T[] _effectDatas = new T[0];
+
         protected abstract bool ExecuteEffect(T effectData);
-
-        // [SerializeField]
-        // protected List<T> _list = new List<T>();
-
-        // [SerializeField]
-        // protected T[] _effects = new T[0];
 
         public override bool ExecuteEffectAtIndex(int index)
         {

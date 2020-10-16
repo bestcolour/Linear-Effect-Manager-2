@@ -61,10 +61,8 @@
                 {
                     return;
                 }
-
-                serializedObject.Update();
                 _target.Block.OrderElement_Add(BlockGameObject, type);
-                serializedObject.ApplyModifiedProperties();
+                _target.SaveModifiedProperties();
             }
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {

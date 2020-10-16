@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using UnityEngine;
+#if UNITY_EDITOR
     using UnityEditor;
+#endif
     using DualList;
 
     //A block class will hold the order of the commands to be executed and then call
@@ -37,8 +39,7 @@
             public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
-
-            protected string EffectName = "New Effect";
+            public string EffectName = "New Effect";
             // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
@@ -119,6 +120,7 @@
             //============= SAVING ORDER ARRAY =====================
             SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
             orderArrayProperty.ClearArray();
+            Debug.Log(_orderArray.Length);
             for (int i = 0; i < _orderArray.Length; i++)
             {
                 orderArrayProperty.AddToSerializedPropertyArray(_orderArray[i]);
