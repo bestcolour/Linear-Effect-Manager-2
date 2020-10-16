@@ -119,6 +119,7 @@
         private void HandleOnChange(ReorderableList list)
         {
             //Call the recalibration of effect order here in the block
+            _target.SaveModifiedProperties();
         }
 
         #endregion
