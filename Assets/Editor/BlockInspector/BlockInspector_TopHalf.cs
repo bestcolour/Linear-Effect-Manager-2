@@ -29,14 +29,12 @@
             _list = new ReorderableList(serializedObject, orderArray, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
             _selectedElements = new HashSet<int>();
             _firstClickedIndex = -1;
-            // _hasSelectedElement = false;
 
             _list.drawHeaderCallback = TopHalf_HandleDrawHeaderCallBack;
             _list.drawElementCallback = TopHalf_HandleDrawElementCallBack;
             _list.elementHeightCallback += TopHalf_HandleElementHeightCallBack;
             _list.onChangedCallback += TopHalf_HandleOnChange;
             _list.onSelectCallback += TopHalf_HandleOnSelect;
-            _list.onMouseDragCallback += TopHalf_HandleDrag;
         }
 
 
@@ -46,7 +44,6 @@
             _list.elementHeightCallback -= TopHalf_HandleElementHeightCallBack;
             _list.onChangedCallback -= TopHalf_HandleOnChange;
             _list.onSelectCallback -= TopHalf_HandleOnSelect;
-            _list.onMouseDragCallback -= TopHalf_HandleDrag;
 
             _list = null;
         }
@@ -67,12 +64,7 @@
 
 
         #region Event Handlers
-        private void TopHalf_HandleDrag(ReorderableList list)
-        {
-            //Drag all the selected elements by communicating 
-            //DECIDE IF U WANNA CODE MUTLIPLE SELECTION AND HENCE DRAGGING
-            // Debug.Log($"Dragging {list.index}");
-        }
+      
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {
@@ -103,6 +95,7 @@
             _selectedElements.Add(clickedIndex);
             _firstClickedIndex = clickedIndex;
         }
+
 
         private void TopHalf_HandleDrawHeaderCallBack(Rect rect)
         {
@@ -188,13 +181,6 @@
             _list.DoLayoutList();
         }
         #endregion
-
-// #region Resets
-// void TopHalf_ResetSelectedElements()
-// {
-//     _selectedElements.Clear();
-// }
-// #endregion
 
     }
 

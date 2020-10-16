@@ -13,11 +13,11 @@
         #endregion
 
         event DragCenterDivisionCallback OnDrag = null;
-        bool _isDragging = false;
+        bool _CenterDiv_isDragging = false;
 
         void CenterDiv_OnEnable()
         {
-            _isDragging = false;
+            _CenterDiv_isDragging = false;
             OnDrag += HandleDivisonDrag;
         }
 
@@ -42,7 +42,7 @@
             //===================== PROCESS EVENTS ===========================
             Event e = Event.current;
 
-            switch (_isDragging)
+            switch (_CenterDiv_isDragging)
             {
                 case false:
                     //Run logic if mouse is over the division
@@ -60,7 +60,7 @@
                         return;
                     }
 
-                    _isDragging = true;
+                    _CenterDiv_isDragging = true;
                     break;
 
                 case true:
@@ -68,7 +68,7 @@
                     //If mouse button goes up 
                     if (e.type == EventType.MouseUp)
                     {
-                        _isDragging = false;
+                        _CenterDiv_isDragging = false;
                         return;
                     }
 
