@@ -18,7 +18,6 @@
         Vector2 _scrollPosition = default;
         HashSet<int> _selectedElements = default;
         int _firstClickedIndex = -1;
-        // bool _hasSelectedElement = false;
         #endregion
 
         #region LifeTime Methods
@@ -37,7 +36,7 @@
             _list.elementHeightCallback += TopHalf_HandleElementHeightCallBack;
             _list.onChangedCallback += TopHalf_HandleOnChange;
             _list.onSelectCallback += TopHalf_HandleOnSelect;
-            // _list.onMouseUpCallback += TopHalf_HandleMouseUp;
+            _list.onMouseDragCallback += TopHalf_HandleDrag;
         }
 
 
@@ -47,7 +46,7 @@
             _list.elementHeightCallback -= TopHalf_HandleElementHeightCallBack;
             _list.onChangedCallback -= TopHalf_HandleOnChange;
             _list.onSelectCallback -= TopHalf_HandleOnSelect;
-            // _list.onMouseUpCallback -= TopHalf_HandleMouseUp;
+            _list.onMouseDragCallback -= TopHalf_HandleDrag;
 
             _list = null;
         }
@@ -68,12 +67,12 @@
 
 
         #region Event Handlers
-        // private void TopHalf_HandleMouseUp(ReorderableList list)
-        // {
-        //     //If handle select doesnt select any element this click cycle, reset the _firstClickedIndex
-        //     if (_hasSelectedElement) { _hasSelectedElement = false; return; }
-        //     _firstClickedIndex = -1;
-        // }
+        private void TopHalf_HandleDrag(ReorderableList list)
+        {
+            //Drag all the selected elements by communicating 
+            //DECIDE IF U WANNA CODE MUTLIPLE SELECTION AND HENCE DRAGGING
+            // Debug.Log($"Dragging {list.index}");
+        }
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {
@@ -91,7 +90,6 @@
                 int direction = diff > 0 ? 1 : -1;
                 diff = Mathf.Abs(diff);
 
-                Debug.Log($"Diff: {diff} Direction: {direction}");
                 for (int i = 0; i <= diff; i++)
                 {
                     _selectedElements.Add(_firstClickedIndex + i * direction);
@@ -119,7 +117,6 @@
         private void TopHalf_HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty orderElement = _list.serializedProperty.GetArrayElementAtIndex(index);
-
 
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
@@ -191,6 +188,13 @@
             _list.DoLayoutList();
         }
         #endregion
+
+// #region Resets
+// void TopHalf_ResetSelectedElements()
+// {
+//     _selectedElements.Clear();
+// }
+// #endregion
 
     }
 

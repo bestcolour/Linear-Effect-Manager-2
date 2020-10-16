@@ -95,7 +95,13 @@
 
         void DeleteAllSelectedEffects()
         {
-           
+            foreach (var index in _selectedElements)
+            {
+                _target.Block.OrderElement_RemoveAt(index);
+            }
+            _selectedElements.Clear();
+            
+            _target.SaveModifiedProperties();
         }
 
         #endregion

@@ -353,9 +353,6 @@ MonoBehaviour:
   _effectDatas:
   - Lol: 0
   - Lol: 0
-  - Lol: 0
-  - Lol: 0
-  - Lol: 0
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,19 +373,10 @@ MonoBehaviour:
     - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 1
       EffectName: New Effect
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 2
-      EffectName: New Effect
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 3
-      EffectName: New Effect
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 4
-      EffectName: New Effect
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 228, y: 104}
+      BlockPosition: {x: 182, y: 133}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
