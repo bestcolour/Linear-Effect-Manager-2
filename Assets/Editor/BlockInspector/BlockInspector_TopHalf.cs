@@ -28,7 +28,7 @@
             _settingsProperty = serializedObject.FindProperty(BlockScriptableInstance.PROPERTYPATH_SETTINGS);
             _list = new ReorderableList(serializedObject, orderArray, displayAddButton: false, displayHeader: true, displayRemoveButton: false, draggable: true);
             _selectedElements = new HashSet<int>();
-            _firstClickedIndex = -1;
+            TopHalf_ResetFirstClickedIndex();
 
             _list.drawHeaderCallback = TopHalf_HandleDrawHeaderCallBack;
             _list.drawElementCallback = TopHalf_HandleDrawElementCallBack;
@@ -186,7 +186,7 @@
 
         bool TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex)
         {
-            if (_list.count <= 0)
+            if (_list.count <= 0 || _firstClickedIndex == -1)
             {
                 diff = int.MinValue;
                 direction = int.MinValue;
@@ -200,8 +200,13 @@
             direction = diff > 0 ? 1 : -1;
             diff = Mathf.Abs(diff);
             firstClickedIndex = _firstClickedIndex;
-            Debug.Log($"Diff: {diff} Direction: {direction} FirstclickedIndex {_firstClickedIndex}");
+            // Debug.Log($"Diff: {diff} Direction: {direction} FirstclickedIndex {_firstClickedIndex}");
             return true;
+        }
+
+        void TopHalf_ResetFirstClickedIndex()
+        {
+            _firstClickedIndex = -1;
         }
         #endregion
 

@@ -151,6 +151,7 @@
             }
 
             _selectedElements.Clear();
+            TopHalf_ResetFirstClickedIndex();
             _target.SaveModifiedProperties();
         }
 
