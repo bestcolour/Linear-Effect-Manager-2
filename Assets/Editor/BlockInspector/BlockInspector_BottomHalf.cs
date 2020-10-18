@@ -129,25 +129,6 @@
                 return;
             }
 
-            //Positive works with the for loop but negative doesnt for some reason
-            //TRY TO FIX THIS ISSUE OF HAVING -VE DIR BUT NOT BEING ABLE TO DELETE ALL THE EFFECTS
-
-            //CurrentClicked = 0
-            //diff = 1
-            //direction = -1
-            //firstclicked = 1
-
-            //!Should not happen!
-            //Loop 1
-            //index = 0
-
-            //Should be:
-            //Loop 1
-            //index = 1 + -1 * 0 = 1
-
-            //Loop 2
-            //index = 1 + -1 * 1  =0
-
             switch (direction > 0)
             {
                 case true:
@@ -166,25 +147,8 @@
                         int index = firstClickedIndex + direction * i;
                         _target.Block.OrderElement_RemoveAt(index);
                     }
-
-
-                    //CurrentClicked = 0
-                    //diff = 1
-                    //direction = -1
-                    //firstclicked = 1
-
-                    //Loop 1:
-                    // index: 1
-
-                    //Loop 2:
-                    // index: 0
-
-
-
                     break;
             }
-
-
 
             _selectedElements.Clear();
             _target.SaveModifiedProperties();
