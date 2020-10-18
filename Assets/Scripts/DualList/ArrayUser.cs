@@ -15,7 +15,6 @@
         [SerializeField]
         protected OData[] _orderArray = new OData[0];
 
-        public OData[] RemoveMe => _orderArray;
 
 #if UNITY_EDITOR
         #region Editor Commands

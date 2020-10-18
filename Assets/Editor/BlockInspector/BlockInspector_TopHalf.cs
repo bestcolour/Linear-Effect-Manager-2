@@ -64,7 +64,7 @@
 
 
         #region Event Handlers
-      
+
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {
@@ -76,11 +76,7 @@
             {
                 _selectedElements.Clear();
 
-                int diff = clickedIndex - _firstClickedIndex;
-
-                //If its positive it will move downards
-                int direction = diff > 0 ? 1 : -1;
-                diff = Mathf.Abs(diff);
+                TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out _firstClickedIndex);
 
                 for (int i = 0; i <= diff; i++)
                 {
@@ -109,7 +105,7 @@
 
         private void TopHalf_HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty orderElement = _list.serializedProperty.GetArrayElementAtIndex(index);
+            SerializedProperty orderElement = TopHalf_GetOrderArrayElement(index);
 
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
@@ -179,6 +175,33 @@
         void TopHalf_DrawReOrderableList()
         {
             _list.DoLayoutList();
+        }
+        #endregion
+
+        #region Supporting Methods
+        SerializedProperty TopHalf_GetOrderArrayElement(int i)
+        {
+            return _list.serializedProperty.GetArrayElementAtIndex(i);
+        }
+
+        bool TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex)
+        {
+            if (_list.count <= 0)
+            {
+                diff = int.MinValue;
+                direction = int.MinValue;
+                firstClickedIndex = int.MinValue;
+                return false;
+            }
+
+            diff = _list.index - _firstClickedIndex;
+
+            //If its positive it will move downards
+            direction = diff > 0 ? 1 : -1;
+            diff = Mathf.Abs(diff);
+            firstClickedIndex = _firstClickedIndex;
+            Debug.Log($"Diff: {diff} Direction: {direction} FirstclickedIndex {_firstClickedIndex}");
+            return true;
         }
         #endregion
 

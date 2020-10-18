@@ -369,14 +369,14 @@ MonoBehaviour:
   - _orderArray:
     - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 0
-      EffectName: New Effect
+      EffectName: A
     - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 1
-      EffectName: New Effect
+      _dataElmtIndex: 2
+      EffectName: C
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 182, y: 133}
+      BlockPosition: {x: 154, y: 177}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225
