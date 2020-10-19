@@ -44,6 +44,8 @@
             OnRemoveObject?.Invoke(index);
         }
 
+        public int AddObject
+
 
 
 #endif

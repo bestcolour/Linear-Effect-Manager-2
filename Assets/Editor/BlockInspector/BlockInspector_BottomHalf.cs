@@ -110,11 +110,20 @@
         #region Commands
         void BottomHalf_PasteClipBoardEffects()
         {
-            foreach (var item in _clipBoard)
+
+            for (int i = 0; i < _clipBoard.Count; i++)
             {
+                var effectOrder = _clipBoard[i];
                 //1) Convert effect name to type using CommandData
+                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type effectType))
+                {
+                    Debug.Log($"There is no such effect executor called {effectOrder.EffectName} in CommandData.cs!");
+                    continue;
+                }
+
                 //2) Call target.Block.OrderElement_Insert()
-                Debug.Log(item.EffectName);
+                _target.Block.OrderElement_Insert(_target.BlockGameObject, effectType, effectOrder, CurrentClickedListIndex + 1);
+                Debug.Log(effectOrder.EffectName);
             }
 
 
@@ -122,7 +131,7 @@
 
         void BottomHalf_OpenEffectSearchBar()
         {
-            if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
+            if (!CommandData.TryGetExecutor("TestUpdateExecutor", out Type type))
             {
                 return;
             }

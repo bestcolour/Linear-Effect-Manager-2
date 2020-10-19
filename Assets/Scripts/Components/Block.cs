@@ -57,6 +57,8 @@
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
             }
+
+
 #endif
         }
         #endregion
@@ -157,34 +159,30 @@
 
 
         #endregion
-        #region Overrides
+        #region DualList Overrides
         //I assume this is for copy pasting
-        public override void OrderElement_Insert(GameObject gameObject, Type type, int index)
+        public new void OrderElement_Insert(GameObject gameObject, Type type, Block.EffectOrder orderData, int index)
         {
-            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
             {
-                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
                 return;
             }
 
             if (index > _orderArray.Length) return;
 
-            OData newOrderClass = GetOrderData_ForInsert(gameObject, type);
+            Block.EffectOrder newOrderClass = GetOrderData_ForInsert(gameObject, type);
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
         }
 
-        //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected override Block.EffectOrder GetOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
-        {
-            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
-            {
-                component = gameObject.AddComponent(typeOfHolder);
-            }
 
-            BaseEffectExecutor holder = component.GetComponent<BaseEffectExecutor>();
-            Block.EffectOrder o = new Block.EffectOrder();
-            o.Initialize(holder, isForInsert);
-            return o;
+        protected override Block.EffectOrder GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder)
+        {
+            Block.EffectOrder order = GetOrderData(gameObject, typeOfHolder, true);
+
+
+
+            return order;
         }
         #endregion
 
