@@ -159,7 +159,7 @@
         #endregion
         #region Overrides
         //I assume this is for copy pasting
-        public void OrderElement_Insert(GameObject gameObject, Type type, int index)
+        public override void OrderElement_Insert(GameObject gameObject, Type type, int index)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -171,6 +171,11 @@
 
             OData newOrderClass = GetOrderData_ForInsert(gameObject, type);
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
+        }
+
+        public override OrderData<Block.EffectOrder> GetOrderData_ForInsert
+        {
+
         }
         #endregion
 

@@ -55,11 +55,11 @@
 
 
         #region Get OrderData
-        protected OData GetOrderData_ForAdd(Type typeOfHolder) => GetOrderData(typeOfHolder, false);
-        protected OData GetOrderData_ForInsert(Type typeOfHolder) => GetOrderData(typeOfHolder, true);
+        protected virtual OData GetOrderData_ForAdd(Type typeOfHolder) => GetOrderData(typeOfHolder, false);
+        protected virtual OData GetOrderData_ForInsert(Type typeOfHolder) => GetOrderData(typeOfHolder, true);
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected OData GetOrderData(Type typeOfHolder, bool isForInsert)
+        protected virtual OData GetOrderData(Type typeOfHolder, bool isForInsert)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {
