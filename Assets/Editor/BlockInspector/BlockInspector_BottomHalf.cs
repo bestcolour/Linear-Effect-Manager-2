@@ -75,10 +75,8 @@
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                foreach (var item in _clipBoard)
-                {
-                    Debug.Log(item.EffectName);
-                }
+                BottomHalf_PasteClipBoardEffects();
+
 
             }
             //=================== DRAW DELETE BUTTON ===================
@@ -110,6 +108,18 @@
         #endregion
 
         #region Commands
+        void BottomHalf_PasteClipBoardEffects()
+        {
+            foreach (var item in _clipBoard)
+            {
+                //1) Convert effect name to type using CommandData
+                //2) Call target.Block.OrderElement_Insert()
+                Debug.Log(item.EffectName);
+            }
+
+
+        }
+
         void BottomHalf_OpenEffectSearchBar()
         {
             if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
@@ -137,27 +147,6 @@
                 _target.Block.OrderElement_RemoveAt(index);
             }
 
-            // switch (direction > 0)
-            // {
-            //     case true:
-            //         //Remove elements from the biggest index to the lowest index
-            //         for (int i = diff; i >= 0; i--)
-            //         {
-            //             int index = firstClickedIndex + direction * i;
-            //             _target.Block.OrderElement_RemoveAt(index);
-            //         }
-            //         break;
-
-            //     case false:
-            //         //Remove elements from the biggest index to the lowest index
-            //         for (int i = 0; i <= diff; i++)
-            //         {
-            //             int index = firstClickedIndex + direction * i;
-            //             _target.Block.OrderElement_RemoveAt(index);
-            //         }
-            //         break;
-            // }
-
             _selectedElements.Clear();
             TopHalf_ResetFirstClickedIndex();
             _target.SaveModifiedProperties();
@@ -180,7 +169,6 @@
                 SerializedProperty p = TopHalf_GetOrderArrayElement(startingIndex + i);
                 Block.EffectOrder orderObject = new Block.EffectOrder();
                 orderObject.LoadFromSerializedProperty(p);
-                Debug.Log(orderObject.EffectName);
                 _clipBoard.Add(orderObject);
             }
 

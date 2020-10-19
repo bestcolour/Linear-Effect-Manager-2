@@ -157,6 +157,24 @@
 
 
         #endregion
+        #region Overrides
+        //I assume this is for copy pasting
+        public void OrderElement_Insert(GameObject gameObject, Type type, int index)
+        {
+            if (!type.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
+            if (index > _orderArray.Length) return;
+
+            OData newOrderClass = GetOrderData_ForInsert(gameObject, type);
+            ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
+        }
+        #endregion
+
+
 #endif
     }
 
