@@ -18,7 +18,7 @@
 #if UNITY_EDITOR
         #region Editor Commands
 
-        public void OrderElement_Add(Type type)
+        public virtual void OrderElement_Add(Type type)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -30,7 +30,7 @@
         }
 
 
-        public void OrderElement_RemoveAt(int index)
+        public virtual void OrderElement_RemoveAt(int index)
         {
             if (index >= _orderArray.Length) return;
 
@@ -39,7 +39,7 @@
         }
 
         //I assume this is for copy pasting
-        public void OrderElement_Insert(Type type, int index)
+        public virtual void OrderElement_Insert(Type type, int index)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -55,11 +55,11 @@
 
 
         #region Get OrderData
-        OData GetOrderData_ForAdd(Type typeOfHolder) => GetOrderData(typeOfHolder, false);
-        OData GetOrderData_ForInsert(Type typeOfHolder) => GetOrderData(typeOfHolder, true);
+        protected OData GetOrderData_ForAdd(Type typeOfHolder) => GetOrderData(typeOfHolder, false);
+        protected OData GetOrderData_ForInsert(Type typeOfHolder) => GetOrderData(typeOfHolder, true);
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        OData GetOrderData(Type typeOfHolder, bool isForInsert)
+        protected OData GetOrderData(Type typeOfHolder, bool isForInsert)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {
