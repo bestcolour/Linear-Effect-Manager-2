@@ -127,27 +127,36 @@
             {
                 return;
             }
+            //Remove elements from the biggest index to the lowest index
+            int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
 
-            switch (direction > 0)
+            //Remove elements from the biggest index to the lowest index
+            for (int i = 0; i <= diff; i++)
             {
-                case true:
-                    //Remove elements from the biggest index to the lowest index
-                    for (int i = diff; i >= 0; i--)
-                    {
-                        int index = firstClickedIndex + direction * i;
-                        _target.Block.OrderElement_RemoveAt(index);
-                    }
-                    break;
-
-                case false:
-                    //Remove elements from the biggest index to the lowest index
-                    for (int i = 0; i <= diff; i++)
-                    {
-                        int index = firstClickedIndex + direction * i;
-                        _target.Block.OrderElement_RemoveAt(index);
-                    }
-                    break;
+                int index = startingIndex - i;
+                _target.Block.OrderElement_RemoveAt(index);
             }
+
+            // switch (direction > 0)
+            // {
+            //     case true:
+            //         //Remove elements from the biggest index to the lowest index
+            //         for (int i = diff; i >= 0; i--)
+            //         {
+            //             int index = firstClickedIndex + direction * i;
+            //             _target.Block.OrderElement_RemoveAt(index);
+            //         }
+            //         break;
+
+            //     case false:
+            //         //Remove elements from the biggest index to the lowest index
+            //         for (int i = 0; i <= diff; i++)
+            //         {
+            //             int index = firstClickedIndex + direction * i;
+            //             _target.Block.OrderElement_RemoveAt(index);
+            //         }
+            //         break;
+            // }
 
             _selectedElements.Clear();
             TopHalf_ResetFirstClickedIndex();
@@ -164,6 +173,7 @@
 
             _clipBoard.Clear();
 
+            //Always ensure that the order of the elements copied starts from the smallest index to the largest index
             int startingIndex = direction > 0 ? _firstClickedIndex : CurrentClickedListIndex;
             for (int i = 0; i <= diff; i++)
             {
