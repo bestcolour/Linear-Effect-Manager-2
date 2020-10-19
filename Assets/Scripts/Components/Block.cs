@@ -173,9 +173,18 @@
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
         }
 
-        public override OrderData<Block.EffectOrder> GetOrderData_ForInsert
+        //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
+        protected override Block.EffectOrder GetOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
         {
+            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+            {
+                component = gameObject.AddComponent(typeOfHolder);
+            }
 
+            BaseEffectExecutor holder = component.GetComponent<BaseEffectExecutor>();
+            Block.EffectOrder o = new Block.EffectOrder();
+            o.Initialize(holder, isForInsert);
+            return o;
         }
         #endregion
 
