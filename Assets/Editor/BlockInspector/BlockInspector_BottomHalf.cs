@@ -75,11 +75,10 @@
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                if (!CommandData.TryGetExecutor("TestUpdateExecutor", out Type type))
+                foreach (var item in _clipBoard)
                 {
-                    return;
+                    Debug.Log(item.EffectName);
                 }
-                // _target.Editor_AddEffect(type);S
 
             }
             //=================== DRAW DELETE BUTTON ===================
@@ -163,13 +162,18 @@
                 return;
             }
 
+            _clipBoard.Clear();
+
+            int startingIndex = direction > 0 ? _firstClickedIndex : CurrentClickedListIndex;
             for (int i = 0; i <= diff; i++)
             {
-                SerializedProperty p = TopHalf_GetOrderArrayElement(_firstClickedIndex + i * direction);
+                SerializedProperty p = TopHalf_GetOrderArrayElement(startingIndex + i);
                 Block.EffectOrder orderObject = new Block.EffectOrder();
                 orderObject.LoadFromSerializedProperty(p);
+                Debug.Log(orderObject.EffectName);
                 _clipBoard.Add(orderObject);
             }
+
         }
 
         #endregion

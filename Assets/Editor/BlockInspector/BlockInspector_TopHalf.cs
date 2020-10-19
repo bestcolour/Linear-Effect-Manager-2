@@ -20,6 +20,10 @@
         int _firstClickedIndex = -1;
         #endregion
 
+        #region Properties
+        int CurrentClickedListIndex => _list.index;
+        #endregion
+
         #region LifeTime Methods
 
         void TopHalf_OnEnable()
@@ -194,7 +198,7 @@
                 return false;
             }
 
-            diff = _list.index - _firstClickedIndex;
+            diff = CurrentClickedListIndex - _firstClickedIndex;
 
             //If its positive it will move downards
             direction = diff > 0 ? 1 : -1;
