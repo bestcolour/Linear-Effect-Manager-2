@@ -27,6 +27,12 @@
             _refHolder.RemoveObjectAt(_dataElmtIndex);
         }
 
+        //To be called before removing the order intsance from the list
+        public virtual void OnInsert()
+        {
+            _refHolder.CopyArrayElementsTo();
+        }
+
 
         #region Handle Event
         //Compares with the removed object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating

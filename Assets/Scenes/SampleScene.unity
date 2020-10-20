@@ -380,7 +380,7 @@ MonoBehaviour:
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 265, y: 197}
+      BlockPosition: {x: 315.5, y: 97.5}
   _settings:
     _someSetting: 0
 --- !u!1 &963194225

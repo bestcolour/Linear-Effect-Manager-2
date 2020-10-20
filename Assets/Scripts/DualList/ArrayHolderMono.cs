@@ -44,7 +44,11 @@
             OnRemoveObject?.Invoke(index);
         }
 
-        public int AddObject
+        public void CopyArrayElementsTo(int from, int to, int insertAt)
+        {
+            //Copies array elements from fromindex to toindex
+            //inserts it at insertAtindex
+        }
 
 
 

@@ -64,8 +64,13 @@
             //================ DRAW CUT BUTTON ===============
             else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                //If there had been previous clipboard effects and you are cutting agn,
+                if (_clipBoard.Count > 0)
+                {
+                    BottomHalf_DeleteAllClipBoardEffects();
+                }
+
                 BottomHalf_CopySelectedToClipBoard();
-                BottomHalf_DeleteAllSelectedEffects();
             }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -110,7 +115,6 @@
         #region Commands
         void BottomHalf_PasteClipBoardEffects()
         {
-
             for (int i = 0; i < _clipBoard.Count; i++)
             {
                 var effectOrder = _clipBoard[i];
@@ -122,7 +126,7 @@
                 }
 
                 //2) Call target.Block.OrderElement_Insert()
-                _target.Block.OrderElement_Insert(_target.BlockGameObject, effectType, effectOrder, CurrentClickedListIndex + 1);
+                // _target.Block.OrderElement_Insert(_target.BlockGameObject, effectType, effectOrder, CurrentClickedListIndex + 1);
                 Debug.Log(effectOrder.EffectName);
             }
 
@@ -135,13 +139,12 @@
             {
                 return;
             }
-            _target.Block.OrderElement_Add(BlockGameObject, type);
+            _target.Block.OrderElement_AddNew(BlockGameObject, type);
             _target.SaveModifiedProperties();
         }
 
         void BottomHalf_DeleteAllSelectedEffects()
         {
-            //1 -1 1
             if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex))
             {
                 return;
@@ -183,6 +186,14 @@
 
         }
 
+        void BottomHalf_DeleteAllClipBoardEffects()
+        {
+            // for (int i = 0; i < _clipBoard.Count; i++)
+            // {
+            //     _clipBoard[i].OnRemove();
+            // }
+            // _clipBoard.Clear();
+        }
         #endregion
 
 

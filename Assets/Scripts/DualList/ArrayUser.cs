@@ -19,7 +19,7 @@
 #if UNITY_EDITOR
         #region Editor Commands
 
-        public virtual void OrderElement_Add(GameObject gameObject, Type type)
+        public virtual void OrderElement_AddNew(GameObject gameObject, Type type)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -27,7 +27,7 @@
                 return;
             }
 
-            ArrayExtension.Add(ref _orderArray, GetOrderData_ForAdd(gameObject, type));
+            ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false));
         }
 
         public virtual void OrderElement_RemoveAt(int index)
@@ -38,8 +38,7 @@
             ArrayExtension.RemoveAt(ref _orderArray, index);
         }
 
-        //I assume this is for copy pasting
-        public virtual void OrderElement_Insert(GameObject gameObject, Type type, int index)
+        public virtual void OrderElement_InsertNew(GameObject gameObject, Type type, int index)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -49,17 +48,27 @@
 
             if (index > _orderArray.Length) return;
 
-            OData newOrderClass = GetOrderData_ForInsert(gameObject, type);
+            OData newOrderClass = GetNewOrderData(gameObject, type, true);
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
+        }
+
+        //I assume this is for copy pasting
+        public virtual void OrderElement_Insert(GameObject gameObject, OData orderData, int index)
+        {
+            if (index > _orderArray.Length) return;
+
+            orderData.OnInsert();
+
+            ArrayExtension.Insert(ref _orderArray, index, orderData);
         }
 
 
         #region Get OrderData
-        protected virtual OData GetOrderData_ForAdd(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, false);
-        protected virtual OData GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, true);
+        // protected virtual OData GetOrderData_ForAdd(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, false);
+        // protected virtual OData GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, true);
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected virtual OData GetOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
+        protected virtual OData GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {

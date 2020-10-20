@@ -58,7 +58,13 @@
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
             }
 
+            public void CopyValuesFrom(EffectOrder e)
+            {
+                _refHolder = e._refHolder;
+                _dataElmtIndex = e._dataElmtIndex;
+                EffectName = e.EffectName;
 
+            }
 #endif
         }
         #endregion
@@ -159,32 +165,7 @@
 
 
         #endregion
-        #region DualList Overrides
-        //I assume this is for copy pasting
-        public new void OrderElement_Insert(GameObject gameObject, Type type, Block.EffectOrder orderData, int index)
-        {
-            if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
-            {
-                Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
-                return;
-            }
 
-            if (index > _orderArray.Length) return;
-
-            Block.EffectOrder newOrderClass = GetOrderData_ForInsert(gameObject, type);
-            ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
-        }
-
-
-        protected override Block.EffectOrder GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder)
-        {
-            Block.EffectOrder order = GetOrderData(gameObject, typeOfHolder, true);
-
-
-
-            return order;
-        }
-        #endregion
 
 
 #endif
