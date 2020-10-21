@@ -13,7 +13,7 @@
 
         public delegate void ChangeObjectArrayCallBack(int objectIndex);
         public event ChangeObjectArrayCallBack OnRemoveObject = null;
-        public event ChangeObjectArrayCallBack OnInsertObject = null;
+        public event ChangeObjectArrayCallBack OnInsertNewObject = null;
 
 
         //Although we do not care if DataUser class is inserting a new orderclass, we still want to call the event to update all the necessary order instances
@@ -28,7 +28,7 @@
             DataArrayObject = objectArray;
             if (isInsert)
             {
-                OnInsertObject?.Invoke(elementIndex);
+                OnInsertNewObject?.Invoke(elementIndex);
             }
 
             return elementIndex;
@@ -44,10 +44,10 @@
             OnRemoveObject?.Invoke(index);
         }
 
-        public void CopyArrayElementsTo(int from, int to, int insertAt)
+        public void DuplicateDataElement(int dataToCopyFrom)
         {
-            //Copies array elements from fromindex to toindex
-            //inserts it at insertAtindex
+            //Duplicates a copy of the class using reflection's deep copy 
+            //Adds the class to the end of the array
         }
 
 

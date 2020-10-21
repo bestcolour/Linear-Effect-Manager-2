@@ -19,7 +19,8 @@
 #if UNITY_EDITOR
         #region Editor Commands
 
-        public virtual void OrderElement_AddNew(GameObject gameObject, Type type)
+        #region Add New Order Elements
+        public virtual void AddNewOrderElement(GameObject gameObject, Type type)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -30,15 +31,8 @@
             ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false));
         }
 
-        public virtual void OrderElement_RemoveAt(int index)
-        {
-            if (index >= _orderArray.Length) return;
 
-            _orderArray[index].OnRemove();
-            ArrayExtension.RemoveAt(ref _orderArray, index);
-        }
-
-        public virtual void OrderElement_InsertNew(GameObject gameObject, Type type, int index)
+        public virtual void InsertNewOrderElement(GameObject gameObject, Type type, int index)
         {
             if (!type.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -52,21 +46,6 @@
             ArrayExtension.Insert(ref _orderArray, index, newOrderClass);
         }
 
-        //I assume this is for copy pasting
-        public virtual void OrderElement_Insert(GameObject gameObject, OData orderData, int index)
-        {
-            if (index > _orderArray.Length) return;
-
-            orderData.OnInsert();
-
-            ArrayExtension.Insert(ref _orderArray, index, orderData);
-        }
-
-
-        #region Get OrderData
-        // protected virtual OData GetOrderData_ForAdd(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, false);
-        // protected virtual OData GetOrderData_ForInsert(GameObject gameObject, Type typeOfHolder) => GetOrderData(gameObject, typeOfHolder, true);
-
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
         protected virtual OData GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
         {
@@ -77,12 +56,33 @@
 
             BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
             OData o = new OData();
-            o.Initialize(holder, isForInsert);
+            o.OnAddNew(holder, isForInsert);
             return o;
         }
 
-
         #endregion
+
+        public virtual void RemoveOrderElementAt(int index)
+        {
+            if (index >= _orderArray.Length) return;
+
+            _orderArray[index].OnRemove();
+            ArrayExtension.RemoveAt(ref _orderArray, index);
+        }
+
+
+        //I assume this is for copy/cut pasting
+        public virtual void InsertOrderElement(GameObject gameObject, OData orderData, int index)
+        {
+            if (index > _orderArray.Length) return;
+
+
+            ArrayExtension.Insert(ref _orderArray, index, orderData);
+        }
+
+
+
+
         #endregion
 #endif
     }

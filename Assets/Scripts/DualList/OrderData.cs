@@ -13,12 +13,12 @@
 #if UNITY_EDITOR
         //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
         //none of these will be used in the actual build except for the variables stored
-        public virtual void Initialize(Holder holder, bool isInsert)
+        public virtual void OnAddNew(Holder holder, bool isInsert)
         {
             _refHolder = holder;
             _dataElmtIndex = _refHolder.AddNewObject(isInsert);
             _refHolder.OnRemoveObject += HandleRemoveObject;
-            _refHolder.OnInsertObject += HandleInsertObject;
+            _refHolder.OnInsertNewObject += HandleInsertObject;
         }
 
         //To be called before removing the order intsance from the list
@@ -27,10 +27,10 @@
             _refHolder.RemoveObjectAt(_dataElmtIndex);
         }
 
-        //To be called before removing the order intsance from the list
-        public virtual void OnInsert()
+        public virtual void OnInsertCopy()
         {
-            _refHolder.CopyArrayElementsTo();
+            //Tell the holder to do a copy of my current data index details and add it to the end of the array
+            _refHolder.DuplicateDataElement(_dataElmtIndex);
         }
 
 

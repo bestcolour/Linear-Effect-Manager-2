@@ -115,18 +115,22 @@
         #region Commands
         void BottomHalf_PasteClipBoardEffects()
         {
+            //Check if there is nothing selected
+            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
+
             for (int i = 0; i < _clipBoard.Count; i++)
             {
                 var effectOrder = _clipBoard[i];
-                //1) Convert effect name to type using CommandData
-                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type effectType))
-                {
-                    Debug.Log($"There is no such effect executor called {effectOrder.EffectName} in CommandData.cs!");
-                    continue;
-                }
+                // //1) Convert effect name to type using CommandData
+                // if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type effectType))
+                // {
+                //     Debug.Log($"There is no such effect executor called {effectOrder.EffectName} in CommandData.cs!");
+                //     continue;
+                // }
 
-                //2) Call target.Block.OrderElement_Insert()
-                // _target.Block.OrderElement_Insert(_target.BlockGameObject, effectType, effectOrder, CurrentClickedListIndex + 1);
+                //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
+                _target.Block.InsertOrderElement(_target.BlockGameObject, effectOrder, currentInsertPosition);
+                currentInsertPosition++;
                 Debug.Log(effectOrder.EffectName);
             }
 
@@ -139,7 +143,7 @@
             {
                 return;
             }
-            _target.Block.OrderElement_AddNew(BlockGameObject, type);
+            _target.Block.AddNewOrderElement(BlockGameObject, type);
             _target.SaveModifiedProperties();
         }
 
@@ -156,7 +160,7 @@
             for (int i = 0; i <= diff; i++)
             {
                 int index = startingIndex - i;
-                _target.Block.OrderElement_RemoveAt(index);
+                _target.Block.RemoveOrderElementAt(index);
             }
 
             _selectedElements.Clear();

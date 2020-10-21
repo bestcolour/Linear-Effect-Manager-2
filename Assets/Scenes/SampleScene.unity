@@ -317,6 +317,7 @@ GameObject:
   - component: {fileID: 910949407}
   - component: {fileID: 910949410}
   - component: {fileID: 910949408}
+  - component: {fileID: 910949409}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -354,6 +355,21 @@ MonoBehaviour:
   - Lol: 0
   - Lol: 0
   - Lol: 0
+  - Lol: 0
+  - Lol: 0
+--- !u!114 &910949409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas: []
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,13 +385,19 @@ MonoBehaviour:
   _blocks:
   - _orderArray:
     - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 2
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 0
       EffectName: New Effect
     - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 1
       EffectName: New Effect
     - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 2
+      _dataElmtIndex: 3
+      EffectName: New Effect
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 4
       EffectName: New Effect
     _blockSettings:
       BlockName: New Block
