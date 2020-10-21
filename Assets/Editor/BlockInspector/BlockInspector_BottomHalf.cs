@@ -118,21 +118,25 @@
             //Check if there is nothing selected
             int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
+            // HashSet<BaseEffectExecutor> affectedHolders = new HashSet<BaseEffectExecutor>();
+
             for (int i = 0; i < _clipBoard.Count; i++)
             {
                 var effectOrder = _clipBoard[i];
-                // //1) Convert effect name to type using CommandData
-                // if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type effectType))
-                // {
-                //     Debug.Log($"There is no such effect executor called {effectOrder.EffectName} in CommandData.cs!");
-                //     continue;
-                // }
+
+                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
+                {
+                    Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
+                    continue;
+                }
 
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-                _target.Block.InsertOrderElement(_target.BlockGameObject, effectOrder, currentInsertPosition);
+                _target.Block.InsertOrderElement(_target.BlockGameObject,executorType, effectOrder, currentInsertPosition);
                 currentInsertPosition++;
                 Debug.Log(effectOrder.EffectName);
             }
+
+
 
 
         }

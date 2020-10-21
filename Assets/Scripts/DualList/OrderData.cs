@@ -27,11 +27,24 @@
             _refHolder.RemoveObjectAt(_dataElmtIndex);
         }
 
+        //For when the holder is not null
         public virtual void OnInsertCopy()
         {
+            _refHolder.OnRemoveObject += HandleRemoveObject;
+            _refHolder.OnInsertNewObject += HandleInsertObject;
             //Tell the holder to do a copy of my current data index details and add it to the end of the array
             _refHolder.DuplicateDataElement(_dataElmtIndex);
         }
+
+        public virtual void OnInsertCopy(Holder holder)
+        {
+            _refHolder = holder;
+            _refHolder.OnRemoveObject += HandleRemoveObject;
+            _refHolder.OnInsertNewObject += HandleInsertObject;
+            //Tell the holder to do a copy of my current data index details and add it to the end of the array
+            _refHolder.DuplicateDataElement(_dataElmtIndex);
+        }
+
 
 
         #region Handle Event

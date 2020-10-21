@@ -22,7 +22,6 @@
             object[] objectArray = DataArrayObject;
             Type dataType = objectArray.GetType().GetElementType();
 
-            // Data[] dataArray = (Data[])DataArrayObject;
             int elementIndex = ArrayExtension.AddReturn(ref objectArray, Activator.CreateInstance(dataType));
 
             DataArrayObject = objectArray;
@@ -44,10 +43,17 @@
             OnRemoveObject?.Invoke(index);
         }
 
-        public void DuplicateDataElement(int dataToCopyFrom)
+        public void DuplicateDataElement(int index)
         {
             //Duplicates a copy of the class using reflection's deep copy 
-            //Adds the class to the end of the array
+            object[] objectArray = DataArrayObject;
+
+            object objectToDuplicate = objectArray[index];
+
+            object copy = ReflectionExtensions.DeepCopy(objectToDuplicate);
+
+            int elementIndex = ArrayExtension.AddReturn(ref objectArray, copy);
+            DataArrayObject = objectArray;
         }
 
 

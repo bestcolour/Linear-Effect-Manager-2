@@ -68,11 +68,27 @@
         }
 
         //I assume this is for copy/cut pasting
-        public virtual void InsertOrderElement(OData orderData, int index)
+        public virtual void InsertOrderElement(Type holderType, OData orderData, int index)
         {
             if (index > _orderArray.Length) return;
-            ArrayExtension.Insert(ref _orderArray, index, orderData);
+
+            if (!holderType.IsSubclassOf(typeof(BaseHolderClass)))
+            {
+                Debug.Log($"Type {holderType} does not inherit from {typeof(BaseHolderClass)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
+            if (!gameObject.TryGetComponent(holderType, out Component component))
+            {
+                component = gameObject.AddComponent(holderType);
+                BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
+                orderData.OnInsertCopy(holder);
+                ArrayExtension.Insert(ref _orderArray, index, orderData);
+                return;
+            }
+
             orderData.OnInsertCopy();
+            ArrayExtension.Insert(ref _orderArray, index, orderData);
         }
 
         #endregion

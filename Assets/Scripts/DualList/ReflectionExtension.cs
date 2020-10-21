@@ -9,7 +9,7 @@ using System.Reflection;
 /// </summary>
 
 //You can remove this namespace if you wish to use this as well!s
-namespace LinearEffects
+namespace DualList
 {
 
     public static class ReflectionExtensions
