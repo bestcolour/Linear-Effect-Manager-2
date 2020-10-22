@@ -11,6 +11,8 @@
         protected int _dataElmtIndex;
 
 #if UNITY_EDITOR
+        public Holder RefHolder => _refHolder;
+
         //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
         //none of these will be used in the actual build except for the variables stored
         public virtual void OnAddNew(Holder holder, bool isInsert)
@@ -33,7 +35,7 @@
             _refHolder.OnRemoveObject += HandleRemoveObject;
             _refHolder.OnInsertNewObject += HandleInsertObject;
             //Tell the holder to do a copy of my current data index details and add it to the end of the array
-            _refHolder.DuplicateDataElement(_dataElmtIndex);
+            _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
         }
 
         public virtual void OnInsertCopy(Holder holder)

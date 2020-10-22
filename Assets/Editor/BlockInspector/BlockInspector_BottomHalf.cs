@@ -118,8 +118,6 @@
             //Check if there is nothing selected
             int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
-            // HashSet<BaseEffectExecutor> affectedHolders = new HashSet<BaseEffectExecutor>();
-
             for (int i = 0; i < _clipBoard.Count; i++)
             {
                 var effectOrder = _clipBoard[i];
@@ -130,20 +128,20 @@
                     continue;
                 }
 
+
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-                _target.Block.InsertOrderElement(_target.BlockGameObject,executorType, effectOrder, currentInsertPosition);
+                _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
                 currentInsertPosition++;
-                Debug.Log(effectOrder.EffectName);
+
             }
 
-
-
-
+            _target.SaveModifiedProperties();
+            _clipBoard.Clear();
         }
 
         void BottomHalf_OpenEffectSearchBar()
         {
-            if (!CommandData.TryGetExecutor("TestUpdateExecutor", out Type type))
+            if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
             {
                 return;
             }

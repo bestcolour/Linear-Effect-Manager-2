@@ -54,7 +54,7 @@
                 component = gameObject.AddComponent(typeOfHolder);
             }
 
-            BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
+            BaseHolderClass holder = component as BaseHolderClass;
             OData o = new OData();
             o.OnAddNew(holder, isForInsert);
             return o;
@@ -85,7 +85,7 @@
             if (!gameObject.TryGetComponent(holderType, out Component component))
             {
                 component = gameObject.AddComponent(holderType);
-                BaseHolderClass holder = component.GetComponent<BaseHolderClass>();
+                BaseHolderClass holder = component as BaseHolderClass;
                 orderData.OnInsertCopy(holder);
                 ArrayExtension.Insert(ref _orderArray, index, orderData);
                 return;

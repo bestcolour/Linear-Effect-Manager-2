@@ -43,7 +43,7 @@
             OnRemoveObject?.Invoke(index);
         }
 
-        public void DuplicateDataElement(int index)
+        public int DuplicateDataElement(int index)
         {
             //Duplicates a copy of the class using reflection's deep copy 
             object[] objectArray = DataArrayObject;
@@ -54,6 +54,7 @@
 
             int elementIndex = ArrayExtension.AddReturn(ref objectArray, copy);
             DataArrayObject = objectArray;
+            return elementIndex;
         }
 
 
