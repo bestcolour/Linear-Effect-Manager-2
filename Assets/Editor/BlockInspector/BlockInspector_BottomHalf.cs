@@ -16,6 +16,7 @@
         void BottomHalf_OnEnable()
         {
             _clipBoard = new List<Block.EffectOrder>();
+            _clipBoardIndices = new HashSet<int>();
         }
 
         void BottomHalf_OnDisable()
@@ -81,8 +82,6 @@
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 BottomHalf_PasteClipBoardEffects();
-
-
             }
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -184,7 +183,8 @@
             int startingIndex = direction > 0 ? _firstClickedIndex : CurrentClickedListIndex;
             for (int i = 0; i <= diff; i++)
             {
-                SerializedProperty p = TopHalf_GetOrderArrayElement(startingIndex + i);
+                int index = startingIndex + i;
+                SerializedProperty p = TopHalf_GetOrderArrayElement(index);
                 Block.EffectOrder orderObject = new Block.EffectOrder();
                 orderObject.LoadFromSerializedProperty(p);
                 _clipBoard.Add(orderObject);

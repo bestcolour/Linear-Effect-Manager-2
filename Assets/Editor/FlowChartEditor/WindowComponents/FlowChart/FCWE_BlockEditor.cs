@@ -26,7 +26,7 @@
         {
             OnSelectBlockNode -= BlockEditor_HandleSelectBlockNode;
             OnNoBlockNodeFound -= BlockEditor_OnNoBlockNodeFound;
-
+            Selection.activeObject = null;
         }
 
         #endregion
