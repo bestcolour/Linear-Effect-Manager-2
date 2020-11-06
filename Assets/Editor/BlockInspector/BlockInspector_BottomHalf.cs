@@ -168,7 +168,8 @@
             {
                 return;
             }
-            //Remove elements from the biggest index to the lowest index
+            
+            //Get the bigger starting index
             int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
 
             //Remove elements from the biggest index to the lowest index
