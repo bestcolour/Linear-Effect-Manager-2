@@ -16,7 +16,6 @@
         void BottomHalf_OnEnable()
         {
             _clipBoard = new List<Block.EffectOrder>();
-            _clipBoardIndices = new HashSet<int>();
         }
 
         void BottomHalf_OnDisable()
