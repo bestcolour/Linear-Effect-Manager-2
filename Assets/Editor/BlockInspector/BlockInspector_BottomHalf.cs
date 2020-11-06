@@ -10,12 +10,17 @@
     public partial class BlockInspector : Editor
     {
         GameObject BlockGameObject => _target.BlockGameObject;
-        List<Block.EffectOrder> _clipBoard = default;
+        // List<Block.EffectOrder> _clipBoard = default;
+
+        List<int> _clipBoardIndices = default;
+        HashSet<int> _clipBoardUnOrderedIndices = default;
 
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
-            _clipBoard = new List<Block.EffectOrder>();
+            // _clipBoard = new List<Block.EffectOrder>();
+            _clipBoardIndices = new List<int>();
+            _clipBoardUnOrderedIndices = new HashSet<int>();
         }
 
         void BottomHalf_OnDisable()
@@ -64,17 +69,18 @@
             //================ DRAW CUT BUTTON ===============
             else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                //If there had been previous clipboard effects and you are cutting agn,
-                if (_clipBoard.Count > 0)
-                {
-                    BottomHalf_DeleteAllClipBoardEffects();
-                }
+                // //If there had been previous clipboard effects and you are cutting agn,
+                // if (_clipBoard.Count > 0)
+                // {
+                //     BottomHalf_DeleteAllClipBoardEffects();
+                // }
 
-                BottomHalf_CopySelectedToClipBoard();
+                // BottomHalf_CopySelectedToClipBoard();
             }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
             }
             //================ DRAW PASTE BUTTON =========================
@@ -116,9 +122,16 @@
             //Check if there is nothing selected
             int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
-            for (int i = 0; i < _clipBoard.Count; i++)
+
+            for (int i = 0; i < _clipBoardIndices.Count; i++)
             {
-                var effectOrder = _clipBoard[i];
+                // var effectOrder = _clipBoard[i];
+
+                if (!GetCopyOfOrderObjectFromArray(_clipBoardIndices[i], out var effectOrder))
+                {
+                    Debug.Log($"Unable to copy index {_clipBoardIndices[i]} because index is out of bounds!");
+                    continue;
+                }
 
                 if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
                 {
@@ -132,9 +145,11 @@
                 currentInsertPosition++;
 
             }
+            Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
 
             _target.SaveModifiedProperties();
-            _clipBoard.Clear();
+            _clipBoardIndices.Clear();
+            _clipBoardUnOrderedIndices.Clear();
         }
 
         void BottomHalf_OpenEffectSearchBar()
@@ -176,19 +191,22 @@
                 return;
             }
 
-            _clipBoard.Clear();
+            // _clipBoard.Clear();
+            _clipBoardIndices.Clear();
+            _clipBoardUnOrderedIndices.Clear();
 
             //Always ensure that the order of the elements copied starts from the smallest index to the largest index
             int startingIndex = direction > 0 ? _firstClickedIndex : CurrentClickedListIndex;
             for (int i = 0; i <= diff; i++)
             {
                 int index = startingIndex + i;
-                SerializedProperty p = TopHalf_GetOrderArrayElement(index);
-                Block.EffectOrder orderObject = new Block.EffectOrder();
-                orderObject.LoadFromSerializedProperty(p);
-                _clipBoard.Add(orderObject);
+                // SerializedProperty p = TopHalf_GetOrderArrayElement(index);
+                // Block.EffectOrder orderObject = new Block.EffectOrder();
+                // orderObject.LoadFromSerializedProperty(p);
+                // _clipBoard.Add(orderObject);
+                _clipBoardIndices.Add(index);
+                _clipBoardUnOrderedIndices.Add(index);
             }
-
         }
 
         void BottomHalf_DeleteAllClipBoardEffects()
@@ -198,6 +216,20 @@
             //     _clipBoard[i].OnRemove();
             // }
             // _clipBoard.Clear();
+        }
+
+        bool GetCopyOfOrderObjectFromArray(int index, out Block.EffectOrder orderData)
+        {
+            if (!TopHalf_GetOrderArrayElement(index, out SerializedProperty p))
+            {
+                orderData = null;
+                return false;
+            }
+
+
+            orderData = new Block.EffectOrder();
+            orderData.LoadFromSerializedProperty(p);
+            return true;
         }
         #endregion
 

@@ -109,7 +109,10 @@
 
         private void TopHalf_HandleDrawElementCallBack(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty orderElement = TopHalf_GetOrderArrayElement(index);
+            if (!TopHalf_GetOrderArrayElement(index, out SerializedProperty orderElement))
+            {
+                return;
+            }
 
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
@@ -183,11 +186,21 @@
         #endregion
 
         #region Supporting Methods
-        SerializedProperty TopHalf_GetOrderArrayElement(int i)
+        bool TopHalf_GetOrderArrayElement(int i, out SerializedProperty property)
         {
-            return _list.serializedProperty.GetArrayElementAtIndex(i);
+            if (i >= _list.count)
+            {
+                property = null;
+                return false;
+            }
+            property = _list.serializedProperty.GetArrayElementAtIndex(i);
+            return true;
         }
 
+        ///<Summary>
+        ///Diff is the size difference between first clicked index and current clicked index, if direction is > 0, currentclicked index > firstclickedindex.
+        /// Firstclickedindex is the index of the element which was clicked before the currently clicked index.
+        ///</Summary>
         bool TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex)
         {
             if (_list.count <= 0 || _firstClickedIndex == -1)
