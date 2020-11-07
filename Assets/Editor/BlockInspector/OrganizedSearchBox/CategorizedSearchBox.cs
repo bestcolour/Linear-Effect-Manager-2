@@ -25,7 +25,9 @@ public class CategorizedSearchBox : SearchField
 
     #endregion
 
-
+    public virtual void EnableSearchBox()
+    {
+    }
     public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
     {
         downOrUpArrowKeyPressed += handleDownOrUpArrowKeyPressed;
@@ -36,14 +38,17 @@ public class CategorizedSearchBox : SearchField
     {
         downOrUpArrowKeyPressed -= handleDownOrUpArrowKeyPressed;
     }
+    public virtual void DisableSearchBox()
+    {
+    }
 
     ///<Summary>
     ///Returns the height that the entire searchbox will need to occupy
     ///</Summary>
-    public virtual float Handle_OnGUI(Vector2 searchBarSize, float searchBoxHeight)
+    public virtual float Handle_OnGUI(Rect searchBarRect, float searchBoxHeight)
     {
         //========= SEARCHBAR ==============
-        SearchBar_OnGUI(searchBarSize);
+        SearchBar_OnGUI(searchBarRect);
 
         //=========== SEARCHBOX ===============
         //Substract the cross icon's width
@@ -55,11 +60,10 @@ public class CategorizedSearchBox : SearchField
 
 
     #region Search Bar Methods
-    protected void SearchBar_OnGUI(Vector2 size)
+    protected void SearchBar_OnGUI(Rect rect)
     {
         //====== UPDATE BAR RECT =========
-        _barRect.width = size.x;
-        _barRect.height = size.y;
+        _barRect = rect;
 
         _searchedBarText = OnGUI(_barRect, _searchedBarText);
     }

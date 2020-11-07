@@ -28,7 +28,7 @@
 
         #region Constants
         // static readonly Vector2 SEARCHBOX_RECTSIZE = new Vector2(500f, EditorGUIUtility.singleLineHeight);
-        const float SEARCHBOX_PADDING = 10f
+        const float SEARCHBOX_PADDING_Y = 10f
         , SEARCHBOX_HEIGHT = 50f
         ;
 
@@ -60,7 +60,7 @@
         void BottomHalf_OnInspectorGUI()
         {
             BottomHalf_DrawToolBar();
-            BottomHalf_OnGUI_OrganizedSearchBox();
+            BottomHalf_SearchBox_OnGUI();
             BottomHalf_OnGUI_ObservedEffect(Screen.width);
 
         }
@@ -93,13 +93,10 @@
             //================DRAW SPACE===============
             EditorGUILayout.Space();
 
-            //================ DRAW ADD BUTTON ===============
-            if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
-            {
-                BottomHalf_OpenEffectSearchBar();
-            }
+            BottomHalf_DrawSearchBoxButtons();
+
             //================ DRAW COPY BUTTON ===============
-            else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
@@ -197,31 +194,63 @@
         #region Commands
 
         #region SearchBar Methods
-        void BottomHalf_OpenEffectSearchBar()
+        void BottomHalf_DrawSearchBoxButtons()
         {
-            _isSearchBoxOpened = true;
+            //================ DRAW SEARCHBOX BUTTON ===============
+            switch (_isSearchBoxOpened)
+            {
+                case true:
+                    if (GUILayout.Button("【―】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+                    {
+                        BottomHalf_SearchBox_Disable();
+                    }
+                    break;
+                case false:
+                    if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+                    {
+                        BottomHalf_SearchBox_Enable();
+                    }
 
-            _searchBox.EnableSearchBox();
+                    break;
+            }
+        }
+
+        void BottomHalf_SearchBox_Enable()
+        {
             // if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
             // {
             //     return;
             // }
             // _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
             // _target.SaveModifiedProperties();
+
+            _isSearchBoxOpened = true;
+            _searchBox.EnableSearchBox();
+
         }
 
-        void BottomHalf_OnGUI_OrganizedSearchBox()
+        void BottomHalf_SearchBox_Disable()
+        {
+            _isSearchBoxOpened = false;
+            _searchBox.DisableSearchBox();
+        }
+
+        void BottomHalf_SearchBox_OnGUI()
         {
             if (!_isSearchBoxOpened) return;
 
-            Vector2 size;
-            size.x = EditorGUIUtility.currentViewWidth - SEARCHBOX_PADDING;
-            size.y = EditorGUIUtility.singleLineHeight;
-
-            float height = _searchBox.Handle_OnGUI(size, SEARCHBOX_HEIGHT);
+            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBoxRect(), SEARCHBOX_HEIGHT);
 
             //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
             EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height));
+        }
+
+        Rect BottomHalf_SearchBox_GetSearchBoxRect()
+        {
+            Rect rect = GUILayoutUtility.GetLastRect();
+            rect.y += rect.height + SEARCHBOX_PADDING_Y;
+            rect.height = EditorGUIUtility.singleLineHeight;
+            return rect;
         }
 
         #endregion
