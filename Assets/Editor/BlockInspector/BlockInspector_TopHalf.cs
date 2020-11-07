@@ -5,7 +5,6 @@
     using UnityEditorInternal;
     using LinearEffects;
     using System.Collections.Generic;
-    using System;
 
     //The top half class will render the settings & command list
     public partial class BlockInspector : Editor
@@ -22,6 +21,14 @@
 
         #region Properties
         int CurrentClickedListIndex => _list.index;
+        #endregion
+
+        #region Constants
+        //For now dark theme editor skin doesnt work as good as i thought it would...
+        static readonly Color ORDERELEMENT_COLOUR_SELECTED = new Color(73 / 255f, 113 / 255f, 170 / 255f, 1f),
+        ORDERELEMENT_COLOUR_UNSELECTED = new Color(0.8f, 0.8f, 0.8f, 1f)
+        ;
+
         #endregion
 
         #region LifeTime Methods
@@ -117,7 +124,7 @@
 
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
-            Color colourOfBg = _selectedElements.Contains(index) ? Color.green : Color.blue;
+            Color colourOfBg = _selectedElements.Contains(index) ? ORDERELEMENT_COLOUR_SELECTED : ORDERELEMENT_COLOUR_UNSELECTED;
 
             Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
             GUI.Box(rect, string.Empty);

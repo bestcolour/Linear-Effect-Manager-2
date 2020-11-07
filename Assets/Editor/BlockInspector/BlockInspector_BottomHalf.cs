@@ -97,15 +97,9 @@
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex))
-                {
-                    return;
-                }
 
-                //Get the bigger starting index
-                int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
 
-                BottomHalf_DeleteAllSelectedEffects(startingIndex, diff);
+                BottomHalf_DeleteAllSelectedEffects();
             }
 
 
@@ -194,11 +188,6 @@
         void BottomHalf_PasteClipBoardEffects()
         {
             if (!HadPreviouslyCopied) return;
-            BottomHalf_PasteFromCopyMethod();
-        }
-
-        void BottomHalf_PasteFromCopyMethod()
-        {
             //Check if there is nothing selected
             int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
@@ -240,10 +229,18 @@
             _target.SaveModifiedProperties();
         }
 
-        void BottomHalf_DeleteAllSelectedEffects(int startingIndex, int range)
+        void BottomHalf_DeleteAllSelectedEffects()
         {
+            if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex))
+            {
+                return;
+            }
+
+            //Get the bigger starting index
+            int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
+
             //Remove elements from the biggest index to the lowest index
-            for (int i = 0; i <= range; i++)
+            for (int i = 0; i <= diff; i++)
             {
                 int index = startingIndex - i;
                 _target.Block.RemoveOrderElementAt(index);
