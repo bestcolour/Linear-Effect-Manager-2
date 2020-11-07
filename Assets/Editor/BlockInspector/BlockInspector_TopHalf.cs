@@ -117,6 +117,7 @@
             //<================ DRAWING MAIN BG =========================>
             //Draw a bg for the entire list rect before we start modifying the rect
             Color colourOfBg = _selectedElements.Contains(index) ? Color.green : Color.blue;
+
             Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
             GUI.Box(rect, string.Empty);
             GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
@@ -140,6 +141,22 @@
             //Draw the Type of Command first
             EditorGUI.LabelField(rect, dummyProperty.stringValue);
 
+
+            // //<================ DRAWING COPY/CUT TARGET =========================>
+            if (!_clipBoardUnOrderedIndices.Contains(index)) return;
+
+            //Modify rect again
+            //Shift rect 10 units to give space between errorlog and type of command
+            rect.x += rect.width + 10;
+            rect.y -= 5;
+
+
+            Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
+            style.fontStyle = FontStyle.Italic;
+            //Draw Errorlog
+            EditorGUI.LabelField(rect, _previousCommand.ToString());
+            style.fontStyle = FontStyle.Normal;
+            GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
 
             //For now this is unneeded
             // //<================ DRAWING ERROR LOG =========================>

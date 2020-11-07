@@ -9,11 +9,15 @@
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
     public partial class BlockInspector : Editor
     {
+        enum BlockCommand { None, Copy, Cut }
+
         GameObject BlockGameObject => _target.BlockGameObject;
         // List<Block.EffectOrder> _clipBoard = default;
 
         List<int> _clipBoardIndices = default;
         HashSet<int> _clipBoardUnOrderedIndices = default;
+
+        BlockCommand _previousCommand = BlockCommand.None;
 
         #region LifeTime Method
         void BottomHalf_OnEnable()
@@ -76,17 +80,21 @@
                 // }
 
                 // BottomHalf_CopySelectedToClipBoard();
+                _previousCommand = BlockCommand.Cut;
+
             }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
+                _previousCommand = BlockCommand.Copy;
             }
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 BottomHalf_PasteClipBoardEffects();
+                _previousCommand = BlockCommand.None;
             }
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -168,7 +176,7 @@
             {
                 return;
             }
-            
+
             //Get the bigger starting index
             int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
 
