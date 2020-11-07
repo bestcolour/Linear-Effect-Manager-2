@@ -17,7 +17,7 @@
         SerializedProperty _settingsProperty = default;
         Vector2 _scrollPosition = default;
         HashSet<int> _selectedElements = default;
-        int _firstClickedIndex = -1;
+        int _firstClickedIndex = -1, _prevClickedIndex = -1;
         #endregion
 
         #region Properties
@@ -72,8 +72,9 @@
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {
-            // _hasSelectedElement = true;
+
             int clickedIndex = list.index;
+            _prevClickedIndex = _firstClickedIndex;
 
             //====================== SHIFT CLICK =========================
             if (Event.current.shift && _firstClickedIndex != -1)
@@ -143,7 +144,7 @@
 
 
             // //<================ DRAWING COPY/CUT TARGET =========================>
-            if (!_prevlyCopied) return;
+            if (!HadPreviouslyCopied) return;
 
             if (!_clipBoardUnOrderedIndices.Contains(index)) return;
 

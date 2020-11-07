@@ -15,10 +15,16 @@
         List<int> _clipBoardIndices = default;
         HashSet<int> _clipBoardUnOrderedIndices = default;
 
-        bool _prevlyCopied = false;
+        // bool _prevlyCopied = false;
+
+        bool HadPreviouslyCopied => _clipBoardIndices.Count > 0;
         #endregion
 
+        #region Observed Effect
         SerializedProperty _currObservedProperty = default;
+
+
+        #endregion
 
         #region Constants
         const string DEBUG_EFFECTEXECUTOR = "TestUpdateExecutor";
@@ -31,7 +37,7 @@
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
-            _prevlyCopied = false;
+            // _prevlyCopied = false;
             _clipBoardIndices = new List<int>();
             _clipBoardUnOrderedIndices = new HashSet<int>();
         }
@@ -44,7 +50,7 @@
         void BottomHalf_OnInspectorGUI()
         {
             BottomHalf_DrawToolBar();
-            BottomHalf_DrawObservedEffect(Screen.width);
+            BottomHalf_OnGUI_ObservedEffect(Screen.width);
 
         }
         #endregion
@@ -90,13 +96,13 @@
             {
                 //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
-                _prevlyCopied = true;
+                // _prevlyCopied = true;
             }
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 BottomHalf_PasteClipBoardEffects();
-                _prevlyCopied = false;
+                // _prevlyCopied = false;
             }
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -120,12 +126,43 @@
 
         #region Observed Effect
 
+        void BottomHalf_OnGUI_ObservedEffect(float inspectorWidth)
+        {
+            if (_currObservedProperty != null && _prevClickedIndex == CurrentClickedListIndex)
+            {
+                //Current effect is still the same
+                BottomHalf_DrawObservedEffect(inspectorWidth);
+                return;
+            }
+
+            if (BottomHalf_TryGetNewObservedEffect())
+            {
+                BottomHalf_DrawObservedEffect(inspectorWidth);
+            }
+        }
+
         void BottomHalf_DrawObservedEffect(float inspectorWidth)
+        {
+            //======== DRAWING EFFECT ==========
+            float height = EditorGUI.GetPropertyHeight(_currObservedProperty);
+
+            // ========== DRAWING BG BOX =============
+            // Color prevColor = GUIExtensions.Start_GUI_ColourChange(OBSERVED_EFFECT_BOXCOLOUR);
+            GUILayout.Box(string.Empty, GUILayout.Height(height + OBSERVED_EFFECTBG_BORDER), GUILayout.MaxWidth(inspectorWidth));
+            // GUIExtensions.End_GUI_ColourChange(prevColor);
+
+            //========== DRAWING EFFECT =============
+            Rect prevRect = GUILayoutUtility.GetLastRect();
+            prevRect.y += OBSERVED_EFFECT_YOFFSET;
+            EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
+        }
+
+        bool BottomHalf_TryGetNewObservedEffect()
         {
             //Get currently selected order element
             if (!TopHalf_GetOrderArrayElement(CurrentClickedListIndex, out SerializedProperty orderElement))
             {
-                return;
+                return false;
             }
 
             //===== GETTING OBSERVED EFFECT =====
@@ -139,25 +176,15 @@
             //Get dataelementindex from orderElement in block
             int dataElementIndex = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue;
 
+            //Somehow the effect order instance still exists when i delete them so i can still apparently get the dataelementindex but the effectDataArray already has deleted all the array elements and hence causes an error when i try to GetArrayElementAtIndex()
+            if (dataElementIndex >= effectDataArray.arraySize)
+                return false;
+
+
             //Get current selected effect through the use of the EffectData array and dataelementindex
             _currObservedProperty = effectDataArray.GetArrayElementAtIndex(dataElementIndex);
-
-            //======== DRAWING EFFECT ==========
-            float height = EditorGUI.GetPropertyHeight(_currObservedProperty);
-
-            // ========== DRAWING BG BOX =============
-            // Color prevColor = GUIExtensions.Start_GUI_ColourChange(OBSERVED_EFFECT_BOXCOLOUR);
-            GUILayout.Box(string.Empty, GUILayout.Height(height + OBSERVED_EFFECTBG_BORDER), GUILayout.MaxWidth(inspectorWidth));
-            // GUIExtensions.End_GUI_ColourChange(prevColor);
-
-            //========== DRAWING EFFECT =============
-            Rect prevRect = GUILayoutUtility.GetLastRect();
-            prevRect.y += OBSERVED_EFFECT_YOFFSET;
-            EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
-
+            return true;
         }
-
-
 
         #endregion
 
@@ -167,19 +194,21 @@
 
         void BottomHalf_PasteClipBoardEffects()
         {
-            switch (_previousCommand)
-            {
-                default: break;
+            if (!HadPreviouslyCopied) return;
+            BottomHalf_PasteFromCopyMethod();
+            // switch (_previousCommand)
+            // {
+            //     default: break;
 
-                case BlockCommand.Copy:
-                    BottomHalf_PasteFromCopyMethod();
-                    break;
+            //     case BlockCommand.Copy:
+            //         BottomHalf_PasteFromCopyMethod();
+            //         break;
 
-                case BlockCommand.Cut:
-                    BottomHalf_PasteFromCutMethod();
-                    break;
+            //     case BlockCommand.Cut:
+            //         BottomHalf_PasteFromCutMethod();
+            //         break;
 
-            }
+            // }
 
         }
 
@@ -214,32 +243,32 @@
             _clipBoardUnOrderedIndices.Clear();
         }
 
-        //More of a reorder really
-        void BottomHalf_PasteFromCutMethod()
-        {
-            // //Check if there is nothing selected
-            // int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
+        // //More of a reorder really
+        // void BottomHalf_PasteFromCutMethod()
+        // {
+        //     // //Check if there is nothing selected
+        //     // int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
-            // foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
-            // {
-            //     if (!TopHalf_GetOrderArrayElement(elementIndexWhichYouIntendToCopy, out SerializedProperty p))
-            //     {
-            //         return;
-            //     }
+        //     // foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
+        //     // {
+        //     //     if (!TopHalf_GetOrderArrayElement(elementIndexWhichYouIntendToCopy, out SerializedProperty p))
+        //     //     {
+        //     //         return;
+        //     //     }
 
-            //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-            //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
-            //     currentInsertPosition++;
-            // }
+        //     //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
+        //     //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+        //     //     currentInsertPosition++;
+        //     // }
 
-            // Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
+        //     // Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
 
-            // _target.SaveModifiedProperties();
+        //     // _target.SaveModifiedProperties();
 
 
-            // _clipBoardIndices.Clear();
-            // _clipBoardUnOrderedIndices.Clear();
-        }
+        //     // _clipBoardIndices.Clear();
+        //     // _clipBoardUnOrderedIndices.Clear();
+        // }
 
         #endregion
 
