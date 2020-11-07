@@ -41,10 +41,7 @@
         public virtual void OnInsertCopy(Holder holder)
         {
             _refHolder = holder;
-            _refHolder.OnRemoveObject += HandleRemoveObject;
-            _refHolder.OnInsertNewObject += HandleInsertObject;
-            //Tell the holder to do a copy of my current data index details and add it to the end of the array
-            _refHolder.DuplicateDataElement(_dataElmtIndex);
+            OnInsertCopy();
         }
 
 

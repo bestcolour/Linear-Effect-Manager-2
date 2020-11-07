@@ -72,12 +72,12 @@
             {
                 BottomHalf_OpenEffectSearchBar();
             }
-            //================ DRAW CUT BUTTON ===============
-            else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
-            {
-                BottomHalf_CopySelectedToClipBoard();
-                _previousCommand = BlockCommand.Cut;
-            }
+            // //================ DRAW CUT BUTTON ===============
+            // else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+            // {
+            //     BottomHalf_CopySelectedToClipBoard();
+            //     _previousCommand = BlockCommand.Cut;
+            // }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {

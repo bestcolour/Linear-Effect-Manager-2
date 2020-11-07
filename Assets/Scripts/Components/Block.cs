@@ -39,7 +39,7 @@
             public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
-            public string EffectName ;
+            public string EffectName;
             // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
@@ -56,6 +56,10 @@
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
+
+
+                _refHolder.OnRemoveObject += HandleRemoveObject;
+                _refHolder.OnInsertNewObject += HandleInsertObject;
             }
 
             public void CopyValuesFrom(EffectOrder e)
@@ -65,6 +69,7 @@
                 EffectName = e.EffectName;
 
             }
+
 #endif
         }
         #endregion

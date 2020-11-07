@@ -351,11 +351,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blocks:
-  - _orderArray: []
+  - _orderArray:
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 0
+      EffectName: TestUpdateExecutor
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 1
+      EffectName: TestUpdateExecutor
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 186, y: 204}
+      BlockPosition: {x: 221, y: 202}
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
@@ -367,10 +373,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 910949406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
+  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDatas: []
+  _effectDatas:
+  - _myAwesomeName: DDDD
+  - _myAwesomeName: DDDD
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
