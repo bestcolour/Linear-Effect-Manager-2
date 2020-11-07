@@ -19,6 +19,8 @@
 
         BlockCommand _previousCommand = BlockCommand.None;
 
+        const string DEBUG_EFFECTEXECUTOR = "TestUpdateExecutor";
+
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
@@ -125,19 +127,37 @@
         #endregion
 
         #region Commands
+
+        #region Paste methods
+
         void BottomHalf_PasteClipBoardEffects()
+        {
+            switch (_previousCommand)
+            {
+                default: break;
+
+                case BlockCommand.Copy:
+                    BottomHalf_PasteFromCopyMethod();
+                    break;
+
+                case BlockCommand.Cut:
+                    BottomHalf_PasteFromCutMethod();
+                    break;
+
+            }
+
+        }
+
+        void BottomHalf_PasteFromCopyMethod()
         {
             //Check if there is nothing selected
             int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
-
-            for (int i = 0; i < _clipBoardIndices.Count; i++)
+            foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
             {
-                // var effectOrder = _clipBoard[i];
-
-                if (!GetCopyOfOrderObjectFromArray(_clipBoardIndices[i], out var effectOrder))
+                if (!GetCopyOfOrderObjectFromArray(elementIndexWhichYouIntendToCopy, out var effectOrder))
                 {
-                    Debug.Log($"Unable to copy index {_clipBoardIndices[i]} because index is out of bounds!");
+                    Debug.Log($"Unable to copy index {elementIndexWhichYouIntendToCopy} because index is out of bounds!");
                     continue;
                 }
 
@@ -147,12 +167,32 @@
                     continue;
                 }
 
-
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
                 _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
                 currentInsertPosition++;
-
             }
+
+            // for (int i = 0; i < _clipBoardIndices.Count; i++)
+            // {
+            //     if (!GetCopyOfOrderObjectFromArray(_clipBoardIndices[i], out var effectOrder))
+            //     {
+            //         Debug.Log($"Unable to copy index {_clipBoardIndices[i]} because index is out of bounds!");
+            //         continue;
+            //     }
+
+            //     if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
+            //     {
+            //         Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
+            //         continue;
+            //     }
+
+            //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
+            //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+            //     currentInsertPosition++;
+
+            // }
+
+
             Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
 
             _target.SaveModifiedProperties();
@@ -160,13 +200,49 @@
             _clipBoardUnOrderedIndices.Clear();
         }
 
+        void BottomHalf_PasteFromCutMethod()
+        {
+            //Check if there is nothing selected
+            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
+
+            foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
+            {
+                if (!GetCopyOfOrderObjectFromArray(elementIndexWhichYouIntendToCopy, out var effectOrder))
+                {
+                    Debug.Log($"Unable to copy index {elementIndexWhichYouIntendToCopy} because index is out of bounds!");
+                    continue;
+                }
+
+                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
+                {
+                    Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
+                    continue;
+                }
+
+                //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
+                _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+                currentInsertPosition++;
+            }
+
+            Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
+
+            _target.SaveModifiedProperties();
+
+            //Delete the currently 
+
+            _clipBoardIndices.Clear();
+            _clipBoardUnOrderedIndices.Clear();
+        }
+
+        #endregion
+
         void BottomHalf_OpenEffectSearchBar()
         {
-            if (!CommandData.TryGetExecutor("DebuggerExecutor", out Type type))
+            if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
             {
                 return;
             }
-            _target.Block.AddNewOrderElement(BlockGameObject, type);
+            _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
             _target.SaveModifiedProperties();
         }
 

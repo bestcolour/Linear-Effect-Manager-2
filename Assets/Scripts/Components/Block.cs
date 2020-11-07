@@ -80,6 +80,7 @@
 
 #if UNITY_EDITOR
         #region Editor Time 
+
         #region Constants
         //All the default and propertypath name constants will be stored here in the Unity_editor section
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
@@ -92,8 +93,6 @@
 
         public const string PROPERTYNAME_ORDERARRAY = "_orderArray";
         #endregion
-
-
 
 
         public Block(Vector2 position)
@@ -110,6 +109,8 @@
             _blockSettings.BlockName = "New Block";
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
+
+        #region Handle Interface Methods
 
         //Add all your future variables inside here for saving from a block to a serializedProperty
         public void SaveToSerializedProperty(SerializedProperty blockProperty)
@@ -163,11 +164,39 @@
         }
 
 
+        #endregion
+
+        #region Override Methods
+        public void AddNewOrderElement(GameObject gameObject, Type type, string effectName)
+        {
+            if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
+            {
+                Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
+                return;
+            }
+
+            ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false, effectName));
+        }
+
+        //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
+        protected Block.EffectOrder GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string effectName)
+        {
+            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+            {
+                component = gameObject.AddComponent(typeOfHolder);
+            }
+
+            BaseEffectExecutor holder = component as BaseEffectExecutor;
+            Block.EffectOrder o = new Block.EffectOrder();
+            o.EffectName = effectName;
+            o.OnAddNew(holder, isForInsert);
+            return o;
+        }
 
         #endregion
 
 
-
+        #endregion
 #endif
     }
 
