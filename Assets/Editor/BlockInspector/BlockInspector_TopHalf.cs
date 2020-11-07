@@ -143,6 +143,8 @@
 
 
             // //<================ DRAWING COPY/CUT TARGET =========================>
+            if (!_prevlyCopied) return;
+
             if (!_clipBoardUnOrderedIndices.Contains(index)) return;
 
             //Modify rect again
@@ -150,11 +152,9 @@
             rect.x += rect.width + 10;
             rect.y -= 5;
 
-
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
             style.fontStyle = FontStyle.Italic;
-            //Draw Errorlog
-            EditorGUI.LabelField(rect, $"{_previousCommand} Dont Delete");
+            EditorGUI.LabelField(rect, "Copy Dont Delete");
             style.fontStyle = FontStyle.Normal;
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
 
@@ -205,7 +205,7 @@
         #region Supporting Methods
         bool TopHalf_GetOrderArrayElement(int i, out SerializedProperty property)
         {
-            if (i >= _list.count)
+            if (i < 0 || i >= _list.count)
             {
                 property = null;
                 return false;

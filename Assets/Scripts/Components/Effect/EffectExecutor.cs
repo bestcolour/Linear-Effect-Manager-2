@@ -25,6 +25,7 @@
                 _effectDatas = value.Select(x => (T)x).ToArray();
             }
         }
+
 #endif
 
         //=============================FOR RUN TIME==============================

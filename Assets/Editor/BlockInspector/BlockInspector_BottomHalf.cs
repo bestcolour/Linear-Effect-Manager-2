@@ -9,22 +9,29 @@
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
     public partial class BlockInspector : Editor
     {
-        enum BlockCommand { None, Copy, Cut }
-
         GameObject BlockGameObject => _target.BlockGameObject;
-        // List<Block.EffectOrder> _clipBoard = default;
 
+        #region ClipBoard Fields
         List<int> _clipBoardIndices = default;
         HashSet<int> _clipBoardUnOrderedIndices = default;
 
-        BlockCommand _previousCommand = BlockCommand.None;
+        bool _prevlyCopied = false;
+        #endregion
 
+        SerializedProperty _currObservedProperty = default;
+
+        #region Constants
         const string DEBUG_EFFECTEXECUTOR = "TestUpdateExecutor";
+        const float OBSERVED_EFFECTBG_BORDER = 50f,
+        OBSERVED_EFFECT_YOFFSET = 20f
+        ;
+        // static readonly Color OBSERVED_EFFECT_BOXCOLOUR = new Color(73, 112, 177) / 255;
+        #endregion
 
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
-            // _clipBoard = new List<Block.EffectOrder>();
+            _prevlyCopied = false;
             _clipBoardIndices = new List<int>();
             _clipBoardUnOrderedIndices = new HashSet<int>();
         }
@@ -83,13 +90,13 @@
             {
                 //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
-                _previousCommand = BlockCommand.Copy;
+                _prevlyCopied = true;
             }
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 BottomHalf_PasteClipBoardEffects();
-                _previousCommand = BlockCommand.None;
+                _prevlyCopied = false;
             }
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -115,12 +122,40 @@
 
         void BottomHalf_DrawObservedEffect(float inspectorWidth)
         {
-            Color prevColor = GUIExtensions.Start_GUI_ColourChange(Color.grey);
-            GUILayout.Box(string.Empty, GUILayout.Height(50f), GUILayout.MaxWidth(inspectorWidth));
-            GUIExtensions.End_GUI_ColourChange(prevColor);
+            //Get currently selected order element
+            if (!TopHalf_GetOrderArrayElement(CurrentClickedListIndex, out SerializedProperty orderElement))
+            {
+                return;
+            }
+
+            //===== GETTING OBSERVED EFFECT =====
+            //convert holder to serializedobject
+            BaseEffectExecutor holder = (BaseEffectExecutor)orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_REFHOLDER).objectReferenceValue;
+            SerializedObject holderObject = new SerializedObject(holder);
+
+            //Get the effectDatas array as serializedProperty
+            SerializedProperty effectDataArray = holderObject.FindProperty(BaseEffectExecutor.PROPERTYNAME_EFFECTDATAS);
+
+            //Get dataelementindex from orderElement in block
+            int dataElementIndex = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue;
+
+            //Get current selected effect through the use of the EffectData array and dataelementindex
+            _currObservedProperty = effectDataArray.GetArrayElementAtIndex(dataElementIndex);
+
+            //======== DRAWING EFFECT ==========
+            float height = EditorGUI.GetPropertyHeight(_currObservedProperty);
+
+            // ========== DRAWING BG BOX =============
+            // Color prevColor = GUIExtensions.Start_GUI_ColourChange(OBSERVED_EFFECT_BOXCOLOUR);
+            GUILayout.Box(string.Empty, GUILayout.Height(height + OBSERVED_EFFECTBG_BORDER), GUILayout.MaxWidth(inspectorWidth));
+            // GUIExtensions.End_GUI_ColourChange(prevColor);
+
+            //========== DRAWING EFFECT =============
+            Rect prevRect = GUILayoutUtility.GetLastRect();
+            prevRect.y += OBSERVED_EFFECT_YOFFSET;
+            EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
 
         }
-
 
 
 
@@ -262,14 +297,11 @@
                 return false;
             }
 
-
             orderData = new Block.EffectOrder();
             orderData.LoadFromSerializedProperty(p);
             return true;
         }
         #endregion
-
-
 
     }
 
