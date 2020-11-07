@@ -75,15 +75,8 @@
             //================ DRAW CUT BUTTON ===============
             else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                // //If there had been previous clipboard effects and you are cutting agn,
-                // if (_clipBoard.Count > 0)
-                // {
-                //     BottomHalf_DeleteAllClipBoardEffects();
-                // }
-
-                // BottomHalf_CopySelectedToClipBoard();
+                BottomHalf_CopySelectedToClipBoard();
                 _previousCommand = BlockCommand.Cut;
-
             }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -101,8 +94,15 @@
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                // _target.Editor_RemoveEffectOrder(0);
-                BottomHalf_DeleteAllSelectedEffects();
+                if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex))
+                {
+                    return;
+                }
+
+                //Get the bigger starting index
+                int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
+
+                BottomHalf_DeleteAllSelectedEffects(startingIndex, diff);
             }
 
 
@@ -155,7 +155,7 @@
 
             foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
             {
-                if (!GetCopyOfOrderObjectFromArray(elementIndexWhichYouIntendToCopy, out var effectOrder))
+                if (!BottomHalf_GetCopyOfOrderObjectFromArray(elementIndexWhichYouIntendToCopy, out var effectOrder))
                 {
                     Debug.Log($"Unable to copy index {elementIndexWhichYouIntendToCopy} because index is out of bounds!");
                     continue;
@@ -171,27 +171,6 @@
                 _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
                 currentInsertPosition++;
             }
-
-            // for (int i = 0; i < _clipBoardIndices.Count; i++)
-            // {
-            //     if (!GetCopyOfOrderObjectFromArray(_clipBoardIndices[i], out var effectOrder))
-            //     {
-            //         Debug.Log($"Unable to copy index {_clipBoardIndices[i]} because index is out of bounds!");
-            //         continue;
-            //     }
-
-            //     if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
-            //     {
-            //         Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
-            //         continue;
-            //     }
-
-            //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-            //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
-            //     currentInsertPosition++;
-
-            // }
-
 
             Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
 
@@ -200,38 +179,31 @@
             _clipBoardUnOrderedIndices.Clear();
         }
 
+        //More of a reorder really
         void BottomHalf_PasteFromCutMethod()
         {
-            //Check if there is nothing selected
-            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
+            // //Check if there is nothing selected
+            // int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
 
-            foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
-            {
-                if (!GetCopyOfOrderObjectFromArray(elementIndexWhichYouIntendToCopy, out var effectOrder))
-                {
-                    Debug.Log($"Unable to copy index {elementIndexWhichYouIntendToCopy} because index is out of bounds!");
-                    continue;
-                }
+            // foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
+            // {
+            //     if (!TopHalf_GetOrderArrayElement(elementIndexWhichYouIntendToCopy, out SerializedProperty p))
+            //     {
+            //         return;
+            //     }
 
-                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
-                {
-                    Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
-                    continue;
-                }
+            //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
+            //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+            //     currentInsertPosition++;
+            // }
 
-                //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-                _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
-                currentInsertPosition++;
-            }
+            // Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
 
-            Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
+            // _target.SaveModifiedProperties();
 
-            _target.SaveModifiedProperties();
 
-            //Delete the currently 
-
-            _clipBoardIndices.Clear();
-            _clipBoardUnOrderedIndices.Clear();
+            // _clipBoardIndices.Clear();
+            // _clipBoardUnOrderedIndices.Clear();
         }
 
         #endregion
@@ -246,18 +218,10 @@
             _target.SaveModifiedProperties();
         }
 
-        void BottomHalf_DeleteAllSelectedEffects()
+        void BottomHalf_DeleteAllSelectedEffects(int startingIndex, int range)
         {
-            if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out int firstClickedIndex))
-            {
-                return;
-            }
-
-            //Get the bigger starting index
-            int startingIndex = direction > 0 ? CurrentClickedListIndex : _firstClickedIndex;
-
             //Remove elements from the biggest index to the lowest index
-            for (int i = 0; i <= diff; i++)
+            for (int i = 0; i <= range; i++)
             {
                 int index = startingIndex - i;
                 _target.Block.RemoveOrderElementAt(index);
@@ -285,25 +249,12 @@
             for (int i = 0; i <= diff; i++)
             {
                 int index = startingIndex + i;
-                // SerializedProperty p = TopHalf_GetOrderArrayElement(index);
-                // Block.EffectOrder orderObject = new Block.EffectOrder();
-                // orderObject.LoadFromSerializedProperty(p);
-                // _clipBoard.Add(orderObject);
                 _clipBoardIndices.Add(index);
                 _clipBoardUnOrderedIndices.Add(index);
             }
         }
 
-        void BottomHalf_DeleteAllClipBoardEffects()
-        {
-            // for (int i = 0; i < _clipBoard.Count; i++)
-            // {
-            //     _clipBoard[i].OnRemove();
-            // }
-            // _clipBoard.Clear();
-        }
-
-        bool GetCopyOfOrderObjectFromArray(int index, out Block.EffectOrder orderData)
+        bool BottomHalf_GetCopyOfOrderObjectFromArray(int index, out Block.EffectOrder orderData)
         {
             if (!TopHalf_GetOrderArrayElement(index, out SerializedProperty p))
             {

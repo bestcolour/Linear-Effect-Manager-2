@@ -154,7 +154,7 @@
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
             style.fontStyle = FontStyle.Italic;
             //Draw Errorlog
-            EditorGUI.LabelField(rect, _previousCommand.ToString());
+            EditorGUI.LabelField(rect, $"{_previousCommand} Dont Delete");
             style.fontStyle = FontStyle.Normal;
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
 

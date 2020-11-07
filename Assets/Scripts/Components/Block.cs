@@ -39,7 +39,7 @@
             public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
-            public string EffectName = "DebuggerExecutor";
+            public string EffectName ;
             // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
