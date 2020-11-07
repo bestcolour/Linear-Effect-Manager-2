@@ -15,8 +15,6 @@
         List<int> _clipBoardIndices = default;
         HashSet<int> _clipBoardUnOrderedIndices = default;
 
-        // bool _prevlyCopied = false;
-
         bool HadPreviouslyCopied => _clipBoardIndices.Count > 0;
         #endregion
 
@@ -85,24 +83,16 @@
             {
                 BottomHalf_OpenEffectSearchBar();
             }
-            // //================ DRAW CUT BUTTON ===============
-            // else if (GUILayout.Button("【✂】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
-            // {
-            //     BottomHalf_CopySelectedToClipBoard();
-            //     _previousCommand = BlockCommand.Cut;
-            // }
             //================ DRAW COPY BUTTON ===============
             else if (GUILayout.Button("【❏】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 //Copy will not actually copy selected element. It will only copy elements which are in the range of the firstclickedindex and currentclickedindex
                 BottomHalf_CopySelectedToClipBoard();
-                // _prevlyCopied = true;
             }
             //================ DRAW PASTE BUTTON =========================
             else if (GUILayout.Button("【≚】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
                 BottomHalf_PasteClipBoardEffects();
-                // _prevlyCopied = false;
             }
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
@@ -196,20 +186,6 @@
         {
             if (!HadPreviouslyCopied) return;
             BottomHalf_PasteFromCopyMethod();
-            // switch (_previousCommand)
-            // {
-            //     default: break;
-
-            //     case BlockCommand.Copy:
-            //         BottomHalf_PasteFromCopyMethod();
-            //         break;
-
-            //     case BlockCommand.Cut:
-            //         BottomHalf_PasteFromCutMethod();
-            //         break;
-
-            // }
-
         }
 
         void BottomHalf_PasteFromCopyMethod()
@@ -242,33 +218,6 @@
             _clipBoardIndices.Clear();
             _clipBoardUnOrderedIndices.Clear();
         }
-
-        // //More of a reorder really
-        // void BottomHalf_PasteFromCutMethod()
-        // {
-        //     // //Check if there is nothing selected
-        //     // int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
-
-        //     // foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
-        //     // {
-        //     //     if (!TopHalf_GetOrderArrayElement(elementIndexWhichYouIntendToCopy, out SerializedProperty p))
-        //     //     {
-        //     //         return;
-        //     //     }
-
-        //     //     //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-        //     //     _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
-        //     //     currentInsertPosition++;
-        //     // }
-
-        //     // Debug.Log($"Copied the current {_clipBoardIndices[0]}th element to the {_clipBoardIndices[_clipBoardIndices.Count - 1]}th element.");
-
-        //     // _target.SaveModifiedProperties();
-
-
-        //     // _clipBoardIndices.Clear();
-        //     // _clipBoardUnOrderedIndices.Clear();
-        // }
 
         #endregion
 
