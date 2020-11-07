@@ -1,6 +1,4 @@
-﻿namespace LinearEffectsEditor
-{
-    using UnityEngine;
+﻿    using UnityEngine;
     using UnityEditor;
 
     public static class GUIExtensions
@@ -113,5 +111,3 @@
         #endregion
 
     }
-
-}

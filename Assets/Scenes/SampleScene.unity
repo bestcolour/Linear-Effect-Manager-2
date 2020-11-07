@@ -353,9 +353,9 @@ MonoBehaviour:
   _blocks:
   - _orderArray: []
     _blockSettings:
-      BlockName: Magic The Gathering
+      BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 78, y: 142}
+      BlockPosition: {x: 399, y: 124}
   _settings:
     _someSetting: 0
 --- !u!114 &910949409

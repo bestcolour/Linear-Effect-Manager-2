@@ -18,9 +18,21 @@
         bool HadPreviouslyCopied => _clipBoardIndices.Count > 0;
         #endregion
 
-        #region Observed Effect
+        #region Observed Effect Fields
         SerializedProperty _currObservedProperty = default;
+        #endregion
 
+        #region SearchBar Fields
+        bool _isSearchBoxOpened = false;
+        CategorizedSearchBox _searchBox = default;
+
+        #region Constants
+        // static readonly Vector2 SEARCHBOX_RECTSIZE = new Vector2(500f, EditorGUIUtility.singleLineHeight);
+        const float SEARCHBOX_PADDING = 10f
+        , SEARCHBOX_HEIGHT = 50f
+        ;
+
+        #endregion
 
         #endregion
 
@@ -29,15 +41,15 @@
         const float OBSERVED_EFFECTBG_BORDER = 50f,
         OBSERVED_EFFECT_YOFFSET = 20f
         ;
-        // static readonly Color OBSERVED_EFFECT_BOXCOLOUR = new Color(73, 112, 177) / 255;
         #endregion
 
         #region LifeTime Method
         void BottomHalf_OnEnable()
         {
-            // _prevlyCopied = false;
             _clipBoardIndices = new List<int>();
             _clipBoardUnOrderedIndices = new HashSet<int>();
+            _searchBox = new CategorizedSearchBox();
+            _isSearchBoxOpened = false;
         }
 
         void BottomHalf_OnDisable()
@@ -48,9 +60,12 @@
         void BottomHalf_OnInspectorGUI()
         {
             BottomHalf_DrawToolBar();
+            BottomHalf_OnGUI_OrganizedSearchBox();
             BottomHalf_OnGUI_ObservedEffect(Screen.width);
 
         }
+
+
         #endregion
 
 
@@ -97,8 +112,6 @@
             //=================== DRAW DELETE BUTTON ===================
             else if (GUILayout.Button("【╳】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-
-
                 BottomHalf_DeleteAllSelectedEffects();
             }
 
@@ -183,7 +196,36 @@
 
         #region Commands
 
-        #region Paste methods
+        #region SearchBar Methods
+        void BottomHalf_OpenEffectSearchBar()
+        {
+            _isSearchBoxOpened = true;
+
+            _searchBox.EnableSearchBox();
+            // if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
+            // {
+            //     return;
+            // }
+            // _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
+            // _target.SaveModifiedProperties();
+        }
+
+        void BottomHalf_OnGUI_OrganizedSearchBox()
+        {
+            if (!_isSearchBoxOpened) return;
+
+            Vector2 size;
+            size.x = EditorGUIUtility.currentViewWidth - SEARCHBOX_PADDING;
+            size.y = EditorGUIUtility.singleLineHeight;
+
+            float height = _searchBox.Handle_OnGUI(size, SEARCHBOX_HEIGHT);
+
+            //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
+            EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height));
+        }
+
+        #endregion
+
 
         void BottomHalf_PasteClipBoardEffects()
         {
@@ -215,18 +257,6 @@
             _target.SaveModifiedProperties();
             _clipBoardIndices.Clear();
             _clipBoardUnOrderedIndices.Clear();
-        }
-
-        #endregion
-
-        void BottomHalf_OpenEffectSearchBar()
-        {
-            if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
-            {
-                return;
-            }
-            _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
-            _target.SaveModifiedProperties();
         }
 
         void BottomHalf_DeleteAllSelectedEffects()
