@@ -125,10 +125,13 @@
                 return;
             }
 
-            if (BottomHalf_TryGetNewObservedEffect())
+            if (!BottomHalf_TryGetNewObservedEffect())
             {
-                BottomHalf_DrawObservedEffect(inspectorWidth);
+                return;
             }
+
+
+            BottomHalf_DrawObservedEffect(inspectorWidth);
         }
 
         void BottomHalf_DrawObservedEffect(float inspectorWidth)
@@ -145,6 +148,12 @@
             Rect prevRect = GUILayoutUtility.GetLastRect();
             prevRect.y += OBSERVED_EFFECT_YOFFSET;
             EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
+
+            //========= SAVE EFFECT'S CHANGES ===========
+            if (_currObservedProperty.serializedObject.ApplyModifiedProperties())
+            {
+                _currObservedProperty.serializedObject.Update();
+            }
         }
 
         bool BottomHalf_TryGetNewObservedEffect()
