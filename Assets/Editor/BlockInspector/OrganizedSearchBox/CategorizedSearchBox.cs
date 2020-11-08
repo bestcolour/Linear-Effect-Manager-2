@@ -1,126 +1,199 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using UnityEditor.IMGUI.Controls;
-
-public class CategorizedSearchBox : SearchField
+﻿namespace CategorizedSearchBox
 {
-    #region SearchBar Fields
-    Rect _barRect = default;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using UnityEditor;
+    using UnityEditor.IMGUI.Controls;
 
-    string _searchedBarText = String.Empty;
-    #endregion
-
-    #region SearchBox Fields
-    Rect _boxRect = default;
-    Vector2 _scrollPosition = default;
-    int _maxNumberOfOptions = default;
-
-    public bool IsInSearchBox => _boxRect.Contains(Event.current.mousePosition, true);
-
-    #region Constants
-
-    const float BAR_CANCELICON_WIDTH = 17.5f;
-    static readonly Color BOX_OPTION_EVEN_COLOUR = Color.white;
-    static readonly Color BOX_OPTION_ODD_COLOUR = Color.gray;
-    #endregion
-
-    #endregion
-
-    public virtual void EnableSearchBox()
+    public class CategorizedSearchBox : SearchField
     {
-    }
-    public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-    {
-        downOrUpArrowKeyPressed += handleDownOrUpArrowKeyPressed;
-    }
+        #region SearchBar Fields
+        Rect _barRect = default;
 
 
-    public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-    {
-        downOrUpArrowKeyPressed -= handleDownOrUpArrowKeyPressed;
-    }
-    public virtual void DisableSearchBox()
-    {
-    }
+        string _searchedBarText = String.Empty;
 
-    ///<Summary>
-    ///Returns the height that the entire searchbox will need to occupy
-    ///</Summary>
-    public virtual float Handle_OnGUI(Rect searchBarRect, float searchBoxHeight)
-    {
-        //========= SEARCHBAR ==============
-        SearchBar_OnGUI(searchBarRect);
+        //======= EVENTS ========
+        event Action OnSearchBarTextChange = null;
 
-        //=========== SEARCHBOX ===============
-        //Substract the cross icon's width
-        SearchBox_OnGUI(searchBoxHeight);
+        #endregion
+
+        #region SearchBox Fields
+        Rect _boxRect = default;
+        Vector2 _scrollPosition = default;
+
+        //======== RESULTS ==========
+        int _maxNumberOfResults = default
+       , _numOfResultsFound = default
+        ;
+
+        List<string> _library, _results;
 
 
-        return _barRect.height + _boxRect.height;
-    }
+        public bool IsInSearchBox => _boxRect.Contains(Event.current.mousePosition, true);
 
+        #region Constants
 
-    #region Search Bar Methods
-    protected void SearchBar_OnGUI(Rect rect)
-    {
-        //====== UPDATE BAR RECT =========
-        _barRect = rect;
+        const float BAR_CANCELICON_WIDTH = 17.5f;
+        static GUIStyle STYLE_RESULTS_EVEN = default
+        , STYLE_RESULTS_ODD = default
+        ;
+        #endregion
 
-        _searchedBarText = OnGUI(_barRect, _searchedBarText);
-    }
-
-
-    #endregion
-
-    #region Search Box Methods
-    void SearchBox_OnGUI(float searchBoxHeight)
-    {
-        SearchBox_UpdateValues(searchBoxHeight);
-
-        //========== DRAW BOX BG =========
-        // EditorGUI.DrawRect(_boxRect, GUI.color);
-
-        SearchBox_DrawOptions();
-    }
-
-    void SearchBox_UpdateValues(float searchBoxHeight)
-    {
-        //must occur after _barRect updates itself
-        //====== UPDATE BOX RECT =========
-        _boxRect.x = _barRect.x;
-        _boxRect.y = _barRect.y + _barRect.height;
-        _boxRect.width = _barRect.width - BAR_CANCELICON_WIDTH;
-        _boxRect.height = searchBoxHeight;
-
-
-        _maxNumberOfOptions = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
-    }
-
-    void SearchBox_DrawOptions()
-    {
-        // ============ DRAW A SPACE ===============
-        EditorGUILayout.Space(_barRect.y + _barRect.height);
-
-        // ============ SCROLL VIEW ================
-        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true, GUILayout.MinWidth(_boxRect.width), GUILayout.MinHeight(_boxRect.height));
-
-        for (int i = 0; i < _maxNumberOfOptions; i++)
+        #endregion
+        public void Initialize(string[] resultsToPopulate)
         {
-            Color prevColour = i % 2 == 0 ? GUIExtensions.Start_GUIBg_ColourChange(BOX_OPTION_EVEN_COLOUR) : GUIExtensions.Start_GUI_ColourChange(BOX_OPTION_ODD_COLOUR);
-            EditorGUILayout.LabelField(i.ToString());
-
-            GUIExtensions.End_GUIBg_ColourChange(prevColour);
+            STYLE_RESULTS_EVEN = new GUIStyle("CN EntryBackOdd");
+            STYLE_RESULTS_ODD = new GUIStyle("CN EntryBackEven");
+            _library = new List<string>();
+            _library.AddRange(resultsToPopulate);
         }
 
-        GUILayout.EndScrollView();
+        #region Enables & Disables
+        public virtual void EnableSearchBox()
+        {
+            OnSearchBarTextChange += HandleSearchBarTextChange;
+        }
+
+
+
+        public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
+        {
+            EnableSearchBox();
+            downOrUpArrowKeyPressed += handleDownOrUpArrowKeyPressed;
+        }
+
+        public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarTextChange)
+        {
+            EnableSearchBox(handleDownOrUpArrowKeyPressed);
+            OnSearchBarTextChange += handleSearchBarTextChange;
+        }
+
+        public virtual void DisableSearchBox()
+        {
+            OnSearchBarTextChange -= HandleSearchBarTextChange;
+        }
+
+        public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
+        {
+            DisableSearchBox();
+            downOrUpArrowKeyPressed -= handleDownOrUpArrowKeyPressed;
+        }
+
+        public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarChange)
+        {
+            DisableSearchBox(handleDownOrUpArrowKeyPressed);
+            OnSearchBarTextChange -= handleSearchBarChange;
+        }
+
+
+        #endregion
+
+        ///<Summary>
+        ///Returns the height that the entire searchbox will need to occupy
+        ///</Summary>
+        public virtual float Handle_OnGUI(Rect searchBarRect, float searchBoxHeight)
+        {
+            //========= SEARCHBAR ==============
+            SearchBar_OnGUI(searchBarRect);
+
+            //=========== SEARCHBOX ===============
+            //Substract the cross icon's width
+            SearchBox_OnGUI(searchBoxHeight);
+
+
+            return _barRect.height + _boxRect.height;
+        }
+
+
+        #region Search Bar Methods
+        protected void SearchBar_OnGUI(Rect rect)
+        {
+            //====== UPDATE BAR RECT =========
+            _barRect = rect;
+
+            string newSearchBarText = OnGUI(_barRect, _searchedBarText);
+
+            if (newSearchBarText == _searchedBarText)
+            {
+                return;
+            }
+
+            _searchedBarText = newSearchBarText;
+            OnSearchBarTextChange?.Invoke();
+
+        }
+
+
+        #endregion
+
+        #region Search Box Methods
+        void SearchBox_OnGUI(float searchBoxHeight)
+        {
+            SearchBox_UpdateValues(searchBoxHeight);
+            SearchBox_HandleResults();
+        }
+
+        void SearchBox_UpdateValues(float searchBoxHeight)
+        {
+            //must occur after _barRect updates itself
+            //====== UPDATE BOX RECT =========
+            _boxRect.x = _barRect.x;
+            _boxRect.y = _barRect.y + _barRect.height;
+            _boxRect.width = _barRect.width - BAR_CANCELICON_WIDTH;
+            _boxRect.height = searchBoxHeight;
+
+
+            _maxNumberOfResults = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
+        }
+
+        void SearchBox_HandleResults()
+        {
+
+            // ============ DRAW A SPACE ===============
+            EditorGUILayout.Space(_barRect.y + _barRect.height);
+
+            // ============ SCROLL VIEW ================
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true, GUILayout.MinWidth(_boxRect.width), GUILayout.MinHeight(_boxRect.height));
+
+            for (int i = 0; i < _results.Count; i++)
+            {
+                GUIStyle resultStyle = i % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
+                EditorGUILayout.LabelField(i.ToString(), resultStyle);
+
+            }
+
+            GUILayout.EndScrollView();
+
+        }
+
+        void HandleSearchBarTextChange()
+        {
+            _results = _library.FindAll(SearchBarSearchPredicate);
+
+
+        }
+
+        bool SearchBarSearchPredicate(string s)
+        {
+
+
+            if (s.Contains(_searchedBarText))
+            {
+
+                return true;
+            }
+
+
+            return false;
+        }
+
+        #endregion
+
+
 
     }
-
-    #endregion
-
-
 
 }

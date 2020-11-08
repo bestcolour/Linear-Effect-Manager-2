@@ -4,6 +4,7 @@
     using UnityEditor;
     using System;
     using LinearEffects;
+    using CategorizedSearchBox;
     using System.Collections.Generic;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
@@ -50,6 +51,7 @@
             _clipBoardIndices = new List<int>();
             _clipBoardUnOrderedIndices = new HashSet<int>();
             _searchBox = new CategorizedSearchBox();
+            _searchBox.Initialize(CommandData.GetEffectStrings());
             _isSearchBoxOpened = false;
         }
 

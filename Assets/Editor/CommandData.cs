@@ -1,6 +1,7 @@
 ﻿namespace LinearEffectsEditor
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using UnityEngine;
     using LinearEffects;
@@ -28,7 +29,10 @@
         };
 
 
-
+        public static string[] GetEffectStrings()
+        {
+            return CommandLabel_To_CommandExecutor.Keys.ToArray();
+        }
 
 
 
