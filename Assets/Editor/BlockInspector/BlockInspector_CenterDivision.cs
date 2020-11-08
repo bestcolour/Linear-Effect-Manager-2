@@ -5,7 +5,7 @@
     using LinearEffects;
     using System;
 
-    public partial class BlockInspector : Editor
+    public partial class BlockInspector : ImprovedEditor
     {
 
         #region Definitions

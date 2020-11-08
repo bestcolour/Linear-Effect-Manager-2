@@ -6,7 +6,7 @@
     using System;
 
     [CustomEditor(typeof(BlockScriptableInstance))]
-    public partial class BlockInspector : Editor
+    public partial class BlockInspector : ImprovedEditor
     {
         #region Constants
         const string EDITORPREFS_HEIGHTRATIO = "TopHalf_To_Height";
@@ -16,20 +16,33 @@
         BlockScriptableInstance _target = null;
         float _ratioOfTopHalfToInspectorHeight = DEFAULT_HEIGHTRATIO;
 
+        #region Inheritance
+        public override bool AllowBaseInspectorGUI => false;
+        #endregion
+
+        Vector2 _topHalfSize = default;
+
+
+
+
         #region LifeTime Methods
         private void OnEnable()
         {
             _target = (BlockScriptableInstance)target;
+            OnInspectorWindowResize += HandleWindowResize;
+
             TopHalf_OnEnable();
             CenterDiv_OnEnable();
             BottomHalf_OnEnable();
-
             Load();
         }
 
 
+
         private void OnDisable()
         {
+            OnInspectorWindowResize -= HandleWindowResize;
+
             TopHalf_OnDisable();
             CenterDiv_OnDisable();
             BottomHalf_OnDisable();
@@ -38,20 +51,19 @@
         }
 
 
-        //Calll the reorderable list to update itself
-        public override void OnInspectorGUI()
+        public override void HandleInspectorGUI()
         {
-            //Initialise each halve's sizes
-            Vector2 topHalfSize;
-            topHalfSize.x = Screen.width * 0.725f;
-            topHalfSize.y = _ratioOfTopHalfToInspectorHeight * Screen.height;
+            // //Initialise each halve's sizes
+            // Vector2 topHalfSize;
+            // topHalfSize.x = Screen.width * 0.725f;
+            _topHalfSize.y = _ratioOfTopHalfToInspectorHeight * Screen.height;
 
 
             serializedObject.Update();
             EditorGUILayout.BeginVertical();
 
             //Draw top half
-            TopHalf_OnInspectorGUI(topHalfSize);
+            TopHalf_OnInspectorGUI();
             CenterDiv_OnInspectorGUI();
             BottomHalf_OnInspectorGUI();
 
@@ -63,11 +75,42 @@
             }
         }
 
+        // //Calll the reorderable list to update itself
+        // public override void OnInspectorGUI()
+        // {
+        //     //Initialise each halve's sizes
+        //     Vector2 topHalfSize;
+        //     topHalfSize.x = Screen.width * 0.725f;
+        //     topHalfSize.y = _ratioOfTopHalfToInspectorHeight * Screen.height;
+
+
+        //     serializedObject.Update();
+        //     EditorGUILayout.BeginVertical();
+
+        //     //Draw top half
+        //     TopHalf_OnInspectorGUI(topHalfSize);
+        //     CenterDiv_OnInspectorGUI();
+        //     BottomHalf_OnInspectorGUI();
+
+
+        //     EditorGUILayout.EndVertical();
+        //     if (serializedObject.ApplyModifiedProperties())
+        //     {
+        //         _target.SaveModifiedProperties();
+        //     }
+        // }
+
 
 
         #endregion
 
         #region  HandleEvents
+        void HandleWindowResize()
+        {
+            //Initialise each halve's sizes
+            _topHalfSize.x = Screen.width * 0.725f;
+        }
+
         private void HandleDivisonDrag(float mouseDeltaY)
         {
             if (mouseDeltaY == 0) return;
@@ -77,6 +120,8 @@
             _ratioOfTopHalfToInspectorHeight += mouseDeltaY;
             _ratioOfTopHalfToInspectorHeight = Mathf.Clamp(_ratioOfTopHalfToInspectorHeight, 0.1f, 0.9f);
         }
+
+
         #endregion
 
 
@@ -97,6 +142,8 @@
         {
             EditorPrefs.SetFloat(EDITORPREFS_HEIGHTRATIO, _ratioOfTopHalfToInspectorHeight);
         }
+
+
         #endregion
 
     }

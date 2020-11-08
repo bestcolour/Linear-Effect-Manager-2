@@ -7,16 +7,17 @@
     using System.Collections.Generic;
 
     //The top half class will render the settings & command list
-    public partial class BlockInspector : Editor
+    public partial class BlockInspector : ImprovedEditor
     {
 
         #region Cached Variable
-
         ReorderableList _list = default;
         SerializedProperty _settingsProperty = default;
         Vector2 _scrollPosition = default;
         HashSet<int> _selectedElements = default;
         int _firstClickedIndex = -1, _prevClickedIndex = -1;
+
+
         #endregion
 
         #region Properties
@@ -46,6 +47,8 @@
             _list.elementHeightCallback += TopHalf_HandleElementHeightCallBack;
             _list.onChangedCallback += TopHalf_HandleOnChange;
             _list.onSelectCallback += TopHalf_HandleOnSelect;
+
+
         }
 
 
@@ -57,13 +60,14 @@
             _list.onSelectCallback -= TopHalf_HandleOnSelect;
 
             _list = null;
+
         }
 
 
         //Calll the reorderable list to update itself
-        void TopHalf_OnInspectorGUI(Vector2 windowSize)
+        void TopHalf_OnInspectorGUI()
         {
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(windowSize.x), GUILayout.Height(windowSize.y));
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(_topHalfSize.x), GUILayout.Height(_topHalfSize.y));
             EditorGUILayout.Space();
             TopHalf_DrawSettings();
             EditorGUILayout.Space(20f);
@@ -75,7 +79,7 @@
 
 
         #region Event Handlers
-
+      
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {

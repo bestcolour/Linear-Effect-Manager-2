@@ -7,7 +7,7 @@
     using System.Collections.Generic;
 
     //The bottom half class will render the current observed command as well as the command toolbar (add,minus coppy etc)
-    public partial class BlockInspector : Editor
+    public partial class BlockInspector : ImprovedEditor
     {
         GameObject BlockGameObject => _target.BlockGameObject;
 
@@ -28,8 +28,9 @@
 
         #region Constants
         // static readonly Vector2 SEARCHBOX_RECTSIZE = new Vector2(500f, EditorGUIUtility.singleLineHeight);
-        const float SEARCHBOX_PADDING_Y = 10f
-        , SEARCHBOX_HEIGHT = 50f
+        const float SEARCHBAR_PADDING_TOP = 10f
+        , SEARCHBOX_HEIGHT = 75f
+        , SEARCHBAR_PADDING_BOT = 10f
         ;
 
         #endregion
@@ -193,7 +194,7 @@
 
         #region Commands
 
-        #region SearchBar Methods
+        #region SearchBox Methods
         void BottomHalf_DrawSearchBoxButtons()
         {
             //================ DRAW SEARCHBOX BUTTON ===============
@@ -239,16 +240,16 @@
         {
             if (!_isSearchBoxOpened) return;
 
-            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBoxRect(), SEARCHBOX_HEIGHT);
+            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBarRect(), SEARCHBOX_HEIGHT);
 
             //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
-            EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height));
+            EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height + SEARCHBAR_PADDING_BOT));
         }
 
-        Rect BottomHalf_SearchBox_GetSearchBoxRect()
+        Rect BottomHalf_SearchBox_GetSearchBarRect()
         {
             Rect rect = GUILayoutUtility.GetLastRect();
-            rect.y += rect.height + SEARCHBOX_PADDING_Y;
+            rect.y += rect.height + SEARCHBAR_PADDING_TOP;
             rect.height = EditorGUIUtility.singleLineHeight;
             return rect;
         }
