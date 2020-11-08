@@ -194,7 +194,7 @@
 
         #region Commands
 
-        #region SearchBox Methods
+        #region SearchBar Methods
         void BottomHalf_DrawSearchBoxButtons()
         {
             //================ DRAW SEARCHBOX BUTTON ===============
