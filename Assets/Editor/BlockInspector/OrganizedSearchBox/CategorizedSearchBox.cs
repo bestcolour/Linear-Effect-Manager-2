@@ -1,7 +1,6 @@
 ﻿namespace CategorizedSearchBox
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
@@ -30,13 +29,16 @@
         ;
 
         List<string> _library, _results;
+        HashSet<string> _drawnCategories = default;
 
 
         public bool IsInSearchBox => _boxRect.Contains(Event.current.mousePosition, true);
 
         #region Constants
+        const string CATEGORY_IDENTIFIER = "/", CATEGORY_ARROWSYMBOL = "＞ ";
+        const float BAR_CANCELICON_WIDTH = 17.5f
+        ;
 
-        const float BAR_CANCELICON_WIDTH = 17.5f;
         static GUIStyle STYLE_RESULTS_EVEN = default
         , STYLE_RESULTS_ODD = default
         ;
@@ -48,7 +50,9 @@
             STYLE_RESULTS_EVEN = new GUIStyle("CN EntryBackOdd");
             STYLE_RESULTS_ODD = new GUIStyle("CN EntryBackEven");
             _library = new List<string>();
+            _drawnCategories = new HashSet<string>();
             _library.AddRange(resultsToPopulate);
+            HandleSearchBarTextChange();
         }
 
         #region Enables & Disables
@@ -160,8 +164,22 @@
 
             for (int i = 0; i < _results.Count; i++)
             {
+                string result = _results[i];
                 GUIStyle resultStyle = i % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
-                EditorGUILayout.LabelField(i.ToString(), resultStyle);
+
+                if (!TryGetCategory(result, out string category))
+                {
+                    EditorGUILayout.LabelField(result, resultStyle);
+                    continue;
+                }
+
+                // if (_drawnCategories.Contains(category))
+                //     continue;
+
+
+                //=== DRAWING CATERGORY
+                EditorGUILayout.LabelField(CATEGORY_ARROWSYMBOL + category, resultStyle);
+                _drawnCategories.Add(category);
 
             }
 
@@ -171,23 +189,35 @@
 
         void HandleSearchBarTextChange()
         {
+            if (_searchedBarText == string.Empty)
+            {
+                _results = _library;
+                return;
+            }
+
             _results = _library.FindAll(SearchBarSearchPredicate);
-
-
         }
 
         bool SearchBarSearchPredicate(string s)
         {
-
-
-            if (s.Contains(_searchedBarText))
+            if (s.Contains(_searchedBarText, StringComparison.CurrentCultureIgnoreCase))
             {
-
                 return true;
             }
 
-
             return false;
+        }
+
+        bool TryGetCategory(string s, out string catergory)
+        {
+            int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
+
+            catergory = string.Empty;
+
+            if (slashChar == -1) return false;
+
+            catergory = s.Substring(0, slashChar);
+            return true;
         }
 
         #endregion
