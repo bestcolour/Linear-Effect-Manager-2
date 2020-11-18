@@ -33,11 +33,8 @@
         HashSet<string> _categoriesToBeDrawn = default;
         int _currentlySelectedResult = -1;
 
-
-        public bool IsInResultBox => _resultBoxRect.Contains(Event.current.mousePosition, true);
-
         #region Constants
-        const string CATEGORY_IDENTIFIER = "/", CATEGORY_ARROWSYMBOL = "＞ ";
+        public const string CATEGORY_IDENTIFIER = "/", CATEGORY_ARROWSYMBOL = "＞ ";
         const float BAR_CANCELICON_WIDTH = 17.5f
         ;
 
@@ -103,8 +100,6 @@
             _resultBoxRect.width = _searchBarRect.width - BAR_CANCELICON_WIDTH;
             _resultBoxRect.height = searchBoxHeight;
 
-
-            // _maxNumberOfResults = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
         }
 
         void ResultBox_DrawResults()
@@ -325,15 +320,12 @@
 
         #endregion
 
+        #region  On Confirm Methods
         // ============= RAISE CONFIRM ==============
         //Handles when search bar has "enter" pressed down (when a result has been highlighted using the up & down arrow keys) or when a result has been pressed down
         //resultname can be: category name, result name
         void RaiseOnConfirm(string resultName)
         {
-            Debug.Log(resultName);
-            // int lastZeroIndex = _searchedBarText.Length - 1;
-
-            // _currentlySelectedResult = -1;
             //Check if the confirmed result is a category. if so, append that category name to the searchbar text
             if (_categoriesToBeDrawn.Contains(resultName))
             {
@@ -380,7 +372,7 @@
             //If we cant find a prev category, then we just need to remove the entire searchbar text and replace it later with the correct text
             _searchedBarText = _searchedBarText.Remove(0, _searchedBarText.Length);
         }
-
+        #endregion
 
         //============= RAISE DOWN OR UP ARROW PRESSED ==============
         private void RaiseDownOrUpArrowKeyPressed(bool upArrowKeyWasPressed)
@@ -392,6 +384,9 @@
         }
 
         #endregion
+
+
+
     }
 
 }

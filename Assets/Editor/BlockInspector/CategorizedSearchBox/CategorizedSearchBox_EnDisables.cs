@@ -26,7 +26,7 @@
             _categoriesToBeDrawn = new HashSet<string>();
             _library.AddRange(resultsToPopulate);
 
-
+            RaiseSearchBarTextChange(string.Empty);
         }
 
         #region Enables & Disables
@@ -35,8 +35,6 @@
         public virtual void EnableSearchBox()
         {
             _currentlySelectedResult = -1;
-            //Need to call this to update on intit the results list 
-            RaiseSearchBarTextChange(string.Empty);
         }
 
 
@@ -47,38 +45,6 @@
             OnUpOrDownArrowPressed += handleDownOrUpArrowKeyPressed;
             OnPressConfirm += handleOnConfirmPressed;
         }
-
-
-        //Up down arrow keys pressed
-        // public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-        // {
-        //     EnableSearchBox();
-        //     downOrUpArrowKeyPressed += handleDownOrUpArrowKeyPressed;
-        // }
-
-        // //search bar text change
-        // public virtual void EnableSearchBox(SearchBarTextChangeCallback handleSearchBarTextChange)
-        // {
-        //     EnableSearchBox();
-        //     OnSearchBarTextChange += handleSearchBarTextChange;
-        // }
-
-        // //result confirmed and pressed
-        // public virtual void EnableSearchBox(OnPressConfirmCallback handlePressConfirm)
-        // {
-        //     EnableSearchBox();
-        //     OnPressConfirm += handlePressConfirm;
-        // }
-
-        // //up down + search text change
-        // public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarTextChange)
-        // {
-        //     EnableSearchBox(handleDownOrUpArrowKeyPressed);
-        //     OnSearchBarTextChange += handleSearchBarTextChange;
-        // }
-
-
-
 
         //========= DISABLES ===============
         public virtual void DisableSearchBox()
@@ -92,25 +58,6 @@
             OnUpOrDownArrowPressed -= handleDownOrUpArrowKeyPressed;
             OnPressConfirm -= handleOnConfirmPressed;
         }
-
-        // public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-        // {
-        //     DisableSearchBox();
-        //     downOrUpArrowKeyPressed -= handleDownOrUpArrowKeyPressed;
-        // }
-
-        // public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarChange)
-        // {
-        //     DisableSearchBox(handleDownOrUpArrowKeyPressed);
-        //     OnSearchBarTextChange -= handleSearchBarChange;
-        // }
-
-        // public virtual void DisableSearchBox(Action handleSearchBarTextChange)
-        // {
-        //     DisableSearchBox();
-        //     OnSearchBarTextChange -= handleSearchBarTextChange;
-        // }
-
 
         #endregion
 
