@@ -22,11 +22,11 @@
             STYLE_RESULTS_SELECTED = new GUIStyle("PR Ping");
 
             _library = new List<string>();
+            _results = new List<string>();
             _drawnCategories = new HashSet<string>();
             _library.AddRange(resultsToPopulate);
 
-            //Need to call this to update on intit the results list 
-            RaiseSearchBarTextChange(string.Empty);
+
         }
 
         #region Enables & Disables
@@ -34,7 +34,9 @@
         //============ ENABLES ================
         public virtual void EnableSearchBox()
         {
-            _currentlySelectedResult=-1;
+            _currentlySelectedResult = -1;
+            //Need to call this to update on intit the results list 
+            RaiseSearchBarTextChange(string.Empty);
         }
 
 

@@ -15,6 +15,7 @@
 
         string _searchedBarText = String.Empty;
 
+
         //======= EVENTS ========
         event SearchBarTextChangeCallback OnSearchBarTextChange = null;
         event OnPressConfirmCallback OnPressConfirm = null;
@@ -89,7 +90,6 @@
         {
             ResultBox_UpdateValues(searchBoxHeight);
             ResultBox_DrawResults();
-            ResultBox_ClearValues();
         }
 
         void ResultBox_UpdateValues(float searchBoxHeight)
@@ -105,14 +105,8 @@
             // _maxNumberOfResults = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
         }
 
-        private void ResultBox_ClearValues()
-        {
-            _drawnCategories.Clear();
-        }
-
         void ResultBox_DrawResults()
         {
-
             // ============ DRAW A SPACE ===============
             EditorGUILayout.Space(_searchBarRect.y + _searchBarRect.height);
 
@@ -132,14 +126,8 @@
                     continue;
                 }
 
-                //If the result is a category but it was already drawn, skip
-                if (_drawnCategories.Contains(category))
-                    continue;
-
-
                 //=== DRAWING CATERGORY =====
                 EditorGUILayout.LabelField(CATEGORY_ARROWSYMBOL + category, resultStyle);
-                _drawnCategories.Add(category);
                 ProcessResult(category);
             }
 
@@ -195,6 +183,14 @@
                             RaiseDownOrUpArrowKeyPressed(false);
                             break;
 
+                        case KeyCode.KeypadEnter:
+                            if (_currentlySelectedResult < 0) return;
+
+                            if (_results[_currentlySelectedResult] != resultName) return;
+
+                            RaiseOnConfirm(resultName);
+                            break;
+
                         //Else do nth
                         default: break;
                     }
@@ -214,13 +210,31 @@
 
 
         #region Handle  Events
+        #region SearchTextChange Methods
         //======= RAISE SEARCH BAR TEXT CHANGE ==========
         void RaiseSearchBarTextChange(string newSearchBarText)
         {
             _currentlySelectedResult = -1;
 
-            //ensure that if there is nth in the searchbar, at least show all the results
-            _results = newSearchBarText == string.Empty ? _results = _library : _library.FindAll(SearchBarSearchPredicate);
+            _results.Clear();
+            if (newSearchBarText == string.Empty)
+                _results.AddRange(_library);
+            else
+                _results.AddRange(_library.FindAll(SearchBarSearchPredicate));
+
+
+            // //ensure that if there is nth in the searchbar, at least show all the results
+            // if (newSearchBarText == string.Empty)
+            // {
+            //     _results = _library;
+            //     //Sort all the results in terms of their categories
+            // }
+            // else
+            // {
+            //     _results = _library.FindAll(SearchBarSearchPredicate);
+            // }
+            FilterResultCategories();
+
 
             OnSearchBarTextChange?.Invoke(newSearchBarText);
             Event.current?.Use();
@@ -234,8 +248,65 @@
             }
 
             return false;
+            // //if this string has a category inside of it
+            // if (TryGetCategory(s, out string category))
+            // {
+            //     //Check if the category is found inside of the category hashset
+            //     if (_drawnCategories.Contains(category))
+            //     {
+            //         //if so dont draw it agn
+            //         return false;
+            //     }
+
+            //     //Else check if it contains searchbartext
+            //     return SearchBarSearchPredicate_SearchTextCheck(s);
+            // }
+
+            // //Else just check if it contains searchbartext
+            // return SearchBarSearchPredicate_SearchTextCheck(s);
         }
 
+        // bool SearchBarSearchPredicate_SearchTextCheck(string s)
+        // {
+        //     if (s.Contains(_searchedBarText, StringComparison.CurrentCultureIgnoreCase))
+        //     {
+        //         return true;
+        //     }
+
+        //     return false;
+        // }
+
+        void FilterResultCategories()
+        {
+            for (int i = 0; i < _results.Count; i++)
+            {
+                string s = _results[i];
+
+                //if this string doesnt hv a category inside of it
+                if (!TryGetCategory(s, out string category))
+                {
+                    continue;
+                }
+
+                //Check if the category is found inside of the category hashset
+                if (_drawnCategories.Contains(category))
+                {
+                    //if so remove this result element
+                    // int lastIndex = _results.Count - 1;
+                    // _results[i] = _results[lastIndex];
+                    _results.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                //Else
+                _drawnCategories.Add(category);
+
+            }
+        }
+
+
+        #endregion
 
         // ============= RAISE CONFIRM ==============
         //Handles when search bar has "enter" pressed down (when a result has been highlighted using the up & down arrow keys) or when a result has been pressed down
@@ -253,11 +324,14 @@
                 }
 
                 _searchedBarText = _searchedBarText == string.Empty ? _searchedBarText + resultName : _searchedBarText + "/" + resultName;
+                RaiseSearchBarTextChange(_searchedBarText);
                 return;
             }
 
             //Else, invoke the onconfirm event
             OnPressConfirm?.Invoke(_searchedBarText);
+            //Close the search box or something?
+
             Event.current.Use();
         }
 
@@ -266,7 +340,7 @@
         private void RaiseDownOrUpArrowKeyPressed(bool upArrowKeyWasPressed)
         {
             int addition = upArrowKeyWasPressed ? -1 : 1;
-            _currentlySelectedResult = Mathf.Clamp(_currentlySelectedResult + addition, -1, _results.Count);
+            _currentlySelectedResult = Mathf.Clamp(_currentlySelectedResult + addition, -1, _results.Count - 1);
             OnUpOrDownArrowPressed?.Invoke(upArrowKeyWasPressed);
             Event.current.Use();
         }
