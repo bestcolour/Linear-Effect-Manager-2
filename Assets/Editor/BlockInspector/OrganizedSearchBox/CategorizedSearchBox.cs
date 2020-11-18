@@ -17,7 +17,9 @@
 
 
         //======= EVENTS ========
+
         event SearchBarTextChangeCallback OnSearchBarTextChange = null;
+        //Pls add Repaint() inside of this event
         event OnPressConfirmCallback OnPressConfirm = null;
         event UpOrDownArrowPressedCallback OnUpOrDownArrowPressed = null;
 
@@ -328,27 +330,55 @@
         //resultname can be: category name, result name
         void RaiseOnConfirm(string resultName)
         {
+            Debug.Log(resultName);
+            // int lastZeroIndex = _searchedBarText.Length - 1;
+
             // _currentlySelectedResult = -1;
             //Check if the confirmed result is a category. if so, append that category name to the searchbar text
             if (_categoriesToBeDrawn.Contains(resultName))
             {
-                //Add only when the text doesnt already have the result name
-                if (_searchedBarText.Contains(resultName))
-                {
-                    return;
-                }
+                OnConfirm_RemoveTillLastCategorySlash();
 
                 _searchedBarText += $"{resultName}/";
-                // _searchedBarText = _searchedBarText == string.Empty ? _searchedBarText + resultName : _searchedBarText + "/" + resultName;
+
                 RaiseSearchBarTextChange(_searchedBarText);
                 return;
             }
+
+            OnConfirm_RemoveTillLastCategorySlash();
+
+            _searchedBarText += resultName;
 
             //Else, invoke the onconfirm event cause this is prolly the final result name
             //Close the search box or something?
             OnPressConfirm?.Invoke(_searchedBarText);
 
-            Event.current.Use();
+            // Event.current.Use();
+        }
+
+        //Note, this does not remove the last category's slash
+        void OnConfirm_RemoveTillLastCategorySlash()
+        {
+            int lastZeroIndex = _searchedBarText.Length - 1;
+            if (TryGetIndexOfPrevCategory(_searchedBarText, out int categoryStartingIndex))
+            {
+                //Remove everything that has been incorrect in terms of spelling (assuming the worse case), from prevSlash onwards till the end and then append the correct spelling
+
+                //we need to avoid removing the last category's slash so we carry out this only if the categoryStartingIndex is not the last index
+                //If the category is not in the last index on the searchbar string,
+                if (categoryStartingIndex == lastZeroIndex)
+                {
+                    return;
+                }
+
+                //Push the starting index by one so as to avoid removing the /
+                categoryStartingIndex++;
+                _searchedBarText = _searchedBarText.Remove(categoryStartingIndex, _searchedBarText.Length - categoryStartingIndex);
+                return;
+            }
+
+            //If we cant find a prev category, then we just need to remove the entire searchbar text and replace it later with the correct text
+            _searchedBarText = _searchedBarText.Remove(0, _searchedBarText.Length);
         }
 
 
@@ -358,7 +388,7 @@
             int addition = upArrowKeyWasPressed ? -1 : 1;
             _currentlySelectedResult = Mathf.Clamp(_currentlySelectedResult + addition, -1, _results.Count - 1);
             OnUpOrDownArrowPressed?.Invoke(upArrowKeyWasPressed);
-            Event.current.Use();
+            // Event.current.Use();
         }
 
         #endregion

@@ -344,6 +344,8 @@
         void BottomHalf_SearchBox_HandleUpDownKeyPressed(bool isUpKeyPressed)
         {
             // Debug.Log($"IsUpKeyPressed: {isUpKeyPressed}");
+            Repaint();
+
         }
 
         void BottomHalf_SearchBox_HandleSearchBarTextChange(string newSearchBarText)
@@ -351,9 +353,11 @@
             // Debug.Log($"newSearchBarText: {newSearchBarText}");
 
         }
+        
         void BottomHalf_SearchBox_HandleOnConfirm(string fullPathOfResultPressed)
         {
             Debug.Log($"fullPathOfResultPressed: {fullPathOfResultPressed}");
+            Repaint();
         }
 
         #endregion
