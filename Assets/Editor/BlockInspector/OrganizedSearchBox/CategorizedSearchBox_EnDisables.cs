@@ -19,12 +19,14 @@
             _searchBar = new SearchField();
             STYLE_RESULTS_EVEN = new GUIStyle("CN EntryBackOdd");
             STYLE_RESULTS_ODD = new GUIStyle("CN EntryBackEven");
+            STYLE_RESULTS_SELECTED = new GUIStyle("PR Ping");
+
             _library = new List<string>();
             _drawnCategories = new HashSet<string>();
             _library.AddRange(resultsToPopulate);
 
             //Need to call this to update on intit the results list 
-            HandleSearchBarTextChange(string.Empty);
+            RaiseSearchBarTextChange(string.Empty);
         }
 
         #region Enables & Disables
@@ -32,8 +34,7 @@
         //============ ENABLES ================
         public virtual void EnableSearchBox()
         {
-            OnSearchBarTextChange += HandleSearchBarTextChange;
-            UpOrDownArrowPressed += HandleDownOrUpArrowKeyPressed;
+            _currentlySelectedResult=-1;
         }
 
 
@@ -41,7 +42,7 @@
         {
             EnableSearchBox();
             OnSearchBarTextChange += handleSearchBarTextChanged;
-            UpOrDownArrowPressed += handleDownOrUpArrowKeyPressed;
+            OnUpOrDownArrowPressed += handleDownOrUpArrowKeyPressed;
             OnPressConfirm += handleOnConfirmPressed;
         }
 
@@ -80,15 +81,13 @@
         //========= DISABLES ===============
         public virtual void DisableSearchBox()
         {
-            OnSearchBarTextChange -= HandleSearchBarTextChange;
-            UpOrDownArrowPressed -= HandleDownOrUpArrowKeyPressed;
         }
 
         public virtual void DisableSearchBox(UpOrDownArrowPressedCallback handleDownOrUpArrowKeyPressed, SearchBarTextChangeCallback handleSearchBarTextChanged, OnPressConfirmCallback handleOnConfirmPressed)
         {
             DisableSearchBox();
             OnSearchBarTextChange -= handleSearchBarTextChanged;
-            UpOrDownArrowPressed -= handleDownOrUpArrowKeyPressed;
+            OnUpOrDownArrowPressed -= handleDownOrUpArrowKeyPressed;
             OnPressConfirm -= handleOnConfirmPressed;
         }
 

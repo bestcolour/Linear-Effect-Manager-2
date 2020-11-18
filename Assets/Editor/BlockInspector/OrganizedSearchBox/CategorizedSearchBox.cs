@@ -18,16 +18,17 @@
         //======= EVENTS ========
         event SearchBarTextChangeCallback OnSearchBarTextChange = null;
         event OnPressConfirmCallback OnPressConfirm = null;
-        event UpOrDownArrowPressedCallback UpOrDownArrowPressed = null;
+        event UpOrDownArrowPressedCallback OnUpOrDownArrowPressed = null;
 
         #endregion
 
-        #region SearchBox Fields
+        #region ResultBox Fields
         Rect _resultBoxRect = default;
         Vector2 _scrollPosition = default;
 
         List<string> _library, _results;
         HashSet<string> _drawnCategories = default;
+        int _currentlySelectedResult = -1;
 
 
         public bool IsInResultBox => _resultBoxRect.Contains(Event.current.mousePosition, true);
@@ -39,6 +40,7 @@
 
         static GUIStyle STYLE_RESULTS_EVEN = default
         , STYLE_RESULTS_ODD = default
+        , STYLE_RESULTS_SELECTED = default
         ;
         #endregion
 
@@ -76,7 +78,7 @@
             }
 
             _searchedBarText = newSearchBarText;
-            OnSearchBarTextChange?.Invoke(_searchedBarText);
+            RaiseSearchBarTextChange(_searchedBarText);
         }
 
 
@@ -111,12 +113,6 @@
         void ResultBox_DrawResults()
         {
 
-            // //Dont draw or do anything durign these events
-            // if (e.type == EventType.Layout || e.type == EventType.Repaint)
-            // {
-            //     return;
-            // }
-
             // ============ DRAW A SPACE ===============
             EditorGUILayout.Space(_searchBarRect.y + _searchBarRect.height);
 
@@ -126,7 +122,7 @@
             for (int i = 0; i < _results.Count; i++)
             {
                 string result = _results[i];
-                GUIStyle resultStyle = i % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
+                GUIStyle resultStyle = GetResultStyle(i);
 
                 //If no category was found, just draw the result as it is
                 if (!TryGetCategory(result, out string category))
@@ -151,6 +147,13 @@
 
         }
 
+        GUIStyle GetResultStyle(int resultIndex)
+        {
+            if (resultIndex == _currentlySelectedResult) return STYLE_RESULTS_SELECTED;
+
+            return resultIndex % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
+        }
+
         bool TryGetCategory(string s, out string catergory)
         {
             int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
@@ -171,8 +174,6 @@
 
             switch (e.type)
             {
-
-
                 //==============MOUSE UP EVENT ================
                 case EventType.MouseUp:
                     if (rect.Contains(e.mousePosition, true))
@@ -187,11 +188,11 @@
                     switch (e.keyCode)
                     {
                         case KeyCode.UpArrow:
-                            UpOrDownArrowPressed?.Invoke(true);
+                            RaiseDownOrUpArrowKeyPressed(true);
                             break;
 
                         case KeyCode.DownArrow:
-                            UpOrDownArrowPressed?.Invoke(false);
+                            RaiseDownOrUpArrowKeyPressed(false);
                             break;
 
                         //Else do nth
@@ -213,16 +214,16 @@
 
 
         #region Handle  Events
-        //======= SEARCH BAR TEXT CHANGE ==========
-        void HandleSearchBarTextChange(string newSearchBarText)
+        //======= RAISE SEARCH BAR TEXT CHANGE ==========
+        void RaiseSearchBarTextChange(string newSearchBarText)
         {
-            if (_searchedBarText == string.Empty)
-            {
-                _results = _library;
-                return;
-            }
+            _currentlySelectedResult = -1;
 
-            _results = _library.FindAll(SearchBarSearchPredicate);
+            //ensure that if there is nth in the searchbar, at least show all the results
+            _results = newSearchBarText == string.Empty ? _results = _library : _library.FindAll(SearchBarSearchPredicate);
+
+            OnSearchBarTextChange?.Invoke(newSearchBarText);
+            Event.current?.Use();
         }
 
         bool SearchBarSearchPredicate(string s)
@@ -236,7 +237,7 @@
         }
 
 
-        // ============= HANDLE CONFIRM ==============
+        // ============= RAISE CONFIRM ==============
         //Handles when search bar has "enter" pressed down (when a result has been highlighted using the up & down arrow keys) or when a result has been pressed down
         //resultname can be: category name, result name
         void RaiseOnConfirm(string resultName)
@@ -257,14 +258,17 @@
 
             //Else, invoke the onconfirm event
             OnPressConfirm?.Invoke(_searchedBarText);
-
+            Event.current.Use();
         }
 
 
-        //============= HANDLE DOWN OR UP ARROW PRESSED ==============
-        private void HandleDownOrUpArrowKeyPressed(bool upArrowKeyWasPressed)
+        //============= RAISE DOWN OR UP ARROW PRESSED ==============
+        private void RaiseDownOrUpArrowKeyPressed(bool upArrowKeyWasPressed)
         {
-
+            int addition = upArrowKeyWasPressed ? -1 : 1;
+            _currentlySelectedResult = Mathf.Clamp(_currentlySelectedResult + addition, -1, _results.Count);
+            OnUpOrDownArrowPressed?.Invoke(upArrowKeyWasPressed);
+            Event.current.Use();
         }
 
         #endregion
