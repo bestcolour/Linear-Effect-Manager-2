@@ -122,7 +122,18 @@
                 if (!TryGetCategory(_searchedBarText, result, out string category))
                 {
                     //Remove any path categories before the result found if the forward path (in this case is _searchedBarText) is not empty or null
-                    result = String.IsNullOrEmpty(_searchedBarText) ? result : result.Remove(0, _searchedBarText.Length);
+
+                    //========= FRONT PATH NOT EMPTY ==========
+                    if (!String.IsNullOrEmpty(_searchedBarText))
+                    {
+                        //Get prev category slash's index if possible. If it is possible then remove everything from start to that slash
+                        //Example below to visualize
+
+                        //_searchedBarText = Hello/Debu
+                        //Result = Hello/Debug/1
+                        result = TryGetIndexOfPrevCategory(_searchedBarText, out int prevCategoryStartingIndex) ? result.Remove(0, prevCategoryStartingIndex + 1) : result;
+                    }
+
 
                     EditorGUILayout.LabelField(result, resultStyle);
                     ProcessResult(result);
@@ -145,18 +156,6 @@
             return resultIndex % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
         }
 
-        // bool TryGetCategory(string s, out string category)
-        // {
-        //     int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
-
-        //     category = string.Empty;
-
-        //     if (slashChar == -1) return false;
-
-        //     category = s.Substring(0, slashChar);
-        //     return true;
-        // }
-
         //frontPathToExclude must be start from index 0 of fullPath
         bool TryGetCategory(string frontPathToExclude, string fullPath, out string category)
         {
@@ -169,7 +168,17 @@
             }
 
             //========= FRONT PATH NOT EMPTY ==========
-            string stringToSearchFrom = fullPath.Remove(0, frontPathToExclude.Length);
+            //Get prev category slash's index if possible. If it is possible then remove everything from start to that slash
+            //Example below to visualize
+
+            //frontPathToExclude = Hello/Debu
+            //fullPath = Hello/Debug/1
+            if (!TryGetIndexOfPrevCategory(frontPathToExclude, out int prevCategoryStartingIndex))
+            {
+                return TryGetCategory(fullPath, out category);
+            }
+
+            string stringToSearchFrom = fullPath.Remove(0, prevCategoryStartingIndex + 1);
             return TryGetCategory(stringToSearchFrom, out category);
         }
 
@@ -184,6 +193,16 @@
             category = s.Substring(0, slashChar);
             return true;
         }
+
+        bool TryGetIndexOfPrevCategory(string s, out int categoryStartingIndex)
+        {
+            categoryStartingIndex = s.LastIndexOf(CATEGORY_IDENTIFIER);
+
+            if (categoryStartingIndex == -1) return false;
+
+            return true;
+        }
+
 
 
 
@@ -275,7 +294,6 @@
 
         void FilterResultCategories(string frontPath)
         {
-            Debug.Log($"frontPath: {frontPath}");
             for (int i = 0; i < _results.Count; i++)
             {
 
