@@ -73,7 +73,6 @@
 
 
         #region ToolBar
-
         const float BUTTON_SIZE = 35f;
 
         void BottomHalf_DrawToolBar()
@@ -119,145 +118,9 @@
             EditorGUILayout.EndHorizontal();
         }
 
-        #endregion
 
-        #region Observed Effect
-
-        void BottomHalf_OnGUI_ObservedEffect(float inspectorWidth)
-        {
-            if (_currObservedProperty != null && _prevClickedIndex == CurrentClickedListIndex)
-            {
-                //Current effect is still the same
-                BottomHalf_DrawObservedEffect(inspectorWidth);
-                return;
-            }
-
-            if (!BottomHalf_TryGetNewObservedEffect())
-            {
-                return;
-            }
-
-
-            BottomHalf_DrawObservedEffect(inspectorWidth);
-        }
-
-        void BottomHalf_DrawObservedEffect(float inspectorWidth)
-        {
-            //======== DRAWING EFFECT ==========
-            float height = EditorGUI.GetPropertyHeight(_currObservedProperty);
-
-            // ========== DRAWING BG BOX =============
-            // Color prevColor = GUIExtensions.Start_GUI_ColourChange(OBSERVED_EFFECT_BOXCOLOUR);
-            GUILayout.Box(string.Empty, GUILayout.Height(height + OBSERVED_EFFECTBG_BORDER), GUILayout.MaxWidth(inspectorWidth));
-            // GUIExtensions.End_GUI_ColourChange(prevColor);
-
-            //========== DRAWING EFFECT =============
-            Rect prevRect = GUILayoutUtility.GetLastRect();
-            prevRect.y += OBSERVED_EFFECT_YOFFSET;
-            EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
-
-            //========= SAVE EFFECT'S CHANGES ===========
-            if (_currObservedProperty.serializedObject.ApplyModifiedProperties())
-            {
-                _currObservedProperty.serializedObject.Update();
-            }
-        }
-
-        bool BottomHalf_TryGetNewObservedEffect()
-        {
-            //Get currently selected order element
-            if (!TopHalf_GetOrderArrayElement(CurrentClickedListIndex, out SerializedProperty orderElement))
-            {
-                return false;
-            }
-
-            //===== GETTING OBSERVED EFFECT =====
-            //convert holder to serializedobject
-            BaseEffectExecutor holder = (BaseEffectExecutor)orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_REFHOLDER).objectReferenceValue;
-            SerializedObject holderObject = new SerializedObject(holder);
-
-            //Get the effectDatas array as serializedProperty
-            SerializedProperty effectDataArray = holderObject.FindProperty(BaseEffectExecutor.PROPERTYNAME_EFFECTDATAS);
-
-            //Get dataelementindex from orderElement in block
-            int dataElementIndex = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue;
-
-            //Somehow the effect order instance still exists when i delete them so i can still apparently get the dataelementindex but the effectDataArray already has deleted all the array elements and hence causes an error when i try to GetArrayElementAtIndex()
-            if (dataElementIndex >= effectDataArray.arraySize)
-                return false;
-
-
-            //Get current selected effect through the use of the EffectData array and dataelementindex
-            _currObservedProperty = effectDataArray.GetArrayElementAtIndex(dataElementIndex);
-            return true;
-        }
-
-        #endregion
 
         #region Commands
-
-        #region SearchBar Methods
-        void BottomHalf_DrawSearchBoxButtons()
-        {
-            //================ DRAW SEARCHBOX BUTTON ===============
-            switch (_isSearchBoxOpened)
-            {
-                case true:
-                    if (GUILayout.Button("【―】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
-                    {
-                        BottomHalf_SearchBox_Disable();
-                    }
-                    break;
-                case false:
-                    if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
-                    {
-                        BottomHalf_SearchBox_Enable();
-                    }
-
-                    break;
-            }
-        }
-
-        void BottomHalf_SearchBox_Enable()
-        {
-            // if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
-            // {
-            //     return;
-            // }
-            // _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
-            // _target.SaveModifiedProperties();
-
-            _isSearchBoxOpened = true;
-            _searchBox.EnableSearchBox();
-
-        }
-
-        void BottomHalf_SearchBox_Disable()
-        {
-            _isSearchBoxOpened = false;
-            _searchBox.DisableSearchBox();
-        }
-
-        void BottomHalf_SearchBox_OnGUI()
-        {
-            if (!_isSearchBoxOpened) return;
-
-            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBarRect(), SEARCHBOX_HEIGHT);
-
-            //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
-            EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height + SEARCHBAR_PADDING_BOT));
-        }
-
-        Rect BottomHalf_SearchBox_GetSearchBarRect()
-        {
-            Rect rect = GUILayoutUtility.GetLastRect();
-            rect.y += rect.height + SEARCHBAR_PADDING_TOP;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            return rect;
-        }
-
-        #endregion
-
 
         void BottomHalf_PasteClipBoardEffects()
         {
@@ -348,6 +211,155 @@
             return true;
         }
         #endregion
+
+
+
+
+        #endregion
+
+        #region Observed Effect
+
+        void BottomHalf_OnGUI_ObservedEffect(float inspectorWidth)
+        {
+            if (_currObservedProperty != null && _prevClickedIndex == CurrentClickedListIndex)
+            {
+                //Current effect is still the same
+                BottomHalf_DrawObservedEffect(inspectorWidth);
+                return;
+            }
+
+            if (!BottomHalf_TryGetNewObservedEffect())
+            {
+                return;
+            }
+
+
+            BottomHalf_DrawObservedEffect(inspectorWidth);
+        }
+
+        void BottomHalf_DrawObservedEffect(float inspectorWidth)
+        {
+            //======== DRAWING EFFECT ==========
+            float height = EditorGUI.GetPropertyHeight(_currObservedProperty);
+
+            // ========== DRAWING BG BOX =============
+            // Color prevColor = GUIExtensions.Start_GUI_ColourChange(OBSERVED_EFFECT_BOXCOLOUR);
+            GUILayout.Box(string.Empty, GUILayout.Height(height + OBSERVED_EFFECTBG_BORDER), GUILayout.MaxWidth(inspectorWidth));
+            // GUIExtensions.End_GUI_ColourChange(prevColor);
+
+            //========== DRAWING EFFECT =============
+            Rect prevRect = GUILayoutUtility.GetLastRect();
+            prevRect.y += OBSERVED_EFFECT_YOFFSET;
+            EditorGUI.PropertyField(prevRect, _currObservedProperty, true);
+
+            //========= SAVE EFFECT'S CHANGES ===========
+            if (_currObservedProperty.serializedObject.ApplyModifiedProperties())
+            {
+                _currObservedProperty.serializedObject.Update();
+            }
+        }
+
+        bool BottomHalf_TryGetNewObservedEffect()
+        {
+            //Get currently selected order element
+            if (!TopHalf_GetOrderArrayElement(CurrentClickedListIndex, out SerializedProperty orderElement))
+            {
+                return false;
+            }
+
+            //===== GETTING OBSERVED EFFECT =====
+            //convert holder to serializedobject
+            BaseEffectExecutor holder = (BaseEffectExecutor)orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_REFHOLDER).objectReferenceValue;
+            SerializedObject holderObject = new SerializedObject(holder);
+
+            //Get the effectDatas array as serializedProperty
+            SerializedProperty effectDataArray = holderObject.FindProperty(BaseEffectExecutor.PROPERTYNAME_EFFECTDATAS);
+
+            //Get dataelementindex from orderElement in block
+            int dataElementIndex = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue;
+
+            //Somehow the effect order instance still exists when i delete them so i can still apparently get the dataelementindex but the effectDataArray already has deleted all the array elements and hence causes an error when i try to GetArrayElementAtIndex()
+            if (dataElementIndex >= effectDataArray.arraySize)
+                return false;
+
+
+            //Get current selected effect through the use of the EffectData array and dataelementindex
+            _currObservedProperty = effectDataArray.GetArrayElementAtIndex(dataElementIndex);
+            return true;
+        }
+
+        #endregion
+
+        #region SearchBar Methods
+        void BottomHalf_DrawSearchBoxButtons()
+        {
+            //================ DRAW SEARCHBOX BUTTON ===============
+            switch (_isSearchBoxOpened)
+            {
+                case true:
+                    if (GUILayout.Button("【―】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+                    {
+                        _isSearchBoxOpened = false;
+                        _searchBox.DisableSearchBox(BottomHalf_SearchBox_HandleUpDownKeyPressed, BottomHalf_SearchBox_HandleSearchBarTextChange, BottomHalf_SearchBox_HandleOnConfirm);
+                    }
+                    break;
+                case false:
+                    if (GUILayout.Button("【＋】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
+                    {
+                        // if (!CommandData.TryGetExecutor(DEBUG_EFFECTEXECUTOR, out Type type))
+                        // {
+                        //     return;
+                        // }
+                        // _target.Block.AddNewOrderElement(BlockGameObject, type, DEBUG_EFFECTEXECUTOR);
+                        // _target.SaveModifiedProperties();
+
+                        _isSearchBoxOpened = true;
+                        _searchBox.EnableSearchBox(BottomHalf_SearchBox_HandleUpDownKeyPressed, BottomHalf_SearchBox_HandleSearchBarTextChange, BottomHalf_SearchBox_HandleOnConfirm);
+                    }
+
+                    break;
+            }
+        }
+
+        void BottomHalf_SearchBox_OnGUI()
+        {
+            //Draw only when opened
+            if (!_isSearchBoxOpened) return;
+
+            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBarRect(), SEARCHBOX_HEIGHT);
+
+            //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
+            EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height + SEARCHBAR_PADDING_BOT));
+        }
+
+        Rect BottomHalf_SearchBox_GetSearchBarRect()
+        {
+            Rect rect = GUILayoutUtility.GetLastRect();
+            rect.y += rect.height + SEARCHBAR_PADDING_TOP;
+            rect.height = EditorGUIUtility.singleLineHeight;
+            return rect;
+        }
+
+        #region Handle Searchbox events
+        void BottomHalf_SearchBox_HandleUpDownKeyPressed(bool isUpKeyPressed)
+        {
+            // Debug.Log($"IsUpKeyPressed: {isUpKeyPressed}");
+        }
+
+        void BottomHalf_SearchBox_HandleSearchBarTextChange(string newSearchBarText)
+        {
+            // Debug.Log($"newSearchBarText: {newSearchBarText}");
+
+        }
+        void BottomHalf_SearchBox_HandleOnConfirm(string fullPathOfResultPressed)
+        {
+            Debug.Log($"fullPathOfResultPressed: {fullPathOfResultPressed}");
+        }
+
+        #endregion
+
+        #endregion
+
 
     }
 

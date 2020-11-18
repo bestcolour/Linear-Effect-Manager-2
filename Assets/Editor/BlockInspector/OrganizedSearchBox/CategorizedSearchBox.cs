@@ -6,33 +6,31 @@
     using UnityEditor;
     using UnityEditor.IMGUI.Controls;
 
-    public class CategorizedSearchBox : SearchField
+    public partial class CategorizedSearchBox
     {
         #region SearchBar Fields
-        Rect _barRect = default;
+        SearchField _searchBar = default;
+        Rect _searchBarRect = default;
 
 
         string _searchedBarText = String.Empty;
 
         //======= EVENTS ========
-        event Action OnSearchBarTextChange = null;
+        event SearchBarTextChangeCallback OnSearchBarTextChange = null;
+        event OnPressConfirmCallback OnPressConfirm = null;
+        event UpOrDownArrowPressedCallback UpOrDownArrowPressed = null;
 
         #endregion
 
         #region SearchBox Fields
-        Rect _boxRect = default;
+        Rect _resultBoxRect = default;
         Vector2 _scrollPosition = default;
-
-        //======== RESULTS ==========
-        int _maxNumberOfResults = default
-       , _numOfResultsFound = default
-        ;
 
         List<string> _library, _results;
         HashSet<string> _drawnCategories = default;
 
 
-        public bool IsInSearchBox => _boxRect.Contains(Event.current.mousePosition, true);
+        public bool IsInResultBox => _resultBoxRect.Contains(Event.current.mousePosition, true);
 
         #region Constants
         const string CATEGORY_IDENTIFIER = "/", CATEGORY_ARROWSYMBOL = "＞ ";
@@ -45,70 +43,21 @@
         #endregion
 
         #endregion
-        public void Initialize(string[] resultsToPopulate)
-        {
-            STYLE_RESULTS_EVEN = new GUIStyle("CN EntryBackOdd");
-            STYLE_RESULTS_ODD = new GUIStyle("CN EntryBackEven");
-            _library = new List<string>();
-            _drawnCategories = new HashSet<string>();
-            _library.AddRange(resultsToPopulate);
-            HandleSearchBarTextChange();
-        }
-
-        #region Enables & Disables
-        public virtual void EnableSearchBox()
-        {
-            OnSearchBarTextChange += HandleSearchBarTextChange;
-        }
-
-
-
-        public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-        {
-            EnableSearchBox();
-            downOrUpArrowKeyPressed += handleDownOrUpArrowKeyPressed;
-        }
-
-        public virtual void EnableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarTextChange)
-        {
-            EnableSearchBox(handleDownOrUpArrowKeyPressed);
-            OnSearchBarTextChange += handleSearchBarTextChange;
-        }
-
-        public virtual void DisableSearchBox()
-        {
-            OnSearchBarTextChange -= HandleSearchBarTextChange;
-        }
-
-        public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed)
-        {
-            DisableSearchBox();
-            downOrUpArrowKeyPressed -= handleDownOrUpArrowKeyPressed;
-        }
-
-        public virtual void DisableSearchBox(SearchFieldCallback handleDownOrUpArrowKeyPressed, Action handleSearchBarChange)
-        {
-            DisableSearchBox(handleDownOrUpArrowKeyPressed);
-            OnSearchBarTextChange -= handleSearchBarChange;
-        }
-
-
-        #endregion
 
         ///<Summary>
         ///Returns the height that the entire searchbox will need to occupy
         ///</Summary>
-        public virtual float Handle_OnGUI(Rect searchBarRect, float searchBoxHeight)
+        public virtual float Handle_OnGUI(Rect searchBarRect, float resultBoxHeight)
         {
             //========= SEARCHBAR ==============
             SearchBar_OnGUI(searchBarRect);
 
-            //=========== SEARCHBOX ===============
+            //=========== RESULTBOX ===============
             //Substract the cross icon's width
-            SearchBox_OnGUI(searchBoxHeight);
+            ResultBox_OnGUI(resultBoxHeight);
 
 
-            return _barRect.height + _boxRect.height;
+            return _searchBarRect.height + _resultBoxRect.height;
         }
 
 
@@ -116,9 +65,10 @@
         protected void SearchBar_OnGUI(Rect rect)
         {
             //====== UPDATE BAR RECT =========
-            _barRect = rect;
+            _searchBarRect = rect;
 
-            string newSearchBarText = OnGUI(_barRect, _searchedBarText);
+            //====== UPDATE THE SEARCH BAR TEXT ============
+            string newSearchBarText = _searchBar.OnGUI(_searchBarRect, _searchedBarText);
 
             if (newSearchBarText == _searchedBarText)
             {
@@ -126,68 +76,145 @@
             }
 
             _searchedBarText = newSearchBarText;
-            OnSearchBarTextChange?.Invoke();
-
+            OnSearchBarTextChange?.Invoke(_searchedBarText);
         }
 
 
         #endregion
 
-        #region Search Box Methods
-        void SearchBox_OnGUI(float searchBoxHeight)
+        #region Result Box Methods
+        void ResultBox_OnGUI(float searchBoxHeight)
         {
-            SearchBox_UpdateValues(searchBoxHeight);
-            SearchBox_HandleResults();
+            ResultBox_UpdateValues(searchBoxHeight);
+            ResultBox_DrawResults();
+            ResultBox_ClearValues();
         }
 
-        void SearchBox_UpdateValues(float searchBoxHeight)
+        void ResultBox_UpdateValues(float searchBoxHeight)
         {
             //must occur after _barRect updates itself
             //====== UPDATE BOX RECT =========
-            _boxRect.x = _barRect.x;
-            _boxRect.y = _barRect.y + _barRect.height;
-            _boxRect.width = _barRect.width - BAR_CANCELICON_WIDTH;
-            _boxRect.height = searchBoxHeight;
+            _resultBoxRect.x = _searchBarRect.x;
+            _resultBoxRect.y = _searchBarRect.y + _searchBarRect.height;
+            _resultBoxRect.width = _searchBarRect.width - BAR_CANCELICON_WIDTH;
+            _resultBoxRect.height = searchBoxHeight;
 
 
-            _maxNumberOfResults = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
+            // _maxNumberOfResults = Mathf.FloorToInt(_boxRect.height / EditorGUIUtility.singleLineHeight);
         }
 
-        void SearchBox_HandleResults()
+        private void ResultBox_ClearValues()
+        {
+            _drawnCategories.Clear();
+        }
+
+        void ResultBox_DrawResults()
         {
 
+            // //Dont draw or do anything durign these events
+            // if (e.type == EventType.Layout || e.type == EventType.Repaint)
+            // {
+            //     return;
+            // }
+
             // ============ DRAW A SPACE ===============
-            EditorGUILayout.Space(_barRect.y + _barRect.height);
+            EditorGUILayout.Space(_searchBarRect.y + _searchBarRect.height);
 
             // ============ SCROLL VIEW ================
-            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true, GUILayout.MinWidth(_boxRect.width), GUILayout.MinHeight(_boxRect.height));
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true, GUILayout.MinWidth(_resultBoxRect.width), GUILayout.MinHeight(_resultBoxRect.height));
 
             for (int i = 0; i < _results.Count; i++)
             {
                 string result = _results[i];
                 GUIStyle resultStyle = i % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
 
+                //If no category was found, just draw the result as it is
                 if (!TryGetCategory(result, out string category))
                 {
                     EditorGUILayout.LabelField(result, resultStyle);
+                    ProcessResult(result);
                     continue;
                 }
 
-                // if (_drawnCategories.Contains(category))
-                //     continue;
+                //If the result is a category but it was already drawn, skip
+                if (_drawnCategories.Contains(category))
+                    continue;
 
 
-                //=== DRAWING CATERGORY
+                //=== DRAWING CATERGORY =====
                 EditorGUILayout.LabelField(CATEGORY_ARROWSYMBOL + category, resultStyle);
                 _drawnCategories.Add(category);
-
+                ProcessResult(category);
             }
 
             GUILayout.EndScrollView();
 
         }
 
-        void HandleSearchBarTextChange()
+        bool TryGetCategory(string s, out string catergory)
+        {
+            int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
+
+            catergory = string.Empty;
+
+            if (slashChar == -1) return false;
+
+            catergory = s.Substring(0, slashChar);
+            return true;
+        }
+
+        //Must only be called after the EditorGUILayout field is drawn
+        void ProcessResult(string resultName)
+        {
+            Rect rect = GUILayoutUtility.GetLastRect();
+            Event e = Event.current;
+
+            switch (e.type)
+            {
+
+
+                //==============MOUSE UP EVENT ================
+                case EventType.MouseUp:
+                    if (rect.Contains(e.mousePosition, true))
+                    {
+                        RaiseOnConfirm(resultName);
+                    }
+                    break;
+
+
+                //============== KEY DOWN EVENT ================
+                case EventType.KeyDown:
+                    switch (e.keyCode)
+                    {
+                        case KeyCode.UpArrow:
+                            UpOrDownArrowPressed?.Invoke(true);
+                            break;
+
+                        case KeyCode.DownArrow:
+                            UpOrDownArrowPressed?.Invoke(false);
+                            break;
+
+                        //Else do nth
+                        default: break;
+                    }
+                    break;
+
+
+                //Else do nth
+                default: break;
+
+            }
+
+
+        }
+
+        #endregion
+
+
+
+        #region Handle  Events
+        //======= SEARCH BAR TEXT CHANGE ==========
+        void HandleSearchBarTextChange(string newSearchBarText)
         {
             if (_searchedBarText == string.Empty)
             {
@@ -208,22 +235,39 @@
             return false;
         }
 
-        bool TryGetCategory(string s, out string catergory)
+
+        // ============= HANDLE CONFIRM ==============
+        //Handles when search bar has "enter" pressed down (when a result has been highlighted using the up & down arrow keys) or when a result has been pressed down
+        //resultname can be: category name, result name
+        void RaiseOnConfirm(string resultName)
         {
-            int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
+            Debug.Log($"Result name is {resultName}");
+            //Check if the confirmed result is a category. if so, append that category name to the searchbar text
+            if (_drawnCategories.Contains(resultName))
+            {
+                //Add only when the text doesnt already have the result name
+                if (_searchedBarText.Contains(resultName))
+                {
+                    return;
+                }
 
-            catergory = string.Empty;
+                _searchedBarText = _searchedBarText == string.Empty ? _searchedBarText + resultName : _searchedBarText + "/" + resultName;
+                return;
+            }
 
-            if (slashChar == -1) return false;
+            //Else, invoke the onconfirm event
+            OnPressConfirm?.Invoke(_searchedBarText);
 
-            catergory = s.Substring(0, slashChar);
-            return true;
+        }
+
+
+        //============= HANDLE DOWN OR UP ARROW PRESSED ==============
+        private void HandleDownOrUpArrowKeyPressed(bool upArrowKeyWasPressed)
+        {
+
         }
 
         #endregion
-
-
-
     }
 
 }
