@@ -33,13 +33,16 @@
         {
 #if UNITY_EDITOR
             #region Constants
-            public const string PROPERTYNAME_EFFECTNAME = "EffectName";
+            public const string PROPERTYNAME_EFFECTNAME = "EffectName"
+            , PROPERTYNAME_FULLEFFECTNAME = "FullEffectName"
+            , PROPERTYNAME_REFHOLDER = "_refHolder"
+            , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
+            ;
             // public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
-            public const string PROPERTYNAME_REFHOLDER = "_refHolder";
-            public const string PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex";
             #endregion
 
             public string EffectName;
+            public string FullEffectName;
             // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
@@ -48,6 +51,7 @@
                 property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
                 // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
                 property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = EffectName;
+                property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue = FullEffectName;
             }
 
             public void LoadFromSerializedProperty(SerializedProperty property)
@@ -56,6 +60,7 @@
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
+                FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
 
 
                 _refHolder.OnRemoveObject += HandleRemoveObject;
@@ -67,6 +72,7 @@
                 _refHolder = e._refHolder;
                 _dataElmtIndex = e._dataElmtIndex;
                 EffectName = e.EffectName;
+                FullEffectName = e.FullEffectName;
 
             }
 
@@ -172,7 +178,7 @@
         #endregion
 
         #region Override Methods
-        public void AddNewOrderElement(GameObject gameObject, Type type, string effectName)
+        public void AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
         {
             if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
             {
@@ -180,11 +186,11 @@
                 return;
             }
 
-            ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false, effectName));
+            ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false, fullEffectName, effectName));
         }
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected Block.EffectOrder GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string effectName)
+        protected Block.EffectOrder GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string fullEffectName, string effectName)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {
@@ -193,7 +199,10 @@
 
             BaseEffectExecutor holder = component as BaseEffectExecutor;
             Block.EffectOrder o = new Block.EffectOrder();
+
             o.EffectName = effectName;
+            o.FullEffectName = fullEffectName;
+
             o.OnAddNew(holder, isForInsert);
             return o;
         }

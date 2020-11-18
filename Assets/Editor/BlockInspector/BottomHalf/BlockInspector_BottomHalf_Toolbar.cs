@@ -78,7 +78,7 @@ namespace LinearEffectsEditor
         {
             if (!HadPreviouslyCopied) return;
             //Check if there is nothing selected
-            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex;
+            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex+1;
 
             foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
             {
@@ -88,9 +88,9 @@ namespace LinearEffectsEditor
                     continue;
                 }
 
-                if (!CommandData.TryGetExecutor(effectOrder.EffectName, out Type executorType))
+                if (!CommandData.TryGetExecutor(effectOrder.FullEffectName, out Type executorType))
                 {
-                    Debug.Log($"The Executor {effectOrder.EffectName} doesnt exist in CommandData.cs!");
+                    Debug.Log($"The Executor {effectOrder.FullEffectName} doesnt exist in CommandData.cs!");
                     continue;
                 }
 

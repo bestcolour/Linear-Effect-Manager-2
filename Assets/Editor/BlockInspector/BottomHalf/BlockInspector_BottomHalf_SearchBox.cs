@@ -123,18 +123,18 @@
         #endregion
 
         #region Add Effect Command
-        void BottomHalf_AddEffect(string effectorName)
+        void BottomHalf_AddEffect(string fullEffectName)
         {
-            if (!CommandData.TryGetExecutor(effectorName, out Type type))
+            if (!CommandData.TryGetExecutor(fullEffectName, out Type type))
             {
                 return;
             }
 
             //Since the effector name has slashes inside of it (cause categorization and stuff),there is a need to remove it 
-            int previousCategoryIndex = effectorName.LastIndexOf(CategorizedSearchBox.CATEGORY_IDENTIFIER);
-            effectorName = previousCategoryIndex == -1 ? effectorName : effectorName.Remove(0, previousCategoryIndex + 1);
+            int previousCategoryIndex = fullEffectName.LastIndexOf(CategorizedSearchBox.CATEGORY_IDENTIFIER);
+            string effectName = previousCategoryIndex == -1 ? fullEffectName : fullEffectName.Remove(0, previousCategoryIndex + 1);
 
-            _target.Block.AddNewOrderElement(BlockGameObject, type, effectorName);
+            _target.Block.AddNewOrderElement(BlockGameObject, type, fullEffectName, effectName);
             _target.SaveModifiedProperties();
 
         }
