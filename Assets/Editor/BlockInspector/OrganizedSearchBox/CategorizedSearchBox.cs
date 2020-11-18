@@ -28,7 +28,7 @@
         Vector2 _scrollPosition = default;
 
         List<string> _library, _results;
-        HashSet<string> _drawnCategories = default;
+        HashSet<string> _categoriesToBeDrawn = default;
         int _currentlySelectedResult = -1;
 
 
@@ -119,8 +119,11 @@
                 GUIStyle resultStyle = GetResultStyle(i);
 
                 //If no category was found, just draw the result as it is
-                if (!TryGetCategory(result, out string category))
+                if (!TryGetCategory(_searchedBarText, result, out string category))
                 {
+                    //Remove any path categories before the result found if the forward path (in this case is _searchedBarText) is not empty or null
+                    result = String.IsNullOrEmpty(_searchedBarText) ? result : result.Remove(0, _searchedBarText.Length);
+
                     EditorGUILayout.LabelField(result, resultStyle);
                     ProcessResult(result);
                     continue;
@@ -142,17 +145,47 @@
             return resultIndex % 2 == 0 ? STYLE_RESULTS_EVEN : STYLE_RESULTS_ODD;
         }
 
-        bool TryGetCategory(string s, out string catergory)
-        {
-            int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
+        // bool TryGetCategory(string s, out string category)
+        // {
+        //     int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
 
-            catergory = string.Empty;
+        //     category = string.Empty;
+
+        //     if (slashChar == -1) return false;
+
+        //     category = s.Substring(0, slashChar);
+        //     return true;
+        // }
+
+        //frontPathToExclude must be start from index 0 of fullPath
+        bool TryGetCategory(string frontPathToExclude, string fullPath, out string category)
+        {
+            category = string.Empty;
+
+            //====== FRONT PATH IS EMPTY ==========
+            if (String.IsNullOrEmpty(frontPathToExclude))
+            {
+                return TryGetCategory(fullPath, out category);
+            }
+
+            //========= FRONT PATH NOT EMPTY ==========
+            string stringToSearchFrom = fullPath.Remove(0, frontPathToExclude.Length);
+            return TryGetCategory(stringToSearchFrom, out category);
+        }
+
+        bool TryGetCategory(string s, out string category)
+        {
+            category = string.Empty;
+
+            int slashChar = s.IndexOf(CATEGORY_IDENTIFIER);
 
             if (slashChar == -1) return false;
 
-            catergory = s.Substring(0, slashChar);
+            category = s.Substring(0, slashChar);
             return true;
         }
+
+
 
         //Must only be called after the EditorGUILayout field is drawn
         void ProcessResult(string resultName)
@@ -216,25 +249,15 @@
         {
             _currentlySelectedResult = -1;
 
+            _categoriesToBeDrawn.Clear();
             _results.Clear();
+
             if (newSearchBarText == string.Empty)
                 _results.AddRange(_library);
             else
                 _results.AddRange(_library.FindAll(SearchBarSearchPredicate));
 
-
-            // //ensure that if there is nth in the searchbar, at least show all the results
-            // if (newSearchBarText == string.Empty)
-            // {
-            //     _results = _library;
-            //     //Sort all the results in terms of their categories
-            // }
-            // else
-            // {
-            //     _results = _library.FindAll(SearchBarSearchPredicate);
-            // }
-            FilterResultCategories();
-
+            FilterResultCategories(newSearchBarText);
 
             OnSearchBarTextChange?.Invoke(newSearchBarText);
             Event.current?.Use();
@@ -248,59 +271,33 @@
             }
 
             return false;
-            // //if this string has a category inside of it
-            // if (TryGetCategory(s, out string category))
-            // {
-            //     //Check if the category is found inside of the category hashset
-            //     if (_drawnCategories.Contains(category))
-            //     {
-            //         //if so dont draw it agn
-            //         return false;
-            //     }
-
-            //     //Else check if it contains searchbartext
-            //     return SearchBarSearchPredicate_SearchTextCheck(s);
-            // }
-
-            // //Else just check if it contains searchbartext
-            // return SearchBarSearchPredicate_SearchTextCheck(s);
         }
 
-        // bool SearchBarSearchPredicate_SearchTextCheck(string s)
-        // {
-        //     if (s.Contains(_searchedBarText, StringComparison.CurrentCultureIgnoreCase))
-        //     {
-        //         return true;
-        //     }
-
-        //     return false;
-        // }
-
-        void FilterResultCategories()
+        void FilterResultCategories(string frontPath)
         {
+            Debug.Log($"frontPath: {frontPath}");
             for (int i = 0; i < _results.Count; i++)
             {
+
                 string s = _results[i];
 
-                //if this string doesnt hv a category inside of it
-                if (!TryGetCategory(s, out string category))
+                //if this string doesnt hv a category inside of it, leave it in results
+                if (!TryGetCategory(frontPath, s, out string category))
                 {
                     continue;
                 }
 
                 //Check if the category is found inside of the category hashset
-                if (_drawnCategories.Contains(category))
+                if (_categoriesToBeDrawn.Contains(category))
                 {
                     //if so remove this result element
-                    // int lastIndex = _results.Count - 1;
-                    // _results[i] = _results[lastIndex];
                     _results.RemoveAt(i);
                     i--;
                     continue;
                 }
 
                 //Else
-                _drawnCategories.Add(category);
+                _categoriesToBeDrawn.Add(category);
 
             }
         }
@@ -313,9 +310,9 @@
         //resultname can be: category name, result name
         void RaiseOnConfirm(string resultName)
         {
-            Debug.Log($"Result name is {resultName}");
+            // _currentlySelectedResult = -1;
             //Check if the confirmed result is a category. if so, append that category name to the searchbar text
-            if (_drawnCategories.Contains(resultName))
+            if (_categoriesToBeDrawn.Contains(resultName))
             {
                 //Add only when the text doesnt already have the result name
                 if (_searchedBarText.Contains(resultName))
@@ -323,14 +320,15 @@
                     return;
                 }
 
-                _searchedBarText = _searchedBarText == string.Empty ? _searchedBarText + resultName : _searchedBarText + "/" + resultName;
+                _searchedBarText += $"{resultName}/";
+                // _searchedBarText = _searchedBarText == string.Empty ? _searchedBarText + resultName : _searchedBarText + "/" + resultName;
                 RaiseSearchBarTextChange(_searchedBarText);
                 return;
             }
 
-            //Else, invoke the onconfirm event
-            OnPressConfirm?.Invoke(_searchedBarText);
+            //Else, invoke the onconfirm event cause this is prolly the final result name
             //Close the search box or something?
+            OnPressConfirm?.Invoke(_searchedBarText);
 
             Event.current.Use();
         }

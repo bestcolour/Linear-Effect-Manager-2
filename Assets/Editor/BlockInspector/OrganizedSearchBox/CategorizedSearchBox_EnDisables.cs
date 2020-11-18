@@ -23,7 +23,7 @@
 
             _library = new List<string>();
             _results = new List<string>();
-            _drawnCategories = new HashSet<string>();
+            _categoriesToBeDrawn = new HashSet<string>();
             _library.AddRange(resultsToPopulate);
 
 
