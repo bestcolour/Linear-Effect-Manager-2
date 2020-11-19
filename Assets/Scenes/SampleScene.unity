@@ -278,7 +278,7 @@ MonoBehaviour:
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 221, y: 196}
+      BlockPosition: {x: 185, y: 108}
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
@@ -293,9 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDatas:
-  - _myAwesomeName: DDDD
-    _prefab: {fileID: 0}
+  _effectDatas: []
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,8 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDatas:
-  - Lol: 0
+  _effectDatas: []
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0

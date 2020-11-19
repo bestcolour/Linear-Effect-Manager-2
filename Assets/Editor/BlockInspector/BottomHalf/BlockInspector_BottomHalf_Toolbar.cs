@@ -36,11 +36,11 @@ namespace LinearEffectsEditor
             //================DRAW NEXT/PREV COMMAND BUTTONS===============
             if (GUILayout.Button("【↑】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-
+                CurrentClickedListIndex  -=1;
             }
             else if (GUILayout.Button("【↓】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-
+                CurrentClickedListIndex +=1;
             }
 
 
@@ -78,7 +78,7 @@ namespace LinearEffectsEditor
         {
             if (!HadPreviouslyCopied) return;
             //Check if there is nothing selected
-            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex+1;
+            int currentInsertPosition = CurrentClickedListIndex == -1 ? _list.count : CurrentClickedListIndex + 1;
 
             foreach (var elementIndexWhichYouIntendToCopy in _clipBoardIndices)
             {

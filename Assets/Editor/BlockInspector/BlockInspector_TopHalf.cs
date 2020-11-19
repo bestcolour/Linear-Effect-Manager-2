@@ -21,7 +21,20 @@
         #endregion
 
         #region Properties
-        int CurrentClickedListIndex => _list.index;
+        int CurrentClickedListIndex
+        {
+            get
+            {
+                return _list.index;
+            }
+            set
+            {
+                _list.index = Mathf.Clamp(value, -1, _list.count - 1);
+                _firstClickedIndex = _list.index;
+                _selectedElements.Clear();
+                _selectedElements.Add(_firstClickedIndex);
+            }
+        }
         #endregion
 
         #region Constants
@@ -29,6 +42,9 @@
         static readonly Color ORDERELEMENT_COLOUR_SELECTED = new Color(73 / 255f, 113 / 255f, 170 / 255f, 1f),
         ORDERELEMENT_COLOUR_UNSELECTED = new Color(0.8f, 0.8f, 0.8f, 1f)
         ;
+
+        const string COPY_REMINDER_TEXT = "Copy Dont Delete";
+        const float COPY_REMINDER_RECTWIDTH = 500f;
 
         #endregion
 
@@ -79,7 +95,7 @@
 
 
         #region Event Handlers
-      
+
 
         private void TopHalf_HandleOnSelect(ReorderableList list)
         {
@@ -164,9 +180,12 @@
             rect.x += rect.width + 10;
             rect.y -= 5;
 
+            rect.width = COPY_REMINDER_RECTWIDTH;
+
+
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
             style.fontStyle = FontStyle.Italic;
-            EditorGUI.LabelField(rect, "Copy Dont Delete");
+            EditorGUI.LabelField(rect, COPY_REMINDER_TEXT);
             style.fontStyle = FontStyle.Normal;
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
 
