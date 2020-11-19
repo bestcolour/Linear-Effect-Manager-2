@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 910949407}
   - component: {fileID: 910949408}
   - component: {fileID: 910949409}
+  - component: {fileID: 910949410}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -269,15 +270,15 @@ MonoBehaviour:
     - _refHolder: {fileID: 910949409}
       _dataElmtIndex: 0
       EffectName: TestUpdateExecutor
-    _blockSettings:
-      BlockName: Hello world
-      BlockColour: {r: 1, g: 0.8365737, b: 0, a: 1}
-      BlockPosition: {x: 331.5, y: 146}
-  - _orderArray: []
+      FullEffectName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949410}
+      _dataElmtIndex: 0
+      EffectName: DebuggerExecutor
+      FullEffectName: Debug/1/DebuggerExecutor
     _blockSettings:
       BlockName: New Block
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 100.04999, y: 200.4}
+      BlockPosition: {x: 221, y: 196}
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
@@ -295,6 +296,20 @@ MonoBehaviour:
   _effectDatas:
   - _myAwesomeName: DDDD
     _prefab: {fileID: 0}
+--- !u!114 &910949410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas:
+  - Lol: 0
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0

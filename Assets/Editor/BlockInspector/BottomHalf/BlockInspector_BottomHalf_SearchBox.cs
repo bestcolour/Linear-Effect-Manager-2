@@ -17,8 +17,8 @@
         #region Constants
         // static readonly Vector2 SEARCHBOX_RECTSIZE = new Vector2(500f, EditorGUIUtility.singleLineHeight);
         const float SEARCHBAR_PADDING_TOP = 10f
-        , SEARCHBOX_HEIGHT = 75f
-        , SEARCHBAR_PADDING_BOT = 10f
+        , SEARCHBOX_HEIGHT = 100f
+        , SEARCHBAR_PADDING_BOT = -100f
         ;
 
         #endregion

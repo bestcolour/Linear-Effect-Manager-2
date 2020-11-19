@@ -26,6 +26,14 @@
         {
             {"Debug/1/DebuggerExecutor", typeof(DebuggerExecutor)},
             {"Debug/TestUpdateExecutor", typeof(TestUpdateExecutor)},
+            {"Debug/12", typeof(TestUpdateExecutor)},
+            {"Debug/13", typeof(TestUpdateExecutor)},
+            {"Debug/14", typeof(TestUpdateExecutor)},
+            {"Debug/15", typeof(TestUpdateExecutor)},
+            {"Debug/119", typeof(TestUpdateExecutor)},
+            {"Debug/112", typeof(TestUpdateExecutor)},
+            {"Debug/10", typeof(TestUpdateExecutor)},
+            {"Debug/19", typeof(TestUpdateExecutor)},
         };
 
 
