@@ -86,7 +86,7 @@
             //Idk why but i cant create a new instance of custom class inside of Update/InspectorUpdate/Genric Menu callbac. So im addign it here
             Event e = Event.current;
 
-            NodeManager_NodeCreation_OnGUI();
+            NodeManager_NodeCycler_OnGUI();
 
             NodeManager_Draw();
             NodeManager_DrawDebugger();

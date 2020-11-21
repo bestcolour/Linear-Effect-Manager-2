@@ -7,8 +7,11 @@
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
+        const string TOOLBAR_BUTTONSYMBOL_ADD = "＋"
+        , TOOLBAR_BUTTONSYMBOL_COPY = "❏"
+        , TOOLBAR_BUTTONSYMBOL_DELETE = "X"
+        ;
 
-       
         const float TOOLBAR_HEIGHT = 30f;
         static readonly Vector2 BUTTONSIZE = new Vector2(20f, 20f);
 
@@ -44,15 +47,15 @@
             //================== DRAW ADD BUTTON ======================
             rect.size = BUTTONSIZE;
             rect.x += 5f;
-            if (GUI.Button(rect, "＋"))
+            if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_ADD))
             {
-                NodeManager_NodeCreation_TriggerCreateNewNode(AddNewBlockFrom.ToolBar);
+                NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom.ToolBar);
             }
 
             //================== DRAW COPY BUTTON ======================
             rect.size = BUTTONSIZE;
             rect.x += BUTTONSIZE.x + 5f;
-            if (GUI.Button(rect, "❏"))
+            if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_COPY))
             {
 
             }
@@ -60,34 +63,10 @@
             //================== DRAW DELETE BUTTON ======================
             rect.size = BUTTONSIZE;
             rect.x += BUTTONSIZE.x + 5f;
-            if (GUI.Button(rect, "X"))
+            if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_DELETE))
             {
-
+                NodeManager_NodeCycler_DeleteNode();
             }
-
-
-            // rect.size = BUTTONSIZE;
-            // rect.x = position.width - BUTTONSIZE.x - 5f;
-            // switch (_toolBarHidden)
-            // {
-            //     case true:
-            //         if (GUI.Button(rect, "˅"))
-            //         {
-            //             //Hide toolbar
-            //             _toolBarHidden = false;
-            //         }
-            //         break;
-
-            //     case false:
-            //         if (GUI.Button(rect, "˄"))
-            //         {
-            //             //Hide toolbar
-            //             _toolBarHidden = true;
-            //         }
-            //         break;
-            // }
-
-
 
             GUIExtensions.End_GUI_ColourChange(prevColor);
         }

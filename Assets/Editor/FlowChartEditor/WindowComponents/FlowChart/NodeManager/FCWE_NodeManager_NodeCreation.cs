@@ -7,16 +7,16 @@ namespace LinearEffectsEditor
     using LinearEffects;
     using System;
 
-//This code handles all the creation of new block nodes in the window editor 
+    //This code handles all the creation of new block nodes in the window editor 
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Lifetime Methods
 
-        void NodeManager_NodeCreation_OnGUI()
+        void NodeManager_NodeCycler_OnGUI()
         {
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
-                NodeManager_NodeCreation_AddNewNode();
+                NodeManager_NodeCycler_AddNewNode();
             }
         }
 
@@ -24,38 +24,38 @@ namespace LinearEffectsEditor
 
 
         #region Creating NodeBlocks
-        void NodeManager_NodeCreation_TriggerCreateNewNode(AddNewBlockFrom from)
+        void NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom from)
         {
             _newBlockFromEnum = from;
         }
 
-        BlockNode NodeManager_NodeCreation_AddNewNode()
+        BlockNode NodeManager_NodeCycler_AddNewNode()
         {
             BlockNode node;
             switch (_newBlockFromEnum)
             {
                 case AddNewBlockFrom.ContextMenu:
-                    node = NodeManager_NodeCreation_AddNewNode(Event.current.mousePosition);
+                    node = NodeManager_NodeCycler_AddNewNode(Event.current.mousePosition);
                     break;
 
                 case AddNewBlockFrom.ToolBar:
-                    node = NodeManager_NodeCreation_AddNewNode(CenterScreen);
+                    node = NodeManager_NodeCycler_AddNewNode(CenterScreen);
                     break;
 
                 //Fall back code
                 default:
-                    node = NodeManager_NodeCreation_AddNewNode(Vector2.zero);
+                    node = NodeManager_NodeCycler_AddNewNode(Vector2.zero);
                     break;
             }
 
             return node;
         }
 
-        BlockNode NodeManager_NodeCreation_AddNewNode(Vector2 position)
+        BlockNode NodeManager_NodeCycler_AddNewNode(Vector2 position)
         {
             //Ensure that block gets a unique label name every time a new node is added
 
-            Block b = new Block(position, NodeManager_NodeCreation_GetUniqueBlockName());
+            Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName());
 
             SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
             BlockNode node = new BlockNode(newBlockProperty);
@@ -66,7 +66,7 @@ namespace LinearEffectsEditor
             return node;
         }
 
-        private string NodeManager_NodeCreation_GetUniqueBlockName()
+        private string NodeManager_NodeCycler_GetUniqueBlockName()
         {
             string s = "New Block ";
 
@@ -86,6 +86,26 @@ namespace LinearEffectsEditor
         }
 
         #endregion
+
+        #region Deleting NodeBlocks
+        void NodeManager_NodeCycler_DeleteNode()
+        {
+            //Get the indices of all the selected blocks
+
+            //Check if the block or anyone of the block has more than 1 effects inside of it then
+            //add a pop up to say that there is no way of getting it back
+
+            //if player accepts, yeet the entire selected blocks
+            //remove them from the list and the dictionary
+
+
+
+        }
+
+
+        #endregion
+
+
     }
 
 }

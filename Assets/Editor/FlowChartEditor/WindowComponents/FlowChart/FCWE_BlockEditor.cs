@@ -55,7 +55,6 @@
 
             //=========== THERE IS CHANGE TO BLOCKNODE NAME ===============
             BlockNode changedBlock = _allBlockNodesDictionary[prevName];
-            Debug.Log(changedBlock == null);
 
             //remove previous entry from dictionary (prev name)
             _allBlockNodesDictionary.Remove(prevName);
