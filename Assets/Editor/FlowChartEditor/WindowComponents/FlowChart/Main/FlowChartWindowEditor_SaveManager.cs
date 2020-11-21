@@ -6,7 +6,7 @@
     using UnityEditor.SceneManagement;
     using UnityEngine.SceneManagement;
 
-    //Handles the saving and loading of FlowChartWindow level data ie. FlowChart _flowChart variable
+    //Handles the saving and loading of main FlowChartWindow level data ie. FlowChart _flowChart variable
     public partial class FlowChartWindowEditor : EditorWindow
     {
         #region Constants

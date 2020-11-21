@@ -43,8 +43,12 @@
         //Optimise drawcalls later by doing occulsion culling
         //because this script isnt gunna get compiledi into the final build, ill use list instead of array
         List<BlockNode> _allBlockNodes;
+        Dictionary<string,BlockNode> _allBlockNodesDictionary ;
 
         HashSet<BlockNode> _selectedBlocks;
+
+        //used to communicate which block was selected in MouseDown to MouseUp
+        int _selectedBlockIndex;
         #endregion
 
 
@@ -82,11 +86,7 @@
             //Idk why but i cant create a new instance of custom class inside of Update/InspectorUpdate/Genric Menu callbac. So im addign it here
             Event e = Event.current;
 
-            if (_newBlockFromEnum != AddNewBlockFrom.None)
-            {
-                NodeManager_AddNewNode();
-                return;
-            }
+            NodeManager_NodeCreation_OnGUI();
 
             NodeManager_Draw();
             NodeManager_DrawDebugger();
@@ -206,8 +206,7 @@
 
         }
 
-        //used to communicate which block was selected in MouseDown to MouseUp
-        int _selectedBlockIndex;
+
 
         void NodeManager_HandleLeftMouseDownInGraph()
         {
@@ -296,46 +295,8 @@
 
 
         //================================================= SUPPORTING FUNCTIONS ==================================================
-        #region Creating NodeBlocks
-        void NodeManager_TriggerCreateNewNode(AddNewBlockFrom from)
-        {
-            _newBlockFromEnum = from;
-        }
 
-        BlockNode NodeManager_AddNewNode()
-        {
-            BlockNode node;
-            switch (_newBlockFromEnum)
-            {
-                case AddNewBlockFrom.ContextMenu:
-                    node = NodeManager_AddNewNode(Event.current.mousePosition);
-                    break;
 
-                case AddNewBlockFrom.ToolBar:
-                    node = NodeManager_AddNewNode(CenterScreen);
-                    break;
-
-                //Fall back code
-                default:
-                    node = NodeManager_AddNewNode(Vector2.zero);
-                    break;
-            }
-
-            return node;
-        }
-
-        BlockNode NodeManager_AddNewNode(Vector2 position)
-        {
-            Block b = new Block(position);
-            SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
-            BlockNode node = new BlockNode(newBlockProperty);
-
-            _allBlockNodes.Add(node);
-            _newBlockFromEnum = AddNewBlockFrom.None;
-            return node;
-        }
-
-        #endregion
         #region Selecting Block
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared

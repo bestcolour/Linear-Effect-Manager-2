@@ -45,12 +45,16 @@
             _newBlockFromEnum = AddNewBlockFrom.None;
             _allBlocksArrayProperty = _target.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
             _allBlockNodes = new List<BlockNode>();
+            _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
 
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
                 SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
                 BlockNode node = new BlockNode(e);
+
+                //Record all the nodes
                 _allBlockNodes.Add(node);
+                _allBlockNodesDictionary.Add(node.Label, node);
             }
         }
         #endregion

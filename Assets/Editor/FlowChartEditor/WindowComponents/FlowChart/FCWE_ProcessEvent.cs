@@ -130,7 +130,7 @@
         void ProcessEvent_InitializeNodeMenu()
         {
             _nodeMenu = new GenericMenu();
-            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_TriggerCreateNewNode(AddNewBlockFrom.ContextMenu));
+            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_NodeCreation_TriggerCreateNewNode(AddNewBlockFrom.ContextMenu));
         }
         #endregion
     }

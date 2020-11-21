@@ -17,7 +17,7 @@
         #region Constants
         // static readonly Vector2 SEARCHBOX_RECTSIZE = new Vector2(500f, EditorGUIUtility.singleLineHeight);
         const float SEARCHBAR_PADDING_TOP = 10f
-        , SEARCHBOX_HEIGHT = 100f
+        , RESULTBOX_HEIGHT = 100f
         , SEARCHBAR_PADDING_BOT = -100f
         ;
 
@@ -82,7 +82,7 @@
             //Draw only when opened
             if (!_isSearchBoxOpened) return;
 
-            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBarRect(), SEARCHBOX_HEIGHT);
+            float height = _searchBox.Handle_OnGUI(BottomHalf_SearchBox_GetSearchBarRect(), RESULTBOX_HEIGHT);
 
             //This ensures that the search box will always have enough space to be rendered (and if it cant fit in the the window then it will be considered as part of the scroll height)
             EditorGUILayout.LabelField(string.Empty, GUILayout.MinHeight(height + SEARCHBAR_PADDING_BOT));

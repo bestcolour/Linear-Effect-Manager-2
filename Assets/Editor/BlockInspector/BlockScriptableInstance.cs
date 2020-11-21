@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace LinearEffectsEditor
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
@@ -24,15 +24,23 @@ namespace LinearEffectsEditor
         public Block Block { get; private set; }
 
         BlockNode _blockNode;
+
+        #region Properties
         public GameObject BlockGameObject { get; private set; }
 
         SerializedProperty BlockProperty => _blockNode.BlockProperty;
+        #endregion
+
+        #region Events
+        public event Action<string, string> OnSaveModifiedProperties = null;
+        #endregion
+
         public void OnCreation(GameObject go)
         {
             BlockGameObject = go;
         }
 
-        public void Initialize(BlockNode node)
+        public void ReadBlockNode(BlockNode node)
         {
             _blockNode = node;
             Block = new Block();
@@ -47,11 +55,17 @@ namespace LinearEffectsEditor
                 Debug.LogWarning("Reselect the block!");
                 return;
             }
-            
+
+//Saving name before updating the blocknode's values
+            string prevName = _blockNode.Label;
+
             BlockProperty.serializedObject.Update();
             Block.SaveToSerializedProperty(BlockProperty);
             BlockProperty.serializedObject.ApplyModifiedProperties();
             _blockNode.ReloadNodeProperties();
+
+            //Call event
+            OnSaveModifiedProperties?.Invoke(prevName, _blockNode.Label);
         }
 
 

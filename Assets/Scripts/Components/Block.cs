@@ -106,18 +106,30 @@
         #endregion
 
 
-        public Block(Vector2 position)
+        // public Block(Vector2 position)
+        // {
+        //     DefaultConstruction();
+        //     _blockSettings.BlockPosition = position;
+        // }
+
+        //Used in FCWE_NodeManager_NodeCreation.cs
+        public Block(Vector2 position, string blockName)
         {
-            _blockSettings = new BlockSettings();
-            _blockSettings.BlockName = "New Block";
-            _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
+            DefaultConstruction();
+            _blockSettings.BlockName = blockName;
             _blockSettings.BlockPosition = position;
         }
 
+        //Used in BlockScriptableInstance.cs
         public Block()
         {
+            DefaultConstruction();
+        }
+
+        void DefaultConstruction()
+        {
             _blockSettings = new BlockSettings();
-            _blockSettings.BlockName = "New Block";
+            // _blockSettings.BlockName = "New Block";
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 

@@ -18,12 +18,17 @@
             BlockEditor_OnNoBlockNodeFound();
             _blockEditor = ScriptableObject.CreateInstance<BlockScriptableInstance>();
             _blockEditor.OnCreation(_flowChart.gameObject);
+
+            _blockEditor.OnSaveModifiedProperties += BlockEditor_HandleOnSaveModifiedProperties;
             OnSelectBlockNode += BlockEditor_HandleSelectBlockNode;
             OnNoBlockNodeFound += BlockEditor_OnNoBlockNodeFound;
         }
 
+
+
         void BlockEditor_OnDisable()
         {
+            _blockEditor.OnSaveModifiedProperties -= BlockEditor_HandleOnSaveModifiedProperties;
             OnSelectBlockNode -= BlockEditor_HandleSelectBlockNode;
             OnNoBlockNodeFound -= BlockEditor_OnNoBlockNodeFound;
             Selection.activeObject = null;
@@ -35,8 +40,28 @@
         private void BlockEditor_HandleSelectBlockNode(BlockNode node)
         {
             // Debug.Log($"Block is: {node.ID}");
-            _blockEditor.Initialize(node);
+            _blockEditor.ReadBlockNode(node);
             Selection.activeObject = _blockEditor;
+
+        }
+
+        private void BlockEditor_HandleOnSaveModifiedProperties(string prevName, string newName)
+        {
+            //If there is no change to the name of the blocknode,
+            if (_allBlockNodesDictionary.ContainsKey(newName))
+            {
+                return;
+            }
+
+            //=========== THERE IS CHANGE TO BLOCKNODE NAME ===============
+            BlockNode changedBlock = _allBlockNodesDictionary[prevName];
+            Debug.Log(changedBlock == null);
+
+            //remove previous entry from dictionary (prev name)
+            _allBlockNodesDictionary.Remove(prevName);
+
+            //replace it with newName's entry
+            _allBlockNodesDictionary.Add(newName, changedBlock);
 
         }
 

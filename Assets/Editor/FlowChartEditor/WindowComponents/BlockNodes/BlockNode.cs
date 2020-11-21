@@ -24,8 +24,10 @@
 
         #region Properties
         public SerializedProperty BlockProperty { get; private set; }
-        public string ID { get; private set; }
+        // public string ID { get; private set; }
         public bool IsSelected { set; private get; }
+
+        public string Label => _label;
         #endregion
 
 
@@ -41,7 +43,7 @@
         {
             BlockProperty = blockProperty;
             _rect = NODEBLOCK_SIZE;
-            ID = System.Guid.NewGuid().ToString();
+            // ID = System.Guid.NewGuid().ToString();
             IsSelected = false;
 
             LoadFrom();
@@ -52,7 +54,7 @@
         {
             BlockProperty = blockProperty;
             _rect = NODEBLOCK_SIZE;
-            ID = System.Guid.NewGuid().ToString();
+            // ID = System.Guid.NewGuid().ToString();
             IsSelected = false;
 
             LoadFrom();

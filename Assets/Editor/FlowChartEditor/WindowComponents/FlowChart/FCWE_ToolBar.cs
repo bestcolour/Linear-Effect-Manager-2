@@ -46,7 +46,7 @@
             rect.x += 5f;
             if (GUI.Button(rect, "＋"))
             {
-                NodeManager_TriggerCreateNewNode(AddNewBlockFrom.ToolBar);
+                NodeManager_NodeCreation_TriggerCreateNewNode(AddNewBlockFrom.ToolBar);
             }
 
             //================== DRAW COPY BUTTON ======================
