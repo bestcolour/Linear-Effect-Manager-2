@@ -43,7 +43,7 @@
         {
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
             _newBlockFromEnum = AddNewBlockFrom.None;
-            _allBlocksArrayProperty = _target.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
+            _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
             _allBlockNodes = new List<BlockNode>();
             _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
 

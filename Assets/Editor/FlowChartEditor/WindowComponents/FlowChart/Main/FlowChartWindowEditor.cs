@@ -10,7 +10,7 @@
     {
         #region Current Cached Variable
         // static FlowChart _target = default;
-        static SerializedObject _target = default;
+        static SerializedObject _targetObject = default;
         static FlowChart _flowChart = default;
         static EditorState _state;
 
@@ -158,7 +158,7 @@
 
         void LOADED_OnEnable()
         {
-            _target = new SerializedObject(_flowChart);
+            _targetObject = new SerializedObject(_flowChart);
             LoadedBackground_OnEnable();
             NodeManager_OnEnable();
             ToolBar_OnEnable();

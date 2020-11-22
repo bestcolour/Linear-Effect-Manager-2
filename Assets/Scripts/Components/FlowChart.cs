@@ -28,7 +28,15 @@ namespace LinearEffects
         [SerializeField]
         FlowChartSettings _settings = new FlowChartSettings();
 
+        public Block GetBlock(int index)
+        {
+            return _blocks[index];
+        }
+
 
     }
+
+
+
 }
 

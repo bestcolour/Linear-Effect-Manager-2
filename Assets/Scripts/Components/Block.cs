@@ -206,7 +206,7 @@
 
         #endregion
 
-        #region Override Methods
+        #region  ArrayUser Methods
         public void AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
         {
             if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
@@ -234,6 +234,15 @@
 
             o.OnAddNew(holder, isForInsert);
             return o;
+        }
+
+        public void RemoveAllOrderData()
+        {
+            //Remove order data from the largest element index
+            for (int i = _orderArray.Length - 1; i > -1; i--)
+            {
+                RemoveOrderElementAt(i);
+            }
         }
 
         #endregion

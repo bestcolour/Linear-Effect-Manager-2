@@ -5,7 +5,7 @@
 
     public static class EditorDebugExtension
     {
-        #region  Debug
+        #region Debug
         //Just a debug method
         public static void PrintAllProperties(this SerializedObject serializedObject)
         {
@@ -39,6 +39,24 @@
             return false;
         }
         #endregion
+
+        public static bool DeleteArrayElement(this SerializedProperty arrayProperty, System.Predicate<SerializedProperty> predicate)
+        {
+            for (int i = 0; i < arrayProperty.arraySize; i++)
+            {
+                SerializedProperty property = arrayProperty.GetArrayElementAtIndex(i);
+
+                if (predicate.Invoke(property))
+                {
+                    arrayProperty.DeleteArrayElementAtIndex(i);
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
 
     }
 

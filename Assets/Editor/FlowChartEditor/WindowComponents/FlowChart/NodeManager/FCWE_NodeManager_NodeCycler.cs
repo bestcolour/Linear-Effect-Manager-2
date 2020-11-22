@@ -160,25 +160,38 @@ namespace LinearEffectsEditor
             //remove them from the list and the dictionary
             foreach (var blockNode in _selectedBlocks)
             {
-                //Remove from list
-                int index = _allBlockNodes.IndexOf(blockNode);
-                _allBlockNodes.RemoveAt(index);
-                _allBlockNodesDictionary.Remove(blockNode.Label);
-
-                // //Save the array property
-                // _allBlocksArrayProperty.serializedObject.Update();
-                // _allBlocksArrayProperty.DeleteArrayElementAtIndex(index);
-                // _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
-
-
                 //Close blocknode editor if it is being yeeted
                 if (_blockEditor.Block.BlockName == blockNode.Label)
                 {
                     BlockEditor_HandleOnNoBlockNodeFound();
                 }
+
+                //Remove from list
+                int index = _allBlockNodes.IndexOf(blockNode);
+                _allBlockNodes.RemoveAt(index);
+                _allBlockNodesDictionary.Remove(blockNode.Label);
+
+                //Get block from flow chart and then remove all order data
+                Block block = _flowChart.GetBlock(index);
+                block.RemoveAllOrderData();
+
+                // blockNode.OnDelete();
+
+                //Save the array property
+                _allBlocksArrayProperty.serializedObject.Update();
+                _allBlocksArrayProperty.DeleteArrayElement
+                (
+                    (x) =>
+                    {
+                        string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                        string b = blockNode.BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                        return a == b;
+                    }
+                );
+
+                _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
+
             }
-
-
 
         }
 

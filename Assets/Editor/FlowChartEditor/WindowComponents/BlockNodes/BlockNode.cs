@@ -1,6 +1,7 @@
 ﻿namespace LinearEffectsEditor
 {
     using LinearEffects;
+    using System;
     using UnityEngine;
     using UnityEditor;
 
