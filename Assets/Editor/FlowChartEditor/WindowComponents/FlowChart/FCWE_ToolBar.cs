@@ -65,7 +65,7 @@
             rect.x += BUTTONSIZE.x + 5f;
             if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_DELETE))
             {
-                NodeManager_NodeCycler_DeleteNode();
+                NodeManager_NodeCycler_DeleteButton();
             }
 
             GUIExtensions.End_GUI_ColourChange(prevColor);

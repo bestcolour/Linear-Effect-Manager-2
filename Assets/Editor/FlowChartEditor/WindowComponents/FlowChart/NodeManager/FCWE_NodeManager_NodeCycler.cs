@@ -11,14 +11,29 @@ namespace LinearEffectsEditor
     public partial class FlowChartWindowEditor : EditorWindow
     {
 
+        #region Constants
+        const string DELETEWARNING_TITLE = "Are you sure you want to delete?"
+        , DELETEWARNING_MESSAGE = "Deletion cannot be undoned once executed"
+        , DELETEWARNING_OK = "Continue"
+        , DELETEWARNING_CANCEL = "Cancel"
+        ;
+        #endregion
+
+        bool _deleteWarningBox = default;
+
+
         #region Lifetime Methods
 
         void NodeManager_NodeCycler_OnGUI()
         {
+
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
                 NodeManager_NodeCycler_AddNewNode();
             }
+
+            //=========== DRAW DELETE BOX ==============
+            NodeManager_NodeCycler_DrawDeleteWarning();
         }
 
         #endregion
@@ -90,20 +105,82 @@ namespace LinearEffectsEditor
         #endregion
 
         #region Deleting NodeBlocks
-        void NodeManager_NodeCycler_DeleteNode()
+        void NodeManager_NodeCycler_DeleteButton()
         {
-            //Get the indices of all the selected blocks
+            //Check if the block or anyone of the selected block has more than 1 effects inside of it then
+            foreach (var blockNode in _selectedBlocks)
+            {
+                int effectCount = blockNode.GetEffectCount;
+                //If effect count is more than 0 exit loop and open up warning window
+                if (effectCount > 0)
+                {
+                    // Debug.Log($"There are {effectCount} effects! Open warning window");
+                    //add a pop up to say that there is no way of getting it back
+                    _deleteWarningBox = true;
+                    return;
+                }
+            }
 
-            //Check if the block or anyone of the block has more than 1 effects inside of it then
-            //add a pop up to say that there is no way of getting it back
+            //Delete nodes if all of the nodes are empty of effect orders
+            NodeManager_NodeCycler_DeleteSelectedNodes();
+        }
 
+        void NodeManager_NodeCycler_DrawDeleteWarning()
+        {
+            if (!_deleteWarningBox)
+            {
+                return;
+            }
+
+            switch (EditorUtility.DisplayDialogComplex(DELETEWARNING_TITLE, DELETEWARNING_MESSAGE, DELETEWARNING_OK, DELETEWARNING_CANCEL, string.Empty))
+            {
+                //============= OK BUTTON PRESSED ==============
+                case 0:
+                    NodeManager_NodeCycler_DeleteSelectedNodes();
+                    //Close the warning box
+                    _deleteWarningBox = false;
+                    break;
+
+
+                //=============== CANCEL BUTTON PRESSED ===============
+                case 1:
+                    _deleteWarningBox = false;
+                    break;
+                // ==================== ALT BUTTON PRESSED ================
+                default:
+                    _deleteWarningBox = false;
+                    break;
+            }
+
+        }
+
+        void NodeManager_NodeCycler_DeleteSelectedNodes()
+        {
             //if player accepts, yeet the entire selected blocks
             //remove them from the list and the dictionary
+            foreach (var blockNode in _selectedBlocks)
+            {
+                //Remove from list
+                int index = _allBlockNodes.IndexOf(blockNode);
+                _allBlockNodes.RemoveAt(index);
+                _allBlockNodesDictionary.Remove(blockNode.Label);
+
+                // //Save the array property
+                // _allBlocksArrayProperty.serializedObject.Update();
+                // _allBlocksArrayProperty.DeleteArrayElementAtIndex(index);
+                // _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
+
+
+                //Close blocknode editor if it is being yeeted
+                if (_blockEditor.Block.BlockName == blockNode.Label)
+                {
+                    BlockEditor_HandleOnNoBlockNodeFound();
+                }
+            }
 
 
 
         }
-
 
         #endregion
 

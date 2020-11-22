@@ -28,6 +28,8 @@
         public bool IsSelected { set; private get; }
 
         public string Label => _label;
+
+        public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;
         #endregion
 
 
