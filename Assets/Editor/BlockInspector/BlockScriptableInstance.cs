@@ -36,7 +36,6 @@ namespace LinearEffectsEditor
         #endregion
 
         #region Events
-        // public event Action<string, string> OnBlockNameChange = null;
         ///<Summary>
         ///Is called when block node's blockname is changed. The method should return true if the new blockname is valid else return false with a new unique and valid name
         ///</Summary>
@@ -70,8 +69,6 @@ namespace LinearEffectsEditor
 
             if (prevName != newName)
             {
-                //Change in blockname
-                // OnBlockNameChange?.Invoke(prevName, newName);
 
                 if (OnVerifyBlockNameChange == null)
                 {

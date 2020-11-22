@@ -84,6 +84,10 @@
         [Header("<== Click To Open ==>")]
         [SerializeField]
         BlockSettings _blockSettings;
+
+        #endregion
+
+        #region Properties
         public string BlockName
         {
             get
