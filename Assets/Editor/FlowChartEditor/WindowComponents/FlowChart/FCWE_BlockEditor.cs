@@ -15,27 +15,28 @@
         void BlockEditor_OnEnable()
         {
             //Clear selection to prevent assemblyreload errors
-            BlockEditor_OnNoBlockNodeFound();
+            BlockEditor_HandleOnNoBlockNodeFound();
             _blockEditor = ScriptableObject.CreateInstance<BlockScriptableInstance>();
             _blockEditor.OnCreation(_flowChart.gameObject);
 
-            _blockEditor.OnSaveModifiedProperties += BlockEditor_HandleOnSaveModifiedProperties;
+            _blockEditor.OnVerifyBlockNameChange = BlockEditor_HandleVerifyBlockNameChange;
             OnSelectBlockNode += BlockEditor_HandleSelectBlockNode;
-            OnNoBlockNodeFound += BlockEditor_OnNoBlockNodeFound;
+            OnNoBlockNodeFound += BlockEditor_HandleOnNoBlockNodeFound;
         }
 
 
 
         void BlockEditor_OnDisable()
         {
-            _blockEditor.OnSaveModifiedProperties -= BlockEditor_HandleOnSaveModifiedProperties;
+            _blockEditor.OnVerifyBlockNameChange = null;
             OnSelectBlockNode -= BlockEditor_HandleSelectBlockNode;
-            OnNoBlockNodeFound -= BlockEditor_OnNoBlockNodeFound;
+            OnNoBlockNodeFound -= BlockEditor_HandleOnNoBlockNodeFound;
             Selection.activeObject = null;
         }
 
         #endregion
 
+        #region Handle Methods
 
         private void BlockEditor_HandleSelectBlockNode(BlockNode node)
         {
@@ -45,29 +46,45 @@
 
         }
 
-        private void BlockEditor_HandleOnSaveModifiedProperties(string prevName, string newName)
+        #region  OnVerify BlockName Change
+        private bool BlockEditor_HandleVerifyBlockNameChange(string prevName, string newName, out string uniqueName)
         {
-            //If there is no change to the name of the blocknode,
+            uniqueName = "";
+
+            //If there is already an entry inside of the dictionary with that given newName,
             if (_allBlockNodesDictionary.ContainsKey(newName))
             {
-                return;
+                uniqueName = NodeManager_NodeCycler_GetUniqueBlockName(newName);
+                BlockEditor_RenameDictionaryKey(prevName, uniqueName);
+                return false;
             }
 
-            //=========== THERE IS CHANGE TO BLOCKNODE NAME ===============
-            BlockNode changedBlock = _allBlockNodesDictionary[prevName];
+            BlockEditor_RenameDictionaryKey(prevName, newName);
 
-            //remove previous entry from dictionary (prev name)
-            _allBlockNodesDictionary.Remove(prevName);
-
-            //replace it with newName's entry
-            _allBlockNodesDictionary.Add(newName, changedBlock);
+            return true;
 
         }
 
-        void BlockEditor_OnNoBlockNodeFound()
+        void BlockEditor_RenameDictionaryKey(string keyPrevName, string keyNewName)
+        {
+            BlockNode changedBlock = _allBlockNodesDictionary[keyPrevName];
+
+            //remove previous entry from dictionary (prev name)
+            _allBlockNodesDictionary.Remove(keyPrevName);
+
+            //replace it with newName's entry
+            _allBlockNodesDictionary.Add(keyNewName, changedBlock);
+        }
+        #endregion
+
+
+        void BlockEditor_HandleOnNoBlockNodeFound()
         {
             Selection.activeObject = null;
         }
+
+        #endregion
+
 
     }
 

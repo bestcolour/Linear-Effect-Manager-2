@@ -7,9 +7,10 @@ namespace LinearEffectsEditor
     using LinearEffects;
     using System;
 
-    //This code handles all the creation of new block nodes in the window editor 
+    //This code handles all the creation and deletion of block nodes in the window editor 
     public partial class FlowChartWindowEditor : EditorWindow
     {
+
         #region Lifetime Methods
 
         void NodeManager_NodeCycler_OnGUI()
@@ -55,7 +56,7 @@ namespace LinearEffectsEditor
         {
             //Ensure that block gets a unique label name every time a new node is added
 
-            Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName());
+            Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName(Block.DEFAULT_BLOCK_NAME));
 
             SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
             BlockNode node = new BlockNode(newBlockProperty);
@@ -66,9 +67,10 @@ namespace LinearEffectsEditor
             return node;
         }
 
-        private string NodeManager_NodeCycler_GetUniqueBlockName()
+        private string NodeManager_NodeCycler_GetUniqueBlockName(string defaultName)
         {
-            string s = "New Block ";
+            //Add a space to ensure that there is a whitespace
+            string s = defaultName + " ";
 
             for (int i = 0; i < int.MaxValue; i++)
             {
@@ -81,7 +83,7 @@ namespace LinearEffectsEditor
                 return unqName;
             }
 
-            Debug.LogError("There is no way you create 2147483647 blocks with all their names as New Block <number>.... you monster why are you like this....");
+            Debug.LogError($"There is no way you create 2147483647 blocks with all their names as {defaultName} <number>.... you monster why are you like this....");
             return null;
         }
 

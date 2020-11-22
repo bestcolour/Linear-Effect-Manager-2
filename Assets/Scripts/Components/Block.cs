@@ -15,11 +15,11 @@
     {
         #region Definitions
         [Serializable]
-        class BlockSettings
+        public class BlockSettings
         {
-#if UNITY_EDITOR
             //======================= NODE PROPERTIES (ie properties which block node uses & saves) =========================
             public string BlockName;
+#if UNITY_EDITOR
             public Color BlockColour;
             [HideInInspector]
             public Vector2 BlockPosition;
@@ -80,11 +80,21 @@
         }
         #endregion
 
-        #region Runtime Cached Variables
+        #region Exposed Fields
         [Header("<== Click To Open ==>")]
         [SerializeField]
         BlockSettings _blockSettings;
-
+        public string BlockName
+        {
+            get
+            {
+                return _blockSettings.BlockName;
+            }
+            set
+            {
+                _blockSettings.BlockName = value;
+            }
+        }
 
         #endregion
 
@@ -93,6 +103,9 @@
         #region Editor Time 
 
         #region Constants
+        //Being used in FCWE_NodeManager_NodeCycler.cs
+        public const string DEFAULT_BLOCK_NAME = "New Block";
+
         //All the default and propertypath name constants will be stored here in the Unity_editor section
         static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
 

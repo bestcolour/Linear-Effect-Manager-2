@@ -20,6 +20,10 @@ namespace LinearEffectsEditor
 
         #endregion
 
+        #region Definition
+        public delegate bool VerifyBlockNameChangeCallback(string prevName, string newName, out string uniqueName);
+        #endregion
+
         [field: SerializeField]
         public Block Block { get; private set; }
 
@@ -32,7 +36,11 @@ namespace LinearEffectsEditor
         #endregion
 
         #region Events
-        public event Action<string, string> OnSaveModifiedProperties = null;
+        // public event Action<string, string> OnBlockNameChange = null;
+        ///<Summary>
+        ///Is called when block node's blockname is changed. The method should return true if the new blockname is valid else return false with a new unique and valid name
+        ///</Summary>
+        public VerifyBlockNameChangeCallback OnVerifyBlockNameChange = null;
         #endregion
 
         public void OnCreation(GameObject go)
@@ -56,16 +64,44 @@ namespace LinearEffectsEditor
                 return;
             }
 
-//Saving name before updating the blocknode's values
+            //Saving name before updating the blocknode's values
             string prevName = _blockNode.Label;
+            string newName = Block.BlockName;
 
+            if (prevName != newName)
+            {
+                //Change in blockname
+                // OnBlockNameChange?.Invoke(prevName, newName);
+
+                if (OnVerifyBlockNameChange == null)
+                {
+                    Debug.LogError("OnVerifyBlockNameChange should not be null!");
+                }
+
+                //Check if VerifyBlockNameChange returns true or false
+                bool isNewNameValid = OnVerifyBlockNameChange.Invoke(prevName, newName, out string uniqueName);
+                if (!isNewNameValid)
+                {
+                    Block.BlockName = uniqueName;
+                }
+
+
+            }
+
+
+
+            //Saving
+            SaveBlockDataToBlockProperty();
+            _blockNode.ReloadNodeProperties();
+        }
+
+        void SaveBlockDataToBlockProperty()
+        {
+            //Save the node block's  properties
             BlockProperty.serializedObject.Update();
             Block.SaveToSerializedProperty(BlockProperty);
-            BlockProperty.serializedObject.ApplyModifiedProperties();
-            _blockNode.ReloadNodeProperties();
 
-            //Call event
-            OnSaveModifiedProperties?.Invoke(prevName, _blockNode.Label);
+            BlockProperty.serializedObject.ApplyModifiedProperties();
         }
 
 
