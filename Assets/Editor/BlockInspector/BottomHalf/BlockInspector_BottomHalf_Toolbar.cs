@@ -5,7 +5,7 @@ namespace LinearEffectsEditor
     using UnityEditor;
     using System;
     using LinearEffects;
-    using CategorizedSearchBox;
+    // using CategorizedSearchBox;
     using System.Collections.Generic;
 
     public partial class BlockInspector : ImprovedEditor

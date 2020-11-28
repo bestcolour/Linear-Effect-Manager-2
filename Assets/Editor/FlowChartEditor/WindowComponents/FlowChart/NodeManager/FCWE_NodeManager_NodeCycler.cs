@@ -172,10 +172,8 @@ namespace LinearEffectsEditor
                 _allBlockNodesDictionary.Remove(blockNode.Label);
 
                 //Get block from flow chart and then remove all order data
-                Block block = _flowChart.GetBlock(index);
+                Block block = _flowChart.Editor_GetBlock(blockNode.Label);
                 block.RemoveAllOrderData();
-
-                // blockNode.OnDelete();
 
                 //Save the array property
                 _allBlocksArrayProperty.serializedObject.Update();

@@ -8,7 +8,7 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
         const string TOOLBAR_BUTTONSYMBOL_ADD = "＋"
-        , TOOLBAR_BUTTONSYMBOL_COPY = "❏"
+        , TOOLBAR_BUTTONSYMBOL_DUPLICATE = "❏"
         , TOOLBAR_BUTTONSYMBOL_DELETE = "X"
         ;
 
@@ -52,10 +52,10 @@
                 NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom.ToolBar);
             }
 
-            //================== DRAW COPY BUTTON ======================
+            //================== DRAW DUPLICATE BUTTON ======================
             rect.size = BUTTONSIZE;
             rect.x += BUTTONSIZE.x + 5f;
-            if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_COPY))
+            if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_DUPLICATE))
             {
 
             }

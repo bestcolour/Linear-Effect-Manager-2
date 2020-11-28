@@ -3,10 +3,7 @@ namespace LinearEffectsEditor
 {
     using UnityEngine;
     using UnityEditor;
-    using System;
     using LinearEffects;
-    using CategorizedSearchBox;
-    using System.Collections.Generic;
 
     public partial class BlockInspector : ImprovedEditor
     {
