@@ -35,7 +35,9 @@
 
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
+                Debug.Log(i);
                 _allBlockNodes[i].Save();
+                Debug.Log($"Saved {_allBlockNodes[i].Label}");
             }
         }
 
