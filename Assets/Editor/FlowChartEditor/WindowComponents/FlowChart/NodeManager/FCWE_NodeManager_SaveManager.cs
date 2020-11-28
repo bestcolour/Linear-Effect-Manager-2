@@ -64,16 +64,18 @@
             _newBlockFromEnum = AddNewBlockFrom.None;
             _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
             _allBlockNodes.Clear();
-            _allBlockNodesDictionary.Clear();
+            // _allBlockNodesDictionary.Clear();
 
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
                 SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                BlockNode node = new BlockNode(e);
+                string label = e.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
 
-                //Record all the nodes
-                _allBlockNodes.Add(node);
-                _allBlockNodesDictionary.Add(node.Label, node);
+                //Get blocknode ref which still exists in the dictionary
+                BlockNode blockNode = _allBlockNodesDictionary[label];
+                blockNode.Initialize(e);
+
+                _allBlockNodes.Add(blockNode);
             }
         }
 

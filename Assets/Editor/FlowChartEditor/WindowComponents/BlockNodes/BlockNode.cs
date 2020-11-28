@@ -63,6 +63,14 @@
             LoadFrom();
         }
 
+        ///<Summary>Method which is used to reset node's value incase you do not want to create a new instance of BlockNode class</Summary>
+        public void Initialize(SerializedProperty blockProperty)
+        {
+            BlockProperty = blockProperty;
+            IsSelected = false;
+            LoadFrom();
+        }
+
         //Loads the block's cached variables into this node 
         void LoadFrom()
         {
