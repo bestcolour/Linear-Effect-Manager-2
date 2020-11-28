@@ -10,6 +10,7 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
         BlockScriptableInstance _blockEditor;
+        bool isBlockEditorOpen => Selection.activeObject == _blockEditor;
 
         #region LifeTime
         void BlockEditor_OnEnable()

@@ -27,6 +27,17 @@ namespace LinearEffectsEditor
         void NodeManager_NodeCycler_OnGUI()
         {
 
+            if (Event.current.type == EventType.KeyDown)
+            {
+                if (Event.current.keyCode == KeyCode.G)
+                {
+                    for (int i = 0; i < _allBlockNodes.Count; i++)
+                    {
+                        Debug.Log($"Index: {i} Count: {_allBlockNodes.Count}");
+                    }
+                }
+            }
+
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
                 NodeManager_NodeCycler_AddNewNode();
@@ -156,19 +167,19 @@ namespace LinearEffectsEditor
 
         void NodeManager_NodeCycler_DeleteSelectedNodes()
         {
+
             //if player accepts, yeet the entire selected blocks
             //remove them from the list and the dictionary
             foreach (var blockNode in _selectedBlocks)
             {
                 //Close blocknode editor if it is being yeeted
-                if (_blockEditor.Block.BlockName == blockNode.Label)
+                if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
                 {
                     BlockEditor_HandleOnNoBlockNodeFound();
                 }
 
                 //Remove from list
-                int index = _allBlockNodes.IndexOf(blockNode);
-                _allBlockNodes.RemoveAt(index);
+                _allBlockNodes.Remove(blockNode);
                 _allBlockNodesDictionary.Remove(blockNode.Label);
 
                 //Get block from flow chart and then remove all order data
@@ -178,19 +189,20 @@ namespace LinearEffectsEditor
                 //Save the array property
                 _allBlocksArrayProperty.serializedObject.Update();
                 _allBlocksArrayProperty.DeleteArrayElement
-                (
-                    (x) =>
-                    {
-                        string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-                        string b = blockNode.BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-                        return a == b;
-                    }
-                );
+                   (
+                       (x) =>
+                       {
+                           string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                           string b = blockNode.BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                           return a == b;
+                       }
+                   );
 
                 _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
 
             }
 
+            NodeManager_ReloadCachedBlockNodes();
         }
 
         #endregion

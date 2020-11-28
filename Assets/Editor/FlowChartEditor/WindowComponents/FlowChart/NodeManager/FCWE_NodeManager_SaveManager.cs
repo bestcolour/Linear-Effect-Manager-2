@@ -35,9 +35,7 @@
 
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                Debug.Log(i);
                 _allBlockNodes[i].Save();
-                Debug.Log($"Saved {_allBlockNodes[i].Label}");
             }
         }
 
@@ -59,6 +57,26 @@
                 _allBlockNodesDictionary.Add(node.Label, node);
             }
         }
+
+        void NodeManager_ReloadCachedBlockNodes()
+        {
+            //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
+            _newBlockFromEnum = AddNewBlockFrom.None;
+            _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
+            _allBlockNodes.Clear();
+            _allBlockNodesDictionary.Clear();
+
+            for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
+            {
+                SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
+                BlockNode node = new BlockNode(e);
+
+                //Record all the nodes
+                _allBlockNodes.Add(node);
+                _allBlockNodesDictionary.Add(node.Label, node);
+            }
+        }
+
         #endregion
     }
 
