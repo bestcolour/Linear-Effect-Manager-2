@@ -29,6 +29,8 @@
         public bool IsSelected { set; private get; }
 
         public string Label => _label;
+        public Vector2 Position => _rect.position;
+        public Color Colour => _blockColour;
 
         public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;
         #endregion
@@ -64,7 +66,7 @@
         }
 
         ///<Summary>Method which is used to reset node's value incase you do not want to create a new instance of BlockNode class</Summary>
-        public void Initialize(SerializedProperty blockProperty)
+        public void SetBlockProperty(SerializedProperty blockProperty)
         {
             BlockProperty = blockProperty;
             IsSelected = false;

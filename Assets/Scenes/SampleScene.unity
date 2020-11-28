@@ -268,9 +268,9 @@ MonoBehaviour:
   _blocks:
   - _orderArray: []
     _blockSettings:
-      BlockName: New Block 1
+      BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 205, y: 256}
+      BlockPosition: {x: 121, y: 156}
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
@@ -285,7 +285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDatas: []
+  _effectDatas:
+  - Lol: 0
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0

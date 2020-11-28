@@ -57,7 +57,7 @@
             rect.x += BUTTONSIZE.x + 5f;
             if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_DUPLICATE))
             {
-
+                NodeManager_NodeCycler_DuplicateSelectedNodes();
             }
 
             //================== DRAW DELETE BUTTON ======================
@@ -70,9 +70,6 @@
 
             GUIExtensions.End_GUI_ColourChange(prevColor);
         }
-
-
-
 
 
     }

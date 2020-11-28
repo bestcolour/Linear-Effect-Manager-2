@@ -73,7 +73,7 @@
 
                 //Get blocknode ref which still exists in the dictionary
                 BlockNode blockNode = _allBlockNodesDictionary[label];
-                blockNode.Initialize(e);
+                blockNode.SetBlockProperty(e);
 
                 _allBlockNodes.Add(blockNode);
             }

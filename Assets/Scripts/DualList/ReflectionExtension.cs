@@ -1,16 +1,10 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Reflection;
-
-/// <summary>
-/// Thank you Celtc from StackOverFlow https://stackoverflow.com/users/2985232/celtc for the solution to duplicating UnityEventBase. 
-/// Original Link: https://stackoverflow.com/questions/39092168/c-sharp-copying-unityevent-information-using-reflection
-/// I will add some comments which helped remind me what the code lines did cause me smol brain need write notes to rmb thingys
-/// </summary>
-
+﻿
 //You can remove this namespace if you wish to use this as well!s
 namespace DualList
 {
+using System.Collections.Generic;
+using System;
+using System.Reflection;
 
     public static class ReflectionExtensions
     {

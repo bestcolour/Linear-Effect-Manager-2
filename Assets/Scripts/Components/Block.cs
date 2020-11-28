@@ -67,14 +67,14 @@
                 _refHolder.OnInsertNewObject += HandleInsertObject;
             }
 
-            public void CopyValuesFrom(EffectOrder e)
-            {
-                _refHolder = e._refHolder;
-                _dataElmtIndex = e._dataElmtIndex;
-                EffectName = e.EffectName;
-                FullEffectName = e.FullEffectName;
+            // public void CopyValuesFrom(EffectOrder e)
+            // {
+            //     _refHolder = e._refHolder;
+            //     _dataElmtIndex = e._dataElmtIndex;
+            //     EffectName = e.EffectName;
+            //     FullEffectName = e.FullEffectName;
 
-            }
+            // }
 
 #endif
         }
@@ -94,10 +94,10 @@
             {
                 return _blockSettings.BlockName;
             }
-            set
-            {
-                _blockSettings.BlockName = value;
-            }
+            // set
+            // {
+            //     _blockSettings.BlockName = value;
+            // }
         }
 
         #endregion
@@ -123,11 +123,15 @@
         #endregion
 
 
-        // public Block(Vector2 position)
-        // {
-        //     DefaultConstruction();
-        //     _blockSettings.BlockPosition = position;
-        // }
+        #region Initialization
+        //Used in FCWE_NodeManager_NodeCreation.cs
+        public Block(Vector2 position, string blockName, Color blockColour)
+        {
+            _blockSettings = new BlockSettings();
+            _blockSettings.BlockName = blockName;
+            _blockSettings.BlockPosition = position;
+            _blockSettings.BlockColour = blockColour;
+        }
 
         //Used in FCWE_NodeManager_NodeCreation.cs
         public Block(Vector2 position, string blockName)
@@ -149,6 +153,12 @@
             // _blockSettings.BlockName = "New Block";
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
+
+        #endregion
+
+        #region Sets
+        public void SetBlockName(string blockName) { _blockSettings.BlockName = blockName; }
+        #endregion
 
         #region Handle Interface Methods
 
@@ -206,16 +216,18 @@
 
         #endregion
 
-        #region  ArrayUser Methods
-        public void AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
+        #region ArrayUser Methods
+        public EffectOrder AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
         {
             if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
             {
                 Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
-                return;
+                return null;
             }
 
-            ArrayExtension.Add(ref _orderArray, GetNewOrderData(gameObject, type, false, fullEffectName, effectName));
+            EffectOrder addedOrder = GetNewOrderData(gameObject, type, false, fullEffectName, effectName);
+            ArrayExtension.Add(ref _orderArray, addedOrder);
+            return addedOrder;
         }
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on

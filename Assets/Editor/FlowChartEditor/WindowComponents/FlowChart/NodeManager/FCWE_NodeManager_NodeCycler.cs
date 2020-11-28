@@ -1,7 +1,6 @@
 ﻿
 namespace LinearEffectsEditor
 {
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
     using LinearEffects;
@@ -17,6 +16,8 @@ namespace LinearEffectsEditor
         , DELETEWARNING_OK = "Continue"
         , DELETEWARNING_CANCEL = "Cancel"
         ;
+
+        const float DUPLICATE_OFFSET = 5f;
         #endregion
 
         bool _deleteWarningBox = default;
@@ -49,6 +50,26 @@ namespace LinearEffectsEditor
 
         #endregion
 
+
+        string NodeManager_NodeCycler_GetUniqueBlockName(string defaultName)
+        {
+            //Add a space to ensure that there is a whitespace
+            string s = defaultName + " ";
+
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                string unqName = s + i;
+                //Keep looping if there is an entry called "New Block 1", "New Block 2", ....
+                if (_allBlockNodesDictionary.ContainsKey(unqName))
+                    continue;
+
+                //Else if the dict doesnt hv this name,
+                return unqName;
+            }
+
+            Debug.LogError($"There is no way you create 2147483647 blocks with all their names as {defaultName} <number>.... you monster why are you like this....");
+            return null;
+        }
 
         #region Creating NodeBlocks
         void NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom from)
@@ -93,25 +114,7 @@ namespace LinearEffectsEditor
             return node;
         }
 
-        private string NodeManager_NodeCycler_GetUniqueBlockName(string defaultName)
-        {
-            //Add a space to ensure that there is a whitespace
-            string s = defaultName + " ";
 
-            for (int i = 0; i < int.MaxValue; i++)
-            {
-                string unqName = s + i;
-                //Keep looping if there is an entry called "New Block 1", "New Block 2", ....
-                if (_allBlockNodesDictionary.ContainsKey(unqName))
-                    continue;
-
-                //Else if the dict doesnt hv this name,
-                return unqName;
-            }
-
-            Debug.LogError($"There is no way you create 2147483647 blocks with all their names as {defaultName} <number>.... you monster why are you like this....");
-            return null;
-        }
 
         #endregion
 
@@ -202,11 +205,78 @@ namespace LinearEffectsEditor
 
             }
 
+            NodeManager_ClearAllSelectedNodes();
             NodeManager_ReloadCachedBlockNodes();
         }
 
         #endregion
 
+        #region Duplicating NodeBlocks
+        void NodeManager_NodeCycler_DuplicateSelectedNodes()
+        {
+            foreach (var nodeToDuplicate in _selectedBlocks)
+            {
+                //Close blocknode editor if it is being yeeted
+                if (isBlockEditorOpen && _blockEditor.Block.BlockName == nodeToDuplicate.Label)
+                {
+                    BlockEditor_HandleOnNoBlockNodeFound();
+                }
+
+                _allBlocksArrayProperty.serializedObject.Update();
+                NodeManager_NodeCyler_DuplicateNode(nodeToDuplicate);
+                _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
+
+            }
+
+            NodeManager_ClearAllSelectedNodes();
+        }
+
+        void NodeManager_NodeCyler_DuplicateNode(BlockNode nodeToDuplicate)
+        {
+            //============== DUPLICATING THE SELECTED NODE'S BLOCK ============
+            Block blockToDuplicate = _flowChart.Editor_GetBlock(nodeToDuplicate.Label);
+            Vector2 newPosition = nodeToDuplicate.Position + Vector2.one * DUPLICATE_OFFSET;
+
+            //Create a new block with the identical position
+            Block duplicate = new Block(newPosition, NodeManager_NodeCycler_GetUniqueBlockName(blockToDuplicate.BlockName), nodeToDuplicate.Colour);
+
+            //============ DUPLICATE EVERYTHING FROM BLOCKTODUPLICATE ONTO THE DUPLICATE ==============
+            SerializedProperty orderArray = nodeToDuplicate.BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+
+            for (int i = 0; i < orderArray.arraySize; i++)
+            {
+                //Get the an effect order to duplicate
+                SerializedProperty effectOrderProperty = orderArray.GetArrayElementAtIndex(i);
+
+                Block.EffectOrder effectOrder = new Block.EffectOrder();
+                effectOrder.LoadFromSerializedProperty(effectOrderProperty);
+
+                string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEFFECTNAME).stringValue;
+                string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
+
+                if (!CommandData.TryGetExecutor(fullEffectName, out Type type))
+                {
+                    Debug.LogError($"The effectname : {effectName} cannot be found in CommandData anymore! Full path: {fullEffectName}");
+                    return;
+                }
+
+                //Add the effectorder into the duplicate block
+                duplicate.InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
+            }
+
+
+            //====== ADDING THE DUPLICATED NODE BACK TO THE ARRAYPROPERTY =============
+            SerializedProperty duplicatedBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(duplicate);
+            BlockNode duplicatedBlockNode = new BlockNode(duplicatedBlockProperty);
+
+
+            //Record all the newly added node
+            _allBlockNodes.Add(duplicatedBlockNode);
+            _allBlockNodesDictionary.Add(duplicatedBlockNode.Label, duplicatedBlockNode);
+        }
+
+
+        #endregion
 
     }
 
