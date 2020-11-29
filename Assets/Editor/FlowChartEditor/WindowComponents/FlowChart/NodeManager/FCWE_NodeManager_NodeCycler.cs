@@ -27,18 +27,6 @@ namespace LinearEffectsEditor
 
         void NodeManager_NodeCycler_OnGUI()
         {
-
-            if (Event.current.type == EventType.KeyDown)
-            {
-                if (Event.current.keyCode == KeyCode.G)
-                {
-                    for (int i = 0; i < _allBlockNodes.Count; i++)
-                    {
-                        Debug.Log($"Index: {i} Count: {_allBlockNodes.Count}");
-                    }
-                }
-            }
-
             if (_newBlockFromEnum != AddNewBlockFrom.None)
             {
                 NodeManager_NodeCycler_AddNewNode();
@@ -189,12 +177,16 @@ namespace LinearEffectsEditor
                 _allBlockNodesDictionary.Remove(blockNode.Label);
 
                 //Get block from flow chart and then remove all order data
-                Block block = _flowChart.Editor_GetBlock(blockNode.Label);
+                Block block = new Block();
+                block.LoadFromSerializedProperty(blockNode.BlockProperty);
+
+                blockNode.BlockProperty.serializedObject.Update();
                 block.RemoveAllOrderData();
+                block.SaveToSerializedProperty(blockNode.BlockProperty);
+                blockNode.BlockProperty.serializedObject.ApplyModifiedProperties();
 
                 //Save the array property
                 _allBlocksArrayProperty.serializedObject.Update();
-
                 _allBlocksArrayProperty.DeleteArrayElement
                    (
                        (x) =>

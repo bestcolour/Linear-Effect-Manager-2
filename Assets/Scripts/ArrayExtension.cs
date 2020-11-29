@@ -128,7 +128,7 @@ public static class ArrayExtension
         array = tempList.ToArray();
     }
 
-    public static void RemoveAt<T>(this T[] array, int index,out T[] newArray)
+    public static void RemoveAt<T>(this T[] array, int index, out T[] newArray)
     {
         List<T> tempList = new List<T>(array);
         tempList.RemoveAt(index);

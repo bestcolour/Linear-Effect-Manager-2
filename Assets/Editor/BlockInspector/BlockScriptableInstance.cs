@@ -79,7 +79,7 @@ namespace LinearEffectsEditor
                 bool isNewNameValid = OnVerifyBlockNameChange.Invoke(prevName, newName, out string uniqueName);
                 if (!isNewNameValid)
                 {
-                    Block.SetBlockName(uniqueName);
+                    Block.Editor_SetBlockName(uniqueName);
                 }
 
 

@@ -19,8 +19,7 @@
         {
             _refHolder = holder;
             _dataElmtIndex = _refHolder.AddNewObject(isInsert);
-            _refHolder.OnRemoveObject += HandleRemoveObject;
-            _refHolder.OnInsertNewObject += HandleInsertObject;
+            SubscribeToEvents();
         }
 
         //To be called before removing the order intsance from the list
@@ -32,8 +31,7 @@
         //For when the holder is not null
         public virtual void OnInsertCopy()
         {
-            _refHolder.OnRemoveObject += HandleRemoveObject;
-            _refHolder.OnInsertNewObject += HandleInsertObject;
+            SubscribeToEvents();
             //Tell the holder to do a copy of my current data index details and add it to the end of the array
             _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
         }
@@ -42,6 +40,13 @@
         {
             _refHolder = holder;
             OnInsertCopy();
+        }
+
+        public virtual void SubscribeToEvents()
+        {
+            Debug.Log("Sub");
+            _refHolder.OnRemoveObject += HandleRemoveObject;
+            _refHolder.OnInsertNewObject += HandleInsertObject;
         }
 
 

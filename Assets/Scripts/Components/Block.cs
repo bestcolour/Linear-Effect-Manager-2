@@ -136,7 +136,7 @@
         //Used in FCWE_NodeManager_NodeCreation.cs
         public Block(Vector2 position, string blockName)
         {
-            DefaultConstruction();
+            Editor_DefaultConstruction();
             _blockSettings.BlockName = blockName;
             _blockSettings.BlockPosition = position;
         }
@@ -144,20 +144,28 @@
         //Used in BlockScriptableInstance.cs
         public Block()
         {
-            DefaultConstruction();
+            Editor_DefaultConstruction();
         }
 
-        void DefaultConstruction()
+        void Editor_DefaultConstruction()
         {
             _blockSettings = new BlockSettings();
             // _blockSettings.BlockName = "New Block";
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
+        public void Editor_AddSubscription()
+        {
+            for (int i = 0; i < _orderArray.Length; i++)
+            {
+                _orderArray[i].SubscribeToEvents();
+            }
+        }
+
         #endregion
 
         #region Sets
-        public void SetBlockName(string blockName) { _blockSettings.BlockName = blockName; }
+        public void Editor_SetBlockName(string blockName) { _blockSettings.BlockName = blockName; }
         #endregion
 
         #region Handle Interface Methods

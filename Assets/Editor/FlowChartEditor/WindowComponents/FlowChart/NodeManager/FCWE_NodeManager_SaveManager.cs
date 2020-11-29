@@ -51,8 +51,12 @@
 
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
-                SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                BlockNode node = new BlockNode(e);
+                SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
+                BlockNode node = new BlockNode(blockProperty);
+
+                NodeManager_CheckEffectElementIndex(blockProperty);
+                // Block block = _flowChart.Editor_GetBlock(node.Label);
+                // block.Editor_AddSubscription();
 
                 //Record all the nodes
                 _allBlockNodes.Add(node);
@@ -60,26 +64,15 @@
             }
         }
 
-        // void NodeManager_ReloadCachedBlockNodes()
-        // {
-        //     //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
-        //     _newBlockFromEnum = AddNewBlockFrom.None;
-        //     _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
-        //     _allBlockNodes.Clear();
-        //     // _allBlockNodesDictionary.Clear();
-
-        //     for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
-        //     {
-        //         SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-        //         string label = e.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-
-        //         //Get blocknode ref which still exists in the dictionary
-        //         BlockNode blockNode = _allBlockNodesDictionary[label];
-        //         blockNode.SetBlockProperty(e);
-
-        //         _allBlockNodes.Add(blockNode);
-        //     }
-        // }
+        void NodeManager_CheckEffectElementIndex(SerializedProperty blockProperty)
+        {
+            SerializedProperty effectArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+            for (int i = 0; i < effectArray.arraySize; i++)
+            {
+                SerializedProperty effectOrder = effectArray.GetArrayElementAtIndex(i);
+                Debug.Log(effectOrder.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
+            }
+        }
 
         #endregion
     }
