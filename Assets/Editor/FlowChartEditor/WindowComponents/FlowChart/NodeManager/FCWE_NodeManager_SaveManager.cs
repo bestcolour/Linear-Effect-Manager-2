@@ -14,6 +14,8 @@
         #region LifeTime
         void NodeManager_SaveManager_OnEnable()
         {
+            _allBlockNodes = new List<BlockNode>();
+            _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
             NodeManager_LoadCachedBlockNodes();
         }
 
@@ -44,8 +46,8 @@
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
             _newBlockFromEnum = AddNewBlockFrom.None;
             _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
-            _allBlockNodes = new List<BlockNode>();
-            _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
+            _allBlockNodes.Clear();
+            _allBlockNodesDictionary.Clear();
 
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
@@ -58,26 +60,26 @@
             }
         }
 
-        void NodeManager_ReloadCachedBlockNodes()
-        {
-            //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
-            _newBlockFromEnum = AddNewBlockFrom.None;
-            _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
-            _allBlockNodes.Clear();
-            // _allBlockNodesDictionary.Clear();
+        // void NodeManager_ReloadCachedBlockNodes()
+        // {
+        //     //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
+        //     _newBlockFromEnum = AddNewBlockFrom.None;
+        //     _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
+        //     _allBlockNodes.Clear();
+        //     // _allBlockNodesDictionary.Clear();
 
-            for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
-            {
-                SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                string label = e.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+        //     for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
+        //     {
+        //         SerializedProperty e = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
+        //         string label = e.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
 
-                //Get blocknode ref which still exists in the dictionary
-                BlockNode blockNode = _allBlockNodesDictionary[label];
-                blockNode.SetBlockProperty(e);
+        //         //Get blocknode ref which still exists in the dictionary
+        //         BlockNode blockNode = _allBlockNodesDictionary[label];
+        //         blockNode.SetBlockProperty(e);
 
-                _allBlockNodes.Add(blockNode);
-            }
-        }
+        //         _allBlockNodes.Add(blockNode);
+        //     }
+        // }
 
         #endregion
     }

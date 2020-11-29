@@ -171,6 +171,8 @@ namespace LinearEffectsEditor
         void NodeManager_NodeCycler_DeleteSelectedNodes()
         {
 
+            // NodeManager_SaveManager_SaveAllNodes();
+
             //if player accepts, yeet the entire selected blocks
             //remove them from the list and the dictionary
             foreach (var blockNode in _selectedBlocks)
@@ -178,6 +180,7 @@ namespace LinearEffectsEditor
                 //Close blocknode editor if it is being yeeted
                 if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
                 {
+
                     BlockEditor_HandleOnNoBlockNodeFound();
                 }
 
@@ -191,13 +194,13 @@ namespace LinearEffectsEditor
 
                 //Save the array property
                 _allBlocksArrayProperty.serializedObject.Update();
+
                 _allBlocksArrayProperty.DeleteArrayElement
                    (
                        (x) =>
                        {
                            string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-                           string b = blockNode.BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-                           return a == b;
+                           return a == blockNode.Label;
                        }
                    );
 
@@ -206,7 +209,7 @@ namespace LinearEffectsEditor
             }
 
             NodeManager_ClearAllSelectedNodes();
-            NodeManager_ReloadCachedBlockNodes();
+            NodeManager_LoadCachedBlockNodes();
         }
 
         #endregion
