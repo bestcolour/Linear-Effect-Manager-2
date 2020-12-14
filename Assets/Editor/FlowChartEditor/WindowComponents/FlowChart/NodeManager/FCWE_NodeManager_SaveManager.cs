@@ -70,7 +70,7 @@
             for (int i = 0; i < effectArray.arraySize; i++)
             {
                 SerializedProperty effectOrder = effectArray.GetArrayElementAtIndex(i);
-                Debug.Log(effectOrder.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
+                // Debug.Log(effectOrder.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
             }
         }
 

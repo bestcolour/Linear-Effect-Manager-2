@@ -13,21 +13,28 @@
         const string EDITORPREFS_PREV_FLOWCHART_SCENEPATH = "FlowChartPath";
         #endregion
 
+        ///<Summary>Saves the current FlowChart path</Summary>
         void SaveManager_SaveFlowChartPath()
         {
-            if (_flowChart == null) return;
-            string path =  _flowChart.transform.GetFullPath();
+            if (_flowChart == null)
+            {
+                return;
+            }
+            
+            string path = _flowChart.transform.GetFullPath();
             EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
         }
 
+        ///<Summary>Tries to load the FlowChart.cs instance from the scene</Summary>
         FlowChart SaveManager_TryLoadFlowChartPath()
         {
             string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
-            if (path == string.Empty)
+            if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
 
+            //Path is not empty
             for (int i = 0; i < EditorSceneManager.loadedSceneCount; i++)
             {
                 Scene loadedScene = EditorSceneManager.GetSceneAt(i);
@@ -45,15 +52,15 @@
             }
 
 
-            //Else if no flowchart is found
+            //Else if no flowchart is found because the FlowChart.cs instance is destroyed or deleted 
             return null;
-
         }
 
+        ///<Summary>Tries to load the FlowChart.cs instance from the scene but during Editor's runtime</Summary>
         FlowChart SaveManager_TryLoadFlowChartPath_Runtime()
         {
             string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
-            if (path == string.Empty)
+            if (string.IsNullOrEmpty(path))
             {
                 return null;
             }

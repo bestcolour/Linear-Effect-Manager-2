@@ -8,7 +8,8 @@
     using LinearEffects;
 
     [CustomEditor(typeof(FlowChart))]
-    public class FlowChartEditor : Editor
+    ///<Summary>The inspector editor for the FlowChart component</Summary>
+    public class FlowChartInspectorEditor : Editor
     {
         const string SETTINGS_PROPERTY_NAME = "_settings";
 
@@ -49,6 +50,7 @@
         }
 
 
+        //Draw the properties only, dont want to draw the block array 
         void DrawProperties()
         {
             if (_settingsProperty == null)

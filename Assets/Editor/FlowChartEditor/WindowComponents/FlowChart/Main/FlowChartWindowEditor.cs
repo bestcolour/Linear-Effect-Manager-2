@@ -19,7 +19,15 @@
         #region Defintition
         enum EditorState
         {
-            INITIALIZE = -1, UNLOADED = 0, LOADED = 1, RUNTIME_DEBUG = 2
+            ///<Summary>State where the window editor has just been opened and needs to load its values</Summary>
+            INITIALIZE = -1
+            ,
+            ///<Summary>State where the window editor has just been opened and needs to load its values</Summary>
+            UNLOADED = 0
+            ,
+            LOADED = 1
+            ,
+            RUNTIME_DEBUG = 2
         }
         #endregion
 
@@ -77,13 +85,13 @@
             {
                 //============================ RUNTIME =======================
                 case true:
-                    //Get the flow chart during runtime then
-                    _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
+                    Debug.Log("Debug mode for LEM 2 has not been implemented");
+                    // //Get the flow chart during runtime then
+                    // _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
 
-                    _state = EditorState.RUNTIME_DEBUG;
-                    RUNTIME_DEBUG_OnEnable();
-
-
+                    // //This is for future development if i want to add a runtime debug mode
+                    // _state = EditorState.RUNTIME_DEBUG;
+                    // RUNTIME_DEBUG_OnEnable();
 
                     break;
                 //============================ EDITOR TIME ==========================
@@ -102,7 +110,7 @@
                         return;
                     }
 
-                     //This means user has opened flowchart editor via button press 
+                    //This means user has opened flowchart editor via button press 
                     _state = EditorState.LOADED;
                     LOADED_OnEnable();
 
