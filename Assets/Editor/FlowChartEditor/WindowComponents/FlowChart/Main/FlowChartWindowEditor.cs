@@ -103,6 +103,7 @@
                     }
 
                     //This means user has opened flowchart editor from menu context
+                    //Which for now..... is empty!
                     if (_flowChart == null)
                     {
                         _state = EditorState.UNLOADED;
@@ -164,6 +165,7 @@
 
         void UNLOADED_OnDisable() { }
 
+        ///<Summary>Is called when there is a FlowChart.cs instance found. Calls all the various components to call their OnEnables</Summary>
         void LOADED_OnEnable()
         {
             _targetObject = new SerializedObject(_flowChart);
@@ -174,6 +176,7 @@
             BlockEditor_OnEnable();
         }
 
+        ///<Summary>Is called on Disable if the window editor is LOADED</Summary>
         void LOADED_OnDisable()
         {
             LoadedBackground_OnDisable();
