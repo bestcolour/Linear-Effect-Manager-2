@@ -62,19 +62,13 @@
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
                 FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
 
+                //Subscribe to the ref holder when a block is being loaded (which hence loads its order data)
+                _refHolder.SubToOnRemove(HandleRemoveObject);
+                _refHolder.SubToOnInsert(HandleInsertObject);
 
-                _refHolder.OnRemoveObject += HandleRemoveObject;
-                _refHolder.OnInsertNewObject += HandleInsertObject;
+                // _refHolder.OnRemoveObject += HandleRemoveObject;
+                // _refHolder.OnInsertNewObject += HandleInsertObject;
             }
-
-            // public void CopyValuesFrom(EffectOrder e)
-            // {
-            //     _refHolder = e._refHolder;
-            //     _dataElmtIndex = e._dataElmtIndex;
-            //     EffectName = e.EffectName;
-            //     FullEffectName = e.FullEffectName;
-
-            // }
 
 #endif
         }
@@ -154,17 +148,19 @@
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
-        public void Editor_AddSubscription()
-        {
-            for (int i = 0; i < _orderArray.Length; i++)
-            {
-                _orderArray[i].SubscribeToEvents();
-            }
-        }
+        // ///<Summary>Forcefully subscribes the entire order array elements to their respective holder's events</Summary>
+        // public void Editor_AddSubscription()
+        // {
+        //     for (int i = 0; i < _orderArray.Length; i++)
+        //     {
+        //         _orderArray[i].SubscribeToEvents();
+        //     }
+        // }
 
         #endregion
 
         #region Sets
+        ///<Summary>For forceful renaming of block names when the flowchart window manager already contains a block with similar name</Summary>
         public void Editor_SetBlockName(string blockName) { _blockSettings.BlockName = blockName; }
         #endregion
 
@@ -225,14 +221,17 @@
         #endregion
 
         #region ArrayUser Methods
+        ///<Summary>Adds a new order element into the block class. We need a gameobject which this Block class is being serialized on.</Summary>
         public EffectOrder AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
         {
+            //Check if type is inheriting from base effect executor
             if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
             {
                 Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
                 return null;
             }
 
+            //Get new effect order
             EffectOrder addedOrder = GetNewOrderData(gameObject, type, false, fullEffectName, effectName);
             ArrayExtension.Add(ref _orderArray, addedOrder);
             return addedOrder;

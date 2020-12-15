@@ -61,7 +61,7 @@
 
         public virtual void RemoveOrderElementAt(int index)
         {
-            if (index >= _orderArray.Length) return;
+            // if (index >= _orderArray.Length) return;
 
             _orderArray[index].OnRemove();
             ArrayExtension.RemoveAt(ref _orderArray, index);
@@ -70,7 +70,7 @@
         //I assume this is for copy/cut pasting
         public virtual void InsertOrderElement(Type holderType, OData orderData, int index)
         {
-            if (index > _orderArray.Length) return;
+            // if (index > _orderArray.Length) return;
 
             if (!holderType.IsSubclassOf(typeof(BaseHolderClass)))
             {

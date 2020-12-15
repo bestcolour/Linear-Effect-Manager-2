@@ -25,6 +25,10 @@
         //To be called before removing the order intsance from the list
         public virtual void OnRemove()
         {
+            _refHolder.UnSubFromOnInsert(HandleInsertObject);
+            _refHolder.UnSubFromOnRemove(HandleRemoveObject);
+            // _refHolder.OnRemoveObject -= HandleRemoveObject;
+            // _refHolder.OnInsertNewObject -= HandleInsertObject;
             _refHolder.RemoveObjectAt(_dataElmtIndex);
         }
 
@@ -44,9 +48,10 @@
 
         public virtual void SubscribeToEvents()
         {
-            Debug.Log("Sub");
-            _refHolder.OnRemoveObject += HandleRemoveObject;
-            _refHolder.OnInsertNewObject += HandleInsertObject;
+            _refHolder.SubToOnRemove(HandleRemoveObject);
+            _refHolder.SubToOnInsert(HandleInsertObject);
+            // _refHolder.OnRemoveObject += HandleRemoveObject;
+            // _refHolder.OnInsertNewObject += HandleInsertObject;
         }
 
 
@@ -55,10 +60,12 @@
         //Compares with the removed object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
         protected virtual void HandleRemoveObject(int removedIndex)
         {
+            Debug.Log($"I am an orderdata and my elmt index is {_dataElmtIndex} on {_refHolder} and the removedIndex is {removedIndex}");
             if (_dataElmtIndex > removedIndex)
             {
                 _dataElmtIndex--;
             }
+            Debug.Log($"After doing checks, my dataElmtIndex is {_dataElmtIndex}");
         }
 
         //Compares with the inserted object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating

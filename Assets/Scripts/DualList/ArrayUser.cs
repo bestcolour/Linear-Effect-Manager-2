@@ -64,17 +64,18 @@
 
         public virtual void RemoveOrderElementAt(int index)
         {
-            if (index >= _orderArray.Length) return;
-
+            Debug.Log("Called");
+            // if (index >= _orderArray.Length) return;
+            //Call callbacks
             _orderArray[index].OnRemove();
             ArrayExtension.RemoveAt(ref _orderArray, index);
         }
 
 
-        //I assume this is for copy/cut pasting
+        //I assume this is for copy/cut pasting of orders
         public virtual void InsertOrderElement(GameObject gameObject, Type holderType, OData orderData, int index)
         {
-            if (index > _orderArray.Length) return;
+            // if (index > _orderArray.Length) return;
 
             if (!holderType.IsSubclassOf(typeof(BaseHolderClass)))
             {
@@ -84,6 +85,7 @@
 
             if (!gameObject.TryGetComponent(holderType, out Component component))
             {
+                //If no component found, insert the orderdata into the order array
                 component = gameObject.AddComponent(holderType);
                 BaseHolderClass holder = component as BaseHolderClass;
                 orderData.OnInsertCopy(holder);

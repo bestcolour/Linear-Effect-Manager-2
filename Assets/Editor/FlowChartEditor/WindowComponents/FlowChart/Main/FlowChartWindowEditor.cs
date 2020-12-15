@@ -19,12 +19,13 @@
         #region Defintition
         enum EditorState
         {
-            ///<Summary>State where the window editor has just been opened and needs to load its values</Summary>
+            ///<Summary>State where the window editor has just been opened</Summary>
             INITIALIZE = -1
             ,
             ///<Summary>State where the window editor has just been opened and needs to load its values</Summary>
             UNLOADED = 0
             ,
+            ///<Summary>State where the window editor has a FlowChart.cs instance being inspected</Summary>
             LOADED = 1
             ,
             RUNTIME_DEBUG = 2

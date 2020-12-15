@@ -156,9 +156,9 @@ namespace LinearEffectsEditor
 
         }
 
+        ///<Summary>Deletes selected nodes</Summary>
         void NodeManager_NodeCycler_DeleteSelectedNodes()
         {
-
             // NodeManager_SaveManager_SaveAllNodes();
 
             //if player accepts, yeet the entire selected blocks
@@ -168,7 +168,6 @@ namespace LinearEffectsEditor
                 //Close blocknode editor if it is being yeeted
                 if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
                 {
-
                     BlockEditor_HandleOnNoBlockNodeFound();
                 }
 
@@ -180,12 +179,13 @@ namespace LinearEffectsEditor
                 Block block = new Block();
                 block.LoadFromSerializedProperty(blockNode.BlockProperty);
 
+                //Delete order data as well as from the respective holders from block
                 blockNode.BlockProperty.serializedObject.Update();
                 block.RemoveAllOrderData();
                 block.SaveToSerializedProperty(blockNode.BlockProperty);
                 blockNode.BlockProperty.serializedObject.ApplyModifiedProperties();
 
-                //Save the array property
+                //Delete block from block array
                 _allBlocksArrayProperty.serializedObject.Update();
                 _allBlocksArrayProperty.DeleteArrayElement
                    (

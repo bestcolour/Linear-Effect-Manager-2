@@ -62,9 +62,10 @@ public static class TransformExtension
             return false;
         }
 
+
         //=================== CURRENTNAME = ROOT GAMEOBJECT ==========================
         int slashFound = pathWithoutSceneName.IndexOf("/");
-        string rootGameObjectName = pathWithoutSceneName.Substring(0, slashFound);
+        string rootGameObjectName = slashFound == -1 ? pathWithoutSceneName : pathWithoutSceneName.Substring(0, slashFound);
 
         //Remove the rootgameobjectname's string
         string restOfThePath = rootGameObjectName.Remove(0, slashFound + 1);
