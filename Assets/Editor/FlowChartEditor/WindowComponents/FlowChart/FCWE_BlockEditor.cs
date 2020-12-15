@@ -6,7 +6,7 @@
     using UnityEditor;
     using System;
 
-    //The block editor handles the data of the currently editting FlowChart instance
+    //The block editor handles an instance of BlockScriptableInstance whenver a blocknode is observed inside of the FlowChart window
     public partial class FlowChartWindowEditor : EditorWindow
     {
         BlockScriptableInstance _blockEditor;

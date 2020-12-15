@@ -285,7 +285,7 @@ MonoBehaviour:
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
       BlockPosition: {x: 304, y: 173}
   _settings:
-    _someSetting: 0
+    _someSetting: 1
 --- !u!114 &910949409
 MonoBehaviour:
   m_ObjectHideFlags: 0

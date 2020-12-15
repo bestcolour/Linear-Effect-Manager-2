@@ -130,7 +130,7 @@ namespace LinearEffectsEditor
 
         void BottomHalf_CopySelectedToClipBoard()
         {
-            //as hashset does not garuntee order, i will be using index from and to ensure the copied elements are in the correct order
+            //as hashset does not guarantee order, i will be using index from and to ensure the copied elements are in the correct order
             if (!TopHalf_GetSelectedForLoopValues(out int diff, out int direction, out _firstClickedIndex))
             {
                 return;

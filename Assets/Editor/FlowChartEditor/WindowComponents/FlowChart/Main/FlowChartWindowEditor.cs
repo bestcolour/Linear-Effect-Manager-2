@@ -37,7 +37,8 @@
 
 
         #region Unity LifeTime
-        [MenuItem(itemName: "Window/FlowChart Editor")]
+        // [MenuItem(itemName: "Window/FlowChart Editor")]
+        //Current not going to open the window via menu
         public static void OpenWindow()
         {
             var window = GetWindow<FlowChartWindowEditor>();

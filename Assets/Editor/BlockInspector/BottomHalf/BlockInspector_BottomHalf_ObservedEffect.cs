@@ -5,10 +5,9 @@ namespace LinearEffectsEditor
     using UnityEditor;
     using LinearEffects;
 
+//Responsible for drawing and updating the current being inspected effect
     public partial class BlockInspector : ImprovedEditor
     {
-
-
         #region Observed Effect Fields
         SerializedProperty _currObservedProperty = default;
         #endregion
