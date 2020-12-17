@@ -56,28 +56,28 @@
 
 
 
-        #region Handle Event
-        //Compares with the removed object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
-        protected virtual void HandleRemoveObject(int removedIndex)
-        {
-            Debug.Log($"I am an orderdata and my elmt index is {_dataElmtIndex} on {_refHolder} and the removedIndex is {removedIndex}");
-            if (_dataElmtIndex > removedIndex)
-            {
-                _dataElmtIndex--;
-            }
-            Debug.Log($"After doing checks, my dataElmtIndex is {_dataElmtIndex}");
-        }
+        // #region Handle Event
+        // //Compares with the removed object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
+        // protected virtual void HandleRemoveObject(int removedIndex)
+        // {
+        //     Debug.Log($"I am an orderdata and my elmt index is {_dataElmtIndex} on {_refHolder} and the removedIndex is {removedIndex}");
+        //     if (_dataElmtIndex > removedIndex)
+        //     {
+        //         _dataElmtIndex--;
+        //     }
+        //     Debug.Log($"After doing checks, my dataElmtIndex is {_dataElmtIndex}");
+        // }
 
-        //Compares with the inserted object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
-        protected virtual void HandleInsertObject(int insertedIndex)
-        {
-            if (_dataElmtIndex > insertedIndex)
-            {
-                _dataElmtIndex++;
-            }
-        }
+        // //Compares with the inserted object's element index this.instance's element index and determine if this.instance's elemnt idnex needs updating
+        // protected virtual void HandleInsertObject(int insertedIndex)
+        // {
+        //     if (_dataElmtIndex > insertedIndex)
+        //     {
+        //         _dataElmtIndex++;
+        //     }
+        // }
 
-        #endregion
+        // #endregion
 #endif
 
     }

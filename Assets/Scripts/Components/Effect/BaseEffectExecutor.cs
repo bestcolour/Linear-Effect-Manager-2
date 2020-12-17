@@ -3,7 +3,8 @@
     using System.Collections.Generic;
     using System;
     using DualList;
-using UnityEngine;
+    using UnityEngine;
+    using UnityEditor;
 
     [System.Serializable]
     public abstract class BaseEffectExecutor : ArrayHolderMono
@@ -25,15 +26,17 @@ using UnityEngine;
         {
             object[] objectArray = DataArrayObject;
             Type dataType = objectArray.GetType().GetElementType();
-            string fullName = dataType.FullName;
-            Debug.Log(fullName);
+
+            //Getting baseEffector's effectname
+            Type thisType = GetType();
+            string effectName = thisType.Name;
 
             int elementIndex = ArrayExtension.AddReturn(ref objectArray, Activator.CreateInstance(dataType));
 
             DataArrayObject = objectArray;
             if (isInsert)
             {
-                OnInsertObject?.Invoke(elementIndex, fullName);
+                OnInsertObject?.Invoke(elementIndex, effectName);
             }
 
             return elementIndex;
@@ -46,10 +49,12 @@ using UnityEngine;
             ArrayExtension.RemoveAt(ref objectArray, index);
             DataArrayObject = objectArray;
             Type dataType = objectArray.GetType().GetElementType();
-            string fullName = dataType.ToString();
 
+            //Getting baseEffector's effectname
+            Type thisType = GetType();
+            string effectName = thisType.Name;
 
-            OnRemoveObject?.Invoke(index,fullName);
+            OnRemoveObject?.Invoke(index, effectName);
         }
 
 #endif

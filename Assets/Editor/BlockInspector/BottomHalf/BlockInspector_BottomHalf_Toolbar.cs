@@ -120,7 +120,10 @@ namespace LinearEffectsEditor
             for (int i = 0; i <= diff; i++)
             {
                 int index = startingIndex - i;
+
+                //MUST ALSO UPDATE THE SCRIPTABLE INSTANCE'S BLOCK VALUE or at least dont save using this scriptableinstance!
                 _target.Block.RemoveOrderElementAt(index);
+                Debug.Log(_target.BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).GetArrayElementAtIndex(index).FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
             }
 
             _selectedElements.Clear();

@@ -73,7 +73,7 @@
         #endregion
 
         #region Handles
-        private void NodeManager_HandleOnRemoveEvent(int removedIndex, string fullEffectName)
+        private void NodeManager_HandleOnRemoveEvent(int removedIndex, string effectName)
         {
             //Search through every block
             for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
@@ -85,14 +85,15 @@
                 {
                     //Check if block's effect order name is the same as the fullEffectname
                     SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
-                    string fullName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEFFECTNAME).stringValue;
+                    string orderElementEffectName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
 
-Debug.Log($"FullEffect Name {fullEffectName} FullName: {fullName}");
-
-                    if (fullName != fullEffectName)
+                    if (orderElementEffectName != effectName)
                     {
                         continue;
                     }
+
+                    Debug.Log($"EffectName {effectName} FullName: {orderElementEffectName}");
+
 
                     //Check if the removed index is smaller than this order element's index
                     SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
@@ -128,7 +129,7 @@ Debug.Log($"FullEffect Name {fullEffectName} FullName: {fullName}");
                 {
                     //Check if block's effect order name is the same as the fullEffectname
                     SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
-                    string fullName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEFFECTNAME).stringValue;
+                    string fullName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
 
                     if (fullName != fullEffectName)
                     {

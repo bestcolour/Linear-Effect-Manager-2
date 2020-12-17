@@ -12,7 +12,7 @@
 #if UNITY_EDITOR
         protected abstract object[] DataArrayObject { get; set; }
 
-        public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectFullName);
+        public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectName);
         // public event ChangeObjectArrayCallBack OnRemoveObject = null;
         // public event ChangeObjectArrayCallBack OnInsertNewObject = null;
 
