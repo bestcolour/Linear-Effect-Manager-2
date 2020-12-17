@@ -43,6 +43,13 @@
 
         void NodeManager_LoadCachedBlockNodes()
         {
+            //Clear all of the events subscriptions on all of the baseexecutors
+            BaseEffectExecutor[] effectExecutors = _flowChart.GetComponents<BaseEffectExecutor>();
+            foreach (var item in effectExecutors)
+            {
+                item.ClearAllSubs();
+            }
+
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
             _newBlockFromEnum = AddNewBlockFrom.None;
             _allBlocksArrayProperty = _targetObject.FindProperty(FlowChart.PROPERTYNAME_BLOCKARRAY);
@@ -54,26 +61,15 @@
                 SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
                 BlockNode node = new BlockNode(blockProperty);
 
-                NodeManager_CheckEffectElementIndex(blockProperty);
-                // Block block = _flowChart.Editor_GetBlock(node.Label);
-                // block.Editor_AddSubscription();
+                //Add subscriptio to the respective holders
+                Block block = _flowChart.Editor_GetBlock(node.Label);
+                block.Editor_AddSubscription();
 
                 //Record all the nodes
                 _allBlockNodes.Add(node);
                 _allBlockNodesDictionary.Add(node.Label, node);
             }
         }
-
-        void NodeManager_CheckEffectElementIndex(SerializedProperty blockProperty)
-        {
-            SerializedProperty effectArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
-            for (int i = 0; i < effectArray.arraySize; i++)
-            {
-                SerializedProperty effectOrder = effectArray.GetArrayElementAtIndex(i);
-                // Debug.Log(effectOrder.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
-            }
-        }
-
         #endregion
     }
 

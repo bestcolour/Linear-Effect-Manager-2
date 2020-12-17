@@ -28,10 +28,20 @@
         public void UnSubFromOnRemove(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnRemoveObjectHashset, arrayCallBack);
         public void UnSubFromOnInsert(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnInsertObjectHashset, arrayCallBack);
 
+        public void ClearAllSubs()
+        {
+            OnRemoveObjectHashset.Clear();
+            OnInsertObjectHashset.Clear();
+        }
+
         protected virtual void SubToEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
         {
             //Dont allow to sub if array callback is null or hashset alrdy contains it
-            if (callback == null || eventHashset.Contains(callback))
+            if (callback == null)
+            {
+                return;
+            }
+            if (eventHashset.Contains(callback))
             {
                 return;
             }
@@ -41,8 +51,13 @@
         protected virtual void UnSubFromEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
         {
             //Dont allow to sub if array callback is null or hashset alrdy contains it
-            if (callback == null || !eventHashset.Contains(callback))
+            if (callback == null)
             {
+                return;
+            }
+            if (!eventHashset.Contains(callback))
+            {
+                Debug.Log("Failed to unsub");
                 return;
             }
             eventHashset.Remove(callback);
@@ -72,7 +87,7 @@
             if (isInsert)
             {
                 // OnInsertNewObject?.Invoke(elementIndex);
-                  InvokeEventHashset(OnInsertObjectHashset, elementIndex);
+                InvokeEventHashset(OnInsertObjectHashset, elementIndex);
             }
 
             return elementIndex;

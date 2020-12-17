@@ -36,20 +36,12 @@ namespace LinearEffects
         }
 
 #if UNITY_EDITOR
-
         public Block Editor_GetBlock(string label)
         {
             int index = _blocks.FindIndex(x => x.BlockName == label);
             if (index == -1) return null;
             return _blocks[index];
         }
-
-        public void AddBlock()
-        {
-
-        }
-
-
 #endif
 
 

@@ -11,7 +11,7 @@
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
     [Serializable]
-    public class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor>, ISavableData
+    public partial class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor>, ISavableData
     {
         #region Definitions
         [Serializable]
@@ -28,50 +28,7 @@
 
         }
 
-        [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor>, ISavableData
-        {
-#if UNITY_EDITOR
-            #region Constants
-            public const string PROPERTYNAME_EFFECTNAME = "EffectName"
-            , PROPERTYNAME_FULLEFFECTNAME = "FullEffectName"
-            , PROPERTYNAME_REFHOLDER = "_refHolder"
-            , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
-            ;
-            // public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
-            #endregion
-
-            public string EffectName;
-            public string FullEffectName;
-            // public string ErrorLog = "Error";
-
-            public void SaveToSerializedProperty(SerializedProperty property)
-            {
-                property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
-                property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
-                // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
-                property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = EffectName;
-                property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue = FullEffectName;
-            }
-
-            public void LoadFromSerializedProperty(SerializedProperty property)
-            {
-                _refHolder = (BaseEffectExecutor)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
-                _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
-                // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
-                EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
-                FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
-
-                //Subscribe to the ref holder when a block is being loaded (which hence loads its order data)
-                _refHolder.SubToOnRemove(HandleRemoveObject);
-                _refHolder.SubToOnInsert(HandleInsertObject);
-
-                // _refHolder.OnRemoveObject += HandleRemoveObject;
-                // _refHolder.OnInsertNewObject += HandleInsertObject;
-            }
-
-#endif
-        }
+      
         #endregion
 
         #region Exposed Fields
@@ -148,14 +105,14 @@
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
-        // ///<Summary>Forcefully subscribes the entire order array elements to their respective holder's events</Summary>
-        // public void Editor_AddSubscription()
-        // {
-        //     for (int i = 0; i < _orderArray.Length; i++)
-        //     {
-        //         _orderArray[i].SubscribeToEvents();
-        //     }
-        // }
+        ///<Summary>Forcefully subscribes the entire order array elements to their respective holder's events</Summary>
+        public void Editor_AddSubscription()
+        {
+            for (int i = 0; i < _orderArray.Length; i++)
+            {
+                _orderArray[i].SubscribeToEvents();
+            }
+        }
 
         #endregion
 
@@ -250,6 +207,7 @@
 
             o.EffectName = effectName;
             o.FullEffectName = fullEffectName;
+            o.ParentBlockName = BlockName;
 
             o.OnAddNew(holder, isForInsert);
             return o;
@@ -262,6 +220,12 @@
             {
                 RemoveOrderElementAt(i);
             }
+        }
+
+        public override void RemoveOrderElementAt(int index)
+        {
+            Debug.Log("Called by " + BlockName);
+            base.RemoveOrderElementAt(index);
         }
 
         #endregion

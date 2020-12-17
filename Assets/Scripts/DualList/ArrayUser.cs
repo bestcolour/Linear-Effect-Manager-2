@@ -64,7 +64,6 @@
 
         public virtual void RemoveOrderElementAt(int index)
         {
-            Debug.Log("Called");
             // if (index >= _orderArray.Length) return;
             //Call callbacks
             _orderArray[index].OnRemove();
@@ -73,6 +72,7 @@
 
 
         //I assume this is for copy/cut pasting of orders
+        ///<Summary>Inserts a new instance of OData into a currently existing holder type instance (if there is no holder type present, a new one will be added)</Summary>
         public virtual void InsertOrderElement(GameObject gameObject, Type holderType, OData orderData, int index)
         {
             // if (index > _orderArray.Length) return;

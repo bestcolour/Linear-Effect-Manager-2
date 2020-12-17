@@ -36,11 +36,11 @@ namespace LinearEffectsEditor
             //================DRAW NEXT/PREV COMMAND BUTTONS===============
             if (GUILayout.Button("【↑】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                CurrentClickedListIndex  -=1;
+                CurrentClickedListIndex -= 1;
             }
             else if (GUILayout.Button("【↓】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
-                CurrentClickedListIndex +=1;
+                CurrentClickedListIndex += 1;
             }
 
 
@@ -150,6 +150,7 @@ namespace LinearEffectsEditor
             }
         }
 
+        ///<Summary>Duplicates an element of the order array</Summary>
         bool BottomHalf_GetCopyOfOrderObjectFromArray(int index, out Block.EffectOrder orderData)
         {
             if (!TopHalf_GetOrderArrayElement(index, out SerializedProperty p))
@@ -160,6 +161,7 @@ namespace LinearEffectsEditor
 
             orderData = new Block.EffectOrder();
             orderData.LoadFromSerializedProperty(p);
+            orderData.SubscribeToEvents();
             return true;
         }
         #endregion

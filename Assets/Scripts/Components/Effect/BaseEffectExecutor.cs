@@ -1,5 +1,6 @@
 ﻿namespace LinearEffects
 {
+    using System.Collections.Generic;
     using DualList;
 
     [System.Serializable]

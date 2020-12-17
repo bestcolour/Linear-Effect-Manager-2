@@ -178,6 +178,7 @@ namespace LinearEffectsEditor
                 //Get block from flow chart and then remove all order data
                 Block block = new Block();
                 block.LoadFromSerializedProperty(blockNode.BlockProperty);
+                // Block block = _flowChart.Editor_GetBlock(blockNode.Label);
 
                 //Delete order data as well as from the respective holders from block
                 blockNode.BlockProperty.serializedObject.Update();
@@ -233,7 +234,7 @@ namespace LinearEffectsEditor
             Vector2 newPosition = nodeToDuplicate.Position + Vector2.one * DUPLICATE_OFFSET;
 
             //Create a new block with the identical position
-            Block duplicate = new Block(newPosition, NodeManager_NodeCycler_GetUniqueBlockName(blockToDuplicate.BlockName), nodeToDuplicate.Colour);
+            Block duplicateBlock = new Block(newPosition, NodeManager_NodeCycler_GetUniqueBlockName(blockToDuplicate.BlockName), nodeToDuplicate.Colour);
 
             //============ DUPLICATE EVERYTHING FROM BLOCKTODUPLICATE ONTO THE DUPLICATE ==============
             SerializedProperty orderArray = nodeToDuplicate.BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
@@ -243,9 +244,7 @@ namespace LinearEffectsEditor
                 //Get the an effect order to duplicate
                 SerializedProperty effectOrderProperty = orderArray.GetArrayElementAtIndex(i);
 
-                Block.EffectOrder effectOrder = new Block.EffectOrder();
-                effectOrder.LoadFromSerializedProperty(effectOrderProperty);
-
+                //Do a effect type check here incase some naming conventions change
                 string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEFFECTNAME).stringValue;
                 string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
 
@@ -255,13 +254,17 @@ namespace LinearEffectsEditor
                     return;
                 }
 
+                //Copy the values of current effect order to duplicate from onto the new instance of effect order
+                Block.EffectOrder effectOrder = new Block.EffectOrder();
+                effectOrder.LoadFromSerializedProperty(effectOrderProperty);
+
                 //Add the effectorder into the duplicate block
-                duplicate.InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
+                duplicateBlock.InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
             }
 
 
             //====== ADDING THE DUPLICATED NODE BACK TO THE ARRAYPROPERTY =============
-            SerializedProperty duplicatedBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(duplicate);
+            SerializedProperty duplicatedBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(duplicateBlock);
             BlockNode duplicatedBlockNode = new BlockNode(duplicatedBlockProperty);
 
 

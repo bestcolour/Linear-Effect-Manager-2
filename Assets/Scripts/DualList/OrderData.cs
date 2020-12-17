@@ -35,9 +35,9 @@
         //For when the holder is not null
         public virtual void OnInsertCopy()
         {
-            SubscribeToEvents();
             //Tell the holder to do a copy of my current data index details and add it to the end of the array
             _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
+            SubscribeToEvents();
         }
 
         public virtual void OnInsertCopy(Holder holder)
