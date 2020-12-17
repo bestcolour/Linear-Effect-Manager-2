@@ -19,14 +19,14 @@
         {
             _refHolder = holder;
             _dataElmtIndex = _refHolder.AddNewObject(isInsert);
-            SubscribeToEvents();
+            // SubscribeToEvents();
         }
 
         //To be called before removing the order intsance from the list
         public virtual void OnRemove()
         {
-            _refHolder.UnSubFromOnInsert(HandleInsertObject);
-            _refHolder.UnSubFromOnRemove(HandleRemoveObject);
+            // _refHolder.UnSubFromOnInsert(HandleInsertObject);
+            // _refHolder.UnSubFromOnRemove(HandleRemoveObject);
             // _refHolder.OnRemoveObject -= HandleRemoveObject;
             // _refHolder.OnInsertNewObject -= HandleInsertObject;
             _refHolder.RemoveObjectAt(_dataElmtIndex);
@@ -37,7 +37,7 @@
         {
             //Tell the holder to do a copy of my current data index details and add it to the end of the array
             _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
-            SubscribeToEvents();
+            // SubscribeToEvents();
         }
 
         public virtual void OnInsertCopy(Holder holder)
@@ -46,13 +46,13 @@
             OnInsertCopy();
         }
 
-        public virtual void SubscribeToEvents()
-        {
-            _refHolder.SubToOnRemove(HandleRemoveObject);
-            _refHolder.SubToOnInsert(HandleInsertObject);
-            // _refHolder.OnRemoveObject += HandleRemoveObject;
-            // _refHolder.OnInsertNewObject += HandleInsertObject;
-        }
+        // public virtual void SubscribeToEvents()
+        // {
+        //     // _refHolder.SubToOnRemove(HandleRemoveObject);
+        //     // _refHolder.SubToOnInsert(HandleInsertObject);
+        //     // _refHolder.OnRemoveObject += HandleRemoveObject;
+        //     // _refHolder.OnInsertNewObject += HandleInsertObject;
+        // }
 
 
 

@@ -56,11 +56,11 @@
                 // _refHolder.OnInsertNewObject += HandleInsertObject;
             }
 
-            public override void SubscribeToEvents()
-            {
-                Debug.Log($"Parent block name: {ParentBlockName}");
-                base.SubscribeToEvents();
-            }
+            // public override void SubscribeToEvents()
+            // {
+            //     Debug.Log($"Parent block name: {ParentBlockName}");
+            //     base.SubscribeToEvents();
+            // }
 
 #endif
         }

@@ -161,7 +161,7 @@ namespace LinearEffectsEditor
 
             orderData = new Block.EffectOrder();
             orderData.LoadFromSerializedProperty(p);
-            orderData.SubscribeToEvents();
+            // orderData.SubscribeToEvents();
             return true;
         }
         #endregion

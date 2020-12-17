@@ -105,14 +105,14 @@
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 
-        ///<Summary>Forcefully subscribes the entire order array elements to their respective holder's events</Summary>
-        public void Editor_AddSubscription()
-        {
-            for (int i = 0; i < _orderArray.Length; i++)
-            {
-                _orderArray[i].SubscribeToEvents();
-            }
-        }
+        // ///<Summary>Forcefully subscribes the entire order array elements to their respective holder's events</Summary>
+        // public void Editor_AddSubscription()
+        // {
+        //     for (int i = 0; i < _orderArray.Length; i++)
+        //     {
+        //         _orderArray[i].SubscribeToEvents();
+        //     }
+        // }
 
         #endregion
 
@@ -179,7 +179,7 @@
 
         #region ArrayUser Methods
         ///<Summary>Adds a new order element into the block class. We need a gameobject which this Block class is being serialized on.</Summary>
-        public EffectOrder AddNewOrderElement(GameObject gameObject, Type type, string fullEffectName, string effectName)
+        public EffectOrder AddNewOrderElement(GameObject gameObject, Type type, string fullEffectorName, string effectName)
         {
             //Check if type is inheriting from base effect executor
             if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
@@ -189,13 +189,13 @@
             }
 
             //Get new effect order
-            EffectOrder addedOrder = GetNewOrderData(gameObject, type, false, fullEffectName, effectName);
+            EffectOrder addedOrder = GetNewOrderData(gameObject, type, false, fullEffectorName, effectName);
             ArrayExtension.Add(ref _orderArray, addedOrder);
             return addedOrder;
         }
 
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected Block.EffectOrder GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string fullEffectName, string effectName)
+        protected Block.EffectOrder GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string fullEffectorName, string effectName)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {
@@ -206,7 +206,7 @@
             Block.EffectOrder o = new Block.EffectOrder();
 
             o.EffectName = effectName;
-            o.FullEffectName = fullEffectName;
+            o.FullEffectName = fullEffectorName;
             o.ParentBlockName = BlockName;
 
             o.OnAddNew(holder, isForInsert);
@@ -220,12 +220,6 @@
             {
                 RemoveOrderElementAt(i);
             }
-        }
-
-        public override void RemoveOrderElementAt(int index)
-        {
-            Debug.Log("Called by " + BlockName);
-            base.RemoveOrderElementAt(index);
         }
 
         #endregion

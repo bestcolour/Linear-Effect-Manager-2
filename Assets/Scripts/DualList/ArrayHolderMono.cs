@@ -12,71 +12,71 @@
 #if UNITY_EDITOR
         protected abstract object[] DataArrayObject { get; set; }
 
-        public delegate void ChangeObjectArrayCallBack(int objectIndex);
+        public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectFullName);
         // public event ChangeObjectArrayCallBack OnRemoveObject = null;
         // public event ChangeObjectArrayCallBack OnInsertNewObject = null;
 
         #region Subscribing to EventList
-        HashSet<ChangeObjectArrayCallBack> OnRemoveObjectHashset = new HashSet<ChangeObjectArrayCallBack>();
-        HashSet<ChangeObjectArrayCallBack> OnInsertObjectHashset = new HashSet<ChangeObjectArrayCallBack>();
+        protected ChangeObjectArrayCallBack OnRemoveObject = null;
+        protected ChangeObjectArrayCallBack OnInsertObject = null;
 
-        ///<Summary>Adds event to a Hashset of delegates to be called when an element of the holder array is removed</Summary>
-        public void SubToOnRemove(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnRemoveObjectHashset, arrayCallBack);
-        ///<Summary>Adds event to a Hashset of delegates to be called when a new element inserted into the holder array</Summary>
-        public void SubToOnInsert(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnInsertObjectHashset, arrayCallBack);
+        // ///<Summary>Adds event to a Hashset of delegates to be called when an element of the holder array is removed</Summary>
+        // public void SubToOnRemove(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnRemoveObjectHashset, arrayCallBack);
+        // ///<Summary>Adds event to a Hashset of delegates to be called when a new element inserted into the holder array</Summary>
+        // public void SubToOnInsert(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnInsertObjectHashset, arrayCallBack);
 
-        public void UnSubFromOnRemove(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnRemoveObjectHashset, arrayCallBack);
-        public void UnSubFromOnInsert(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnInsertObjectHashset, arrayCallBack);
+        // public void UnSubFromOnRemove(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnRemoveObjectHashset, arrayCallBack);
+        // public void UnSubFromOnInsert(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnInsertObjectHashset, arrayCallBack);
 
-        public void ClearAllSubs()
+        public virtual void InitializeSubs(ChangeObjectArrayCallBack onRemove, ChangeObjectArrayCallBack onInsert)
         {
-            OnRemoveObjectHashset.Clear();
-            OnInsertObjectHashset.Clear();
+            OnRemoveObject = onRemove;
+            OnInsertObject = onInsert;
         }
 
-        protected virtual void SubToEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
-        {
-            //Dont allow to sub if array callback is null or hashset alrdy contains it
-            if (callback == null)
-            {
-                return;
-            }
-            if (eventHashset.Contains(callback))
-            {
-                return;
-            }
-            eventHashset.Add(callback);
-        }
+        // protected virtual void SubToEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
+        // {
+        //     //Dont allow to sub if array callback is null or hashset alrdy contains it
+        //     if (callback == null)
+        //     {
+        //         return;
+        //     }
+        //     if (eventHashset.Contains(callback))
+        //     {
+        //         return;
+        //     }
+        //     eventHashset.Add(callback);
+        // }
 
-        protected virtual void UnSubFromEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
-        {
-            //Dont allow to sub if array callback is null or hashset alrdy contains it
-            if (callback == null)
-            {
-                return;
-            }
-            if (!eventHashset.Contains(callback))
-            {
-                Debug.Log("Failed to unsub");
-                return;
-            }
-            eventHashset.Remove(callback);
-        }
+        // protected virtual void UnSubFromEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
+        // {
+        //     //Dont allow to sub if array callback is null or hashset alrdy contains it
+        //     if (callback == null)
+        //     {
+        //         return;
+        //     }
+        //     if (!eventHashset.Contains(callback))
+        //     {
+        //         Debug.Log("Failed to unsub");
+        //         return;
+        //     }
+        //     eventHashset.Remove(callback);
+        // }
 
-        protected virtual void InvokeEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, int index)
-        {
-            foreach (var item in eventHashset)
-            {
-                item.Invoke(index);
-            }
-        }
+        // protected virtual void InvokeEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, int index)
+        // {
+        //     foreach (var item in eventHashset)
+        //     {
+        //         item.Invoke(index);
+        //     }
+        // }
 
 
 
         #endregion
 
         //Although we do not care if DataUser class is inserting a new orderclass, we still want to call the event to update all the necessary order instances
-        public int AddNewObject(bool isInsert)
+        public virtual int AddNewObject(bool isInsert)
         {
             object[] objectArray = DataArrayObject;
             Type dataType = objectArray.GetType().GetElementType();
@@ -86,14 +86,14 @@
             DataArrayObject = objectArray;
             if (isInsert)
             {
-                // OnInsertNewObject?.Invoke(elementIndex);
-                InvokeEventHashset(OnInsertObjectHashset, elementIndex);
+                // OnInsertObject?.Invoke(elementIndex);
+                // InvokeEventHashset(OnInsertObjectHashset, elementIndex);
             }
 
             return elementIndex;
         }
 
-        public void RemoveObjectAt(int index)
+        public virtual void RemoveObjectAt(int index)
         {
 
             object[] objectArray = DataArrayObject;
@@ -103,7 +103,7 @@
 
             // OnRemoveObject?.Invoke(index);
 
-            InvokeEventHashset(OnRemoveObjectHashset, index);
+            // InvokeEventHashset(OnRemoveObject, index);
         }
 
         public int DuplicateDataElement(int index)
