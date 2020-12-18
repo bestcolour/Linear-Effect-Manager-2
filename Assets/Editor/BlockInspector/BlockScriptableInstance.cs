@@ -87,7 +87,6 @@ namespace LinearEffectsEditor
 
 
 
-            //Saving
             SaveBlockDataToBlockProperty();
             _blockNode.ReloadNodeProperties();
         }

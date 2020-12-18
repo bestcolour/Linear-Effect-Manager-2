@@ -151,7 +151,7 @@
             GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
 
             //<================ DRAWING COMMAND TYPE=========================>
-            if (!EditorDebugExtension.TryGetProperty(orderElement, Block.EffectOrder.PROPERTYNAME_EFFECTNAME, out SerializedProperty dummyProperty)) return;
+            if (!EditorDebugExtension.TryGetProperty(orderElement, Block.EffectOrder.PROPERTYNAME_EXECUTORNAME, out SerializedProperty dummyProperty)) return;
 
             //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
             GUIContent content = new GUIContent(dummyProperty.stringValue);

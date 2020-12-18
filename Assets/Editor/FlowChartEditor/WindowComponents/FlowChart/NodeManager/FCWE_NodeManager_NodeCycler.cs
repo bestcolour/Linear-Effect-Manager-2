@@ -245,8 +245,8 @@ namespace LinearEffectsEditor
                 SerializedProperty effectOrderProperty = orderArray.GetArrayElementAtIndex(i);
 
                 //Do a effect type check here incase some naming conventions change
-                string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEFFECTNAME).stringValue;
-                string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
+                string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEXECUTORNAME).stringValue;
+                string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EXECUTORNAME).stringValue;
 
                 if (!CommandData.TryGetExecutor(fullEffectName, out Type type))
                 {

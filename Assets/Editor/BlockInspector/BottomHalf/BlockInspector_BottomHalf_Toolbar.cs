@@ -88,14 +88,16 @@ namespace LinearEffectsEditor
                     continue;
                 }
 
-                if (!CommandData.TryGetExecutor(effectOrder.FullEffectName, out Type executorType))
+                if (!CommandData.TryGetExecutor(effectOrder.FullExecutorName, out Type executorType))
                 {
-                    Debug.Log($"The Executor {effectOrder.FullEffectName} doesnt exist in CommandData.cs!");
+                    Debug.Log($"The Executor {effectOrder.FullExecutorName} doesnt exist in CommandData.cs!");
                     continue;
                 }
 
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
                 _target.Block.EditorProperties_InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+                //Do manual checking of inserting because the onInsert check which is carried out by FCWE_NodeManager_SaveManager.cs will not affect the scriptableinstance's block
+                // _target.Block.EditorProperties_ManualOnInsertCheck(currentInsertPosition, executorType.Name);
                 currentInsertPosition++;
             }
 
@@ -121,9 +123,11 @@ namespace LinearEffectsEditor
             {
                 int index = startingIndex - i;
 
+                string removedExecutorName = _target.Block.OrderArray[index].ExecutorName;
                 //MUST ALSO UPDATE THE SCRIPTABLE INSTANCE'S BLOCK VALUE or at least dont save using this scriptableinstance!
                 _target.Block.EditorProperties_RemoveOrderElementAt(index);
-                // Debug.Log(_target.BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).GetArrayElementAtIndex(index).FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
+                //Self check all the block order data and do a manaul removal check here
+                _target.Block.EditorProperties_ManualOnRemovalCheck(index, removedExecutorName);
             }
 
             _selectedElements.Clear();
