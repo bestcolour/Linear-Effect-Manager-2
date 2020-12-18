@@ -73,7 +73,133 @@
         #endregion
 
         #region Handles
+        public delegate void CompareDataElementIndexCallback(SerializedProperty dataElementProperty, int dataElementIndex);
+
+
+
         private void NodeManager_SaveManager_HandleOnRemoveEvent(int removedIndex, string effectorName)
+        {
+
+            //Compare the index and if the removed index is smaller than the data element index being looped checked thru, decrement it
+            NodeManager_SaveManager_CompareDataElementIndex
+            (
+                (SerializedProperty dataElementProperty, int dataElementIndex) =>
+                {
+                    if (removedIndex < dataElementIndex)
+                    {
+                        //set the data element index to something decremented
+                        dataElementIndex--;
+                        dataElementProperty.serializedObject.Update();
+                        dataElementProperty.intValue = dataElementIndex;
+                        dataElementProperty.serializedObject.ApplyModifiedProperties();
+                    }
+                }
+                ,
+                effectorName
+            )
+            ;
+            // //Search through every block
+            // for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
+            // {
+            //     SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(blockIndex);
+            //     SerializedProperty orderArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+
+            //     for (int orderIndex = 0; orderIndex < orderArray.arraySize; orderIndex++)
+            //     {
+            //         //Check if block's effect order name is the same as the fullEffectname
+            //         SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
+            //         string orderElementEffectName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
+
+            //         if (orderElementEffectName != effectorName)
+            //         {
+            //             continue;
+            //         }
+
+            //         Debug.Log($"EffectName {effectorName} FullName: {orderElementEffectName}");
+
+
+            //         //Check if the removed index is smaller than this order element's index
+            //         SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
+            //         int dataElmtIndex = dataElementProperty.intValue;
+            //         if (removedIndex < dataElmtIndex)
+            //         {
+            //             //set the data element index to something decremented
+            //             dataElmtIndex--;
+            //             dataElementProperty.serializedObject.Update();
+            //             dataElementProperty.intValue = dataElmtIndex;
+            //             dataElementProperty.serializedObject.ApplyModifiedProperties();
+            //         }
+
+            //     }
+
+
+            // }
+
+
+
+        }
+
+        
+        private void NodeManager_SaveManager_HandleOnInsertEvent(int insertedIndex, string effectorName)
+        {
+            //Compare the index and if the removed index is smaller than the data element index being looped checked thru, decrement it
+            NodeManager_SaveManager_CompareDataElementIndex
+            (
+                (SerializedProperty dataElementProperty, int dataElementIndex) =>
+                {
+                    if (insertedIndex > dataElementIndex)
+                    {
+                        //set the data element index to something decremented
+                        dataElementIndex++;
+                        dataElementProperty.serializedObject.Update();
+                        dataElementProperty.intValue = dataElementIndex;
+                        dataElementProperty.serializedObject.ApplyModifiedProperties();
+                    }
+                }
+                ,
+                effectorName
+            )
+            ;
+
+            // //Search through every block
+            // for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
+            // {
+            //     SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(blockIndex);
+            //     SerializedProperty orderArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
+
+            //     for (int orderIndex = 0; orderIndex < orderArray.arraySize; orderIndex++)
+            //     {
+            //         //Check if block's effect order name is the same as the fullEffectname
+            //         SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
+            //         string fullName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
+
+            //         if (fullName != fullEffectName)
+            //         {
+            //             continue;
+            //         }
+
+            //         //Check if the removed index is smaller than this order element's index
+            //         SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
+            //         int dataElmtIndex = dataElementProperty.intValue;
+            //         if (insertedIndex > dataElmtIndex)
+            //         {
+            //             //set the data element index to something decremented
+            //             dataElmtIndex++;
+            //             dataElementProperty.serializedObject.Update();
+            //             dataElementProperty.intValue = dataElmtIndex;
+            //             dataElementProperty.serializedObject.ApplyModifiedProperties();
+            //         }
+
+            //     }
+
+
+            // }
+
+        }
+
+
+
+        void NodeManager_SaveManager_CompareDataElementIndex(CompareDataElementIndexCallback compareDataElementIndex, string effectorName)
         {
             //Search through every block
             for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
@@ -98,56 +224,15 @@
                     //Check if the removed index is smaller than this order element's index
                     SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
                     int dataElmtIndex = dataElementProperty.intValue;
-                    if (removedIndex < dataElmtIndex)
-                    {
-                        //set the data element index to something decremented
-                        dataElmtIndex--;
-                        dataElementProperty.serializedObject.Update();
-                        dataElementProperty.intValue = dataElmtIndex;
-                        dataElementProperty.serializedObject.ApplyModifiedProperties();
-                    }
-
-                }
-
-
-            }
-
-
-
-        }
-
-
-
-        private void NodeManager_SaveManager_HandleOnInsertEvent(int insertedIndex, string fullEffectName)
-        {
-            //Search through every block
-            for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
-            {
-                SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(blockIndex);
-                SerializedProperty orderArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
-
-                for (int orderIndex = 0; orderIndex < orderArray.arraySize; orderIndex++)
-                {
-                    //Check if block's effect order name is the same as the fullEffectname
-                    SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
-                    string fullName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
-
-                    if (fullName != fullEffectName)
-                    {
-                        continue;
-                    }
-
-                    //Check if the removed index is smaller than this order element's index
-                    SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
-                    int dataElmtIndex = dataElementProperty.intValue;
-                    if (insertedIndex > dataElmtIndex)
-                    {
-                        //set the data element index to something decremented
-                        dataElmtIndex++;
-                        dataElementProperty.serializedObject.Update();
-                        dataElementProperty.intValue = dataElmtIndex;
-                        dataElementProperty.serializedObject.ApplyModifiedProperties();
-                    }
+                    compareDataElementIndex?.Invoke(dataElementProperty, dataElmtIndex);
+                    // if (removedIndex < dataElmtIndex)
+                    // {
+                    //     //set the data element index to something decremented
+                    //     dataElmtIndex--;
+                    //     dataElementProperty.serializedObject.Update();
+                    //     dataElementProperty.intValue = dataElmtIndex;
+                    //     dataElementProperty.serializedObject.ApplyModifiedProperties();
+                    // }
 
                 }
 
@@ -155,6 +240,7 @@
             }
 
         }
+
 
 
         #endregion
