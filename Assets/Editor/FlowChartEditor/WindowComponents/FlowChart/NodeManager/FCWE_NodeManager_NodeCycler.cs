@@ -182,7 +182,7 @@ namespace LinearEffectsEditor
 
                 //Delete order data as well as from the respective holders from block
                 blockNode.BlockProperty.serializedObject.Update();
-                block.RemoveAllOrderData();
+                block.EditorProperties_RemoveAllOrderData();
                 block.SaveToSerializedProperty(blockNode.BlockProperty);
                 blockNode.BlockProperty.serializedObject.ApplyModifiedProperties();
 
@@ -259,7 +259,7 @@ namespace LinearEffectsEditor
                 effectOrder.LoadFromSerializedProperty(effectOrderProperty);
 
                 //Add the effectorder into the duplicate block
-                duplicateBlock.InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
+                duplicateBlock.EditorProperties_InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
             }
 
 

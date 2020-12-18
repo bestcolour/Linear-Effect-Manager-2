@@ -1,7 +1,5 @@
 ﻿
 //You can remove this namespace if you wish to use this as well!s
-namespace DualList
-{
 using System.Collections.Generic;
 using System;
 using System.Reflection;
@@ -131,5 +129,3 @@ using System.Reflection;
         }
 
     }
-
-}

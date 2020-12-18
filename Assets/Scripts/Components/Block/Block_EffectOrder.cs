@@ -11,13 +11,56 @@
     public partial class Block
     {
         [Serializable]
-        public class EffectOrder : OrderData<BaseEffectExecutor>, ISavableData
+        public class EffectOrder : ISavableData
+        // public class EffectOrder : OrderData<BaseEffectExecutor>, ISavableData
         {
+            [SerializeField]
+            protected BaseEffectExecutor _refHolder;
+            [SerializeField]
+            protected int _dataElmtIndex;
+
 #if UNITY_EDITOR
+            #region Editor Properties
+            public BaseEffectExecutor RefHolder => _refHolder;
+            //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
+            //none of these will be used in the actual build except for the variables stored
+            public virtual void OnAddNew(BaseEffectExecutor holder, bool isInsert)
+            {
+                _refHolder = holder;
+                _dataElmtIndex = _refHolder.AddNewObject(isInsert);
+                // SubscribeToEvents();
+            }
+
+            //To be called before removing the order intsance from the list
+            public virtual void OnRemove()
+            {
+                // _refHolder.UnSubFromOnInsert(HandleInsertObject);
+                // _refHolder.UnSubFromOnRemove(HandleRemoveObject);
+                // _refHolder.OnRemoveObject -= HandleRemoveObject;
+                // _refHolder.OnInsertNewObject -= HandleInsertObject;
+                _refHolder.RemoveObjectAt(_dataElmtIndex);
+            }
+
+            //For when the holder is not null
+            public virtual void OnInsertCopy()
+            {
+                //Tell the holder to do a copy of my current data index details and add it to the end of the array
+                _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
+                // SubscribeToEvents();
+            }
+
+            public virtual void OnInsertCopy(BaseEffectExecutor holder)
+            {
+                _refHolder = holder;
+                OnInsertCopy();
+            }
+
+            #endregion
+
+            #region ISavable Methods
             #region Constants
             public const string PROPERTYNAME_EFFECTNAME = "EffectName"
             , PROPERTYNAME_FULLEFFECTNAME = "FullEffectName"
-            , PROPERTYNAME_PARENTBLOCKNAME = "ParentBlockName"
             , PROPERTYNAME_REFHOLDER = "_refHolder"
             , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
             ;
@@ -26,7 +69,6 @@
 
             public string EffectName;
             public string FullEffectName;
-            public string ParentBlockName;
             // public string ErrorLog = "Error";
 
             public void SaveToSerializedProperty(SerializedProperty property)
@@ -34,7 +76,6 @@
                 property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
                 property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
                 // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
-                property.FindPropertyRelative(PROPERTYNAME_PARENTBLOCKNAME).stringValue = ParentBlockName;
                 property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue = EffectName;
                 property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue = FullEffectName;
             }
@@ -46,22 +87,8 @@
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
                 EffectName = property.FindPropertyRelative(PROPERTYNAME_EFFECTNAME).stringValue;
                 FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
-                ParentBlockName = property.FindPropertyRelative(PROPERTYNAME_PARENTBLOCKNAME).stringValue;
-
-                // //Subscribe to the ref holder when a block is being loaded (which hence loads its order data)
-                // _refHolder.SubToOnRemove(HandleRemoveObject);
-                // _refHolder.SubToOnInsert(HandleInsertObject);
-
-                // _refHolder.OnRemoveObject += HandleRemoveObject;
-                // _refHolder.OnInsertNewObject += HandleInsertObject;
             }
-
-            // public override void SubscribeToEvents()
-            // {
-            //     Debug.Log($"Parent block name: {ParentBlockName}");
-            //     base.SubscribeToEvents();
-            // }
-
+            #endregion
 #endif
         }
     }

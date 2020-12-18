@@ -69,9 +69,6 @@
             DataArrayObject = objectArray;
             return elementIndex;
         }
-
-
-
 #endif
     }
 }

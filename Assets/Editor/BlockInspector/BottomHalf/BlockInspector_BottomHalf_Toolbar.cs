@@ -95,7 +95,7 @@ namespace LinearEffectsEditor
                 }
 
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-                _target.Block.InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+                _target.Block.EditorProperties_InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
                 currentInsertPosition++;
             }
 
@@ -122,7 +122,7 @@ namespace LinearEffectsEditor
                 int index = startingIndex - i;
 
                 //MUST ALSO UPDATE THE SCRIPTABLE INSTANCE'S BLOCK VALUE or at least dont save using this scriptableinstance!
-                _target.Block.RemoveOrderElementAt(index);
+                _target.Block.EditorProperties_RemoveOrderElementAt(index);
                 // Debug.Log(_target.BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).GetArrayElementAtIndex(index).FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue);
             }
 
