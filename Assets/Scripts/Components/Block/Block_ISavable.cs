@@ -1,4 +1,5 @@
-﻿namespace LinearEffects
+﻿#if UNITY_EDITOR
+namespace LinearEffects
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -23,7 +24,6 @@
         #endregion
 
 
-        #region Handle Interface Methods
 
         //Add all your future variables inside here for saving from a block to a serializedProperty
         public void SaveToSerializedProperty(SerializedProperty blockProperty)
@@ -77,8 +77,8 @@
         }
 
 
-        #endregion
 
     }
 
 }
+#endif

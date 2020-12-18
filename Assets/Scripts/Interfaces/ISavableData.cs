@@ -1,4 +1,5 @@
-﻿namespace LinearEffects
+﻿#if UNITY_EDITOR
+namespace LinearEffects
 {
     using UnityEditor;
     using UnityEngine;
@@ -9,7 +10,6 @@
         void LoadFromSerializedProperty(SerializedProperty property);
     }
 
-#if UNITY_EDITOR
     #region    //============================== SERIALIZED PROPERTY EXTENSIONS ================================
     public static class BlockSerializedPropertyExtension
     {
@@ -31,6 +31,6 @@
         }
     }
     #endregion
-#endif
 
 }
+#endif

@@ -1,6 +1,4 @@
-﻿
-//You can remove this namespace if you wish to use this as well!s
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.Reflection;
 

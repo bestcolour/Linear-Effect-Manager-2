@@ -7,7 +7,10 @@
     //A block class will hold the order of the commands to be executed and then call
     //the respective commandexecutor to execute those commands
     [Serializable]
-    public partial class Block : ISavableData
+    public partial class Block
+#if UNITY_EDITOR
+    : ISavableData
+#endif
     // public partial class Block : ArrayUser<Block.EffectOrder, BaseEffectExecutor>, ISavableData
     {
         #region Definitions

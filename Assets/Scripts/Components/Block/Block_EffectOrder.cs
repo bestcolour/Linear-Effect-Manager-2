@@ -10,7 +10,10 @@
     public partial class Block
     {
         [Serializable]
-        public class EffectOrder : ISavableData
+        public class EffectOrder
+#if UNITY_EDITOR
+        : ISavableData
+#endif
         // public class EffectOrder : OrderData<BaseEffectExecutor>, ISavableData
         {
             [SerializeField]
@@ -51,6 +54,7 @@
 
 #endif
 
+#if UNITY_EDITOR
             #region ISavable Methods
             #region Constants
             public const string PROPERTYNAME_EFFECTNAME = "EffectName"
@@ -83,6 +87,8 @@
                 FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
             }
             #endregion
+#endif
+
         }
     }
 
