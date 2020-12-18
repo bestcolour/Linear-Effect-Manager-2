@@ -6,7 +6,6 @@
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
-    using DualList;
 
     public partial class Block
     {
@@ -21,23 +20,17 @@
 
 #if UNITY_EDITOR
             #region Editor Properties
-            public BaseEffectExecutor RefHolder => _refHolder;
             //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
             //none of these will be used in the actual build except for the variables stored
             public virtual void OnAddNew(BaseEffectExecutor holder, bool isInsert)
             {
                 _refHolder = holder;
                 _dataElmtIndex = _refHolder.AddNewObject(isInsert);
-                // SubscribeToEvents();
             }
 
             //To be called before removing the order intsance from the list
             public virtual void OnRemove()
             {
-                // _refHolder.UnSubFromOnInsert(HandleInsertObject);
-                // _refHolder.UnSubFromOnRemove(HandleRemoveObject);
-                // _refHolder.OnRemoveObject -= HandleRemoveObject;
-                // _refHolder.OnInsertNewObject -= HandleInsertObject;
                 _refHolder.RemoveObjectAt(_dataElmtIndex);
             }
 
@@ -46,7 +39,6 @@
             {
                 //Tell the holder to do a copy of my current data index details and add it to the end of the array
                 _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
-                // SubscribeToEvents();
             }
 
             public virtual void OnInsertCopy(BaseEffectExecutor holder)
@@ -56,6 +48,8 @@
             }
 
             #endregion
+
+#endif
 
             #region ISavable Methods
             #region Constants
@@ -89,7 +83,6 @@
                 FullEffectName = property.FindPropertyRelative(PROPERTYNAME_FULLEFFECTNAME).stringValue;
             }
             #endregion
-#endif
         }
     }
 

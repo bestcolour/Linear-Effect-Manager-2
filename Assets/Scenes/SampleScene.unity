@@ -265,11 +265,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blocks:
-  - _orderArray: []
-    _blockSettings:
-      BlockName: New Block 0
+  - _blockSettings:
+      BlockName: New Block 0 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 296, y: 345}
+      BlockPosition: {x: 127, y: 180}
+    _orderArray:
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 0
+      EffectName: TestUpdateExecutor
+      FullEffectName: Debug/TestUpdateExecutor
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
