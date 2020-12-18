@@ -23,7 +23,7 @@ namespace LinearEffects
             }
         }
 
-        public override int AddNewObject(bool isInsert)
+        public override int AddNewObject()
         {
             //========= ADDING NEW OBJECT TYPE TO THE ARRAY =============
             object[] objectArray = DataArrayObject;
@@ -31,14 +31,6 @@ namespace LinearEffects
             int elementIndex = ArrayExtension.AddReturn(ref objectArray, Activator.CreateInstance(dataType));
             DataArrayObject = objectArray;
 
-
-            if (isInsert)
-            {
-                //Getting baseEffector's name
-                dataType = GetType();
-                string effectorName = dataType.Name;
-                OnInsertObject?.Invoke(elementIndex, effectorName);
-            }
 
             return elementIndex;
         }

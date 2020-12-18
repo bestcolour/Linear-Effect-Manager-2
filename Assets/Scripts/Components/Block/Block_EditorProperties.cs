@@ -61,7 +61,7 @@ namespace LinearEffects
             }
 
             //Get new effect order
-            EffectOrder addedOrder = EditorProperties_GetNewOrderData(gameObject, type, false, fullEffectorName, executorName);
+            EffectOrder addedOrder = EditorProperties_GetNewOrderData(gameObject, type, fullEffectorName, executorName);
             ArrayExtension.Add(ref _orderArray, addedOrder);
             return addedOrder;
         }
@@ -101,7 +101,7 @@ namespace LinearEffects
         #region Get New OrderData Methods
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
         ///<Summary>Returns an instance of initialized EffectOrder (Therefore we need typeOfHolder to ensure that such a component exists on the block's gameobject so that the OrderData can hold a reference to it)</Summary>
-        protected EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert, string fullExecutorName, string executorName)
+        protected EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, string fullExecutorName, string executorName)
         {
             if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
             {
@@ -114,23 +114,23 @@ namespace LinearEffects
             o.ExecutorName = executorName;
             o.FullExecutorName = fullExecutorName;
 
-            o.OnAddNew(holder, isForInsert);
+            o.OnAddNew(holder);
             return o;
         }
 
-        //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        protected virtual EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
-        {
-            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
-            {
-                component = gameObject.AddComponent(typeOfHolder);
-            }
+        // //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
+        // protected virtual EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
+        // {
+        //     if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+        //     {
+        //         component = gameObject.AddComponent(typeOfHolder);
+        //     }
 
-            BaseEffectExecutor holder = component as BaseEffectExecutor;
-            EffectOrder o = new EffectOrder();
-            o.OnAddNew(holder, isForInsert);
-            return o;
-        }
+        //     BaseEffectExecutor holder = component as BaseEffectExecutor;
+        //     EffectOrder o = new EffectOrder();
+        //     o.OnAddNew(holder, isForInsert);
+        //     return o;
+        // }
         #endregion
 
         #endregion

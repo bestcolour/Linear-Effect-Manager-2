@@ -25,10 +25,10 @@
 
             //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
             //none of these will be used in the actual build except for the variables stored
-            public virtual void OnAddNew(BaseEffectExecutor holder, bool isInsert)
+            public virtual void OnAddNew(BaseEffectExecutor holder)
             {
                 _refHolder = holder;
-                _dataElmtIndex = _refHolder.AddNewObject(isInsert);
+                _dataElmtIndex = _refHolder.AddNewObject();
             }
 
             //To be called before removing the order intsance from the list

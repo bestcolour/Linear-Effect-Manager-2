@@ -47,7 +47,7 @@
             BaseEffectExecutor[] effectExecutors = _flowChart.GetComponents<BaseEffectExecutor>();
             foreach (var item in effectExecutors)
             {
-                item.InitializeSubs(NodeManager_SaveManager_HandleOnRemoveEvent, NodeManager_SaveManager_HandleOnInsertEvent);
+                item.InitializeSubs(NodeManager_SaveManager_HandleOnRemoveEvent);
             }
 
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
@@ -85,28 +85,6 @@
                     {
                         //set the data element index to something decremented
                         dataElementIndex--;
-                        dataElementProperty.serializedObject.Update();
-                        dataElementProperty.intValue = dataElementIndex;
-                        dataElementProperty.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                ,
-                effectorName
-            )
-            ;
-        }
-
-        private void NodeManager_SaveManager_HandleOnInsertEvent(int insertedIndex, string effectorName)
-        {
-            //Compare the index and if the removed index is smaller than the data element index being looped checked thru, decrement it
-            NodeManager_SaveManager_CompareDataElementIndex
-            (
-                (SerializedProperty dataElementProperty, int dataElementIndex) =>
-                {
-                    if (insertedIndex > dataElementIndex)
-                    {
-                        //set the data element index to something decremented
-                        dataElementIndex++;
                         dataElementProperty.serializedObject.Update();
                         dataElementProperty.intValue = dataElementIndex;
                         dataElementProperty.serializedObject.ApplyModifiedProperties();

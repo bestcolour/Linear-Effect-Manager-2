@@ -14,16 +14,15 @@ namespace LinearEffects
         public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectName);
 
         #region Subscribing to EventList
-        protected ChangeObjectArrayCallBack OnRemoveObject = null, OnInsertObject = null;
+        protected ChangeObjectArrayCallBack OnRemoveObject = null;
 
-        public virtual void InitializeSubs(ChangeObjectArrayCallBack onRemove, ChangeObjectArrayCallBack onInsert)
+        public virtual void InitializeSubs(ChangeObjectArrayCallBack onRemove)
         {
             OnRemoveObject = onRemove;
-            OnInsertObject = onInsert;
         }
         #endregion
 
-        public abstract int AddNewObject(bool isInsert);
+        public abstract int AddNewObject();
 
         public abstract void RemoveObjectAt(int index);
 

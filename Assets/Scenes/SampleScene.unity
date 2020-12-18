@@ -152,6 +152,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &40919614 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6767652999484195730, guid: 7353fd52ac2bc1b4ab4a28da00f94cf4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6767652999330655971}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &653098284
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,7 +286,23 @@ MonoBehaviour:
       ExecutorName: TestUpdateExecutor
       FullExecutorName: Debug/TestUpdateExecutor
     - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 2
+      ExecutorName: TestUpdateExecutor
+      FullExecutorName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 3
+      ExecutorName: TestUpdateExecutor
+      FullExecutorName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949409}
       _dataElmtIndex: 1
+      ExecutorName: TestUpdateExecutor
+      FullExecutorName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 4
+      ExecutorName: TestUpdateExecutor
+      FullExecutorName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949409}
+      _dataElmtIndex: 5
       ExecutorName: TestUpdateExecutor
       FullExecutorName: Debug/TestUpdateExecutor
   _settings:
@@ -301,7 +323,15 @@ MonoBehaviour:
   - _myAwesomeName: DDDD
     _prefab: {fileID: 0}
   - _myAwesomeName: DDDD
+    _prefab: {fileID: 40919614}
+  - _myAwesomeName: DDDD
     _prefab: {fileID: 0}
+  - _myAwesomeName: DDDD
+    _prefab: {fileID: 0}
+  - _myAwesomeName: DDDD
+    _prefab: {fileID: 0}
+  - _myAwesomeName: DDDD
+    _prefab: {fileID: 40919614}
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0
