@@ -94,7 +94,7 @@ namespace LinearEffectsEditor
 
         void SaveBlockDataToBlockProperty()
         {
-            //Save the node block's  properties
+            //Save the block's  properties to the Block's property
             BlockProperty.serializedObject.Update();
             Block.SaveToSerializedProperty(BlockProperty);
             BlockProperty.serializedObject.ApplyModifiedProperties();

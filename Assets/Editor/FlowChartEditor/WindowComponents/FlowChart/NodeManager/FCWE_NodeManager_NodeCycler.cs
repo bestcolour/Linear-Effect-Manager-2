@@ -202,7 +202,7 @@ namespace LinearEffectsEditor
             }
 
             NodeManager_ClearAllSelectedNodes();
-            NodeManager_LoadCachedBlockNodes();
+            NodeManager_SaveManager_LoadCachedBlockNodes();
         }
 
         #endregion

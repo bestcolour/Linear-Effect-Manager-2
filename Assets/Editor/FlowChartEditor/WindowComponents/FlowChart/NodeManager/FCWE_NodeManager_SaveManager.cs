@@ -16,7 +16,7 @@
         {
             _allBlockNodes = new List<BlockNode>();
             _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
-            NodeManager_LoadCachedBlockNodes();
+            NodeManager_SaveManager_LoadCachedBlockNodes();
         }
 
         void NodeManager_SaveManager_OnDisable()
@@ -41,13 +41,13 @@
             }
         }
 
-        void NodeManager_LoadCachedBlockNodes()
+        void NodeManager_SaveManager_LoadCachedBlockNodes()
         {
             //Clear all of the events subscriptions on all of the baseexecutors
             BaseEffectExecutor[] effectExecutors = _flowChart.GetComponents<BaseEffectExecutor>();
             foreach (var item in effectExecutors)
             {
-                item.InitializeSubs(NodeManager_HandleOnRemoveEvent, NodeManager_HandleOnInsertEvent);
+                item.InitializeSubs(NodeManager_SaveManager_HandleOnRemoveEvent, NodeManager_SaveManager_HandleOnInsertEvent);
             }
 
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
@@ -73,7 +73,7 @@
         #endregion
 
         #region Handles
-        private void NodeManager_HandleOnRemoveEvent(int removedIndex, string effectName)
+        private void NodeManager_SaveManager_HandleOnRemoveEvent(int removedIndex, string effectorName)
         {
             //Search through every block
             for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
@@ -87,12 +87,12 @@
                     SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
                     string orderElementEffectName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EFFECTNAME).stringValue;
 
-                    if (orderElementEffectName != effectName)
+                    if (orderElementEffectName != effectorName)
                     {
                         continue;
                     }
 
-                    Debug.Log($"EffectName {effectName} FullName: {orderElementEffectName}");
+                    Debug.Log($"EffectName {effectorName} FullName: {orderElementEffectName}");
 
 
                     //Check if the removed index is smaller than this order element's index
@@ -117,7 +117,8 @@
         }
 
 
-        private void NodeManager_HandleOnInsertEvent(int insertedIndex, string fullEffectName)
+
+        private void NodeManager_SaveManager_HandleOnInsertEvent(int insertedIndex, string fullEffectName)
         {
             //Search through every block
             for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
@@ -154,6 +155,8 @@
             }
 
         }
+
+
         #endregion
 
     }

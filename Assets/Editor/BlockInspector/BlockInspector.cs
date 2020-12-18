@@ -75,33 +75,6 @@
             }
         }
 
-        // //Calll the reorderable list to update itself
-        // public override void OnInspectorGUI()
-        // {
-        //     //Initialise each halve's sizes
-        //     Vector2 topHalfSize;
-        //     topHalfSize.x = Screen.width * 0.725f;
-        //     topHalfSize.y = _ratioOfTopHalfToInspectorHeight * Screen.height;
-
-
-        //     serializedObject.Update();
-        //     EditorGUILayout.BeginVertical();
-
-        //     //Draw top half
-        //     TopHalf_OnInspectorGUI(topHalfSize);
-        //     CenterDiv_OnInspectorGUI();
-        //     BottomHalf_OnInspectorGUI();
-
-
-        //     EditorGUILayout.EndVertical();
-        //     if (serializedObject.ApplyModifiedProperties())
-        //     {
-        //         _target.SaveModifiedProperties();
-        //     }
-        // }
-
-
-
         #endregion
 
         #region  HandleEvents

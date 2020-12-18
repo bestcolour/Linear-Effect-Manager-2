@@ -13,65 +13,15 @@
         protected abstract object[] DataArrayObject { get; set; }
 
         public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectName);
-        // public event ChangeObjectArrayCallBack OnRemoveObject = null;
-        // public event ChangeObjectArrayCallBack OnInsertNewObject = null;
 
         #region Subscribing to EventList
-        protected ChangeObjectArrayCallBack OnRemoveObject = null;
-        protected ChangeObjectArrayCallBack OnInsertObject = null;
-
-        // ///<Summary>Adds event to a Hashset of delegates to be called when an element of the holder array is removed</Summary>
-        // public void SubToOnRemove(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnRemoveObjectHashset, arrayCallBack);
-        // ///<Summary>Adds event to a Hashset of delegates to be called when a new element inserted into the holder array</Summary>
-        // public void SubToOnInsert(ChangeObjectArrayCallBack arrayCallBack) => SubToEventHashset(OnInsertObjectHashset, arrayCallBack);
-
-        // public void UnSubFromOnRemove(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnRemoveObjectHashset, arrayCallBack);
-        // public void UnSubFromOnInsert(ChangeObjectArrayCallBack arrayCallBack) => UnSubFromEventHashset(OnInsertObjectHashset, arrayCallBack);
+        protected ChangeObjectArrayCallBack OnRemoveObject = null, OnInsertObject = null;
 
         public virtual void InitializeSubs(ChangeObjectArrayCallBack onRemove, ChangeObjectArrayCallBack onInsert)
         {
             OnRemoveObject = onRemove;
             OnInsertObject = onInsert;
         }
-
-        // protected virtual void SubToEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
-        // {
-        //     //Dont allow to sub if array callback is null or hashset alrdy contains it
-        //     if (callback == null)
-        //     {
-        //         return;
-        //     }
-        //     if (eventHashset.Contains(callback))
-        //     {
-        //         return;
-        //     }
-        //     eventHashset.Add(callback);
-        // }
-
-        // protected virtual void UnSubFromEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, ChangeObjectArrayCallBack callback)
-        // {
-        //     //Dont allow to sub if array callback is null or hashset alrdy contains it
-        //     if (callback == null)
-        //     {
-        //         return;
-        //     }
-        //     if (!eventHashset.Contains(callback))
-        //     {
-        //         Debug.Log("Failed to unsub");
-        //         return;
-        //     }
-        //     eventHashset.Remove(callback);
-        // }
-
-        // protected virtual void InvokeEventHashset(HashSet<ChangeObjectArrayCallBack> eventHashset, int index)
-        // {
-        //     foreach (var item in eventHashset)
-        //     {
-        //         item.Invoke(index);
-        //     }
-        // }
-
-
 
         #endregion
 
