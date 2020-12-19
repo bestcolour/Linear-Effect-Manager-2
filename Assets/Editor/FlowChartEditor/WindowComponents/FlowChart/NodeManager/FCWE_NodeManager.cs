@@ -43,7 +43,7 @@
         //Optimise drawcalls later by doing occulsion culling
         //because this script isnt gunna get compiledi into the final build, ill use list instead of array
         List<BlockNode> _allBlockNodes;
-        Dictionary<string,BlockNode> _allBlockNodesDictionary ;
+        Dictionary<string, BlockNode> _allBlockNodesDictionary;
 
         HashSet<BlockNode> _selectedBlocks;
 
@@ -295,8 +295,6 @@
 
 
         //================================================= SUPPORTING FUNCTIONS ==================================================
-
-
         #region Selecting Block
         ///<Summary>
         /// Is called to select one and only one block node with the rest all cleared
@@ -354,6 +352,25 @@
             _selectedBlocks.Clear();
         }
         #endregion
+
+        public static BlockNode NodeManager_GetBlockNode(string blockName)
+        {
+            bool foundIt = instance.NodeManager_GetBlockNode(blockName, out BlockNode blockNode); ;
+            if (!foundIt)
+            {
+                Debug.LogError($"Block node with the name {blockName} was not found!");
+                return null;
+            }
+
+            return blockNode;
+        }
+
+        bool NodeManager_GetBlockNode(string blockName, out BlockNode blockNode)
+        {
+            bool foundIt = _allBlockNodesDictionary.TryGetValue(blockName, out blockNode);
+            return foundIt;
+        }
+
     }
 
 }

@@ -268,13 +268,15 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 229, y: 244}
-      ConnectedTowardsBlockName: magic
-    _orderArray:
-    - _refHolder: {fileID: 910949409}
-      _dataElmtIndex: 0
-      ExecutorName: TestUpdateExecutor
-      FullExecutorName: Debug/TestUpdateExecutor
+      BlockPosition: {x: 131, y: 250}
+      ConnectedTowardsBlockName: New Block 1
+    _orderArray: []
+  - _blockSettings:
+      BlockName: New Block 1
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 346, y: 110}
+      ConnectedTowardsBlockName: 
+    _orderArray: []
   _settings:
     _someSetting: 0
 --- !u!114 &910949409
@@ -289,9 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDatas:
-  - _myAwesomeName: DDDD
-    _prefab: {fileID: 0}
+  _effectDatas: []
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0

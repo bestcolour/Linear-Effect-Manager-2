@@ -37,7 +37,7 @@ namespace LinearEffectsEditor
 
         #region Events
         ///<Summary>
-        ///Is called when block node's blockname is changed. The method should return true if the new blockname is valid else return false with a new unique and valid name
+        ///Is called when block node's blockname is changed. The method should return true if the new blockname is valid else return false with a new unique and valid name. Only one method could be assigned to this delegate!
         ///</Summary>
         public VerifyBlockNameChangeCallback OnVerifyBlockNameChange = null;
         #endregion

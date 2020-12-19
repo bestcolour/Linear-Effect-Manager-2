@@ -41,20 +41,21 @@
         Color _blockColour;
         string _connectedTowardsBlockName;
 
+        BlockNode _connectedTowardsBlockNode;
 
 
         #region Saving & Initialization
 
-        public BlockNode(SerializedProperty blockProperty, Vector2 position)
-        {
-            BlockProperty = blockProperty;
-            _rect = NODEBLOCK_SIZE;
-            // ID = System.Guid.NewGuid().ToString();
-            IsSelected = false;
+        // public BlockNode(SerializedProperty blockProperty, Vector2 position)
+        // {
+        //     BlockProperty = blockProperty;
+        //     _rect = NODEBLOCK_SIZE;
+        //     // ID = System.Guid.NewGuid().ToString();
+        //     IsSelected = false;
 
-            LoadFrom();
-            _rect.position = position;
-        }
+        //     LoadFrom();
+        //     _rect.position = position;
+        // }
 
         public BlockNode(SerializedProperty blockProperty)
         {
@@ -66,13 +67,23 @@
             LoadFrom();
         }
 
-        ///<Summary>Method which is used to reset node's value incase you do not want to create a new instance of BlockNode class</Summary>
-        public void SetBlockProperty(SerializedProperty blockProperty)
-        {
-            BlockProperty = blockProperty;
-            IsSelected = false;
-            LoadFrom();
-        }
+        //   public BlockNode(SerializedProperty blockProperty,GUIStyle remove)
+        // {
+        //     BlockProperty = blockProperty;
+        //     _rect = NODEBLOCK_SIZE;
+        //     // ID = System.Guid.NewGuid().ToString();
+        //     IsSelected = false;
+
+        //     LoadFrom();
+        // }
+
+        // ///<Summary>Method which is used to reset node's value incase you do not want to create a new instance of BlockNode class</Summary>
+        // public void SetBlockProperty(SerializedProperty blockProperty)
+        // {
+        //     BlockProperty = blockProperty;
+        //     IsSelected = false;
+        //     LoadFrom();
+        // }
 
         //Loads the block's cached variables into this node 
         void LoadFrom()
@@ -108,6 +119,7 @@
         {
             Color prevColour;
 
+            //=============== DRAW SELECTED HIGHLIGHT ==================
             if (IsSelected)
             {
                 //Modify rect
@@ -120,6 +132,12 @@
                 prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
                 GUI.Box(rectCopy, string.Empty);
                 GUIExtensions.End_GUI_ColourChange(prevColour);
+            }
+
+            //=============== DRAW CONNECTED TOWARDS BLOCK LINE ==================
+            if (!string.IsNullOrEmpty(_connectedTowardsBlockName))
+            {
+                Handles.DrawLine(Position, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName).Position);
             }
 
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);

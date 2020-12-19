@@ -52,8 +52,10 @@
         {
             uniqueName = "";
 
+            //We do not allow empty/null/whitespaces to be set as out block names
             //If there is already an entry inside of the dictionary with that given newName,
-            if (_allBlockNodesDictionary.ContainsKey(newName))
+            //reason is because of ease for identification 
+            if (_allBlockNodesDictionary.ContainsKey(newName) || string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
             {
                 uniqueName = NodeManager_NodeCycler_GetUniqueBlockName(newName);
                 BlockEditor_RenameDictionaryKey(prevName, uniqueName);
