@@ -15,15 +15,10 @@
     {
         #region Definitions
         [Serializable]
-        public class BlockProperties
+        public partial class BlockProperties
         {
             //======================= NODE PROPERTIES (ie properties which block node uses & saves) =========================
             public string BlockName;
-#if UNITY_EDITOR
-            public Color BlockColour;
-            [HideInInspector]
-            public Vector2 BlockPosition;
-#endif
         }
 
 

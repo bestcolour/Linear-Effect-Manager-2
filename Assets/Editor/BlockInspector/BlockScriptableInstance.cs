@@ -32,7 +32,7 @@ namespace LinearEffectsEditor
         #region Properties
         public GameObject BlockGameObject { get; private set; }
 
-     public   SerializedProperty BlockProperty => _blockNode.BlockProperty;
+        SerializedProperty BlockProperty => _blockNode.BlockProperty;
         #endregion
 
         #region Events

@@ -7,6 +7,15 @@ namespace LinearEffects
     using UnityEditor;
     public partial class Block
     {
+        public partial class BlockProperties
+        {
+            public Color BlockColour;
+            [HideInInspector]
+            public Vector2 BlockPosition;
+            public string ConnectedTowardsBlockName;
+        }
+
+
         #region Constants
         //Being used in FCWE_NodeManager_NodeCycler.cs
         public const string DEFAULT_BLOCK_NAME = "New Block";
@@ -19,6 +28,7 @@ namespace LinearEffects
         public const string PROPERTYPATH_BLOCKNAME = PROPERTYNAME_SETTINGS + ".BlockName";
         public const string PROPERTYPATH_BLOCKCOLOUR = PROPERTYNAME_SETTINGS + ".BlockColour";
         public const string PROPERTYPATH_BLOCKPOSITION = PROPERTYNAME_SETTINGS + ".BlockPosition";
+        public const string PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME = PROPERTYNAME_SETTINGS + ".ConnectedTowardsBlockName";
 
         public const string PROPERTYNAME_ORDERARRAY = "_orderArray";
         #endregion
@@ -38,6 +48,7 @@ namespace LinearEffects
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.BlockColour;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
+            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = _blockSettings.ConnectedTowardsBlockName;
 
 
             //============= SAVING ORDER ARRAY =====================
@@ -64,6 +75,7 @@ namespace LinearEffects
             _blockSettings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockSettings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+            _blockSettings.ConnectedTowardsBlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
 
             //============= LOADING ORDER ARRAY =====================
             SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
