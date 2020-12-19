@@ -15,7 +15,8 @@
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
 
-
+        static readonly Color LIGHT_THEME_CONNECTIONLINE_COLOUR = Color.black;
+        static readonly Color DARK_THEME_CONNECTIONLINE_COLOUR = Color.white;
 
         #endregion
 
@@ -36,12 +37,9 @@
         #endregion
 
 
-        //==================== RUNTIME VARIABLES FROM BLOCK PROPERTY ============================
         string _label;
         Color _blockColour;
         string _connectedTowardsBlockName;
-
-        BlockNode _connectedTowardsBlockNode;
 
 
         #region Saving & Initialization
@@ -92,6 +90,7 @@
             _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _rect.position = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
             _connectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+
         }
 
         public void Save()
@@ -115,6 +114,23 @@
         #endregion
 
         #region Window Functions
+        public bool CheckIfClicked()
+        {
+            return _rect.Contains(Event.current.mousePosition, true);
+        }
+
+        public bool CheckRectOverlap(Rect selectionBox)
+        {
+            return _rect.Overlaps(selectionBox, true);
+        }
+
+        public void ProcessMouseDrag(Vector2 mouseDelta)
+        {
+            _rect.position += mouseDelta;
+        }
+        #endregion
+
+        #region Drawing Functions
         public void Draw()
         {
             Color prevColour;
@@ -137,28 +153,23 @@
             //=============== DRAW CONNECTED TOWARDS BLOCK LINE ==================
             if (!string.IsNullOrEmpty(_connectedTowardsBlockName))
             {
-                Handles.DrawLine(Position, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName).Position);
+                prevColour = Handles.color;
+                Handles.color = GetConnectionLineColour();
+                Handles.DrawAAPolyLine(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
+                // Handles.DrawLine(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
+                Handles.color = prevColour;
             }
 
+            //============ DRAW BOX ===============
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
             GUI.Box(_rect, _label);
             GUIExtensions.End_GUI_ColourChange(prevColour);
-
         }
 
-        public bool CheckIfClicked()
-        {
-            return _rect.Contains(Event.current.mousePosition, true);
-        }
 
-        public bool CheckRectOverlap(Rect selectionBox)
+        static Color GetConnectionLineColour()
         {
-            return _rect.Overlaps(selectionBox, true);
-        }
-
-        public void ProcessMouseDrag(Vector2 mouseDelta)
-        {
-            _rect.position += mouseDelta;
+            return !EditorGUIUtility.isProSkin ? LIGHT_THEME_CONNECTIONLINE_COLOUR : DARK_THEME_CONNECTIONLINE_COLOUR;
         }
         #endregion
     }
