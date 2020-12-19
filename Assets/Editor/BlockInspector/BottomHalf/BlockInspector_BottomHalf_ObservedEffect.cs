@@ -5,13 +5,13 @@ namespace LinearEffectsEditor
     using UnityEditor;
     using LinearEffects;
 
-//Responsible for drawing and updating the current being inspected effect
+    //Responsible for drawing and updating the current being inspected effect
     public partial class BlockInspector : ImprovedEditor
     {
         #region Observed Effect Fields
         SerializedProperty _currObservedProperty = default;
         #endregion
-        
+
         const float OBSERVED_EFFECTBG_BORDER = 50f,
            OBSERVED_EFFECT_YOFFSET = 20f
            ;
@@ -69,6 +69,13 @@ namespace LinearEffectsEditor
             //===== GETTING OBSERVED EFFECT =====
             //convert holder to serializedobject
             BaseEffectExecutor holder = (BaseEffectExecutor)orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_REFHOLDER).objectReferenceValue;
+
+            //Since we are destroying unused effect executor whenever we remove a effectorder from the executor, we need to check if holder is null
+            if (holder == null)
+            {
+                return false;
+            }
+
             SerializedObject holderObject = new SerializedObject(holder);
 
             //Get the effectDatas array as serializedProperty

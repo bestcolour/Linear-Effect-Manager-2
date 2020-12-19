@@ -42,11 +42,18 @@ namespace LinearEffects
             ArrayExtension.RemoveAt(ref objectArray, index);
             DataArrayObject = objectArray;
 
-            //Getting baseEffector's effectname
-            Type thisType = GetType();
-            string effectName = thisType.Name;
-            Debug.Assert(OnRemoveObject != null, "Quack");
-            OnRemoveObject?.Invoke(index, effectName);
+            //Only call this event if there is more than 0 elements in the object array after removal
+            if (DataArrayObject.Length > 0)
+            {
+                //Getting baseEffector's effectname
+                Type thisType = GetType();
+                string effectName = thisType.Name;
+                OnRemoveObject?.Invoke(index, effectName);
+                return;
+            }
+
+            //Else, remove destroy this component
+            DestroyImmediate(this);
         }
 
         public override int DuplicateDataElement(int index)
