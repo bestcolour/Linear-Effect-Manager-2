@@ -11,12 +11,13 @@
         #region Constants
         //========================= NODE CONSTANTS =========================================
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
-        const float NODEBLOCK_SELECTION_THICKNESS = 5f;
+        const float NODEBLOCK_SELECTION_THICKNESS = 5f
+        ;
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
 
-        static readonly Color LIGHT_THEME_CONNECTIONLINE_COLOUR = Color.black;
-        static readonly Color DARK_THEME_CONNECTIONLINE_COLOUR = Color.white;
+        // static readonly Color LIGHT_THEME_CONNECTIONLINE_COLOUR = Color.black;
+        // static readonly Color DARK_THEME_CONNECTIONLINE_COLOUR = Color.white;
 
         #endregion
 
@@ -40,6 +41,20 @@
         string _label;
         Color _blockColour;
         string _connectedTowardsBlockName;
+
+        ConnectionLine _arrowLine;
+        ConnectionLine ArrowLine
+        {
+            get
+            {
+                _arrowLine = string.IsNullOrEmpty(_connectedTowardsBlockName) ? null : new ConnectionLine();
+                return _arrowLine;
+            }
+            set
+            {
+                _arrowLine = value;
+            }
+        }
 
 
         #region Saving & Initialization
@@ -131,7 +146,17 @@
         #endregion
 
         #region Drawing Functions
-        public void Draw()
+        ///<Summary>Handles drawing the arrow lines if any </Summary>
+        public void DrawNodeArrowLines()
+        {
+            if (ArrowLine != null)
+            {
+                ArrowLine.Draw(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
+            }
+        }
+
+        ///<Summary>Handles drawing the block itself </Summary>
+        public void DrawNodeBlocks()
         {
             Color prevColour;
 
@@ -150,16 +175,6 @@
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }
 
-            //=============== DRAW CONNECTED TOWARDS BLOCK LINE ==================
-            if (!string.IsNullOrEmpty(_connectedTowardsBlockName))
-            {
-                prevColour = Handles.color;
-                Handles.color = GetConnectionLineColour();
-                Handles.DrawAAPolyLine(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
-                // Handles.DrawLine(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
-                Handles.color = prevColour;
-            }
-
             //============ DRAW BOX ===============
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
             GUI.Box(_rect, _label);
@@ -167,10 +182,6 @@
         }
 
 
-        static Color GetConnectionLineColour()
-        {
-            return !EditorGUIUtility.isProSkin ? LIGHT_THEME_CONNECTIONLINE_COLOUR : DARK_THEME_CONNECTIONLINE_COLOUR;
-        }
         #endregion
     }
 

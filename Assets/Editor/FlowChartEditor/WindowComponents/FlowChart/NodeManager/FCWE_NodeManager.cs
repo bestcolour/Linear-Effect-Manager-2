@@ -105,10 +105,16 @@
 
         void NodeManager_Draw()
         {
+            //========== DRAW NODE BLOCKS ===========
+            for (int i = 0; i < _allBlockNodes.Count; i++)
+            {
+                _allBlockNodes[i].DrawNodeArrowLines();
+            }
+
             //Draw from the bottom up
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                _allBlockNodes[i].Draw();
+                _allBlockNodes[i].DrawNodeBlocks();
             }
 
             //Draw Selection box
