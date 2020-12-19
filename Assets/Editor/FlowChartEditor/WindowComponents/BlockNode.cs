@@ -42,12 +42,12 @@
         Color _blockColour;
         string _connectedTowardsBlockName;
 
-        ConnectionLine _arrowLine;
-        ConnectionLine ArrowLine
+        ArrowConnectionLine _arrowLine;
+        ArrowConnectionLine ArrowLine
         {
             get
             {
-                _arrowLine = string.IsNullOrEmpty(_connectedTowardsBlockName) ? null : new ConnectionLine();
+                _arrowLine = string.IsNullOrEmpty(_connectedTowardsBlockName) ? null : new ArrowConnectionLine();
                 return _arrowLine;
             }
             set
