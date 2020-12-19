@@ -47,7 +47,7 @@
             BaseEffectExecutor[] effectExecutors = _flowChart.GetComponents<BaseEffectExecutor>();
             foreach (var item in effectExecutors)
             {
-                item.InitializeSubs(NodeManager_SaveManager_HandleOnRemoveEvent);
+                item.InitializeSubs(StaticMethods_HandleOnRemoveEvent);
             }
 
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================
@@ -68,66 +68,6 @@
                 _allBlockNodes.Add(node);
                 _allBlockNodesDictionary.Add(node.Label, node);
             }
-        }
-        #endregion
-
-        #region Handles
-        public delegate void CompareDataElementIndexCallback(SerializedProperty dataElementProperty, int dataElementIndex);
-
-        private void NodeManager_SaveManager_HandleOnRemoveEvent(int removedIndex, string effectorName)
-        {
-            //Compare the index and if the removed index is smaller than the data element index being looped checked thru, decrement it
-            NodeManager_SaveManager_CompareDataElementIndex
-            (
-                (SerializedProperty dataElementProperty, int dataElementIndex) =>
-                {
-                    if (removedIndex < dataElementIndex)
-                    {
-                        //set the data element index to something decremented
-                        dataElementIndex--;
-                        dataElementProperty.serializedObject.Update();
-                        dataElementProperty.intValue = dataElementIndex;
-                        dataElementProperty.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                ,
-                effectorName
-            )
-            ;
-        }
-
-        //This method does a check between element index but only via serialized property
-        void NodeManager_SaveManager_CompareDataElementIndex(CompareDataElementIndexCallback compareDataElementIndex, string effectorName)
-        {
-            //Search through every block
-            for (int blockIndex = 0; blockIndex < _allBlocksArrayProperty.arraySize; blockIndex++)
-            {
-                SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(blockIndex);
-                SerializedProperty orderArray = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);
-
-                for (int orderIndex = 0; orderIndex < orderArray.arraySize; orderIndex++)
-                {
-                    //Check if block's effect order name is the same as the fullEffectname
-                    SerializedProperty orderElement = orderArray.GetArrayElementAtIndex(orderIndex);
-                    string orderElementEffectName = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EXECUTORNAME).stringValue;
-
-                    if (orderElementEffectName != effectorName)
-                    {
-                        continue;
-                    }
-
-                    // Debug.Log($"EffectName {effectorName} FullName: {orderElementEffectName}");
-
-
-                    //Check if the removed index is smaller than this order element's index
-                    SerializedProperty dataElementProperty = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX);
-                    int dataElmtIndex = dataElementProperty.intValue;
-                    compareDataElementIndex?.Invoke(dataElementProperty, dataElmtIndex);
-                }
-
-
-            }
-
         }
         #endregion
 

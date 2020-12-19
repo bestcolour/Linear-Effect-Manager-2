@@ -34,6 +34,8 @@
 
         #region  Properties
         Vector2 CenterScreen => new Vector2(Screen.width, Screen.height) * 0.35f;
+
+        protected static FlowChartWindowEditor instance = null;
         #endregion
 
 
@@ -52,6 +54,7 @@
             _flowChart = flowChart;
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
+            instance = window;
         }
 
         private void OnEnable()

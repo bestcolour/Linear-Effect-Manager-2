@@ -95,7 +95,8 @@ namespace LinearEffectsEditor
                 }
 
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
-                _target.Block.EditorProperties_InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
+                _target.Block.EditorProperties_InsertOrderElement(effectOrder, currentInsertPosition);
+                // _target.Block.EditorProperties_InsertOrderElement(_target.BlockGameObject, executorType, effectOrder, currentInsertPosition);
                 //Do manual checking of inserting because the onInsert check which is carried out by FCWE_NodeManager_SaveManager.cs will not affect the scriptableinstance's block
                 // _target.Block.EditorProperties_ManualOnInsertCheck(currentInsertPosition, executorType.Name);
                 currentInsertPosition++;

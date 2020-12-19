@@ -45,6 +45,7 @@ namespace LinearEffects
             //Getting baseEffector's effectname
             Type thisType = GetType();
             string effectName = thisType.Name;
+            Debug.Assert(OnRemoveObject != null, "Quack");
             OnRemoveObject?.Invoke(index, effectName);
         }
 

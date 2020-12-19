@@ -51,17 +51,19 @@ namespace LinearEffects
 
         #region Adding Methods
         ///<Summary>Adds a new order element into the block class. We need a gameobject which this Block class is being serialized on.</Summary>
-        public EffectOrder EditorProperties_AddNewOrderElement(GameObject gameObject, Type type, string fullEffectorName, string executorName)
+        public EffectOrder EditorProperties_AddNewOrderElement(BaseEffectExecutor executor, string fullEffectorName, string executorName)
+        // public EffectOrder EditorProperties_AddNewOrderElement(GameObject gameObject, Type type, string fullEffectorName, string executorName)
         {
-            //Check if type is inheriting from base effect executor
-            if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
-            {
-                Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
-                return null;
-            }
+            // //Check if type is inheriting from base effect executor
+            // if (!type.IsSubclassOf(typeof(BaseEffectExecutor)))
+            // {
+            //     Debug.Log($"Type {type} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
+            //     return null;
+            // }
 
             //Get new effect order
-            EffectOrder addedOrder = EditorProperties_GetNewOrderData(gameObject, type, fullEffectorName, executorName);
+            EffectOrder addedOrder = EditorProperties_GetNewOrderData(executor, fullEffectorName, executorName);
+            // EffectOrder addedOrder = EditorProperties_GetNewOrderData(gameObject, type, fullEffectorName, executorName);
             ArrayExtension.Add(ref _orderArray, addedOrder);
             return addedOrder;
         }
@@ -69,25 +71,26 @@ namespace LinearEffects
         #region  Insert Methods
         //I assume this is for copy/cut pasting of orders
         ///<Summary>Inserts a new instance of OData into a currently existing holder type instance (if there is no holder type present, a new one will be added)</Summary>
-        public virtual void EditorProperties_InsertOrderElement(GameObject gameObject, Type holderType, EffectOrder orderData, int index)
+        public virtual void EditorProperties_InsertOrderElement(EffectOrder orderData, int index)
+        // public virtual void EditorProperties_InsertOrderElement(GameObject gameObject, Type holderType, EffectOrder orderData, int index)
         {
-            if (!holderType.IsSubclassOf(typeof(BaseEffectExecutor)))
-            {
-                Debug.Log($"Type {holderType} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
-                return;
-            }
+            // if (!holderType.IsSubclassOf(typeof(BaseEffectExecutor)))
+            // {
+            //     Debug.Log($"Type {holderType} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
+            //     return;
+            // }
 
-            if (!gameObject.TryGetComponent(holderType, out Component component))
-            {
-                //If no component found, insert the orderdata into the order array
-                component = gameObject.AddComponent(holderType);
-                BaseEffectExecutor holder = component as BaseEffectExecutor;
+            // if (!gameObject.TryGetComponent(holderType, out Component component))
+            // {
+            //     //If no component found, insert the orderdata into the order array
+            //     component = gameObject.AddComponent(holderType);
+            //     BaseEffectExecutor holder = component as BaseEffectExecutor;
 
-                //Call Insert copy functions
-                orderData.OnInsertCopy(holder);
-                ArrayExtension.Insert(ref _orderArray, index, orderData);
-                return;
-            }
+            //     //Call Insert copy functions
+            //     orderData.OnInsertCopy(holder);
+            //     ArrayExtension.Insert(ref _orderArray, index, orderData);
+            //     return;
+            // }
 
             //Call Insert copy functions
             orderData.OnInsertCopy();
@@ -101,36 +104,23 @@ namespace LinearEffects
         #region Get New OrderData Methods
         //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
         ///<Summary>Returns an instance of initialized EffectOrder (Therefore we need typeOfHolder to ensure that such a component exists on the block's gameobject so that the OrderData can hold a reference to it)</Summary>
-        protected EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, string fullExecutorName, string executorName)
+        protected EffectOrder EditorProperties_GetNewOrderData(BaseEffectExecutor executor, string fullExecutorName, string executorName)
+        // protected EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, string fullExecutorName, string executorName)
         {
-            if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
-            {
-                component = gameObject.AddComponent(typeOfHolder);
-            }
+            // if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
+            // {
+            //     component = gameObject.AddComponent(typeOfHolder);
+            // }
 
-            BaseEffectExecutor holder = component as BaseEffectExecutor;
+            // BaseEffectExecutor holder = component as BaseEffectExecutor;
             Block.EffectOrder o = new Block.EffectOrder();
 
             o.ExecutorName = executorName;
             o.FullExecutorName = fullExecutorName;
 
-            o.OnAddNew(holder);
+            o.OnAddNew(executor);
             return o;
         }
-
-        // //Since this class is not deriving from a monobehaviour, we need to pass in the reference of the gameobject this class is being serialized on
-        // protected virtual EffectOrder EditorProperties_GetNewOrderData(GameObject gameObject, Type typeOfHolder, bool isForInsert)
-        // {
-        //     if (!gameObject.TryGetComponent(typeOfHolder, out Component component))
-        //     {
-        //         component = gameObject.AddComponent(typeOfHolder);
-        //     }
-
-        //     BaseEffectExecutor holder = component as BaseEffectExecutor;
-        //     EffectOrder o = new EffectOrder();
-        //     o.OnAddNew(holder, isForInsert);
-        //     return o;
-        // }
         #endregion
 
         #endregion
@@ -166,7 +156,7 @@ namespace LinearEffects
             }
         }
 
-          public virtual void EditorProperties_ManualOnInsertCheck(int insertedIndex, string effectorName)
+        public virtual void EditorProperties_ManualOnInsertCheck(int insertedIndex, string effectorName)
         {
             foreach (var item in _orderArray)
             {

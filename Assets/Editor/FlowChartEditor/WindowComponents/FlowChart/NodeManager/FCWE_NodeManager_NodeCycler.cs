@@ -248,7 +248,7 @@ namespace LinearEffectsEditor
                 string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEXECUTORNAME).stringValue;
                 string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EXECUTORNAME).stringValue;
 
-                if (!CommandData.TryGetExecutor(fullEffectName, out Type type))
+                if (!CommandData.TryGetExecutor(fullEffectName, out Type executorType))
                 {
                     Debug.LogError($"The effectname : {effectName} cannot be found in CommandData anymore! Full path: {fullEffectName}");
                     return;
@@ -259,7 +259,10 @@ namespace LinearEffectsEditor
                 effectOrder.LoadFromSerializedProperty(effectOrderProperty);
 
                 //Add the effectorder into the duplicate block
-                duplicateBlock.EditorProperties_InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
+                //Always ensure that there is a executor component on the flowchart gameobject
+                StaticMethods_EnsureExecutorComponent(_flowChart.gameObject, executorType);
+                duplicateBlock.EditorProperties_InsertOrderElement(effectOrder, i);
+                // duplicateBlock.EditorProperties_InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
             }
 
 

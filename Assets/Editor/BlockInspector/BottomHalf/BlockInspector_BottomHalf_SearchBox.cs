@@ -134,7 +134,9 @@
             int previousCategoryIndex = fullEffectorName.LastIndexOf(CategorizedSearchBox.CATEGORY_IDENTIFIER);
             string effectName = previousCategoryIndex == -1 ? fullEffectorName : fullEffectorName.Remove(0, previousCategoryIndex + 1);
 
-            _target.Block.EditorProperties_AddNewOrderElement(BlockGameObject, type, fullEffectorName, effectName);
+            BaseEffectExecutor executor = FlowChartWindowEditor.StaticMethods_EnsureExecutorComponent(BlockGameObject, type);
+            _target.Block.EditorProperties_AddNewOrderElement(executor, fullEffectorName, effectName);
+            // _target.Block.EditorProperties_AddNewOrderElement(BlockGameObject, type, fullEffectorName, effectName);
             _target.SaveModifiedProperties();
 
         }
