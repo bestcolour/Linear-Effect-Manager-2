@@ -20,7 +20,7 @@
 
         const string NODEBLOCK_ARROWMODE_BUTTON_TEXT = "Connect to \n";
         static readonly Vector2 NODEBLOCK_ARROWMODE_BUTTON_SIZE = new Vector2(75f, 20f);
-        static readonly Vector2 NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET = new Vector2(10f, 0);
+        static readonly Vector2 NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET = new Vector2(20,20);
 
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
@@ -52,9 +52,9 @@
         public Vector2 Position => _rect.position;
 
         public Vector2 Center => _rect.center;
-        public Vector2 InConnectionPoint => _rect.center + NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
-        public Vector2 OutConnectionPoint => _rect.center - NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
-
+        public Vector2 OutConnectionPoint => _rect.center + NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
+        public Vector2 InConnectionPoint => _rect.center - NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
+        
         public Color Colour => _blockColour;
 
         public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;

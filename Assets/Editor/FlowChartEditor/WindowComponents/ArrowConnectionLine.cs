@@ -18,6 +18,8 @@
         , LINE_REMOVEBUTTON_SIZE = 5f
         , LINE_REMOVEBUTTON_PICKSIZE = 7f
         , LINE_TRAINGLE_THICKNESS = 7.5f
+        , LINE_FIRST_TRIANGLE_POSITION_PERCENTAGE = 0.333f
+        , LINE_SECOND_TRIANGLE_POSITION_PERCENTAGE = 0.666f
         ;
 
         static readonly Color LIGHT_THEME_CONNECTIONLINE_COLOUR = Color.black;
@@ -60,52 +62,60 @@
 
             Handles.BeginGUI();
 
+
+            //Useful vars
+            Vector2 startPoint = StartNode.OutConnectionPoint, endPoint = EndNode.InConnectionPoint;
+            Vector2 dir = endPoint - startPoint;
+            Vector2 dirNormalized = dir.normalized;
+
             //=========== DRAW LINE =============
-            Handles.DrawAAPolyLine(LINE_WIDTH, StartNode.OutConnectionPoint, EndNode.InConnectionPoint);
-            // Handles.DrawDottedLine(StartNode.Center, EndNode.Center,LINE_WIDTH);
-            DrawTriangleArrow();
-            // DrawRemoveButton();
+            Handles.DrawAAPolyLine(LINE_WIDTH, startPoint, endPoint);
+
+            //============ DRAW TRIANGLES ===========
+            //Draw one triangle 1/3 along the line 
+            Vector2 currCenterPoint = dir * LINE_FIRST_TRIANGLE_POSITION_PERCENTAGE + startPoint;
+            DrawTriangleArrow(currCenterPoint, dirNormalized);
+            //Draw one triangle 2/3 along the line 
+            currCenterPoint = dir * LINE_SECOND_TRIANGLE_POSITION_PERCENTAGE + startPoint;
+            DrawTriangleArrow(currCenterPoint, dirNormalized);
+
+            //============ DRAW REMOVE BUTTON ===========
+            DrawRemoveButton();
 
             Handles.EndGUI();
             Handles.color = prevColour;
         }
 
-        //         private void DrawRemoveButton()
-        //         {
-        //             Vector2 centerPoint = (StartNode.Center + EndNode.Center) * 0.5f;
-        //             Rect rect = new Rect(centerPoint, REMOVEBUTTON_SIZE);
+        private void DrawRemoveButton()
+        {
+            //The halfway mark for the line
+            Vector2 centerPoint = (StartNode.Center + EndNode.Center) * 0.5f;
+            if (Handles.Button(centerPoint, Quaternion.identity, LINE_REMOVEBUTTON_SIZE, LINE_REMOVEBUTTON_PICKSIZE, Handles.RectangleHandleCap))
+            {
+                onRemove?.Invoke(StartNode.Label, EndNode.Label);
+            }
+        }
 
-        // Handles.Button((inPoint.rect.center + outPoint.rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap)
-        //             if (GUI.Button(rect, "Remove"))
-        //             {
-
-        //             }
-        //         }
-
-        void DrawTriangleArrow()
+        void DrawTriangleArrow(Vector2 centerPoint, Vector2 dir)
         {
             //Instruction to visualise: Draw a unit circle and draw a line to any direction inside that circle.
             //The centerPoint will be the center of that line 
             //Imagine a triangle being drawn at that center pointing towards the circle's edges from the origin of the unit circle
             //=========== DRAW TRIANGLE =============
-
             //------- Top Point ---------
-            Vector2 centerPoint = (StartNode.Center + EndNode.Center) * 0.5f;
+            // Vector2 centerPoint = (StartNode.Center + EndNode.Center) * 0.5f;
             // Vector2 dir = (EndNode.Center - StartNode.Center).normalized;
-            // Vector2 triangleTopPoint = centerPoint + dir * LINE_TRAINGLE_HALF_HEIGHT;
+            Vector2 triangleTopPoint = centerPoint + dir * LINE_TRAINGLE_HALF_HEIGHT;
 
 
-            // Vector2 orthonganalDir = Vector2.Perpendicular(dir);
+            Vector2 orthonganalDir = Vector2.Perpendicular(dir);
 
-            // Vector2 triangleBaseCenter = centerPoint + (-dir * LINE_TRAINGLE_HALF_HEIGHT);
-            // Vector2 triangleBottomLeftPoint = triangleBaseCenter + (orthonganalDir * LINE_TRIANGLE_HALF_WIDTH);
-            // Vector2 triangleBottomrightPoint = triangleBaseCenter + (-orthonganalDir * LINE_TRIANGLE_HALF_WIDTH);
+            Vector2 triangleBaseCenter = centerPoint + (-dir * LINE_TRAINGLE_HALF_HEIGHT);
+            Vector2 triangleBottomLeftPoint = triangleBaseCenter + (orthonganalDir * LINE_TRIANGLE_HALF_WIDTH);
+            Vector2 triangleBottomrightPoint = triangleBaseCenter + (-orthonganalDir * LINE_TRIANGLE_HALF_WIDTH);
+            Handles.DrawAAPolyLine(LINE_TRAINGLE_THICKNESS, triangleTopPoint, triangleBottomLeftPoint, triangleBottomrightPoint, triangleTopPoint);
 
-            if (Handles.Button(centerPoint, Quaternion.identity, LINE_REMOVEBUTTON_SIZE, LINE_REMOVEBUTTON_PICKSIZE, Handles.RectangleHandleCap))
-            {
-                onRemove?.Invoke(StartNode.Label, EndNode.Label);
-            }
-            // Handles.DrawAAPolyLine(LINE_TRAINGLE_THICKNESS, triangleTopPoint, triangleBottomLeftPoint, triangleBottomrightPoint, triangleTopPoint);
+
         }
 
 
