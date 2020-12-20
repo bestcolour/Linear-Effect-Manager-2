@@ -12,6 +12,7 @@ namespace LinearEffects
             public Color BlockColour;
             [HideInInspector]
             public Vector2 BlockPosition;
+            [HideInInspector]
             public string ConnectedTowardsBlockName;
         }
 
