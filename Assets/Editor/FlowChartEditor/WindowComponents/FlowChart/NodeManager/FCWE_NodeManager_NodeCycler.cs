@@ -60,6 +60,11 @@ namespace LinearEffectsEditor
         }
 
         #region Creating NodeBlocks
+        BlockNode NodeManager_NodeCycler_CreateNewNodeConstructor(SerializedProperty blockProperty)
+        {
+            return new BlockNode(blockProperty, NodeManager_ArrowConnectionCycler_ConnectToBlockNode);
+        }
+
         void NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom from)
         {
             _newBlockFromEnum = from;
@@ -94,7 +99,7 @@ namespace LinearEffectsEditor
             Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName(Block.DEFAULT_BLOCK_NAME));
 
             SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
-            BlockNode node = new BlockNode(newBlockProperty);
+            BlockNode node = NodeManager_NodeCycler_CreateNewNodeConstructor(newBlockProperty);
 
             _allBlockNodes.Add(node);
             _allBlockNodesDictionary.Add(node.Label, node);
@@ -268,7 +273,7 @@ namespace LinearEffectsEditor
 
             //====== ADDING THE DUPLICATED NODE BACK TO THE ARRAYPROPERTY =============
             SerializedProperty duplicatedBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(duplicateBlock);
-            BlockNode duplicatedBlockNode = new BlockNode(duplicatedBlockProperty);
+            BlockNode duplicatedBlockNode = NodeManager_NodeCycler_CreateNewNodeConstructor(duplicatedBlockProperty);
 
 
             //Record all the newly added node

@@ -35,11 +35,31 @@
         //because this script isnt gunna get compiledi into the final build, ill use list instead of array
         List<BlockNode> _allBlockNodes;
         Dictionary<string, BlockNode> _allBlockNodesDictionary;
+        List<ArrowConnectionLine> _arrowConnectionLines;
 
         HashSet<BlockNode> _selectedBlocks;
 
         //used to communicate which block was selected in MouseDown to MouseUp
         int _selectedBlockIndex;
+        #endregion
+
+        #region Properties
+        BlockNode selectedBlock
+        {
+            get
+            {
+                if (_selectedBlocks.Count > 0)
+                {
+                    foreach (var blockNode in _selectedBlocks)
+                    {
+                        return blockNode;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         #endregion
 
 

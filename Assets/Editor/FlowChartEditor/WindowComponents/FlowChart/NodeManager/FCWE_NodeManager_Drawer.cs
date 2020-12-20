@@ -9,10 +9,13 @@
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
+
+       
         #region Statics
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent;
 
+        ///<Summary>Can only be get by BlockNode's draw function. Thanks</Summary>
         public static GUIStyle BlockNodeConnectButtonStyle { get; private set; }
 
 
@@ -25,9 +28,11 @@
 
 
 
+
         #region Initialization
         void NodeManager_Drawer_OnEnable()
         {
+
             //================ INIT MAIN DRAWERS ================
             BlockNodeConnectButtonStyle = new GUIStyle(GUI.skin.button);
             BlockNodeConnectButtonStyle.wordWrap = true;
@@ -56,9 +61,14 @@
         }
 
 
-        #region Draw Methods
+        #region Draw Main Methods
         void NodeManager_Drawer_DrawMain()
         {
+            //========== DRAW NODE ARROW LINES ===========
+            for (int i = 0; i < _arrowConnectionLines.Count; i++)
+            {
+                _arrowConnectionLines[i].Draw();
+            }
 
             switch (_toolBarState)
             {
@@ -77,12 +87,6 @@
         ///<Summary>Draw whatever is supposed to be drawn during arrow mode. This includes: (block nodes with a box, their label and a button which says "Connect" which when pressed, will connect the current selected node towards that node) </Summary>
         private void NodeManager_Drawer_DrawMain_ToolBarState_ARROW()
         {
-            //========== DRAW NODE BLOCKS ===========
-            for (int i = 0; i < _allBlockNodes.Count; i++)
-            {
-                _allBlockNodes[i].DrawNodeArrowLines();
-            }
-
             //Draw from the bottom up
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
@@ -93,12 +97,6 @@
         ///<Summary>Draw whatever is supposed to be drawn during normal mode. This includes: (block nodes with just a box with their label), (arrow lines) and (selection box) </Summary>
         private void NodeManager_Drawer_DrawMain_ToolBarState_NORMAL()
         {
-            //========== DRAW NODE BLOCKS ===========
-            for (int i = 0; i < _allBlockNodes.Count; i++)
-            {
-                _allBlockNodes[i].DrawNodeArrowLines();
-            }
-
             //Draw from the bottom up
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
@@ -144,7 +142,8 @@
         }
         #endregion
 
-        #region Colour Handles
+        #region  Handle Methods
+
         private void NodeManager_Drawer_HandleOnSkinChange(bool isDark)
         {
             BlockNodeConnectButtonStyle.normal.textColor = GUI.skin.button.normal.textColor;

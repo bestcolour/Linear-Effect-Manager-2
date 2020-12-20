@@ -14,6 +14,7 @@
         #region LifeTime
         void NodeManager_SaveManager_OnEnable()
         {
+            _arrowConnectionLines = new List<ArrowConnectionLine>();
             _allBlockNodes = new List<BlockNode>();
             _allBlockNodesDictionary = new Dictionary<string, BlockNode>();
             NodeManager_SaveManager_LoadCachedBlockNodes();
@@ -59,15 +60,22 @@
             for (int i = 0; i < _allBlocksArrayProperty.arraySize; i++)
             {
                 SerializedProperty blockProperty = _allBlocksArrayProperty.GetArrayElementAtIndex(i);
-                BlockNode node = new BlockNode(blockProperty);
+                BlockNode node = NodeManager_NodeCycler_CreateNewNodeConstructor(blockProperty);
 
                 //Add subscriptio to the respective holders
-                Block block = _flowChart.Editor_GetBlock(node.Label);
+                // Block block = _flowChart.Editor_GetBlock(node.Label);
 
                 //Record all the nodes
                 _allBlockNodes.Add(node);
                 _allBlockNodesDictionary.Add(node.Label, node);
             }
+
+            //Try Load all of the connection lines only after loading all the blocks
+            foreach (var item in _allBlockNodes)
+            {
+                item.TryEstablishConnection();
+            }
+
         }
         #endregion
 

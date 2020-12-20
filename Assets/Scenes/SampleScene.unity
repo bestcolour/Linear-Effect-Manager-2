@@ -265,15 +265,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blocks:
   - _blockSettings:
-      BlockName: New Block 1 0 omato
+      BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 94, y: 194}
+      BlockPosition: {x: 112, y: 243}
       ConnectedTowardsBlockName: 
     _orderArray: []
   - _blockSettings:
       BlockName: New Block 1
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 357, y: 268}
+      BlockPosition: {x: 113, y: 436}
       ConnectedTowardsBlockName: 
     _orderArray: []
   _settings:

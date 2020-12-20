@@ -8,6 +8,10 @@
     //Graphical representations of block in the flowchart window editor
     public class BlockNode
     {
+        #region Definition
+        public delegate void CreateNewArrowConnectionLineCallback(BlockNode endNode);
+        #endregion
+
         #region Constants
         //========================= NODE CONSTANTS =========================================
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
@@ -16,6 +20,7 @@
 
         const string NODEBLOCK_ARROWMODE_BUTTON_TEXT = "Connect to \n";
         static readonly Vector2 NODEBLOCK_ARROWMODE_BUTTON_SIZE = new Vector2(75f, 20f);
+        static readonly Vector2 NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET = new Vector2(10f, 0);
 
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
@@ -28,7 +33,14 @@
         //Savable variables
         string _label;
         Color _blockColour;
-        string _connectedTowardsBlockName;
+        // string _connectedTowardsBlockName;
+        public string ConnectedTowardsBlockName { get; set; }
+
+        //Runtime
+
+        ///<Summary>The delegate assigned wil be called when the Connect button is pressed</Summary>
+        CreateNewArrowConnectionLineCallback onConnect;
+
         #endregion
 
         #region Properties
@@ -38,25 +50,30 @@
 
         public string Label => _label;
         public Vector2 Position => _rect.position;
+
+        public Vector2 Center => _rect.center;
+        public Vector2 InConnectionPoint => _rect.center + NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
+        public Vector2 OutConnectionPoint => _rect.center - NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
+
         public Color Colour => _blockColour;
 
         public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;
 
-        //Runtime variables
-        ArrowConnectionLine _arrowLine;
+        // //Runtime variables
+        // ArrowConnectionLine _arrowLine;
 
-        ArrowConnectionLine ArrowLine
-        {
-            get
-            {
-                _arrowLine = string.IsNullOrEmpty(_connectedTowardsBlockName) ? null : new ArrowConnectionLine();
-                return _arrowLine;
-            }
-            set
-            {
-                _arrowLine = value;
-            }
-        }
+        // ArrowConnectionLine ArrowLine
+        // {
+        //     get
+        //     {
+        //         _arrowLine = string.IsNullOrEmpty(_connectedTowardsBlockName) ? null : new ArrowConnectionLine();
+        //         return _arrowLine;
+        //     }
+        //     set
+        //     {
+        //         _arrowLine = value;
+        //     }
+        // }
         #endregion
 
 
@@ -75,14 +92,27 @@
         //     _rect.position = position;
         // }
 
-        public BlockNode(SerializedProperty blockProperty)
+        public BlockNode(SerializedProperty blockProperty, CreateNewArrowConnectionLineCallback onConnect)
         {
+            this.onConnect = onConnect;
             BlockProperty = blockProperty;
             _rect = NODEBLOCK_SIZE;
             // ID = System.Guid.NewGuid().ToString();
             IsSelected = false;
 
             LoadFrom();
+
+
+        }
+
+        ///<Summary>Creates a new arrow connection line instance if there is a block name in which this block is connected towards. For now it is called only after Loading of Cached Blocks </Summary>
+        public void TryEstablishConnection()
+        {
+            //Create a new connection line with the connected blockname if there is any
+            if (!string.IsNullOrEmpty(ConnectedTowardsBlockName))
+            {
+                FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this);
+            }
         }
 
         //   public BlockNode(SerializedProperty blockProperty,GUIStyle remove)
@@ -109,7 +139,8 @@
             _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _rect.position = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
-            _connectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+            ConnectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+
 
         }
 
@@ -119,7 +150,7 @@
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _label;
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockColour;
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = _connectedTowardsBlockName;
+            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = ConnectedTowardsBlockName;
 
             BlockProperty.serializedObject.ApplyModifiedProperties();
         }
@@ -128,7 +159,7 @@
         {
             _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            _connectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+            ConnectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
         }
 
         #endregion
@@ -148,17 +179,22 @@
         {
             _rect.position += mouseDelta;
         }
+
+        public bool CheckConnectionTowards(string connectedBlock)
+        {
+            return connectedBlock == ConnectedTowardsBlockName;
+        }
         #endregion
 
         #region Drawing Functions
-        ///<Summary>Handles drawing the arrow lines if any </Summary>
-        public void DrawNodeArrowLines()
-        {
-            if (ArrowLine != null)
-            {
-                ArrowLine.Draw(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
-            }
-        }
+        // ///<Summary>Handles drawing the arrow lines if any </Summary>
+        // public void DrawNodeArrowLines()
+        // {
+        //     if (ArrowLine != null)
+        //     {
+        //         ArrowLine.Draw(_rect.center, FlowChartWindowEditor.NodeManager_GetBlockNode(_connectedTowardsBlockName)._rect.center);
+        //     }
+        // }
 
         ///<Summary>Handles drawing the block background, the blockname label and a highlight background if block is selected </Summary>
         public void Draw_ToolBarState_NORMAL()
@@ -178,25 +214,29 @@
         ///<Summary>If the blocknode is selected, it will draw as the same things as NORMAL mode. Else, it will draw a block background, blockname label and a button which will have the text "Connect" which when pressed will connect the currently selected node towards the node which button was pressed </Summary>
         public void Draw_ToolBarState_ARROW()
         {
-            //=============== DRAW SELECTED HIGHLIGHT ==================
+            //=============== NODE IS SELECTED ==================
             if (IsSelected)
             {
                 DrawHighLightedNode();
                 return;
             }
 
-            //============ DRAW BOX BG ===============
+            //======= NODE IS ALREADY CONNECTED FROM SELECTED NODE TOWARDS THIS NODE =================
+            if (FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_IsConnectedFromSelectedBlockNode(_label))
+            {
+                DrawUnHighLightedNode();
+                return;
+            }
+
+            //============ DRAW BOX WITHOUT LABEL ===============
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
             GUI.Box(_rect, string.Empty);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 
-            // Rect buttonRect = _rect;
-            // buttonRect.size = NODEBLOCK_ARROWMODE_BUTTON_SIZE;
-
             //Draw button that allows for connecting of node
             if (GUI.Button(_rect, NODEBLOCK_ARROWMODE_BUTTON_TEXT + _label, FlowChartWindowEditor.BlockNodeConnectButtonStyle))
             {
-                Debug.Log("Connect");
+                onConnect?.Invoke(this);
             }
 
         }
