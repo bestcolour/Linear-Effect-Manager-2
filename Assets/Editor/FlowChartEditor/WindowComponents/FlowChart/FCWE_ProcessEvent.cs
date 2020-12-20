@@ -41,13 +41,103 @@
 
         void ProcessEvent_OnGUI()
         {
+            switch (_toolBarState)
+            {
+                case ToolBarState.NORMAL:
+                    ProcessEvent_ProcessToolBarState_NORMAL();
+                    break;
+                case ToolBarState.ARROW:
+                    ProcessEvent_ProcessToolBarState_ARROW();
+                    break;
+
+                default:
+                    Debug.Log($"{_toolBarState}'s Toolbar Process Event has not been implemented!");
+                    break;
+            }
+        }
+
+
+        ///<Summary>Events included in ARROW mode is the same as NORMAL mode except that there is no selection box, selecting and dragging around of node blocks</Summary>
+        private void ProcessEvent_ProcessToolBarState_ARROW()
+        {
             Event e = Event.current;
 
             switch (e.type)
             {
-                case EventType.Repaint | EventType.Layout:
+                case EventType.Repaint:
+                    return;
+                case EventType.Layout:
                     return;
 
+                //======================== MOUSE DOWN ============================
+                case EventType.MouseDown:
+
+                    if (_toolBarRect.Contains(e.mousePosition, true))
+                    {
+                        return;
+                    }
+
+                    switch (e.button)
+                    {
+                        //========== MOUSE DOWN - LEFTCLICK =================
+                        case 0:
+                            if (e.alt)
+                            {
+                                _isPanning = true;
+                                return;
+                            }
+                            break;
+
+                        //========== MOUSE DOWN - RIGHTCLICK =================
+                        case 1:
+
+                            _nodeMenu.ShowAsContext();
+                            break;
+
+                        //No intention of calling other mouse clicks
+                        default: return;
+                    }
+                    break;
+
+                //======================== MOUSE UP ============================
+                case EventType.MouseUp:
+                    if (_toolBarRect.Contains(e.mousePosition, true))
+                    {
+                        return;
+                    }
+
+                    if (_isPanning)
+                    {
+                        _isPanning = false;
+                        return;
+                    }
+                    break;
+
+                //======================== MOUSE DRAG ============================
+                case EventType.MouseDrag:
+                    if (_isPanning)
+                    {
+                        OnPan?.Invoke(e.delta * 0.5f);
+                        e.Use();
+                        return;
+                    }
+                    break;
+
+
+            }
+        }
+     
+        ///<Summary>Events included in NORMAL are: Panning, selecting nodes (either through clicking or selection box), Dragging nodes</Summary>
+        private void ProcessEvent_ProcessToolBarState_NORMAL()
+        {
+            Event e = Event.current;
+
+            switch (e.type)
+            {
+                case EventType.Repaint:
+                    return;
+                case EventType.Layout:
+                    return;
 
                 //======================== MOUSE DOWN ============================
                 case EventType.MouseDown:
@@ -117,9 +207,6 @@
 
 
             }
-
-
-
         }
 
 
