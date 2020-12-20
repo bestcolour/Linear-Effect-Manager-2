@@ -4,6 +4,7 @@
     using UnityEditor;
     using LinearEffects;
     using System;
+    using System.Collections.Generic;
     //This handles the adding & destroying of arrow connections
     public partial class FlowChartWindowEditor : EditorWindow
     {
@@ -41,20 +42,59 @@
         //Two ways where arrows need to be deleted:
         //1) A node is deleted
         //2) The user chose to click on a button on the arrrow to delete it
-
-        void NodeManager_ArrowConnectionCycler_DeleteArrowConnectionLine(string from, string to)
+        ///<Summary>Deletes an arrow connection line with the following start and end node labels</Summary>
+        void NodeManager_ArrowConnectionCycler_DeleteArrowConnectionLine(string startNodeLabe, string endNodeLabel)
         {
-            int index = _arrowConnectionLines.FindIndex(x => (x.StartNode.Label == from && x.EndNode.Label == to));
+            int index = _arrowConnectionLines.FindIndex(x => (x.StartNode.Label == startNodeLabe && x.EndNode.Label == endNodeLabel));
 
             if (index == -1)
             {
-                Debug.LogWarning($"Failed to find an arrow connection line with starting node block: {from} and ending node block: {to}");
+                Debug.LogWarning($"Failed to find an arrow connection line with starting node block: {startNodeLabe} and ending node block: {endNodeLabel}");
                 return;
             }
 
             _arrowConnectionLines[index].StartNode.ConnectedTowardsBlockName = string.Empty;
             _arrowConnectionLines.RemoveAt(index);
         }
+
+        ///<Summary>Deletes all of the arrow connections which are connected from a start node</Summary>
+        void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesFrom(string startNodeLabel)
+        {
+            //Find all connection lines that relate to this the from or to node
+            List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.StartNode.Label == startNodeLabel));
+
+            if (results.Count <= 0)
+            {
+                // Debug.LogWarning($"Failed to find an arrow connection line with starting node block: {from} and ending node block: {to}");
+                return;
+            }
+
+            foreach (var index in results)
+            {
+                _arrowConnectionLines[index].StartNode.ConnectedTowardsBlockName = string.Empty;
+                _arrowConnectionLines.RemoveAt(index);
+            }
+        }
+
+        ///<Summary>Deletes all of the arrow connections which are connected to an end node</Summary>
+        void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesTo(string endNodeLabel)
+        {
+            //Find all connection lines that relate to this the from or to node
+            List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.EndNode.Label == endNodeLabel));
+
+            if (results.Count <= 0)
+            {
+                // Debug.LogWarning($"Failed to find an arrow connection line with starting node block: {from} and ending node block: {to}");
+                return;
+            }
+
+            foreach (var index in results)
+            {
+                _arrowConnectionLines[index].StartNode.ConnectedTowardsBlockName = string.Empty;
+                _arrowConnectionLines.RemoveAt(index);
+            }
+        }
+
 
 
 

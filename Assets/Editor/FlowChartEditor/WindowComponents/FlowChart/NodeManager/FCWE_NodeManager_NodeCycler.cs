@@ -176,6 +176,10 @@ namespace LinearEffectsEditor
                     BlockEditor_HandleOnNoBlockNodeFound();
                 }
 
+                //Remove blocknode's connections if any
+                NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesFrom(blockNode.Label);
+                NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesTo(blockNode.Label);
+
                 //Remove from list
                 _allBlockNodes.Remove(blockNode);
                 _allBlockNodesDictionary.Remove(blockNode.Label);
