@@ -16,13 +16,15 @@
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
 
-        // static readonly Color LIGHT_THEME_CONNECTIONLINE_COLOUR = Color.black;
-        // static readonly Color DARK_THEME_CONNECTIONLINE_COLOUR = Color.white;
-
         #endregion
 
         #region Variables
         Rect _rect;
+
+        //Savable variables
+        string _label;
+        Color _blockColour;
+        string _connectedTowardsBlockName;
         #endregion
 
         #region Properties
@@ -35,14 +37,10 @@
         public Color Colour => _blockColour;
 
         public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;
-        #endregion
 
-
-        string _label;
-        Color _blockColour;
-        string _connectedTowardsBlockName;
-
+        //Runtime variables
         ArrowConnectionLine _arrowLine;
+
         ArrowConnectionLine ArrowLine
         {
             get
@@ -55,6 +53,9 @@
                 _arrowLine = value;
             }
         }
+        #endregion
+
+
 
 
         #region Saving & Initialization

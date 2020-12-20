@@ -267,13 +267,13 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 154, y: 112}
-      ConnectedTowardsBlockName: New Block 1
+      BlockPosition: {x: 81, y: 129}
+      ConnectedTowardsBlockName: 
     _orderArray: []
   - _blockSettings:
       BlockName: New Block 1
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 379, y: 262}
+      BlockPosition: {x: 374, y: 248}
       ConnectedTowardsBlockName: 
     _orderArray: []
   _settings:
