@@ -135,12 +135,25 @@
             rect.x -= (BUTTONSIZE.x + TOOLBAR_BUTTON_SPACING);
             if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_ARROWCONNECTION_LINE))
             {
-                //Enter arrow mode
-                _toolBarState = ToolBarState.ARROW;
+                ToolBar_TryEnterArrowState();
             }
 
 
             #endregion
+        }
+
+
+        void ToolBar_TryEnterArrowState()
+        {
+            //Enter arrow mode only if there is only 1 node selected
+            if (_selectedBlocks.Count == 1)
+            {
+                _toolBarState = ToolBarState.ARROW;
+            }
+            else
+            {
+                Debug.Log("To enter the connecting arrow mode, you can only select one node block!");
+            }
         }
     }
 
