@@ -5,13 +5,17 @@
     using UnityEngine;
     using UnityEditor;
     using LinearEffects;
-
+    using System;
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
-  #region Statics
+        #region Statics
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent;
+
+        public static GUIStyle BlockNodeConnectButtonStyle { get; private set; }
+
+
         #endregion
 
 
@@ -21,29 +25,57 @@
 
 
 
-
+        #region Initialization
         void NodeManager_Drawer_OnEnable()
         {
-            NodeManager_InitializeDebugger();
+            NodeManager_Drawer_InitializeMain();
+            NodeManager_Drawer_InitializeDebugger();
         }
 
-        void NodeManager_InitializeDebugger()
+        private void NodeManager_Drawer_InitializeMain()
+        {
+            BlockNodeConnectButtonStyle = new GUIStyle(GUI.skin.button);
+            BlockNodeConnectButtonStyle.wordWrap = true;
+            BlockNodeConnectButtonStyle.alignment = TextAnchor.MiddleCenter;
+        }
+
+        void NodeManager_Drawer_InitializeDebugger()
         {
             DebugStyle = new GUIStyle();
             DebugStyle.wordWrap = true;
             DebugStyle.normal.textColor = Color.red;
             DebugGUIContent = new GUIContent();
         }
+        #endregion
+
 
         void NodeManager_Drawer_OnGUI()
         {
-            NodeManager_Draw();
-            NodeManager_DrawDebugger();
+            NodeManager_Drawer_DrawMain();
+            NodeManager_Drawer_DrawDebugger();
         }
 
 
         #region Draw Methods
-        void NodeManager_Draw()
+        void NodeManager_Drawer_DrawMain()
+        {
+
+            switch (_toolBarState)
+            {
+                case ToolBarState.NORMAL:
+                    NodeManager_Drawer_DrawMain_ToolBarState_NORMAL();
+                    break;
+
+                case ToolBarState.ARROW:
+                    NodeManager_Drawer_DrawMain_ToolBarState_ARROW();
+                    break;
+            }
+
+
+        }
+
+        ///<Summary>Draw whatever is supposed to be drawn during arrow mode. This includes: (block nodes with a box, their label and a button which says "Connect" which when pressed, will connect the current selected node towards that node) </Summary>
+        private void NodeManager_Drawer_DrawMain_ToolBarState_ARROW()
         {
             //========== DRAW NODE BLOCKS ===========
             for (int i = 0; i < _allBlockNodes.Count; i++)
@@ -54,7 +86,23 @@
             //Draw from the bottom up
             for (int i = 0; i < _allBlockNodes.Count; i++)
             {
-                _allBlockNodes[i].DrawNodeBlocks();
+                _allBlockNodes[i].Draw_ToolBarState_ARROW();
+            }
+        }
+
+        ///<Summary>Draw whatever is supposed to be drawn during normal mode. This includes: (block nodes with just a box with their label), (arrow lines) and (selection box) </Summary>
+        private void NodeManager_Drawer_DrawMain_ToolBarState_NORMAL()
+        {
+            //========== DRAW NODE BLOCKS ===========
+            for (int i = 0; i < _allBlockNodes.Count; i++)
+            {
+                _allBlockNodes[i].DrawNodeArrowLines();
+            }
+
+            //Draw from the bottom up
+            for (int i = 0; i < _allBlockNodes.Count; i++)
+            {
+                _allBlockNodes[i].Draw_ToolBarState_NORMAL();
             }
 
             //Draw Selection box
@@ -68,10 +116,13 @@
                 GUI.Box(_selectionBox, string.Empty);
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }
-
         }
 
-        void NodeManager_DrawDebugger()
+        #endregion
+
+        #region Dubugger
+
+        void NodeManager_Drawer_DrawDebugger()
         {
             Rect rect = Rect.zero;
             //Abit of border
@@ -93,6 +144,12 @@
         }
         #endregion
 
+        #region Colour
+        // static Color GetTextColour()
+        // {
+        // return !EditorGUIUtility.isProSkin ? LIGHT_THEME_CONNECTIONLINE_COLOUR : DARK_THEME_CONNECTIONLINE_COLOUR;
+        // }
+        #endregion
 
     }
 

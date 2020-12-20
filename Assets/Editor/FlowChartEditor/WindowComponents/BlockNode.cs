@@ -13,6 +13,10 @@
         static readonly Rect NODEBLOCK_SIZE = new Rect(Vector2.zero, new Vector2(100f, 50f));
         const float NODEBLOCK_SELECTION_THICKNESS = 5f
         ;
+
+        const string NODEBLOCK_ARROWMODE_BUTTON_TEXT = "Connect to \n";
+        static readonly Vector2 NODEBLOCK_ARROWMODE_BUTTON_SIZE = new Vector2(75f, 20f);
+
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
 
@@ -156,32 +160,76 @@
             }
         }
 
-        ///<Summary>Handles drawing the block itself </Summary>
-        public void DrawNodeBlocks()
+        ///<Summary>Handles drawing the block background, the blockname label and a highlight background if block is selected </Summary>
+        public void Draw_ToolBarState_NORMAL()
         {
-            Color prevColour;
-
             //=============== DRAW SELECTED HIGHLIGHT ==================
             if (IsSelected)
             {
-                //Modify rect
-                Rect rectCopy = _rect;
-                rectCopy.width += NODEBLOCK_SELECTION_THICKNESS_SUM;
-                rectCopy.height += NODEBLOCK_SELECTION_THICKNESS_SUM;
-                rectCopy.x -= NODEBLOCK_SELECTION_THICKNESS;
-                rectCopy.y -= NODEBLOCK_SELECTION_THICKNESS;
-
-                prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
-                GUI.Box(rectCopy, string.Empty);
-                GUIExtensions.End_GUI_ColourChange(prevColour);
+                DrawHighLightedNode();
+                return;
             }
 
-            //============ DRAW BOX ===============
+            DrawUnHighLightedNode();
+        }
+
+
+
+        ///<Summary>If the blocknode is selected, it will draw as the same things as NORMAL mode. Else, it will draw a block background, blockname label and a button which will have the text "Connect" which when pressed will connect the currently selected node towards the node which button was pressed </Summary>
+        public void Draw_ToolBarState_ARROW()
+        {
+            //=============== DRAW SELECTED HIGHLIGHT ==================
+            if (IsSelected)
+            {
+                DrawHighLightedNode();
+                return;
+            }
+
+            //============ DRAW BOX BG ===============
+            Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
+            GUI.Box(_rect, string.Empty);
+            GUIExtensions.End_GUI_ColourChange(prevColour);
+
+            // Rect buttonRect = _rect;
+            // buttonRect.size = NODEBLOCK_ARROWMODE_BUTTON_SIZE;
+
+            //Draw button that allows for connecting of node
+            if (GUI.Button(_rect, NODEBLOCK_ARROWMODE_BUTTON_TEXT + _label, FlowChartWindowEditor.BlockNodeConnectButtonStyle))
+            {
+                Debug.Log("Connect");
+            }
+
+        }
+
+
+        #region Base Functions
+        void DrawHighLightedNode()
+        {
+            //Modify rect
+            Rect rectCopy = _rect;
+            rectCopy.width += NODEBLOCK_SELECTION_THICKNESS_SUM;
+            rectCopy.height += NODEBLOCK_SELECTION_THICKNESS_SUM;
+            rectCopy.x -= NODEBLOCK_SELECTION_THICKNESS;
+            rectCopy.y -= NODEBLOCK_SELECTION_THICKNESS;
+
+            Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
+            GUI.Box(rectCopy, string.Empty);
+            GUIExtensions.End_GUI_ColourChange(prevColour);
+
+            //============ DRAW BOX BG ===============
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
             GUI.Box(_rect, _label);
             GUIExtensions.End_GUI_ColourChange(prevColour);
         }
 
+        private void DrawUnHighLightedNode()
+        {
+            //============ DRAW BOX ===============
+            Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
+            GUI.Box(_rect, _label);
+            GUIExtensions.End_GUI_ColourChange(prevColour);
+        }
+        #endregion
 
         #endregion
     }
