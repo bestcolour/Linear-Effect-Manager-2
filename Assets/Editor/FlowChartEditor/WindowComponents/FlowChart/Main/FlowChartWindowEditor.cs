@@ -91,12 +91,12 @@
                 //============================ RUNTIME =======================
                 case true:
                     Debug.Log("Debug mode for LEM 2 has not been implemented");
-                    // //Get the flow chart during runtime then
-                    // _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
+                    //Get the flow chart during runtime then
+                    _flowChart = SaveManager_TryLoadFlowChartPath_Runtime();
 
-                    // //This is for future development if i want to add a runtime debug mode
-                    // _state = EditorState.RUNTIME_DEBUG;
-                    // RUNTIME_DEBUG_OnEnable();
+                    //This is for future development if i want to add a runtime debug mode
+                    _state = EditorState.RUNTIME_DEBUG;
+                    RUNTIME_DEBUG_OnEnable();
 
                     break;
                 //============================ EDITOR TIME ==========================

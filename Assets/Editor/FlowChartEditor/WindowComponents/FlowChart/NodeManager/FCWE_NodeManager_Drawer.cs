@@ -28,24 +28,24 @@
         #region Initialization
         void NodeManager_Drawer_OnEnable()
         {
-            NodeManager_Drawer_InitializeMain();
-            NodeManager_Drawer_InitializeDebugger();
-        }
-
-        private void NodeManager_Drawer_InitializeMain()
-        {
+            //================ INIT MAIN DRAWERS ================
             BlockNodeConnectButtonStyle = new GUIStyle(GUI.skin.button);
             BlockNodeConnectButtonStyle.wordWrap = true;
             BlockNodeConnectButtonStyle.alignment = TextAnchor.MiddleCenter;
-        }
+            OnEditorSkinChange += NodeManager_Drawer_HandleOnSkinChange;
 
-        void NodeManager_Drawer_InitializeDebugger()
-        {
+            //================ INIT DEBUG DRAWERS ================
             DebugStyle = new GUIStyle();
             DebugStyle.wordWrap = true;
             DebugStyle.normal.textColor = Color.red;
             DebugGUIContent = new GUIContent();
         }
+
+        void NodeManager_Drawer_OnDisable()
+        {
+            OnEditorSkinChange -= NodeManager_Drawer_HandleOnSkinChange;
+        }
+
         #endregion
 
 
@@ -144,11 +144,11 @@
         }
         #endregion
 
-        #region Colour
-        // static Color GetTextColour()
-        // {
-        // return !EditorGUIUtility.isProSkin ? LIGHT_THEME_CONNECTIONLINE_COLOUR : DARK_THEME_CONNECTIONLINE_COLOUR;
-        // }
+        #region Colour Handles
+        private void NodeManager_Drawer_HandleOnSkinChange(bool isDark)
+        {
+            BlockNodeConnectButtonStyle.normal.textColor = GUI.skin.button.normal.textColor;
+        }
         #endregion
 
     }

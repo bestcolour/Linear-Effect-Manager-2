@@ -64,6 +64,7 @@
         private void NodeManager_OnDisable()
         {
             NodeManager_SaveManager_OnDisable();
+            NodeManager_Drawer_OnDisable();
 
             OnLeftMouseDownInGraph -= NodeManager_HandleLeftMouseDownInGraph;
             OnPan -= NodeManager_HandlePan;

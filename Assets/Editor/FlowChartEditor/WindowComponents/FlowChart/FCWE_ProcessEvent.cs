@@ -10,14 +10,15 @@
 
         #region  Events
         delegate void DragCallback(Vector2 mouseDelta);
+        public delegate void EditorSkinChangeCallback(bool isDark);
+
         static event DragCallback OnPan = null;
 
         //Is called when mouse is clicked in a area which is not covered by: Toolbar
         static event Action OnLeftMouseDownInGraph = null;
         static event Action OnLeftMouseUpInGraph = null;
         static event DragCallback OnMouseDrag = null;
-
-
+        public static event EditorSkinChangeCallback OnEditorSkinChange = null;
         #endregion
 
 
@@ -27,6 +28,7 @@
         void ProcessEvent_OnEnable()
         {
             _isPanning = false;
+            _wasPrevSkinDark = EditorGUIUtility.isProSkin;
             ProcessEvent_InitializeNodeMenu();
 
         }
@@ -36,11 +38,14 @@
             OnPan = null;
             OnMouseDrag = null;
             OnLeftMouseUpInGraph = null;
+            OnEditorSkinChange = null;
         }
 
 
         void ProcessEvent_OnGUI()
         {
+            ProcessEvent_EditorSkinChange();
+
             switch (_toolBarState)
             {
                 case ToolBarState.NORMAL:
@@ -57,6 +62,22 @@
         }
 
 
+        #region Editor Skin Change
+        bool _wasPrevSkinDark;
+
+        private void ProcessEvent_EditorSkinChange()
+        {
+            //Check if current skin colour is same as prev one
+            if (_wasPrevSkinDark != EditorGUIUtility.isProSkin)
+            {
+                _wasPrevSkinDark = EditorGUIUtility.isProSkin;
+                OnEditorSkinChange?.Invoke(_wasPrevSkinDark);
+            }
+        }
+
+        #endregion
+
+        #region Tool Bar States
         ///<Summary>Events included in ARROW mode is the same as NORMAL mode except that there is no selection box, selecting and dragging around of node blocks</Summary>
         private void ProcessEvent_ProcessToolBarState_ARROW()
         {
@@ -126,7 +147,7 @@
 
             }
         }
-     
+
         ///<Summary>Events included in NORMAL are: Panning, selecting nodes (either through clicking or selection box), Dragging nodes</Summary>
         private void ProcessEvent_ProcessToolBarState_NORMAL()
         {
@@ -208,10 +229,10 @@
 
             }
         }
+        #endregion
 
 
         #region  Node Menu
-
         GenericMenu _nodeMenu = null;
 
         void ProcessEvent_InitializeNodeMenu()

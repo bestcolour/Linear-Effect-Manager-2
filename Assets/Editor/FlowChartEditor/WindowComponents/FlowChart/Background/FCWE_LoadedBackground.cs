@@ -10,16 +10,29 @@
         const int GRID_LARGE_SPACE = 50;
 
         Vector3 _background_Offset;
+        Color _grid1Colour = default
+        , _grid2Colour = default
+        ;
 
         void LoadedBackground_OnEnable()
         {
             OnPan += LoadedBackground_HandlePan;
             _background_Offset = Vector3.zero;
+
+            //======== EDITOR SKIN ========
+            LoadedBackground_GetGrid1Colour(EditorGUIUtility.isProSkin);
+            LoadedBackground_GetGrid2Colour(EditorGUIUtility.isProSkin);
+
+            OnEditorSkinChange += LoadedBackground_GetGrid1Colour;
+            OnEditorSkinChange += LoadedBackground_GetGrid2Colour;
         }
 
         void LoadedBackground_OnDisable()
         {
             OnPan -= LoadedBackground_HandlePan;
+
+            OnEditorSkinChange -= LoadedBackground_GetGrid1Colour;
+            OnEditorSkinChange -= LoadedBackground_GetGrid2Colour;
         }
 
         void LoadedBackground_HandlePan(Vector2 mouseDelta)
@@ -32,8 +45,8 @@
 
         void LoadedBackground_OnGUI()
         {
-            LoadedBackground_DrawGrid(GRID_SMALL_SPACE, GetGrid1Colour());
-            LoadedBackground_DrawGrid(GRID_LARGE_SPACE, GetGrid2Colour());
+            LoadedBackground_DrawGrid(GRID_SMALL_SPACE, _grid1Colour);
+            LoadedBackground_DrawGrid(GRID_LARGE_SPACE, _grid2Colour);
         }
 
         #region Draw
@@ -83,14 +96,16 @@
         static readonly Color DARK_GRIDLINE1_COLOUR = new Color(0.41f, 0.41f, 0.41f, 0.5f);
         static readonly Color DARK_GRIDLINE2_COLOUR = new Color(0.75f, 0.75f, 0.75f, 0.5f);
 
-        Color GetGrid1Colour()
+        void LoadedBackground_GetGrid1Colour(bool isDarkSkin)
         {
-            return !EditorGUIUtility.isProSkin ? LIGHT_GRIDLINE1_COLOUR : DARK_GRIDLINE1_COLOUR;
+            _grid1Colour = !isDarkSkin ? LIGHT_GRIDLINE1_COLOUR : DARK_GRIDLINE1_COLOUR;
+            // return !isDarkSkin ? LIGHT_GRIDLINE1_COLOUR : DARK_GRIDLINE1_COLOUR;
         }
 
-        Color GetGrid2Colour()
+        void LoadedBackground_GetGrid2Colour(bool isDarkSkin)
         {
-            return !EditorGUIUtility.isProSkin ? LIGHT_GRIDLINE2_COLOUR : DARK_GRIDLINE2_COLOUR;
+            _grid2Colour = !isDarkSkin ? LIGHT_GRIDLINE2_COLOUR : DARK_GRIDLINE2_COLOUR;
+            // return !isDarkSkin ? LIGHT_GRIDLINE2_COLOUR : DARK_GRIDLINE2_COLOUR;
         }
         #endregion
 
