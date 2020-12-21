@@ -6,7 +6,7 @@ namespace LinearEffects
     using UnityEngine;
 
 
-    public partial class FlowChart : MonoBehaviour
+    public  partial class BaseFlowChart : MonoBehaviour
     {
         public const string PROPERTYNAME_BLOCKARRAY = "_blocks";
 

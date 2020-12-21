@@ -48,6 +48,12 @@
         #endregion
 
 
+        ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array</Summary>
+        public void ExecuteBlockEffects()
+        {
+
+        }
+
     }
 
 

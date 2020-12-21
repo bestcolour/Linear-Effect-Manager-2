@@ -11,7 +11,7 @@
         #region Current Cached Variable
         // static FlowChart _target = default;
         static SerializedObject _targetObject = default;
-        static FlowChart _flowChart = default;
+        static BaseFlowChart _flowChart = default;
         static EditorState _state;
 
         #endregion
@@ -49,7 +49,7 @@
         }
 
 
-        public static void OpenWindow(FlowChart flowChart)
+        public static void OpenWindow(BaseFlowChart flowChart)
         {
             _flowChart = flowChart;
             var window = GetWindow<FlowChartWindowEditor>();

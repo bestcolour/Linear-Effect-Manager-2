@@ -26,7 +26,7 @@
         }
 
         ///<Summary>Tries to load the FlowChart.cs instance from the scene</Summary>
-        FlowChart SaveManager_TryLoadFlowChartPath()
+        BaseFlowChart SaveManager_TryLoadFlowChartPath()
         {
             string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
             if (string.IsNullOrEmpty(path))
@@ -43,7 +43,7 @@
                     continue;
                 }
 
-                if (!flowChartTransform.TryGetComponent<FlowChart>(out FlowChart flowChart))
+                if (!flowChartTransform.TryGetComponent<BaseFlowChart>(out BaseFlowChart flowChart))
                 {
                     continue;
                 }
@@ -57,7 +57,7 @@
         }
 
         ///<Summary>Tries to load the FlowChart.cs instance from the scene but during Editor's runtime</Summary>
-        FlowChart SaveManager_TryLoadFlowChartPath_Runtime()
+        BaseFlowChart SaveManager_TryLoadFlowChartPath_Runtime()
         {
             string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
             if (string.IsNullOrEmpty(path))
@@ -73,7 +73,7 @@
                     continue;
                 }
 
-                if (!flowChartTransform.TryGetComponent<FlowChart>(out FlowChart flowChart))
+                if (!flowChartTransform.TryGetComponent<BaseFlowChart>(out BaseFlowChart flowChart))
                 {
                     continue;
                 }

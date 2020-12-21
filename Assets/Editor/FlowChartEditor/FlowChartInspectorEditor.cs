@@ -7,7 +7,7 @@
     using UnityEditor;
     using LinearEffects;
 
-    [CustomEditor(typeof(FlowChart))]
+    [CustomEditor(typeof(BaseFlowChart))]
     ///<Summary>The inspector editor for the FlowChart component</Summary>
     public class FlowChartInspectorEditor : Editor
     {
@@ -15,13 +15,13 @@
 
 
         #region  Runtime Vars
-        FlowChart _target = default;
+        BaseFlowChart _target = default;
         SerializedProperty _settingsProperty = default;
         #endregion
 
         private void OnEnable()
         {
-            _target = (FlowChart)target;
+            _target = (BaseFlowChart)target;
             _settingsProperty = serializedObject.FindProperty(SETTINGS_PROPERTY_NAME);
         }
 
