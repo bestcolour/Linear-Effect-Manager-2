@@ -116,7 +116,7 @@
                 //Create a new connection line with the connected blockname if there is any
                 if (!string.IsNullOrEmpty(item))
                 {
-                    Debug.Log(item);
+                    // Debug.Log(item);
                     FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this,item);
                 }
             }

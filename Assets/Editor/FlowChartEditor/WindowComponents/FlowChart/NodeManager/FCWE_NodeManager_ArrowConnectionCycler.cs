@@ -42,6 +42,8 @@
         //Two ways where arrows need to be deleted:
         //1) A node is deleted
         //2) The user chose to click on a button on the arrrow to delete it
+
+        //====================== SCENARIO 1 ==================
         ///<Summary>Deletes an arrow connection line with the following start and end node labels</Summary>
         void NodeManager_ArrowConnectionCycler_DeleteArrowConnectionLine(string startNodeLabel, string endNodeLabel)
         {
@@ -57,27 +59,27 @@
             _arrowConnectionLines.RemoveAt(index);
         }
 
+        //====================== SCENARIO 2 ==================
         ///<Summary>Deletes all of the arrow connections which are connected from a start node</Summary>
         void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesFrom(string startNodeLabel)
         {
             //Find all connection lines that relate to this the from or to node
-            List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.StartNode.Label == startNodeLabel));
+            List<ArrowConnectionLine> results = _arrowConnectionLines.FindAll(x => (x.StartNode.Label == startNodeLabel));
 
             if (results.Count <= 0)
             {
                 return;
             }
 
-            foreach (var index in results)
+            foreach (var arrow in results)
             {
-                ArrowConnectionLine arrow = _arrowConnectionLines[index];
+                // Debug.Log($"Index is {index} and LineCount is {_arrowConnectionLines.Count}");
                 BlockNode startNode = arrow.StartNode;
                 BlockNode endNode = arrow.EndNode;
 
                 //Remove all end nodes' label from the startnode
                 startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label);
-
-                _arrowConnectionLines.RemoveAt(index);
+                _arrowConnectionLines.Remove(arrow);
             }
         }
 
@@ -85,31 +87,75 @@
         void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesTo(string endNodeLabel)
         {
             //Find all connection lines that relate to this the from or to node
-            List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.EndNode.Label == endNodeLabel));
-            // Debug.Log($"Removing EndNode label : {endNodeLabel} ");
+            List<ArrowConnectionLine> results = _arrowConnectionLines.FindAll(x => (x.StartNode.Label == endNodeLabel));
 
             if (results.Count <= 0)
             {
                 return;
             }
 
-            foreach (var index in results)
+            foreach (var arrow in results)
             {
-                ArrowConnectionLine arrow = _arrowConnectionLines[index];
+                // Debug.Log($"Index is {index} and LineCount is {_arrowConnectionLines.Count}");
                 BlockNode startNode = arrow.StartNode;
                 BlockNode endNode = arrow.EndNode;
 
                 //Remove all end nodes' label from the startnode
                 startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label);
-                // if (startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label))
-                // {
-                    // Debug.Log($"Removed EndNode label : {endNodeLabel} from {startNode.Label} ");
-                // }
-
-                _arrowConnectionLines.RemoveAt(index);
+                _arrowConnectionLines.Remove(arrow);
             }
+
+            // //Find all connection lines that relate to this the from or to node
+            // List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.EndNode.Label == endNodeLabel));
+            // // Debug.Log($"Removing EndNode label : {endNodeLabel} ");
+
+            // if (results.Count <= 0)
+            // {
+            //     return;
+            // }
+
+            // foreach (var index in results)
+            // {
+            //     // Debug.Log($"Index is {index} and LineCount is {_arrowConnectionLines.Count}");
+            //     ArrowConnectionLine arrow = _arrowConnectionLines[index];
+            //     BlockNode startNode = arrow.StartNode;
+            //     BlockNode endNode = arrow.EndNode;
+
+            //     //Remove all end nodes' label from the startnode
+            //     startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label);
+            //     // if (startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label))
+            //     // {
+            //     // Debug.Log($"Removed EndNode label : {endNodeLabel} from {startNode.Label} ");
+            //     // }
+
+            //     _arrowConnectionLines.RemoveAt(index);
+            // }
         }
 
+
+        // ///<Summary>Deletes all of the arrow connections which are connected from and to many start nodes</Summary>
+        // void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesFromAndTo(string[] startNodeLabels)
+        // {
+        //     //Find all connection lines that relate to this the from or to node
+        //     List<int> results = _arrowConnectionLines.FindAllIndexOf(x => (x.StartNode.Label == startNodeLabel));
+
+        //     if (results.Count <= 0)
+        //     {
+        //         return;
+        //     }
+
+        //     foreach (var index in results)
+        //     {
+        //         ArrowConnectionLine arrow = _arrowConnectionLines[index];
+        //         BlockNode startNode = arrow.StartNode;
+        //         BlockNode endNode = arrow.EndNode;
+
+        //         //Remove all end nodes' label from the startnode
+        //         startNode.ConnectedTowardsBlockNamesHashset.Remove(endNode.Label);
+
+        //         _arrowConnectionLines.RemoveAt(index);
+        //     }
+        // }
 
 
 

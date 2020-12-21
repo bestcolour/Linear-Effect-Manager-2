@@ -161,29 +161,37 @@ namespace LinearEffectsEditor
 
         }
 
+
+        //if player accepts, yeet the entire selected blocks
         ///<Summary>Deletes selected nodes</Summary>
         void NodeManager_NodeCycler_DeleteSelectedNodes()
         {
-            // NodeManager_SaveManager_SaveAllNodes();
+            //Close the block editor 
+            BlockEditor_HandleOnNoBlockNodeFound();
 
-            //if player accepts, yeet the entire selected blocks
-            //remove them from the list and the dictionary
-            //----------------------- Removing Blocks from the Window Editor & removing their Effects -----------------
+            //ORDER OF REMOVAL:
+            //Remove any arrow connection lines (dependent on list & dictionary)
+            //Remove their order data & effects from their respective holders
+            //Remove them from the list and the dictionary
+            //Remove the block itself from the block array property
+
+            //----------------------- Removing Arrow Connection Lines -----------------
             foreach (var blockNode in _selectedBlocks)
             {
-                //Close blocknode editor if it is being yeeted
-                if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
-                {
-                    BlockEditor_HandleOnNoBlockNodeFound();
-                }
-
-                //Remove blocknode's connections if any
                 NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesFrom(blockNode.Label);
                 NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesTo(blockNode.Label);
+            }
 
-                //Remove from list
-                _allBlockNodes.Remove(blockNode);
-                _allBlockNodesDictionary.Remove(blockNode.Label);
+
+            //----------------------- Removing their Order Data & Effects from their respective Holders -----------------
+            foreach (var blockNode in _selectedBlocks)
+            {
+                // //Close blocknode editor if it is being yeeted
+                // if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
+                // {
+                //     BlockEditor_HandleOnNoBlockNodeFound();
+                // }
+
 
                 //Get block from flow chart and then remove all order data
                 Block block = new Block();
@@ -196,19 +204,14 @@ namespace LinearEffectsEditor
                 block.SaveToSerializedProperty(blockNode.BlockProperty);
                 blockNode.BlockProperty.serializedObject.ApplyModifiedProperties();
 
-                // //Delete block from block array
-                // _allBlocksArrayProperty.serializedObject.Update();
-                // _allBlocksArrayProperty.DeleteArrayElement
-                //    (
-                //        (x) =>
-                //        {
-                //            string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-                //            return a == blockNode.Label;
-                //        }
-                //    );
+            }
 
-                // _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
-
+            //----------------------- Removing from list & dictionary -----------------
+            foreach (var blockNode in _selectedBlocks)
+            {
+                //Remove from list
+                _allBlockNodes.Remove(blockNode);
+                _allBlockNodesDictionary.Remove(blockNode.Label);
             }
 
             //------------ Delete the Blocks from the Block Array Property -------------
