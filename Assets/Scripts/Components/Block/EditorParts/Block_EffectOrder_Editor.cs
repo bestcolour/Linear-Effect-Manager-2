@@ -10,6 +10,44 @@ namespace LinearEffects
     {
         public partial class EffectOrder
         {
+            #region ISavable Methods
+            #region Constants
+            public const string PROPERTYNAME_EXECUTORNAME = "ExecutorName"
+            , PROPERTYNAME_FULLEXECUTORNAME = "FullExecutorName"
+            , PROPERTYNAME_REFHOLDER = "_refHolder"
+            , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
+            ;
+            // public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
+            #endregion
+
+            ///<Summary>For editor use only. Please do not use it during runtime. The FullExecutorName is the entire string path with all the slashes.</Summary>
+            public string ExecutorName;
+
+            ///<Summary>For editor use only. Please do not use it during runtime. The ExecutorName is whatever you call the Executor at the end of the last slash.</Summary>
+            public string FullExecutorName;
+
+            // public string ErrorLog = "Error";
+
+            ///<Summary>For editor use only. Saves the EffectOrder to a serializedProperty</Summary>
+            public void SaveToSerializedProperty(SerializedProperty property)
+            {
+                property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
+                property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
+                // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
+                property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue = ExecutorName;
+                property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue = FullExecutorName;
+            }
+
+            ///<Summary>For editor use only. Loads from a serializedProperty into the EffectOrder </Summary>
+            public void LoadFromSerializedProperty(SerializedProperty property)
+            {
+                _refHolder = (BaseEffectExecutor)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
+                _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
+                // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
+                ExecutorName = property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue;
+                FullExecutorName = property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue;
+            }
+            #endregion
 
             //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
             //none of these will be used in the actual build except for the variables stored
@@ -56,38 +94,7 @@ namespace LinearEffects
                 }
             }
 
-            #region ISavable Methods
-            #region Constants
-            public const string PROPERTYNAME_EXECUTORNAME = "ExecutorName"
-            , PROPERTYNAME_FULLEXECUTORNAME = "FullExecutorName"
-            , PROPERTYNAME_REFHOLDER = "_refHolder"
-            , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
-            ;
-            // public const string PROPERTYNAME_ERRORLOG = "ErrorLog";
-            #endregion
 
-            public string ExecutorName;
-            public string FullExecutorName;
-            // public string ErrorLog = "Error";
-
-            public void SaveToSerializedProperty(SerializedProperty property)
-            {
-                property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
-                property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
-                // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
-                property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue = ExecutorName;
-                property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue = FullExecutorName;
-            }
-
-            public void LoadFromSerializedProperty(SerializedProperty property)
-            {
-                _refHolder = (BaseEffectExecutor)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
-                _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
-                // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
-                ExecutorName = property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue;
-                FullExecutorName = property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue;
-            }
-            #endregion
 
         }
     }

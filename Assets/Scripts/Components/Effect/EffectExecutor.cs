@@ -13,15 +13,16 @@
         [SerializeField]
         protected T[] _effectDatas = new T[0];
 
-        ///<Summary>Returns true when effect has completed its execution.</Summary>
-        protected abstract bool ExecuteEffect(T effectData);
+        ///<Summary>The method which will be called to execute whatever code you want. Set the returns to true when effect has completed its execution.</Summary>
+        protected abstract bool ExecuteEffect(T effectData, out bool haltCodeFlow);
 
-        public override bool ExecuteEffectAtIndex(int index)
+        ///<Summary>Called by Block's EffectOrder during a block's execute effects call. Returns true when the effect being executed is complete</Summary>
+        public override bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow)
         {
 #if UNITY_EDITOR
             Debug.Assert(index >= 0, $"Name of EffectExecutor is {this.GetType().ToString()} Index passed in is {index}");
 #endif
-            return ExecuteEffect(_effectDatas[index]);
+            return ExecuteEffect(_effectDatas[index],out haltCodeFlow);
         }
 
 
