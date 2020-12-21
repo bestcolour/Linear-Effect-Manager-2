@@ -168,6 +168,7 @@ namespace LinearEffectsEditor
 
             //if player accepts, yeet the entire selected blocks
             //remove them from the list and the dictionary
+            //----------------------- Removing Blocks from the Window Editor & removing their Effects -----------------
             foreach (var blockNode in _selectedBlocks)
             {
                 //Close blocknode editor if it is being yeeted
@@ -195,8 +196,26 @@ namespace LinearEffectsEditor
                 block.SaveToSerializedProperty(blockNode.BlockProperty);
                 blockNode.BlockProperty.serializedObject.ApplyModifiedProperties();
 
+                // //Delete block from block array
+                // _allBlocksArrayProperty.serializedObject.Update();
+                // _allBlocksArrayProperty.DeleteArrayElement
+                //    (
+                //        (x) =>
+                //        {
+                //            string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                //            return a == blockNode.Label;
+                //        }
+                //    );
+
+                // _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
+
+            }
+
+            //------------ Delete the Blocks from the Block Array Property -------------
+            _allBlocksArrayProperty.serializedObject.Update();
+            foreach (var blockNode in _selectedBlocks)
+            {
                 //Delete block from block array
-                _allBlocksArrayProperty.serializedObject.Update();
                 _allBlocksArrayProperty.DeleteArrayElement
                    (
                        (x) =>
@@ -205,13 +224,12 @@ namespace LinearEffectsEditor
                            return a == blockNode.Label;
                        }
                    );
-
-                _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
-
             }
+            _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
+
 
             NodeManager_ClearAllSelectedNodes();
-            NodeManager_SaveManager_LoadCachedBlockNodes();
+            // NodeManager_SaveManager_LoadCachedBlockNodes();
         }
 
         #endregion
