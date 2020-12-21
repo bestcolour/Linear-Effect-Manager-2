@@ -7,14 +7,21 @@
     using LinearEffects;
 
     //This file stores all the data of all the types of executor as well as their label names
-    public class EffectsData
+    public static class EffectsData
     {
-        public static bool TryGetExecutor(string executorLabelName, out Type typeToAdd)
+        public static bool TryGetExecutor(string fullExecutorName, out Type typeToAdd)
         {
-            if (!ExecutorLabel_To_EffectExecutor.TryGetValue(executorLabelName, out Type value))
+            if (!ExecutorLabel_To_EffectExecutor.TryGetValue(fullExecutorName, out Type value))
             {
                 typeToAdd = null;
-                Debug.LogError($"Executor Label Name of {executorLabelName} is not found! Please check if you are sending the correct label name");
+                Debug.LogError($"Executor Label Name of {fullExecutorName} is not found! Please check if you are sending the correct label name");
+                return false;
+            }
+
+            if (!value.IsSubclassOf(typeof(BaseEffectExecutor)))
+            {
+                typeToAdd = null;
+                Debug.LogError($"{value.Name} with the Key value of {fullExecutorName} inside of the ExecutorLabel_To_EffectExecutor dictionary does not inherits from {nameof(BaseEffectExecutor)}!");
                 return false;
             }
 
@@ -33,7 +40,7 @@
         //Dictionary key: The path of the effect executor to be shown in the SearchBox. There are two parts to the key: FullExecutorName and ExecutorName.
         //The FullExecutorName is the entire string path with all the slashes. The anything inbetween the start of the string path to the start of the ExecutorName can be changed freely
         //The ExecutorName is whatever you call the Executor at the end of the last slash. The ExecutorName can be named differently from the Executor Type's name (which is the Dictionary's Value) but should not be renamed after the executor has been used.
-       
+
         //Dictionary Value: The System type of your own custom effect executor.
 
         // For an example on how to add your own custom effect executor, look in the Dictionary constructor down below
