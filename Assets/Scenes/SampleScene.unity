@@ -265,22 +265,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blocks:
   - _blockSettings:
-      BlockName: New Block 1
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 79, y: 401}
-      ConnectedTowardsBlockName: 
-    _orderArray: []
-  - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 153, y: 175}
-      ConnectedTowardsBlockName: New Block 2
+      BlockPosition: {x: 398, y: 129}
+      ConnectedTowardsBlockNames: []
     _orderArray: []
   - _blockSettings:
       BlockName: New Block 2
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 352, y: 245}
-      ConnectedTowardsBlockName: 
+      BlockPosition: {x: 410, y: 328}
+      ConnectedTowardsBlockNames: []
     _orderArray: []
   _settings:
     _someSetting: 0

@@ -13,7 +13,7 @@ namespace LinearEffects
             [HideInInspector]
             public Vector2 BlockPosition;
             [HideInInspector]
-            public string ConnectedTowardsBlockName;
+            public string[] ConnectedTowardsBlockNames = new string[0];
         }
 
 
@@ -29,7 +29,7 @@ namespace LinearEffects
         public const string PROPERTYPATH_BLOCKNAME = PROPERTYNAME_SETTINGS + ".BlockName";
         public const string PROPERTYPATH_BLOCKCOLOUR = PROPERTYNAME_SETTINGS + ".BlockColour";
         public const string PROPERTYPATH_BLOCKPOSITION = PROPERTYNAME_SETTINGS + ".BlockPosition";
-        public const string PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME = PROPERTYNAME_SETTINGS + ".ConnectedTowardsBlockName";
+        public const string PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME = PROPERTYNAME_SETTINGS + ".ConnectedTowardsBlockNames";
 
         public const string PROPERTYNAME_ORDERARRAY = "_orderArray";
         #endregion
@@ -49,7 +49,16 @@ namespace LinearEffects
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.BlockColour;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
             blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = _blockSettings.ConnectedTowardsBlockName;
+
+            //-------- Connection Lines Array ----------
+            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            connectionLinesArrayProperty.ClearArray();
+            for (int i = 0; i < _blockSettings.ConnectedTowardsBlockNames.Length; i++)
+            {
+                connectionLinesArrayProperty.InsertArrayElementAtIndex(i);
+                connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue = _blockSettings.ConnectedTowardsBlockNames[i];
+            }
+            // blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = _blockSettings.ConnectedTowardsBlockName;
 
 
             //============= SAVING ORDER ARRAY =====================
@@ -76,7 +85,16 @@ namespace LinearEffects
             _blockSettings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockSettings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
-            _blockSettings.ConnectedTowardsBlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+
+
+            //-------- Connection Lines Array ----------
+            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            _blockSettings.ConnectedTowardsBlockNames = new string[connectionLinesArrayProperty.arraySize];
+            for (int i = 0; i < connectionLinesArrayProperty.arraySize; i++)
+            {
+                _blockSettings.ConnectedTowardsBlockNames[i] = connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue;
+            }
+            // _blockSettings.ConnectedTowardsBlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
 
             //============= LOADING ORDER ARRAY =====================
             SerializedProperty orderArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY);

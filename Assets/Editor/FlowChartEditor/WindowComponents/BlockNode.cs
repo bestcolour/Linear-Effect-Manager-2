@@ -2,6 +2,7 @@
 {
     using LinearEffects;
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
 
@@ -20,7 +21,7 @@
 
         const string NODEBLOCK_ARROWMODE_BUTTON_TEXT = "Connect to \n";
         static readonly Vector2 NODEBLOCK_ARROWMODE_BUTTON_SIZE = new Vector2(75f, 20f);
-        static readonly Vector2 NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET = new Vector2(20,20);
+        static readonly Vector2 NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET = new Vector2(20, 20);
 
         static readonly float NODEBLOCK_SELECTION_THICKNESS_SUM = NODEBLOCK_SELECTION_THICKNESS * 2;
         static readonly Color SELECTION_COLOUR = new Color(.486f, .99f, 0, 0.5f);
@@ -33,10 +34,11 @@
         //Savable variables
         string _label;
         Color _blockColour;
-        // string _connectedTowardsBlockName;
-        public string ConnectedTowardsBlockName { get; set; }
+        // public string ConnectedTowardsBlockNames { get; set; }
+        // public string[] ConnectedTowardsBlockNames { get; set; } = new string[0];
 
         //Runtime
+        public HashSet<String> ConnectedTowardsBlockNamesHashset { get; private set; } = new HashSet<string>();
 
         ///<Summary>The delegate assigned wil be called when the Connect button is pressed</Summary>
         CreateNewArrowConnectionLineCallback onConnect;
@@ -51,10 +53,11 @@
         public string Label => _label;
         public Vector2 Position => _rect.position;
 
+        //Rect properties
         public Vector2 Center => _rect.center;
         public Vector2 OutConnectionPoint => _rect.center + NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
         public Vector2 InConnectionPoint => _rect.center - NODEBLOCK_ARROWCONNECTIONPOINT_OFFSET;
-        
+
         public Color Colour => _blockColour;
 
         public int GetEffectCount => BlockProperty.FindPropertyRelative(Block.PROPERTYNAME_ORDERARRAY).arraySize;
@@ -108,11 +111,16 @@
         ///<Summary>Creates a new arrow connection line instance if there is a block name in which this block is connected towards. For now it is called only after Loading of Cached Blocks </Summary>
         public void TryEstablishConnection()
         {
-            //Create a new connection line with the connected blockname if there is any
-            if (!string.IsNullOrEmpty(ConnectedTowardsBlockName))
+            foreach (var item in ConnectedTowardsBlockNamesHashset)
             {
-                FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this);
+                //Create a new connection line with the connected blockname if there is any
+                if (!string.IsNullOrEmpty(item))
+                {
+                    Debug.Log(item);
+                    FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this,item);
+                }
             }
+
         }
 
         //   public BlockNode(SerializedProperty blockProperty,GUIStyle remove)
@@ -139,8 +147,14 @@
             _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
             _rect.position = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
-            ConnectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
 
+            //Loading connection lines
+            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            ConnectedTowardsBlockNamesHashset.Clear();
+            for (int i = 0; i < connectedNamesProperty.arraySize; i++)
+            {
+                ConnectedTowardsBlockNamesHashset.Add(connectedNamesProperty.GetArrayElementAtIndex(i).stringValue);
+            }
 
         }
 
@@ -150,7 +164,21 @@
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _label;
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockColour;
             BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = ConnectedTowardsBlockName;
+
+            //Saving Connection lines
+            //Loading connection lines
+            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            connectedNamesProperty.ClearArray();
+
+            int index = 0;
+            foreach (var item in ConnectedTowardsBlockNamesHashset)
+            {
+                connectedNamesProperty.InsertArrayElementAtIndex(index);
+                connectedNamesProperty.GetArrayElementAtIndex(index).stringValue = item;
+                index++;
+            }
+
+            // BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = ConnectedTowardsBlockNames;
 
             BlockProperty.serializedObject.ApplyModifiedProperties();
         }
@@ -159,7 +187,8 @@
         {
             _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
             _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            ConnectedTowardsBlockName = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
+
+            // ConnectedTowardsBlockNames = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
         }
 
         #endregion
@@ -180,9 +209,16 @@
             _rect.position += mouseDelta;
         }
 
+///<Summary>Checks if there is a connection line which originates from this block towards the block with the connectedBlock label</Summary>
         public bool CheckConnectionTowards(string connectedBlock)
         {
-            return connectedBlock == ConnectedTowardsBlockName;
+            // bool connectionExists = false;
+
+            // foreach (var item in ConnectedTowardsBlockNames)
+            // {
+                // connectionExists = item == connectedBlock;
+            // }
+            return ConnectedTowardsBlockNamesHashset.Contains(connectedBlock);
         }
         #endregion
 
