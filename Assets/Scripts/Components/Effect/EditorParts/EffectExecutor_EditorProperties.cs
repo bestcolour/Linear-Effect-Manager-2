@@ -35,7 +35,7 @@ namespace LinearEffects
             return elementIndex;
         }
 
-        public override void RemoveObjectAt(int index)
+        public override void RemoveObjectAt(int index, string executorSearchBoxName)
         {
             //========= REMOVING OBJECT TYPE FROM THE ARRAY =============
             object[] objectArray = DataArrayObject;
@@ -47,8 +47,8 @@ namespace LinearEffects
             {
                 //Getting baseEffector's effectname
                 Type thisType = GetType();
-                string effectName = thisType.Name;
-                OnRemoveObject?.Invoke(index, effectName);
+                // string effectName = thisType.Name;
+                OnRemoveObject?.Invoke(index, executorSearchBoxName);
                 return;
             }
 

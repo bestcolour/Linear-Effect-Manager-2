@@ -207,8 +207,8 @@
         {
             //=========== DRAW ORDER===============
             LoadedBackground_OnGUI();
-            ToolBar_OnGUI();
             NodeManager_OnGUI();
+            ToolBar_OnGUI();
             ProcessEvent_OnGUI();
         }
 

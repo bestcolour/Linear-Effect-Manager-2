@@ -24,7 +24,7 @@ namespace LinearEffects
 
         public abstract int AddNewObject();
 
-        public abstract void RemoveObjectAt(int index);
+        public abstract void RemoveObjectAt(int index,string executorSearchBoxName );
 
         public abstract int DuplicateDataElement(int index);
     }

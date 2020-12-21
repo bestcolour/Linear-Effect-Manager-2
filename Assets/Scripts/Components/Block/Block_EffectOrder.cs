@@ -34,7 +34,7 @@
             //To be called before removing the order intsance from the list
             public virtual void OnRemove()
             {
-                _refHolder.RemoveObjectAt(_dataElmtIndex);
+                _refHolder.RemoveObjectAt(_dataElmtIndex, ExecutorName);
             }
 
             //For when the holder is not null

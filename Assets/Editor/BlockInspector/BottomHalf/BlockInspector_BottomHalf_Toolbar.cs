@@ -88,11 +88,11 @@ namespace LinearEffectsEditor
                     continue;
                 }
 
-                if (!CommandData.TryGetExecutor(effectOrder.FullExecutorName, out Type executorType))
-                {
-                    Debug.Log($"The Executor {effectOrder.FullExecutorName} doesnt exist in CommandData.cs!");
-                    continue;
-                }
+                // if (!EffectsData.TryGetExecutor(effectOrder.FullExecutorName, out Type executorType))
+                // {
+                //     Debug.Log($"The Executor {effectOrder.FullExecutorName} doesnt exist in CommandData.cs!");
+                //     continue;
+                // }
 
                 //Add the effectorder into the currently selected index (if there isnt any selected index on the list, add to the end)
                 _target.Block.EditorProperties_InsertOrderElement(effectOrder, currentInsertPosition);

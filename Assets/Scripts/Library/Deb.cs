@@ -4,7 +4,7 @@ using LinearEffects;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class DebuggerExecutor : UpdateEffectExecutor<DebuggerExecutor.DebuggerEffect>
+public class Deb : UpdateEffectExecutor<Deb.DebuggerEffect>
 {
 
     //Step 2) Add System.Serializable attribute to your new command

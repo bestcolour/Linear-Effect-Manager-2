@@ -142,12 +142,12 @@ namespace LinearEffects
             ArrayExtension.RemoveAt(ref _orderArray, index);
         }
 
-        public virtual void EditorProperties_ManualOnRemovalCheck(int removedIndex, string effectorName)
+        public virtual void EditorProperties_ManualOnRemovalCheck(int removedIndex, string executorSearchBoxName)
         {
             foreach (var item in _orderArray)
             {
                 //Check if the effect order has the same executor name as the one that the removed effect was situated in
-                if (item.ExecutorName != effectorName)
+                if (item.ExecutorName != executorSearchBoxName)
                 {
                     continue;
                 }
@@ -156,20 +156,19 @@ namespace LinearEffects
             }
         }
 
-        public virtual void EditorProperties_ManualOnInsertCheck(int insertedIndex, string effectorName)
-        {
-            foreach (var item in _orderArray)
-            {
-                //Check if the effect order has the same executor name as the one that the removed effect was situated in
-                if (item.ExecutorName != effectorName)
-                {
-                    continue;
-                }
+        // public virtual void EditorProperties_ManualOnInsertCheck(int insertedIndex, string effectorName)
+        // {
+        //     foreach (var item in _orderArray)
+        //     {
+        //         //Check if the effect order has the same executor name as the one that the removed effect was situated in
+        //         if (item.ExecutorName != effectorName)
+        //         {
+        //             continue;
+        //         }
 
-                item.ManualInsertCheck(insertedIndex);
-            }
-        }
-
+        //         item.ManualInsertCheck(insertedIndex);
+        //     }
+        // }
         #endregion
 
 

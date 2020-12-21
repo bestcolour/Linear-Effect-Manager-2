@@ -186,13 +186,6 @@ namespace LinearEffectsEditor
             //----------------------- Removing their Order Data & Effects from their respective Holders -----------------
             foreach (var blockNode in _selectedBlocks)
             {
-                // //Close blocknode editor if it is being yeeted
-                // if (isBlockEditorOpen && _blockEditor.Block.BlockName == blockNode.Label)
-                // {
-                //     BlockEditor_HandleOnNoBlockNodeFound();
-                // }
-
-
                 //Get block from flow chart and then remove all order data
                 Block block = new Block();
                 block.LoadFromSerializedProperty(blockNode.BlockProperty);
@@ -278,11 +271,11 @@ namespace LinearEffectsEditor
                 string fullEffectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_FULLEXECUTORNAME).stringValue;
                 string effectName = effectOrderProperty.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_EXECUTORNAME).stringValue;
 
-                if (!CommandData.TryGetExecutor(fullEffectName, out Type executorType))
-                {
-                    Debug.LogError($"The effectname : {effectName} cannot be found in CommandData anymore! Full path: {fullEffectName}");
-                    return;
-                }
+                // if (!EffectsData.TryGetExecutor(fullEffectName, out Type executorType))
+                // {
+                //     Debug.LogError($"The effectname : {effectName} cannot be found in CommandData anymore! Full path: {fullEffectName}");
+                //     return;
+                // }
 
                 //Copy the values of current effect order to duplicate from onto the new instance of effect order
                 Block.EffectOrder effectOrder = new Block.EffectOrder();
@@ -290,7 +283,7 @@ namespace LinearEffectsEditor
 
                 //Add the effectorder into the duplicate block
                 //Always ensure that there is a executor component on the flowchart gameobject
-                StaticMethods_EnsureExecutorComponent(_flowChart.gameObject, executorType);
+                // StaticMethods_EnsureExecutorComponent(_flowChart.gameObject, executorType);
                 duplicateBlock.EditorProperties_InsertOrderElement(effectOrder, i);
                 // duplicateBlock.EditorProperties_InsertOrderElement(_flowChart.gameObject, type, effectOrder, i);
             }

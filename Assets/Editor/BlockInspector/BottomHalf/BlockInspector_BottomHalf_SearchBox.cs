@@ -28,7 +28,7 @@
         void BottomHalf_SearchBox_OnEnable()
         {
             _searchBox = new CategorizedSearchBox();
-            _searchBox.Initialize(CommandData.GetEffectStrings());
+            _searchBox.Initialize(EffectsData.GetEffectStrings());
             _isSearchBoxOpened = false;
         }
         void BottomHalf_SearchBox_OnDisable()
@@ -125,7 +125,7 @@
         #region Add Effect Command
         void BottomHalf_AddEffect(string fullEffectorName)
         {
-            if (!CommandData.TryGetExecutor(fullEffectorName, out Type type))
+            if (!EffectsData.TryGetExecutor(fullEffectorName, out Type type))
             {
                 return;
             }
