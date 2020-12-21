@@ -12,7 +12,7 @@ namespace LinearEffects
         //Used in FCWE_NodeManager_NodeCreation.cs
         public Block(Vector2 position, string blockName, Color blockColour)
         {
-            _blockSettings = new BlockProperties();
+            _blockSettings = new BlockSettings();
             _blockSettings.BlockName = blockName;
             _blockSettings.BlockPosition = position;
             _blockSettings.BlockColour = blockColour;
@@ -34,7 +34,7 @@ namespace LinearEffects
 
         void EditorProperties_DefaultConstruction()
         {
-            _blockSettings = new BlockProperties();
+            _blockSettings = new BlockSettings();
             _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
         }
 

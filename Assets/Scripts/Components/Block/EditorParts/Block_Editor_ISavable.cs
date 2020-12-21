@@ -7,7 +7,7 @@ namespace LinearEffects
     using UnityEditor;
     public partial class Block
     {
-        public partial class BlockProperties
+        public partial class BlockSettings
         {
             public Color BlockColour;
             [HideInInspector]
