@@ -55,8 +55,9 @@
         ///<Summary>A dictionary which stores all the effects. You can add custom effect executors here.  Do note that it is unwise to rename any of the Keys or the Values of the Dictionary after using the Executor. </Summary>
         static readonly Dictionary<string, Type> ExecutorLabel_To_EffectExecutor = new Dictionary<string, Type>()
         {
-            {"Debug/Lose/DebuggerExecutor", typeof(Deb)},
-            {"Debug/TestUpdateExecutor", typeof(TestUpdateExecutor)},
+            {"General/Timer", typeof(TimerExecutor)},
+            {"General/PlayBlock", typeof(PlayBlockExecutor)},
+            {"Visual/LerpColour", typeof(LerpColourExecutor)},
 
             //=================== EXAMPLE ===================
             //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},

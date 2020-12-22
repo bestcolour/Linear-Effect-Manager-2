@@ -10,10 +10,8 @@
     {
         #region Definitions
         [System.Serializable]
-        protected partial class FlowChartSettings
-        {
-            
-        }
+        //Incase i ever want to add stuff to the flowchart in the future
+        protected partial class FlowChartSettings { }
 
         #endregion
 
@@ -29,10 +27,13 @@
         #region Hidden Field
         ///<summary>A dictionary which holds all of the blocks on this flowchart. The key is the Block's Name and the value is the respective block </summary>
         protected Dictionary<string, Block> _blockDictionary = default;
+
         ///<summary>A hashset which holds all of the blocks on this flowchart has been called to execute its effects.</summary>
-        protected HashSet<Block> _activeBlocks = default;
-        ///<summary>A list which holds the blocks which have fully executed all its effects and is waiting for removal after all blocks are updated</summary>
-        protected List<Block> _blockRemovalList = default;
+        protected HashSet<Block> _activeBlockHashset = default;
+
+        ///<summary>A list which holds the blocks that will be called every frame (and removed when its effects are fully exectuted) <summary>
+        protected List<Block> _activeBlockList = default;
+
         #endregion
 
 
@@ -67,15 +68,16 @@
         ///<Summary>Plays a block via block instance</Summary>
         public void PlayBlock(Block block)
         {
-            if (_activeBlocks.Contains(block))
+            if (_activeBlockHashset.Contains(block))
             {
 #if UNITY_EDITOR
                 Debug.LogWarning($"The block {block.BlockName} on the flowchart {name} is already playing!", this);
 #endif
                 return;
             }
-
-            _activeBlocks.Add(block);
+            
+            _activeBlockList.Add(block);
+            _activeBlockHashset.Add(block);
         }
         #endregion
 
@@ -88,40 +90,27 @@
             {
                 _blockDictionary.Add(block.BlockName, block);
             }
-
-            _activeBlocks = new HashSet<Block>();
-            _blockRemovalList = new List<Block>();
+            _activeBlockHashset = new HashSet<Block>();
+            _activeBlockList = new List<Block>();
         }
 
 
         ///<Summary>Proxy Update method call. It will update the blocks' effects (where some of the effects ought to be called over multiple frames)</Summary>
         public void GameUpdate()
         {
-            foreach (var block in _activeBlocks)
+            for (int i = 0; i < _activeBlockList.Count; i++)
             {
+                Block block = _activeBlockList[i];
                 if (block.ExecuteBlockEffects())
                 {
-                    //Remove block from hashset
-                    _blockRemovalList.Add(block);
+                    _activeBlockHashset.Remove(block);
+                    _activeBlockList.RemoveEfficiently(i);
+                    i--;
                 }
             }
 
-            TryRemoveFinishedBlocks();
         }
 
-        private void TryRemoveFinishedBlocks()
-        {
-            if (_blockRemovalList.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (var item in _blockRemovalList)
-            {
-                _activeBlocks.Remove(item);
-            }
-            _blockRemovalList.Clear();
-        }
 
         #endregion
 

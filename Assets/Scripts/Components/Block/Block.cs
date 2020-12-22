@@ -127,7 +127,6 @@
         private bool ScanBlockEffects()
         {
             // bool isAllCodeExecuted = true;
-
             //Start from the frontier
             for (int i = _scanFrontier; i < _orderArray.Length; i++)
             {
@@ -149,8 +148,8 @@
                     continue;
                 }
 
-                //Stop scanning if code flow is being halted
-                _scanFrontier = i;
+                //Stop scanning if code flow is being halted and save where scan left off
+                _scanFrontier = i+1;
                 return false;
 
             }
@@ -159,36 +158,6 @@
             _scanFrontier = _orderArray.Length;
             return true;
         }
-
-        //Heres how calling of effects is going to work:
-        //For instant effects, all of it will be called within one frame
-        //for update effects, the effects will be updated once everyframe.
-        //there will be a boolean on every updatable effect to determine whether that effect will stop the code flow or allow code to flow past it
-        //all effects on a block needs to return a true value inorder to say that a block has finished executing all its effects
-
-        //This method is not perfect.
-        //Below I list down 3 scenarios in which the _orderArray (the effects array) may look like
-        //Legend: 
-        //The alphabets & word below represent effects in your _orderArray (the effects array)
-
-        //I : Instant effect (effects which are determined to be finished in a single frame call)
-        //U : Updatable effect  (effects which are determined to be finished in after multiple frame calls)
-        //UHalt : Updatable effect which halts code flow
-        //Scenario 1:
-        // I -> I -> I 
-        //This scenario is straight forward, in a single frame call, all of the block's effects will be executed 
-
-        //Scenario 2:
-        // I -> UHalt -> I 
-        //This scenario is straight forward also, in the first frame call, the first 2 effects will called. From the second frame onwards, the block will call starting from UHalt and will skip the first I effect. The 3rd effect will only be called after the 2nd effect returns a "true" value when calling it.
-
-        //Scenario 3:
-        // I -> U -> I 
-        //This scenario is a bit tricky.
-
-        //Scan and execute to find the first halt update 
-        //
-
 
     }
 

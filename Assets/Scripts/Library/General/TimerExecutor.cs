@@ -4,7 +4,7 @@ using LinearEffects;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class Deb : UpdateEffectExecutor<Deb.DebuggerEffect>
+public class TimerExecutor : UpdateEffectExecutor<TimerExecutor.DebuggerEffect>
 {
     [System.Serializable]
     public class DebuggerEffect : UpdateEffect
