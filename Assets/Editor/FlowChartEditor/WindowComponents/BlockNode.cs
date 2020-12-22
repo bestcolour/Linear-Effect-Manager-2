@@ -266,7 +266,7 @@
 
             //============ DRAW BOX WITHOUT LABEL ===============
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, string.Empty);
+            GUI.Box(_rect, string.Empty,FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 
             //Draw button that allows for connecting of node
@@ -289,12 +289,12 @@
             rectCopy.y -= NODEBLOCK_SELECTION_THICKNESS;
 
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
-            GUI.Box(rectCopy, string.Empty);
+            GUI.Box(rectCopy, string.Empty,FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 
             //============ DRAW BOX BG ===============
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, _label);
+            GUI.Box(_rect, _label,FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
         }
 
@@ -302,7 +302,7 @@
         {
             //============ DRAW BOX ===============
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, _label);
+            GUI.Box(_rect, _label,FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
         }
         #endregion

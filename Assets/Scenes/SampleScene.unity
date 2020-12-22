@@ -181,8 +181,6 @@ GameObject:
   m_Component:
   - component: {fileID: 910949407}
   - component: {fileID: 910949410}
-  - component: {fileID: 910949409}
-  - component: {fileID: 910949408}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -204,36 +202,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &910949408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 0
-    _duration: 0
---- !u!114 &910949409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - _myAwesomeName: DDDD
-    _prefab: {fileID: 0}
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,17 +218,23 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 156, y: 159}
+      BlockPosition: {x: 96, y: 131}
+      ConnectedTowardsBlockNames:
+      - New Block 1
+      - New Block 2
+    _orderArray: []
+  - _blockSettings:
+      BlockName: New Block 1
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 231, y: 278}
       ConnectedTowardsBlockNames: []
-    _orderArray:
-    - _refHolder: {fileID: 910949409}
-      _dataElmtIndex: 0
-      ExecutorName: TestUpdateExecutor
-      FullExecutorName: Debug/TestUpdateExecutor
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 0
-      ExecutorName: DebuggerExecutor
-      FullExecutorName: Debug/Lose/DebuggerExecutor
+    _orderArray: []
+  - _blockSettings:
+      BlockName: New Block 2
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 332, y: 87}
+      ConnectedTowardsBlockNames: []
+    _orderArray: []
   _settings:
     HideExecutors: 0
 --- !u!1001 &5312462118183921990

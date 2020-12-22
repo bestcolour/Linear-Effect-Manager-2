@@ -10,13 +10,16 @@
     public partial class FlowChartWindowEditor : EditorWindow
     {
 
-       
+
         #region Statics
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent;
 
         ///<Summary>Can only be get by BlockNode's draw function. Thanks</Summary>
         public static GUIStyle BlockNodeConnectButtonStyle { get; private set; }
+
+        ///<Summary>Can only be get by BlockNode's draw function. Thanks</Summary>
+        public static GUIStyle BlockNodeBoxStyle { get; private set; }
 
 
         #endregion
@@ -37,6 +40,14 @@
             BlockNodeConnectButtonStyle = new GUIStyle(GUI.skin.button);
             BlockNodeConnectButtonStyle.wordWrap = true;
             BlockNodeConnectButtonStyle.alignment = TextAnchor.MiddleCenter;
+
+            BlockNodeBoxStyle = new GUIStyle();
+            BlockNodeBoxStyle.wordWrap = true;
+            BlockNodeBoxStyle.normal.background = Texture2D.whiteTexture;
+            BlockNodeBoxStyle.alignment = TextAnchor.MiddleCenter;
+            BlockNodeBoxStyle.normal.textColor = Color.gray;
+
+
             OnEditorSkinChange += NodeManager_Drawer_HandleOnSkinChange;
 
             //================ INIT DEBUG DRAWERS ================
@@ -111,7 +122,7 @@
                 _selectionBox.height = e.mousePosition.y - _selectionBox.y;
 
                 Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTIONBOX_COLOUR);
-                GUI.Box(_selectionBox, string.Empty);
+                GUI.Box(_selectionBox, string.Empty,BlockNodeBoxStyle);
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }
         }
@@ -147,6 +158,7 @@
         private void NodeManager_Drawer_HandleOnSkinChange(bool isDark)
         {
             BlockNodeConnectButtonStyle.normal.textColor = GUI.skin.button.normal.textColor;
+            BlockNodeBoxStyle.normal.textColor = GUI.skin.box.normal.textColor;
         }
         #endregion
 
