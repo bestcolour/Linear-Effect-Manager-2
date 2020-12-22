@@ -1,4 +1,4 @@
-﻿namespace LinearEffects
+﻿namespace LinearEffects.General
 {
     using System.Collections;
     using System.Collections.Generic;

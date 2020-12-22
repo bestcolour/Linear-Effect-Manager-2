@@ -1,11 +1,11 @@
-﻿namespace LinearEffects
+﻿namespace LinearEffects.General
 {
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
     [System.Serializable]
-    public class LerpColourExecutor : UpdateEffectExecutor<LerpColourExecutor.LerpColourEffect>
+    public class LerpGraphicColourExecutor : UpdateEffectExecutor<LerpGraphicColourExecutor.LerpColourEffect>
     {
         [System.Serializable]
         public class LerpColourEffect : UpdateEffect
@@ -57,7 +57,7 @@
         }
 
 
-        protected override void StartExecuteEffect(LerpColourEffect effectData)
+        protected override void BeginExecuteEffect(LerpColourEffect effectData)
         {
             effectData.StartExecute();
         }

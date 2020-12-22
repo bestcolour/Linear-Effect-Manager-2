@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     using LinearEffects;
+    using LinearEffects.General;
 
     //This file stores all the data of all the types of executor as well as their label names
     public static class EffectsData
@@ -57,7 +58,8 @@
         {
             {"General/Timer", typeof(TimerExecutor)},
             {"General/PlayBlock", typeof(PlayBlockExecutor)},
-            {"Visual/LerpColour", typeof(LerpColourExecutor)},
+            {"Visual/Graphic/LerpColour", typeof(LerpGraphicColourExecutor)},
+            {"Visual/Graphic/LerpAlpha", typeof(LerpGraphicAlphaExecutor)},
 
             //=================== EXAMPLE ===================
             //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},

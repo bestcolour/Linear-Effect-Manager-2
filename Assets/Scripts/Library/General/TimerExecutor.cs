@@ -1,51 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using LinearEffects;
-using UnityEngine;
-
-[DisallowMultipleComponent]
-public class TimerExecutor : UpdateEffectExecutor<TimerExecutor.DebuggerEffect>
+﻿namespace LinearEffects.General
 {
-    [System.Serializable]
-    public class DebuggerEffect : UpdateEffect
+    using System.Collections;
+    using System.Collections.Generic;
+    using LinearEffects;
+    using UnityEngine;
+
+    [DisallowMultipleComponent]
+    public class TimerExecutor : UpdateEffectExecutor<TimerExecutor.DebuggerEffect>
     {
-        [SerializeField]
-        float _duration = default;
-
-        float _timer = -1;
-
-
-        public void Reset()
+        [System.Serializable]
+        public class DebuggerEffect : UpdateEffect
         {
-            _timer = _duration;
-        }
+            [SerializeField]
+            float _duration = default;
 
-        public bool TickDown()
-        {
-            if (_timer > 0)
+            float _timer = -1;
+
+
+            public void Reset()
             {
-                _timer -= Time.deltaTime;
-                return false;
+                _timer = _duration;
             }
 
-            return true;
+            public bool TickDown()
+            {
+                if (_timer > 0)
+                {
+                    _timer -= Time.deltaTime;
+                    return false;
+                }
+
+                return true;
+            }
+
         }
 
+        protected override bool ExecuteEffect(DebuggerEffect effectData)
+        {
+            return effectData.TickDown();
+        }
+
+        protected override void BeginExecuteEffect(DebuggerEffect effectData)
+        {
+            effectData.Reset();
+        }
+
+        protected override void EndExecuteEffect(DebuggerEffect effectData)
+        {
+        }
     }
 
-    protected override bool ExecuteEffect(DebuggerEffect effectData)
-    {
-        return effectData.TickDown();
-    }
 
-    protected override void StartExecuteEffect(DebuggerEffect effectData)
-    {
-        effectData.Reset();
-    }
 
-    protected override void EndExecuteEffect(DebuggerEffect effectData)
-    {
-    }
 }
-
-
