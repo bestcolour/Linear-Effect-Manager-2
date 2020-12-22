@@ -10,10 +10,9 @@
     {
         #region Definitions
         [System.Serializable]
-        protected class FlowChartSettings
+        protected partial class FlowChartSettings
         {
-            [SerializeField]
-            bool _someSetting = default;
+            
         }
 
         #endregion

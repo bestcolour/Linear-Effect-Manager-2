@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd96082123a46446a165a767024d5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flowChart: {fileID: 910949408}
+  _flowChart: {fileID: 910949410}
 --- !u!4 &873295938
 Transform:
   m_ObjectHideFlags: 0
@@ -273,9 +273,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 910949407}
-  - component: {fileID: 910949408}
-  - component: {fileID: 910949409}
   - component: {fileID: 910949410}
+  - component: {fileID: 910949409}
+  - component: {fileID: 910949408}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -299,6 +299,36 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &910949408
 MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas:
+  - HaltUntilFinished: 1
+    _duration: 11
+--- !u!114 &910949409
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas:
+  - _myAwesomeName: DDDD
+    _prefab: {fileID: 0}
+--- !u!114 &910949410
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -313,49 +343,19 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 276, y: 171}
+      BlockPosition: {x: 224, y: 144}
       ConnectedTowardsBlockNames: []
     _orderArray:
-    - _refHolder: {fileID: 910949410}
-      _dataElmtIndex: 0
-      ExecutorName: DebuggerExecutor
-      FullExecutorName: Debug/Lose/DebuggerExecutor
     - _refHolder: {fileID: 910949409}
       _dataElmtIndex: 0
       ExecutorName: TestUpdateExecutor
       FullExecutorName: Debug/TestUpdateExecutor
+    - _refHolder: {fileID: 910949408}
+      _dataElmtIndex: 0
+      ExecutorName: DebuggerExecutor
+      FullExecutorName: Debug/Lose/DebuggerExecutor
   _settings:
-    _someSetting: 0
---- !u!114 &910949409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6bba4442cfdda40898db98b22e3625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - _myAwesomeName: DDDD
-    _prefab: {fileID: 6767652999330655972}
---- !u!114 &910949410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 1
-    _duration: 5
+    HideExecutors: 1
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,9 +617,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7353fd52ac2bc1b4ab4a28da00f94cf4, type: 3}
---- !u!1 &6767652999330655972 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6767652999484195730, guid: 7353fd52ac2bc1b4ab4a28da00f94cf4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6767652999330655971}
-  m_PrefabAsset: {fileID: 0}
