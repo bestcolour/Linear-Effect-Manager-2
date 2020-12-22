@@ -214,27 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e15e83a41856b948b8817991e185641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks:
-  - _blockSettings:
-      BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 96, y: 131}
-      ConnectedTowardsBlockNames:
-      - New Block 1
-      - New Block 2
-    _orderArray: []
-  - _blockSettings:
-      BlockName: New Block 1
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 231, y: 278}
-      ConnectedTowardsBlockNames: []
-    _orderArray: []
-  - _blockSettings:
-      BlockName: New Block 2
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 332, y: 87}
-      ConnectedTowardsBlockNames: []
-    _orderArray: []
+  _blocks: []
   _settings:
     HideExecutors: 0
 --- !u!1001 &5312462118183921990
