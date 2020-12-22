@@ -7,7 +7,7 @@
     using UnityEditor;
     using LinearEffects;
 
-    [CustomEditor(typeof(BaseFlowChart))]
+    [CustomEditor(typeof(BaseFlowChart),true)]
     ///<Summary>The inspector editor for the FlowChart component</Summary>
     public class FlowChartInspectorEditor : Editor
     {

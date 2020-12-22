@@ -10,7 +10,7 @@
 
 
         [System.Serializable]
-        public class TestUpdateEffect : Effect
+        public class TestUpdateEffect : UpdateEffect
         {
             public string _myAwesomeName = "DDDD";
 

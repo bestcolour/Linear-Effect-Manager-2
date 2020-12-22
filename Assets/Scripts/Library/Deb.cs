@@ -9,7 +9,7 @@ public class Deb : UpdateEffectExecutor<Deb.DebuggerEffect>
 
     //Step 2) Add System.Serializable attribute to your new command
     [System.Serializable]
-    public class DebuggerEffect : Effect
+    public class DebuggerEffect : UpdateEffect
     {
         public bool Lol = default;
     }

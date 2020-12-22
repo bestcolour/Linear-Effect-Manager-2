@@ -13,7 +13,7 @@
 
         private void Update()
         {
-
+            GameUpdate();
         }
 
 

@@ -14,7 +14,7 @@
         protected T[] _effectDatas = new T[0];
 
         ///<Summary>The method which will be called to execute whatever code you want. Set the returns to true when effect has completed its execution.</Summary>
-        protected abstract bool ExecuteEffect(T effectData, out bool haltCodeFlow);
+        protected abstract bool ExecuteEffect(T effectData);
 
         ///<Summary>Called by Block's EffectOrder during a block's execute effects call. Returns true when the effect being executed is complete</Summary>
         public override bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow)
@@ -22,7 +22,8 @@
 #if UNITY_EDITOR
             Debug.Assert(index >= 0, $"Name of EffectExecutor is {this.GetType().ToString()} Index passed in is {index}");
 #endif
-            return ExecuteEffect(_effectDatas[index],out haltCodeFlow);
+            haltCodeFlow = false;
+            return ExecuteEffect(_effectDatas[index]);
         }
 
 
