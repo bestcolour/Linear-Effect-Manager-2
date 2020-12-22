@@ -4,7 +4,7 @@ namespace LinearEffectsEditor
     using UnityEngine;
     using UnityEditor;
     using LinearEffects;
-    using System;
+    using System.Collections.Generic;
 
     //This code handles all the creation and deletion of block nodes in the window editor 
     public partial class FlowChartWindowEditor : EditorWindow
@@ -233,7 +233,9 @@ namespace LinearEffectsEditor
         #region Duplicating NodeBlocks
         void NodeManager_NodeCycler_DuplicateSelectedNodes()
         {
-            foreach (var nodeToDuplicate in _selectedBlocks)
+            List<BlockNode> duplicatedNodes = new List<BlockNode>();
+
+            foreach (BlockNode nodeToDuplicate in _selectedBlocks)
             {
                 //Close blocknode editor if it is being yeeted
                 if (isBlockEditorOpen && _blockEditor.Block.BlockName == nodeToDuplicate.Label)
@@ -242,15 +244,23 @@ namespace LinearEffectsEditor
                 }
 
                 _allBlocksArrayProperty.serializedObject.Update();
-                NodeManager_NodeCyler_DuplicateNode(nodeToDuplicate);
+                BlockNode duplicatedNode = NodeManager_NodeCyler_DuplicateNode(nodeToDuplicate);
                 _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
-
+                duplicatedNodes.Add(duplicatedNode);
             }
 
             NodeManager_ClearAllSelectedNodes();
+
+            //Now select all of the duplicated nodes
+            foreach (var duplicatedNode in duplicatedNodes)
+            {
+                int nodeIndex = _allBlockNodes.FindIndexFromLastIndex(x => x.Label == duplicatedNode.Label);
+                NodeManager_SelectNode(nodeIndex);
+            }
+
         }
 
-        void NodeManager_NodeCyler_DuplicateNode(BlockNode nodeToDuplicate)
+        BlockNode NodeManager_NodeCyler_DuplicateNode(BlockNode nodeToDuplicate)
         {
             //============== DUPLICATING THE SELECTED NODE'S BLOCK ============
             Block blockToDuplicate = _flowChart.Editor_GetBlock(nodeToDuplicate.Label);
@@ -297,6 +307,7 @@ namespace LinearEffectsEditor
             //Record all the newly added node
             _allBlockNodes.Add(duplicatedBlockNode);
             _allBlockNodesDictionary.Add(duplicatedBlockNode.Label, duplicatedBlockNode);
+            return duplicatedBlockNode;
         }
 
 

@@ -44,6 +44,7 @@
         #endregion
 
         #region Properties
+        ///<Summary>Returns the first block found in the _selectedBlocks hashset</Summary>
         BlockNode selectedBlock
         {
             get
@@ -263,41 +264,46 @@
 
             _selectedBlocks.Add(_allBlockNodes[_selectedBlockIndex]);
 
-
             //Send the selected block to the end of the list so that it will be rendered on top
-            int lastIndex = _allBlockNodes.Count - 1;
-            BlockNode selectedBlock = _allBlockNodes[_selectedBlockIndex], lastBlock = _allBlockNodes[lastIndex];
+            BlockNode blockSelectedByClick = _allBlockNodes[_selectedBlockIndex];
 
-            selectedBlock.IsSelected = true;
-            _allBlockNodes[lastIndex] = selectedBlock;
-            _allBlockNodes[_selectedBlockIndex] = lastBlock;
+            NodeManager_SelectNode(_selectedBlockIndex);
 
-            OnSelectBlockNode?.Invoke(selectedBlock);
+            OnSelectBlockNode?.Invoke(blockSelectedByClick);
         }
 
+        ///<Summary>Toggle node selection to either select an unselected node or deselect a selected node</Summary>
         void NodeManager_ToggleNodeSelection()
         {
             //Return if no blocks were selected
             if (_selectedBlockIndex < 0) return;
 
-            BlockNode selectedBlock = _allBlockNodes[_selectedBlockIndex];
+            BlockNode blockSelectedByClick = _allBlockNodes[_selectedBlockIndex];
 
-            if (_selectedBlocks.Contains(selectedBlock))
+            if (_selectedBlocks.Contains(blockSelectedByClick))
             {
-                selectedBlock.IsSelected = false;
-                _selectedBlocks.Remove(selectedBlock);
+                blockSelectedByClick.IsSelected = false;
+                _selectedBlocks.Remove(blockSelectedByClick);
             }
             else
             {
-                //Send the selected block to the end of the list so that it will be rendered on top
-                int lastIndex = _allBlockNodes.Count - 1;
-                _selectedBlocks.Add(selectedBlock);
-                selectedBlock.IsSelected = true;
-
-                BlockNode lastBlock = _allBlockNodes[lastIndex];
-                _allBlockNodes[lastIndex] = selectedBlock;
-                _allBlockNodes[_selectedBlockIndex] = lastBlock;
+                NodeManager_SelectNode(_selectedBlockIndex);
             }
+        }
+
+        ///<Summary>The base selection for node</Summary>
+        void NodeManager_SelectNode(int nodeIndex)
+        {
+            BlockNode node = _allBlockNodes[nodeIndex];
+
+            //Send the selected block to the end of the list so that it will be rendered on top
+            int lastIndex = _allBlockNodes.Count - 1;
+            _selectedBlocks.Add(node);
+            node.IsSelected = true;
+
+            BlockNode lastBlock = _allBlockNodes[lastIndex];
+            _allBlockNodes[lastIndex] = node;
+            _allBlockNodes[nodeIndex] = lastBlock;
         }
 
         void NodeManager_ClearAllSelectedNodes()
