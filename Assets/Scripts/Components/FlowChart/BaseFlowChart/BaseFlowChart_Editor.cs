@@ -40,7 +40,18 @@ namespace LinearEffects
 
         #endregion
 
-
+        #region Editor Inspector Methods
+        ///<Summary>Clears all blocks in the flowchart and removing all the Executors on the flowchart</Summary>
+        public void Editor_ResetFlowChart()
+        {
+            _blocks = new Block[0];
+            BaseEffectExecutor[] allExecutorsOnFlowChart = GetComponents<BaseEffectExecutor>();
+            foreach (var item in allExecutorsOnFlowChart)
+            {
+                DestroyImmediate(item);
+            }
+        }
+        #endregion
     }
 
 }

@@ -7,11 +7,15 @@
     using UnityEditor;
     using LinearEffects;
 
-    [CustomEditor(typeof(BaseFlowChart),true)]
+    [CustomEditor(typeof(BaseFlowChart), true)]
     ///<Summary>The inspector editor for the FlowChart component</Summary>
     public class FlowChartInspectorEditor : Editor
     {
         const string SETTINGS_PROPERTY_NAME = "_settings";
+
+        const string BUTTON_OPENWINDOW_LABEL = "Open FlowChart"
+        , BUTTON_CLEARFLOWCHART_LABEL = "Clear FlowChart"
+        ;
 
 
         #region  Runtime Vars
@@ -33,19 +37,23 @@
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            GUILayout.BeginVertical();
             DrawProperties();
+            GUILayout.BeginHorizontal();
             DrawButtons();
-            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
             serializedObject.ApplyModifiedProperties();
         }
 
         #region Draw 
         void DrawButtons()
         {
-            if (GUILayout.Button("Open FlowChart"))
+            if (GUILayout.Button(BUTTON_OPENWINDOW_LABEL))
             {
                 FlowChartWindowEditor.OpenWindow(_target);
+            }
+            else if (GUILayout.Button(BUTTON_CLEARFLOWCHART_LABEL))
+            {
+                _target.Editor_ResetFlowChart();
             }
         }
 

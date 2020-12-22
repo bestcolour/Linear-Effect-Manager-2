@@ -307,21 +307,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e15e83a41856b948b8817991e185641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks:
-  - _blockSettings:
-      BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 195, y: 188}
-      ConnectedTowardsBlockNames: []
-    _orderArray: []
-  - _blockSettings:
-      BlockName: New Block 0 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 308, y: 176}
-      ConnectedTowardsBlockNames: []
-    _orderArray: []
+  _blocks: []
   _settings:
-    HideExecutors: 1
+    HideExecutors: 0
 --- !u!1 &1412891008
 GameObject:
   m_ObjectHideFlags: 0
