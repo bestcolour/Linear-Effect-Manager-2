@@ -49,9 +49,6 @@
             }
         }
 
-        // ///<Summary>Returns a boolean to check if the block should continue on </Summary>
-        bool ShouldScanForUpdateEffects => _updatingEffectIndices.Count <= 0;
-
         #endregion
 
 

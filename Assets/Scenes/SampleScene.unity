@@ -377,12 +377,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 910949406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2d59fafa07f79438aa65c542801a88, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f60c1263b575e243868496199dc1c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _effectDatas:
   - HaltUntilFinished: 0
-    _targeAlpha: 0
+    _targetColour: {r: 1, g: 0, b: 0, a: 1}
     _graphic: {fileID: 0}
     _duration: 1
 --- !u!114 &910949410
@@ -401,15 +401,16 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 206, y: 175}
+      BlockPosition: {x: 258, y: 207}
       ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 0
-      ExecutorName: LerpAlpha
-      FullExecutorName: Visual/Graphic/LerpAlpha
+      ExecutorName: LerpColour
+      FullExecutorName: Visual/Graphic/LerpColour
   _settings:
-    HideExecutors: 0
+    HideExecutors: 1
+  _prevHideOption: 1
 --- !u!114 &910949411
 MonoBehaviour:
   m_ObjectHideFlags: 0

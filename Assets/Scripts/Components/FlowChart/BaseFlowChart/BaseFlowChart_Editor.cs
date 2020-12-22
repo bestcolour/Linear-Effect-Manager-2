@@ -27,8 +27,19 @@ namespace LinearEffects
 
 
         #region Hiding In Inspector
+        [SerializeField,HideInInspector]
+        bool _prevHideOption = false;
+
+
         protected virtual void OnValidate()
         {
+            if (_prevHideOption == _settings.HideExecutors)
+            {
+                return;
+            }
+
+            _prevHideOption = _settings.HideExecutors;
+
             HideFlags flag = _settings.HideExecutors ? HideFlags.HideInInspector : HideFlags.None;
             BaseEffectExecutor[] hideExecutors = GetComponents<BaseEffectExecutor>();
 

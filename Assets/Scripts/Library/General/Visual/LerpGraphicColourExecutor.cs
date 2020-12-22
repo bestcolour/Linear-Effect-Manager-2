@@ -12,7 +12,7 @@
         {
             [Header("----- Colour References -----")]
             [SerializeField]
-            Color _targetColour = default;
+            Color _targetColour = Color.white;
 
             [SerializeField]
             Graphic _graphic = default;
