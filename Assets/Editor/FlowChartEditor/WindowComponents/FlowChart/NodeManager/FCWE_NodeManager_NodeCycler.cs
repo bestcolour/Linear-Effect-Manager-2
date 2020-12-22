@@ -225,7 +225,7 @@ namespace LinearEffectsEditor
 
 
             NodeManager_ClearAllSelectedNodes();
-            // NodeManager_SaveManager_LoadCachedBlockNodes();
+            NodeManager_SaveManager_LoadCachedBlockNodes();
         }
 
         #endregion
