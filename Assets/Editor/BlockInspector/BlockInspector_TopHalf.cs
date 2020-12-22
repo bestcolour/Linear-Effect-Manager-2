@@ -5,6 +5,7 @@
     using UnityEditorInternal;
     using LinearEffects;
     using System.Collections.Generic;
+    using System;
 
     //The top half class will render the settings & command list
     public partial class BlockInspector : ImprovedEditor
@@ -48,6 +49,11 @@
 
         #endregion
 
+        #region Statics
+        protected static GUIStyle ExecutorNameLabelStyle { get; private set; } = null;
+        protected static GUIStyle CopyLabelStyle { get; private set; } = null;
+        #endregion
+
         #region LifeTime Methods
 
         void TopHalf_OnEnable()
@@ -65,9 +71,26 @@
             _list.onSelectCallback += TopHalf_HandleOnSelect;
 
 
+            TopHalf_InitializeStyles();
         }
 
+        private void TopHalf_InitializeStyles()
+        {
+            //Style initialize
+            if (ExecutorNameLabelStyle == null)
+            {
+                ExecutorNameLabelStyle = new GUIStyle(EditorStyles.label);
+                ExecutorNameLabelStyle.normal.textColor = Color.black;
+            }
 
+            if (CopyLabelStyle == null)
+            {
+                CopyLabelStyle = new GUIStyle(EditorStyles.label);
+                CopyLabelStyle.normal.textColor = Color.red;
+                CopyLabelStyle.fontStyle = FontStyle.Italic;
+            }
+
+        }
 
         void TopHalf_OnDisable()
         {
@@ -147,7 +170,7 @@
             Color colourOfBg = _selectedElements.Contains(index) ? ORDERELEMENT_COLOUR_SELECTED : ORDERELEMENT_COLOUR_UNSELECTED;
 
             Color prevBgColour = GUIExtensions.Start_GUIBg_ColourChange(colourOfBg);
-            GUI.Box(rect, string.Empty);
+            GUI.Box(rect, string.Empty, FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUIBg_ColourChange(prevBgColour);
 
             //<================ DRAWING COMMAND TYPE=========================>
@@ -155,9 +178,9 @@
 
             //By calculating the size of the content, i can ensure that the error log is always rendered 10 units past the commadntype
             GUIContent content = new GUIContent(dummyProperty.stringValue);
-            var style = EditorStyles.label;
+            // var style = EditorStyles.label;
 
-            Vector2 sizeOfContent = style.CalcSize(content);
+            Vector2 sizeOfContent = ExecutorNameLabelStyle.CalcSize(content);
 
             //Modify rect
             //Shift rect 10units to avoid overlapping the stroke bullet points
@@ -167,7 +190,7 @@
             rect.y += 10;
 
             //Draw the Type of Command first
-            EditorGUI.LabelField(rect, dummyProperty.stringValue);
+            EditorGUI.LabelField(rect, dummyProperty.stringValue, ExecutorNameLabelStyle);
 
 
             // //<================ DRAWING COPY/CUT TARGET =========================>
@@ -184,9 +207,7 @@
 
 
             Color pastLabelColour = GUIExtensions.Start_StyleText_ColourChange(Color.red, EditorStyles.label);
-            style.fontStyle = FontStyle.Italic;
-            EditorGUI.LabelField(rect, COPY_REMINDER_TEXT);
-            style.fontStyle = FontStyle.Normal;
+            EditorGUI.LabelField(rect, COPY_REMINDER_TEXT,CopyLabelStyle);
             GUIExtensions.End_StyleText_ColourChange(pastLabelColour, EditorStyles.label);
 
             //For now this is unneeded
