@@ -37,10 +37,10 @@
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            DrawProperties();
             GUILayout.BeginHorizontal();
             DrawButtons();
             GUILayout.EndHorizontal();
+            DrawProperties();
             serializedObject.ApplyModifiedProperties();
         }
 

@@ -36,10 +36,12 @@ namespace LinearEffectsEditor
             //================DRAW NEXT/PREV COMMAND BUTTONS===============
             if (GUILayout.Button("【↑】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                _prevClickedIndex = CurrentClickedListIndex;
                 CurrentClickedListIndex -= 1;
             }
             else if (GUILayout.Button("【↓】", GUILayout.Height(BUTTON_SIZE), GUILayout.Width(BUTTON_SIZE)))
             {
+                _prevClickedIndex = CurrentClickedListIndex;
                 CurrentClickedListIndex += 1;
             }
 
