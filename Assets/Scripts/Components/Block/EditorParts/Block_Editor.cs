@@ -108,8 +108,10 @@ namespace LinearEffects
             ArrayExtension.RemoveAt(ref _orderArray, index);
         }
 
-        public virtual void EditorProperties_ManualOnRemovalCheck(int removedIndex, string executorSearchBoxName)
+        public virtual void EditorProperties_ManualOnRemovalCheck(int removedEffectOrderIndex, string executorSearchBoxName)
         {
+            EffectOrder removedEffectOrder = _orderArray[removedEffectOrderIndex];
+            int removedDataElmtIndex = removedEffectOrder.DataElementIndex;
             foreach (var item in _orderArray)
             {
                 //Check if the effect order has the same executor name as the one that the removed effect was situated in
@@ -118,7 +120,7 @@ namespace LinearEffects
                     continue;
                 }
 
-                item.ManualRemovalCheck(removedIndex);
+                item.ManualRemovalCheck(removedEffectOrderIndex);
             }
         }
 

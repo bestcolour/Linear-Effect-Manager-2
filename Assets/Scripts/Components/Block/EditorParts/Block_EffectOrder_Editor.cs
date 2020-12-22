@@ -76,6 +76,8 @@ namespace LinearEffects
                 OnInsertCopy();
             }
 
+            public int DataElementIndex => _dataElmtIndex;
+
             ///<Summary>Does a manual removal check in the case where the FlowChart editor's OnRemoval event does not include the block in which this EffectOrder is being serialized on</Summary>
             public virtual void ManualRemovalCheck(int removedIndex)
             {
@@ -85,14 +87,14 @@ namespace LinearEffects
                 }
             }
 
-            ///<Summary>Does a manual insert check in the case where the FlowChart editor's OnInsert event does not include the block in which this EffectOrder is being serialized on</Summary>
-            public virtual void ManualInsertCheck(int insertedIndex)
-            {
-                if (insertedIndex < _dataElmtIndex)
-                {
-                    _dataElmtIndex++;
-                }
-            }
+            // ///<Summary>Does a manual insert check in the case where the FlowChart editor's OnInsert event does not include the block in which this EffectOrder is being serialized on</Summary>
+            // public virtual void ManualInsertCheck(int insertedIndex)
+            // {
+            //     if (insertedIndex < _dataElmtIndex)
+            //     {
+            //         _dataElmtIndex++;
+            //     }
+            // }
 
 
 

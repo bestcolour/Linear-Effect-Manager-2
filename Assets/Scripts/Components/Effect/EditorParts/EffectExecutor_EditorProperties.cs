@@ -46,7 +46,7 @@ namespace LinearEffects
             if (DataArrayObject.Length > 0)
             {
                 //Getting baseEffector's effectname
-                Type thisType = GetType();
+                // Type thisType = GetType();
                 // string effectName = thisType.Name;
                 OnRemoveObject?.Invoke(index, executorSearchBoxName);
                 return;
