@@ -13,7 +13,7 @@
         [SerializeField]
         protected T[] _effectDatas = new T[0];
 
-        ///<Summary>The method which will be called to execute whatever code you want. Set the returns to true when effect has completed its execution.</Summary>
+        ///<Summary>The method which will called every frame after StartExecuteEffect is called. Returns true if Effect has been completely finished executing.</Summary>
         protected abstract bool ExecuteEffect(T effectData);
 
         ///<Summary>Called by Block's EffectOrder during a block's execute effects call. Returns true when the effect being executed is complete</Summary>

@@ -9,11 +9,32 @@
     public abstract class UpdateEffectExecutor<T> : EffectExecutor<T>
     where T : UpdateEffect, new()
     {
+        ///<Summary>The method called before calling ExecuteEffect method. Then number of times this method is called depends on the number of times you decide to play the block this effect is on. Add your reset methods here for your effect classes.</Summary>
+        protected abstract void StartExecuteEffect(T effectData);
+
+        ///<Summary>The method called when ExecuteEffect method is finally finished updating. (The frame in which ExecuteEffect returns true)</Summary>
+        protected abstract void EndExecuteEffect(T effectData);
+
         public override bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow)
         {
             UpdateEffect effect = _effectDatas[index];
             haltCodeFlow = effect.HaltUntilFinished;
-            return ExecuteEffect(_effectDatas[index]);
+
+            if (!effect.FirstFrameCall)
+            {
+                effect.FirstFrameCall = true;
+                StartExecuteEffect(_effectDatas[index]);
+            }
+
+            //When effect has finally over
+            if (ExecuteEffect(_effectDatas[index]))
+            {
+                effect.FirstFrameCall = false;
+                EndExecuteEffect(_effectDatas[index]);
+                return true;
+            }
+
+            return false;
         }
     }
 

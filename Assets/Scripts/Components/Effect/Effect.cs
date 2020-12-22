@@ -1,10 +1,19 @@
 ﻿namespace LinearEffects
 {
+    using UnityEngine;
     [System.Serializable]
     public abstract class Effect { }
 
+    [System.Serializable]
     public abstract class UpdateEffect : Effect
     {
+        ///<Summary>If this is set to true, the effect will essentially act like a stopper. When the Block executes all the effects sequentially and reaches this UpdateEffect, it will going down and keep updating all of the current effects until this UpdateEffect has finished executing all of its code</Summary>
+        [Tooltip("If this is set to true, the effect will essentially act like a stopper. When the Block executes all the effects sequentially and reaches this UpdateEffect, it will going down and keep updating all of the current effects until this UpdateEffect has finished executing all of its code")]
+        [Header("====== UPDATE EFFECT =====")]
         public bool HaltUntilFinished = false;
+
+
+        ///<Summary>This is a boolean which is used to determine whether or not an update effect has triggered a StartEffectExecutor method call on its Executor. Please dont touch</Summary>
+        public bool FirstFrameCall { get; set; } = false;
     }
 }

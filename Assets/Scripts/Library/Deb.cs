@@ -6,18 +6,45 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Deb : UpdateEffectExecutor<Deb.DebuggerEffect>
 {
-
-    //Step 2) Add System.Serializable attribute to your new command
     [System.Serializable]
     public class DebuggerEffect : UpdateEffect
     {
-        public bool Lol = default;
+        [SerializeField]
+        float _duration = default;
+
+        float _timer = -1;
+
+
+        public void Reset()
+        {
+            _timer = _duration;
+        }
+
+        public bool TickDown()
+        {
+            if (_timer > 0)
+            {
+                _timer -= Time.deltaTime;
+                return false;
+            }
+
+            return true;
+        }
+
     }
 
     protected override bool ExecuteEffect(DebuggerEffect effectData)
     {
-        effectData.Lol = true;
-        return effectData.Lol;
+        return effectData.TickDown();
+    }
+
+    protected override void StartExecuteEffect(DebuggerEffect effectData)
+    {
+        effectData.Reset();
+    }
+
+    protected override void EndExecuteEffect(DebuggerEffect effectData)
+    {
     }
 }
 
