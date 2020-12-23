@@ -346,9 +346,6 @@ GameObject:
   - component: {fileID: 910949407}
   - component: {fileID: 910949410}
   - component: {fileID: 910949411}
-  - component: {fileID: 910949408}
-  - component: {fileID: 910949409}
-  - component: {fileID: 910949412}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -370,38 +367,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &910949408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8513cce5accc48844bef878cb5c9a0f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 0
-    _transform: {fileID: 134793327}
-    _targetPos: {x: 0, y: 0, z: 0}
-    _duration: 1
---- !u!114 &910949409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 1
-    _duration: 5
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,25 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e15e83a41856b948b8817991e185641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks:
-  - _blockSettings:
-      BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 274, y: 213}
-      ConnectedTowardsBlockNames: []
-    _orderArray:
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 0
-      ExecutorName: LerpRectTransform
-      FullExecutorName: Transform/LerpRectTransform
-    - _refHolder: {fileID: 910949409}
-      _dataElmtIndex: 0
-      ExecutorName: Timer
-      FullExecutorName: General/Timer
-    - _refHolder: {fileID: 910949412}
-      _dataElmtIndex: 0
-      ExecutorName: LerpColour
-      FullExecutorName: Visual/Graphic/LerpColour
+  _blocks: []
   _settings:
     HideExecutors: 0
   _prevHideOption: 0
@@ -449,23 +396,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _flowChart: {fileID: 910949410}
---- !u!114 &910949412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f60c1263b575e243868496199dc1c22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 0
-    _targetColour: {r: 1, g: 1, b: 1, a: 1}
-    _graphic: {fileID: 134793328}
-    _duration: 1
 --- !u!1 &1079393983
 GameObject:
   m_ObjectHideFlags: 0

@@ -117,7 +117,7 @@
                 if (!string.IsNullOrEmpty(item))
                 {
                     // Debug.Log(item);
-                    FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this,item);
+                    FlowChartWindowEditor.NodeManager_ArrowConnectionCycler_CreateNewArrowConnectionLine(this, item);
                 }
             }
 
@@ -209,14 +209,21 @@
             _rect.position += mouseDelta;
         }
 
-///<Summary>Checks if there is a connection line which originates from this block towards the block with the connectedBlock label</Summary>
+        public void ProcessMouseUp()
+        {
+            BlockProperty.serializedObject.Update();
+            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
+            BlockProperty.serializedObject.ApplyModifiedProperties();
+        }
+
+        ///<Summary>Checks if there is a connection line which originates from this block towards the block with the connectedBlock label</Summary>
         public bool CheckConnectionTowards(string connectedBlock)
         {
             // bool connectionExists = false;
 
             // foreach (var item in ConnectedTowardsBlockNames)
             // {
-                // connectionExists = item == connectedBlock;
+            // connectionExists = item == connectedBlock;
             // }
             return ConnectedTowardsBlockNamesHashset.Contains(connectedBlock);
         }
@@ -266,7 +273,7 @@
 
             //============ DRAW BOX WITHOUT LABEL ===============
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, string.Empty,FlowChartWindowEditor.BlockNodeBoxStyle);
+            GUI.Box(_rect, string.Empty, FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 
             //Draw button that allows for connecting of node
@@ -289,12 +296,12 @@
             rectCopy.y -= NODEBLOCK_SELECTION_THICKNESS;
 
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTION_COLOUR);
-            GUI.Box(rectCopy, string.Empty,FlowChartWindowEditor.BlockNodeBoxStyle);
+            GUI.Box(rectCopy, string.Empty, FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
 
             //============ DRAW BOX BG ===============
             prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, _label,FlowChartWindowEditor.BlockNodeBoxStyle);
+            GUI.Box(_rect, _label, FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
         }
 
@@ -302,7 +309,7 @@
         {
             //============ DRAW BOX ===============
             Color prevColour = GUIExtensions.Start_GUI_ColourChange(_blockColour);
-            GUI.Box(_rect, _label,FlowChartWindowEditor.BlockNodeBoxStyle);
+            GUI.Box(_rect, _label, FlowChartWindowEditor.BlockNodeBoxStyle);
             GUIExtensions.End_GUI_ColourChange(prevColour);
         }
         #endregion

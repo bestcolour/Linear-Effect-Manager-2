@@ -228,6 +228,11 @@
                 //Previously had used the potential to dragg blocks
                 case DragState.DragBlocks_HadDraggedBlock:
                     _dragState = DragState.Default;
+                    foreach (var item in _selectedBlocks)
+                    {
+                        //Save their new position
+                        item.ProcessMouseUp();
+                    }
                     break;
 
                 case DragState.DrawSelection_HadDragged:

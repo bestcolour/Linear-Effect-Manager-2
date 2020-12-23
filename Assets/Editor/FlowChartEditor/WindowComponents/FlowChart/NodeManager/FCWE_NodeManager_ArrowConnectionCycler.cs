@@ -87,7 +87,7 @@
         void NodeManager_ArrowConnectionCycler_DeleteAllArrowConnectionLinesTo(string endNodeLabel)
         {
             //Find all connection lines that relate to this the from or to node
-            List<ArrowConnectionLine> results = _arrowConnectionLines.FindAll(x => (x.StartNode.Label == endNodeLabel));
+            List<ArrowConnectionLine> results = _arrowConnectionLines.FindAll(x => (x.EndNode.Label == endNodeLabel));
 
             if (results.Count <= 0)
             {
