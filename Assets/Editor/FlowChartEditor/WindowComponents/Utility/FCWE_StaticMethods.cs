@@ -10,28 +10,50 @@
     {
         public delegate void CompareDataElementIndexCallback(SerializedProperty dataElementProperty, int dataElementIndex);
 
-        ///<Summary>Ensures that there will always be the executor typed component on the gameobject and that it always has the OnRemoval event assigned on the baseEffectExecutor </Summary>
-        public static BaseEffectExecutor StaticMethods_EnsureExecutorComponent(GameObject gameObject, Type holderType)
+        ///<Summary>Ensures and checks that there will always be the executor typed component with the System.Serializable attribute for its Effect class on the gameobject and that it always has the OnRemoval event assigned on the baseEffectExecutor. Returns true if the component class passes the checks else return false</Summary>
+        public static bool StaticMethods_EnsureExecutorComponent(GameObject gameObject, Type holderType, out BaseEffectExecutor holder)
         {
+            holder = null;
+
             if (!holderType.IsSubclassOf(typeof(BaseEffectExecutor)))
             {
                 Debug.Log($"Type {holderType} does not inherit from {typeof(BaseEffectExecutor)} and therefore adding this type to the OrderData is not possible!");
-                return null;
+                return false;
             }
 
-            BaseEffectExecutor holder;
 
             if (!gameObject.TryGetComponent(holderType, out Component component))
             {
                 //If no component found, insert the orderdata into the order array
                 component = gameObject.AddComponent(holderType);
                 holder = component as BaseEffectExecutor;
-                holder.InitializeSubs(StaticMethods_HandleOnRemoveEvent);
-                return holder;
+
+                if (CheckHolderSerializableImplementation(holder))
+                {
+                    holder.InitializeSubs(StaticMethods_HandleOnRemoveEvent);
+                    return holder;
+                }
+
+                //Else if there is no serializable attribute on the effect class, destroy the newly added component
+                return false;
             }
 
             holder = component as BaseEffectExecutor;
-            return holder;
+
+            return CheckHolderSerializableImplementation(holder) ? holder : null;
+        }
+
+        ///<Summary>Returns true if holder's effect type has a System.Serializable attribute on it. If false, it will destroy the holder component</Summary>
+        static bool CheckHolderSerializableImplementation(BaseEffectExecutor holder)
+        {
+            if (holder.CheckAttributeImplementation(out string errorLog))
+            {
+                return true;
+            }
+
+            DestroyImmediate(holder);
+            Debug.LogError(errorLog);
+            return false;
         }
 
         static void StaticMethods_HandleOnRemoveEvent(int removedIndex, string effectorName)

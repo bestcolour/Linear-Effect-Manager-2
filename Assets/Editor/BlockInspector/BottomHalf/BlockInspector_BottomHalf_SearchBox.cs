@@ -130,11 +130,15 @@
                 return;
             }
 
+            if (!FlowChartWindowEditor.StaticMethods_EnsureExecutorComponent(BlockGameObject, type,out BaseEffectExecutor executor))
+            {
+                return;
+            }
+
             //Since the effector name has slashes inside of it (cause categorization and stuff),there is a need to remove it 
             int previousCategoryIndex = fullEffectorName.LastIndexOf(CategorizedSearchBox.CATEGORY_IDENTIFIER);
             string effectName = previousCategoryIndex == -1 ? fullEffectorName : fullEffectorName.Remove(0, previousCategoryIndex + 1);
 
-            BaseEffectExecutor executor = FlowChartWindowEditor.StaticMethods_EnsureExecutorComponent(BlockGameObject, type);
             _target.Block.EditorProperties_AddNewOrderElement(executor, fullEffectorName, effectName);
             // _target.Block.EditorProperties_AddNewOrderElement(BlockGameObject, type, fullEffectorName, effectName);
             _target.SaveModifiedProperties();

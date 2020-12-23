@@ -346,6 +346,7 @@ GameObject:
   - component: {fileID: 910949407}
   - component: {fileID: 910949410}
   - component: {fileID: 910949411}
+  - component: {fileID: 910949409}
   - component: {fileID: 910949408}
   m_Layer: 8
   m_Name: GameObject
@@ -377,14 +378,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 910949406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f60c1263b575e243868496199dc1c22, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c2d59fafa07f79438aa65c542801a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _effectDatas:
   - HaltUntilFinished: 0
-    _targetColour: {r: 1, g: 0, b: 0, a: 1}
+    _targeAlpha: 0
     _graphic: {fileID: 0}
     _duration: 1
+--- !u!114 &910949409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910949406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a282e524d3c2b4aa76d6fed76a0372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas: []
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,8 +420,8 @@ MonoBehaviour:
     _orderArray:
     - _refHolder: {fileID: 910949408}
       _dataElmtIndex: 0
-      ExecutorName: LerpColour
-      FullExecutorName: Visual/Graphic/LerpColour
+      ExecutorName: LerpAlpha
+      FullExecutorName: Visual/Graphic/LerpAlpha
   _settings:
     HideExecutors: 1
   _prevHideOption: 1

@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace LinearEffects
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -27,6 +27,24 @@ namespace LinearEffects
         public abstract void RemoveObjectAt(int index, string executorSearchBoxName);
 
         public abstract int DuplicateDataElement(int index);
+
+        ///<Summary>Used to check whether the T generic type has the System.Serializable attribute on it. Returns true if there is Serializable Attribute on the Effect ClassType</Summary>
+        public bool CheckAttributeImplementation(out string errorLog)
+        {
+            errorLog = string.Empty;
+            Type effectClassType = EffectClassType;
+
+            if (Attribute.IsDefined(effectClassType, typeof(SerializableAttribute)))
+            {
+                return true;
+            }
+
+            errorLog = $"The Effect Class: {effectClassType} does not have the attribute System.Serializable on it!";
+            return false;
+        }
+
+        protected abstract Type EffectClassType { get; }
+
     }
 
 }

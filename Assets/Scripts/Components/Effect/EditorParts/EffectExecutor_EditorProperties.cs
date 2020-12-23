@@ -8,7 +8,9 @@ namespace LinearEffects
     public abstract partial class EffectExecutor<T>
     {
 
+        protected override Type EffectClassType => typeof(T);
 
+        #region Window Editor Method
         //We need this to allow easy access to converting _effectDatas to object[] and setting of _effectDatas's value to the T generic type
         ///<Summary>Returns the _effectDatas array and sets it to the appropriate Effect Generic type </Summary>
         object[] DataArrayObject
@@ -70,6 +72,7 @@ namespace LinearEffects
             return elementIndex;
         }
 
+        #endregion
 
     }
 
