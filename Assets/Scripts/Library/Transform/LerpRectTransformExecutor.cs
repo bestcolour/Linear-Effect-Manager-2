@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class LerpTransformExecutor : UpdateEffectExecutor<LerpTransformExecutor.LerpTransform>
+    public class LerpRectTransformExecutor : UpdateEffectExecutor<LerpRectTransformExecutor.LerpTransform>
     {
         [System.Serializable]
         public class LerpTransform : UpdateEffect
         {
             [SerializeField]
-            Transform _transform = default;
+            RectTransform _transform = default;
 
             [SerializeField]
             Vector3 _targetPos = default;
@@ -25,7 +25,7 @@
 
             public void BeginExecute()
             {
-                _initialPosition = _transform.position;
+                _initialPosition = _transform.anchoredPosition;
                 _timer = _duration;
             }
 
@@ -37,16 +37,16 @@
                 }
 
                 _timer -= Time.deltaTime;
-                
+
                 float percentage = _timer / _duration;
-                _transform.position = Vector3.Lerp(_targetPos, _initialPosition, percentage);
+                _transform.anchoredPosition = Vector3.Lerp(_targetPos, _initialPosition, percentage);
                 return false;
             }
 
 
             public void EndExecute()
             {
-                _transform.position = _targetPos;
+                _transform.anchoredPosition = _targetPos;
             }
 
 

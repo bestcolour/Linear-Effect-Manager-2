@@ -36,6 +36,7 @@
 
         #region Hidden Field
         int _scanFrontier = 0;
+        bool _isBeingHalted = false;
 
         List<int> _updatingEffectIndices = new List<int>();
         #endregion
@@ -58,20 +59,21 @@
         ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop. </Summary>
         public bool ExecuteBlockEffects()
         {
-            bool allEffectsFinished = ExecuteUpdateEffects(out bool haltCodeFlow);
-
+            bool allScannedThrough = ScanBlockEffects();
+            //Reupdates the halted status
+            bool allEffectsFinished = ExecuteUpdateEffects(out _isBeingHalted);
             //So long as there is no halt in code flow, scan the block effects
-            if (!haltCodeFlow)
+            if (!_isBeingHalted)
             {
-                //Else if updating allEffects are not finished, just scan and return false
-                //Else if scanning returns false and allEffectsFinished is true, return false
-                if (ScanBlockEffects() && allEffectsFinished)
+                //If allEffects are updated finished and all block effects are scanned,
+                if (allScannedThrough && allEffectsFinished)
                 {
-                    //If allEffects are updated finished and all block effects are scanned,
                     _scanFrontier = 0;
                     return true;
                 }
 
+                //Else if updating allEffects are not finished,  return false
+                //Else if scanning returns false and allEffectsFinished is true, return false
                 return false;
             }
 
@@ -123,30 +125,34 @@
         ///<Summary>Loop through the orderArray starting from the _scanFrontier index. Call the effects looped through and check if it is an update effect. If so, add it into the UpdateEffectIndices list so that it could be updated everyframe from the next frame onwards.Also, check if the update effect has HaltUntilFinished boolean checked. If so, stop scanning and set the _scanFrontier as the current index. Returns true if all the effects are scanned through and have been called once.</Summary>
         private bool ScanBlockEffects()
         {
-            // bool isAllCodeExecuted = true;
+            //Dont scan when block code is being halted
+            if (_isBeingHalted)
+            {
+                return false;
+            }
+
             //Start from the frontier
             for (int i = _scanFrontier; i < _orderArray.Length; i++)
             {
                 EffectOrder effect = _orderArray[i];
 
                 //If the returned value is false, that means that this effect is an update effect else it will be an instant effect
-                if (effect.CallEffect(out bool haltUntilFinished))
+                if (effect.CallEffect(out _isBeingHalted))
                 {
                     continue;
                 }
 
                 //Add this effect to the update list 
                 _updatingEffectIndices.Add(i);
-                // isAllCodeExecuted = false;
 
                 //if this update effect isnt halting code flow for scanning, continue
-                if (!haltUntilFinished)
+                if (!_isBeingHalted)
                 {
                     continue;
                 }
 
                 //Stop scanning if code flow is being halted and save where scan left off
-                _scanFrontier = i+1;
+                _scanFrontier = i + 1;
                 return false;
 
             }

@@ -61,6 +61,7 @@
             {"Visual/Graphic/LerpColour", typeof(LerpGraphicColourExecutor)},
             {"Visual/Graphic/LerpAlpha", typeof(LerpGraphicAlphaExecutor)},
             {"Transform/LerpTransform", typeof(LerpTransformExecutor)},
+            {"Transform/LerpRectTransform", typeof(LerpRectTransformExecutor)},
 
             //=================== EXAMPLE ===================
             //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},
