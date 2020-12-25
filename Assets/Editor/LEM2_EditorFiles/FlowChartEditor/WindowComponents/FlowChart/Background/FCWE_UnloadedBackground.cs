@@ -16,6 +16,7 @@
             if (_flowChart != null)
             {
                 DisableWindow();
+                EnableWindow();
             }
             
         }

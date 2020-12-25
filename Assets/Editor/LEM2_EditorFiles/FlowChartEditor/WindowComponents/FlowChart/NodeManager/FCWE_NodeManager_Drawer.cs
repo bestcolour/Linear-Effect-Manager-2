@@ -53,7 +53,7 @@
             //================ INIT DEBUG DRAWERS ================
             DebugStyle = new GUIStyle();
             DebugStyle.wordWrap = true;
-            DebugStyle.normal.textColor = Color.red;
+            DebugStyle.normal.textColor = Color.yellow;
             DebugGUIContent = new GUIContent();
 
             FlowChart_GUIContent = new GUIContent();
