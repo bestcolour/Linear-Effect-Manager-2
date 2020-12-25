@@ -15,7 +15,7 @@
             instance = GetWindow<FlowChartWindowEditor>();
             if (_flowChart != null)
             {
-                REINITIALIZE();
+                DisableWindow();
             }
             
         }

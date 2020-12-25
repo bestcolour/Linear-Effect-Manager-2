@@ -346,7 +346,6 @@ GameObject:
   - component: {fileID: 910949407}
   - component: {fileID: 910949410}
   - component: {fileID: 910949411}
-  - component: {fileID: 910949408}
   m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
@@ -368,24 +367,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &910949408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910949406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b5e39d23d98d7a40ab1617f6fb8d39b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 0
-    _transform: {fileID: 1779978321}
-    _targetRotation: {x: 0, y: 0, z: 90}
-    _localPivot: {x: -0.5, y: -0.5, z: -0.5}
-    _duration: 1
 --- !u!114 &910949410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,20 +379,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e15e83a41856b948b8817991e185641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocks:
-  - _blockSettings:
-      BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 28, y: 78}
-      ConnectedTowardsBlockNames: []
-    _orderArray:
-    - _refHolder: {fileID: 910949408}
-      _dataElmtIndex: 0
-      ExecutorName: LerpRotationAboutPivot-ToVector3
-      FullExecutorName: Transform/LerpRotationAboutPivot-ToVector3
+  _blocks: []
   _settings:
-    HideExecutors: 0
-  _prevHideOption: 0
+    HideExecutors: 1
+  _prevHideOption: 1
 --- !u!114 &910949411
 MonoBehaviour:
   m_ObjectHideFlags: 0

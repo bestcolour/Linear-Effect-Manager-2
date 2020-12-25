@@ -36,6 +36,7 @@
         Vector2 CenterScreen => new Vector2(Screen.width, Screen.height) * 0.35f;
 
         protected static FlowChartWindowEditor instance = null;
+        public static bool IsOpen => instance != null;
         #endregion
 
 
@@ -63,29 +64,55 @@
             _state = EditorState.UNINITIALIZE;
         }
 
+        void OnDisable()
+        {
+            switch (_state)
+            {
+                case EditorState.UNLOADED:
+                    UNLOADED_OnDisable();
+                    break;
+                case EditorState.LOADED:
+                    LOADED_OnDisable();
+                    break;
+                case EditorState.RUNTIME_DEBUG:
+                    RUNTIME_DEBUG_OnDisable();
+                    break;
+            }
+            SaveManager_SaveFlowChartPath();
+        }
+
+        #endregion
+
         #region Initializations
-        ///<Summary>
-        ///To be called when changing states to ensure that the current editor state's components have their OnDisables called
-        ///</Summary>
-        void REINITIALIZE()
+        ///<Summary>To be called when changing states to ensure that the current editor state's components have their OnDisables called</Summary>
+        void TryCallDisable()
         {
             if (_state != EditorState.UNINITIALIZE)
             {
                 //Disable the previous state's components
                 OnDisable();
             }
-            AssignNewState();
+        }
+        ///<Summary>Called to save the window and call all disables</Summary>
+        public static void DisableWindow()
+        {
+            instance.TryCallDisable();
+        }
+
+        ///<Summary>Called to give the window a new initial state</Summary>
+        public static void EnableWindow()
+        {
+            instance.AssignNewInitialState();
         }
 
         //I dont put the code in OnEnable because if i want to intialize styles, i have to do in during OnGUI calls
-        void INITIALIZE()
+        void UNINITIALIZE_OnGUI()
         {
             //Initalize whatever styles here 
-
-            AssignNewState();
+            AssignNewInitialState();
         }
 
-        void AssignNewState()
+        void AssignNewInitialState()
         {
             switch (EditorApplication.isPlaying)
             {
@@ -130,29 +157,13 @@
         }
         #endregion
 
-        void OnDisable()
-        {
-            switch (_state)
-            {
-                case EditorState.UNLOADED:
-                    UNLOADED_OnDisable();
-                    break;
-                case EditorState.LOADED:
-                    LOADED_OnDisable();
-                    break;
-                case EditorState.RUNTIME_DEBUG:
-                    RUNTIME_DEBUG_OnDisable();
-                    break;
-            }
-            SaveManager_SaveFlowChartPath();
-        }
 
         void OnGUI()
         {
             switch (_state)
             {
                 case EditorState.UNINITIALIZE:
-                    INITIALIZE();
+                    UNINITIALIZE_OnGUI();
                     break;
                 case EditorState.UNLOADED:
                     UNLOADED_OnGUI();
@@ -167,7 +178,7 @@
 
 
         }
-        #endregion
+
 
         #region Enable Disable Proxy Calls
         void UNLOADED_OnEnable() { }
@@ -225,10 +236,13 @@
         {
             if (!EditorApplication.isPlaying)
             {
-                REINITIALIZE();
+                TryCallDisable();
+                AssignNewInitialState();
                 return;
             }
         }
+
+
         #endregion
 
 

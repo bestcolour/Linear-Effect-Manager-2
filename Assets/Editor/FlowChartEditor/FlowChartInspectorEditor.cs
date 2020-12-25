@@ -53,7 +53,17 @@
             }
             else if (GUILayout.Button(BUTTON_CLEARFLOWCHART_LABEL))
             {
-                _target.Editor_ResetFlowChart();
+                //Reload window if it is opened
+                if (FlowChartWindowEditor.IsOpen)
+                {
+                    FlowChartWindowEditor.DisableWindow();
+                    _target.Editor_ResetFlowChart();
+                    FlowChartWindowEditor.EnableWindow();
+                }
+                else
+                {
+                    _target.Editor_ResetFlowChart();
+                }
             }
         }
 
