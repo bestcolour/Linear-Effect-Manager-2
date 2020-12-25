@@ -9,8 +9,6 @@
 
     public partial class FlowChartWindowEditor : EditorWindow
     {
-
-
         #region Statics
         static GUIStyle DebugStyle;
         static GUIContent DebugGUIContent, FlowChart_GUIContent;
@@ -163,7 +161,7 @@
             rect.y = TOOLBAR_HEIGHT;
 
 
-            string statement = $"Currently editting flowchart: {_flowChart.name}";
+            string statement = $"Flowchart: {_flowChart.name}";
 
 
             FlowChart_GUIContent.text = statement;
