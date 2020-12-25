@@ -402,7 +402,7 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 434, y: 106}
+      BlockPosition: {x: 104, y: 189}
       ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 910949408}
@@ -581,6 +581,9 @@ GameObject:
   - component: {fileID: 1779978320}
   - component: {fileID: 1779978319}
   - component: {fileID: 1779978318}
+  - component: {fileID: 1779978324}
+  - component: {fileID: 1779978323}
+  - component: {fileID: 1779978322}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -662,6 +665,87 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1779978322
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779978317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302d86b50dc9e5a43850c84e5751a74c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bm_NodeEffectType: FadeToAlphaCanvasGroups
+  bm_UpdateCycle: 0
+  bm_NodeBaseData:
+    m_Position: {x: 910.3847, y: 657.07697}
+    m_NodeID: BEN_17a5f5be-5307-4818-8919-60f564e17c25
+    m_NextPointsIDs: []
+  m_IsFinished: 0
+  m_Timer: 0
+  m_TargetCanvasGroups: []
+  m_InitialAlphas: []
+  m_TargetAlpha: 0
+  m_Duration: 0
+--- !u!114 &1779978323
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779978317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a2b8d857e30d140b328472dd16576c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bm_NodeEffectType: FadeToAlphaCanvasGroup
+  bm_UpdateCycle: 0
+  bm_NodeBaseData:
+    m_Position: {x: 523.2693, y: 795.63464}
+    m_NodeID: BEN_4410686e-a9a6-45f2-b383-c31ee1a4d04c
+    m_NextPointsIDs: []
+  m_IsFinished: 0
+  m_Timer: 0
+  m_TargetCanvasGroup: {fileID: 0}
+  m_InitialAlpha: 0
+  m_TargetAlpha: 0
+  m_Duration: 0
+  m_NextAlpha: 0
+--- !u!114 &1779978324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779978317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e497938d38cb74492560adb572c903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllEffects:
+  - {fileID: 1779978323}
+  - {fileID: 1779978322}
+  m_LinearDescription: 
+  m_InitializeOnAwake: 1
+  m_UpdateEffectCapacity: 5
+  m_InstantEffectCapacity: 10
+  m_StartNodeData:
+    m_Position: {x: 649.5, y: 564.1923}
+    m_NodeID: SN_874283ab-b313-458b-bc5d-3c8829a7721b
+    m_NextPointsIDs:
+    - BEN_4410686e-a9a6-45f2-b383-c31ee1a4d04c
+  m_AllGroupRectNodes: []
+  m_ShowEffects: 0
+  m_DelayBeforeNextEffect: 0
+  <PauseLinearEvent>k__BackingField: 1
+  m_PreviousEffectPlayed: {fileID: 0}
+  m_UpdateCycle: []
+  m_FixedUpdateCycle: []
+  m_LateUpdateCycle: []
 --- !u!1001 &5312462118183921990
 PrefabInstance:
   m_ObjectHideFlags: 0

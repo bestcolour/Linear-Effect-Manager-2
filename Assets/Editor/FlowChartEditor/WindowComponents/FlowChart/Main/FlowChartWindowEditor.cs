@@ -20,7 +20,7 @@
         enum EditorState
         {
             ///<Summary>State where the window editor has just been opened</Summary>
-            INITIALIZE = -1
+            UNINITIALIZE = -1
             ,
             ///<Summary>State where the window editor has just been opened and needs to load its values</Summary>
             UNLOADED = 0
@@ -40,15 +40,16 @@
 
 
         #region Unity LifeTime
-        // [MenuItem(itemName: "Window/FlowChart Editor")]
-        //Current not going to open the window via menu
+        [MenuItem(itemName: "Window/FlowChart Editor")]
+        ///<Summary>Opens the window via buttons by menu item context</Summary>
         public static void OpenWindow()
         {
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
+            instance = window;
         }
 
-
+        ///<Summary>Opens the window via buttons by passing in flowchart reference</Summary>
         public static void OpenWindow(BaseFlowChart flowChart)
         {
             _flowChart = flowChart;
@@ -59,7 +60,7 @@
 
         private void OnEnable()
         {
-            _state = EditorState.INITIALIZE;
+            _state = EditorState.UNINITIALIZE;
         }
 
         #region Initializations
@@ -68,7 +69,7 @@
         ///</Summary>
         void REINITIALIZE()
         {
-            if (_state != EditorState.INITIALIZE)
+            if (_state != EditorState.UNINITIALIZE)
             {
                 //Disable the previous state's components
                 OnDisable();
@@ -101,11 +102,14 @@
                     break;
                 //============================ EDITOR TIME ==========================
                 case false:
+                    // Debug.Log($"Editor is not playing. Is flowchart reference present?: { _flowChart != null}");
                     //Try get previous flowchart
                     if (_flowChart == null)
                     {
                         _flowChart = SaveManager_TryLoadFlowChartPath();
+                        // Debug.Log($"Tried to find previous flowchart... Flowchart found: {_flowChart}");
                     }
+
 
                     //This means user has opened flowchart editor from menu context
                     //Which for now..... is empty!
@@ -147,7 +151,7 @@
         {
             switch (_state)
             {
-                case EditorState.INITIALIZE:
+                case EditorState.UNINITIALIZE:
                     INITIALIZE();
                     break;
                 case EditorState.UNLOADED:

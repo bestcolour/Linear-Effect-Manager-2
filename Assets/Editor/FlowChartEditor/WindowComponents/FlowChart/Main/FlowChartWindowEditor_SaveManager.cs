@@ -20,7 +20,7 @@
             {
                 return;
             }
-            
+
             string path = _flowChart.transform.GetFullPath();
             EditorPrefs.SetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH, path);
         }
@@ -29,6 +29,7 @@
         BaseFlowChart SaveManager_TryLoadFlowChartPath()
         {
             string path = EditorPrefs.GetString(EDITORPREFS_PREV_FLOWCHART_SCENEPATH);
+            // Debug.Log(path);
             if (string.IsNullOrEmpty(path))
             {
                 return null;
@@ -38,11 +39,12 @@
             for (int i = 0; i < EditorSceneManager.loadedSceneCount; i++)
             {
                 Scene loadedScene = EditorSceneManager.GetSceneAt(i);
+                // Debug.Log($"The loaded scene index: {i} with the name: {loadedScene.name} is being checked");
                 if (!loadedScene.GetTransform(path, out Transform flowChartTransform))
                 {
                     continue;
                 }
-
+                // Debug.Log($"The found transform name is {flowChartTransform.name}", flowChartTransform);
                 if (!flowChartTransform.TryGetComponent<BaseFlowChart>(out BaseFlowChart flowChart))
                 {
                     continue;

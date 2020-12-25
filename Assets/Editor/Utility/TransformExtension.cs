@@ -62,24 +62,44 @@ public static class TransformExtension
             return false;
         }
 
-
         //=================== CURRENTNAME = ROOT GAMEOBJECT ==========================
         int slashFound = pathWithoutSceneName.IndexOf("/");
-        string rootGameObjectName = slashFound == -1 ? pathWithoutSceneName : pathWithoutSceneName.Substring(0, slashFound);
+        string rootGameObjectName, restOfThePath;
+        if (slashFound == -1)
+        {
+            rootGameObjectName = pathWithoutSceneName;
+            restOfThePath = string.Empty;
+        }
+        else
+        {
+            rootGameObjectName = pathWithoutSceneName.Substring(0, slashFound);
+            //Remove the rootgameobjectname's string
+            restOfThePath = pathWithoutSceneName.Remove(0, slashFound + 1);
+        }
 
-        //Remove the rootgameobjectname's string
-        string restOfThePath = rootGameObjectName.Remove(0, slashFound + 1);
+        // Debug.Log($"The scene name <{scene.name}> is present in the fullPath <{fullPath}>! RootGameObjectName found is <{rootGameObjectName}> in the path without scene name: <{pathWithoutSceneName}> ");
 
         GameObject[] rootObjects = scene.GetRootGameObjects();
-        for (int i = 0; i < rootObjects.Length; i++)
+        foreach (var rootGameObject in rootObjects)
         {
-            if (rootObjects[i].name != rootGameObjectName)
+            // Debug.Log($"Current rootobject with the name <{rootGameObject.name}> is being compared with the inputed root object string: {rootGameObjectName}", rootGameObject);
+
+            if (rootGameObject.name != rootGameObjectName)
             {
                 continue;
             }
 
-            //Find the transform with the rest of the path
-            transform = rootObjects[i].transform.Find(restOfThePath);
+            // Debug.Log($"Using the rest of the path: <{restOfThePath}>, i am finding the transform with the flowchart component", rootGameObject);
+
+            //If the rest of the path isnt empty, then the root object holds the transform we are looking for
+            if (string.IsNullOrEmpty(restOfThePath))
+            {
+                transform = rootGameObject.transform;
+                return true;
+            }
+
+            //Else we must find the transform with the rest of the path
+            transform = rootGameObject.transform.Find(restOfThePath);
 
             //Since Find() might return null,
             return transform == null ? false : true;
