@@ -65,6 +65,8 @@
             {"Transform/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
             {"Transform/LerpAnchoredPosition-ToVector3", typeof(LerpAnchoredPosition_ToVector3_Executor)},
             {"Transform/LerpScaleAboutPivot-ToVector3", typeof(LerpScaleAboutPivot_ToVector3_Executor)},
+            {"Transform/LerpRotation-ToVector3", typeof(LerpRotate_ToVector3_Executor)},
+            {"Transform/LerpRotationAboutPivot-ToVector3", typeof(LerpRotateAboutPivot_ToVector3_Executor)},
 
             #endregion
             //=================== EXAMPLE ===================
