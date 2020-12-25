@@ -58,8 +58,13 @@
         {
             {"General/Timer", typeof(TimerExecutor)},
             {"General/PlayBlock", typeof(PlayBlockExecutor)},
-            {"Visual/Graphic/LerpColour", typeof(LerpGraphicColourExecutor)},
-            {"Visual/Graphic/LerpAlpha", typeof(LerpGraphicAlphaExecutor)},
+
+            #region Visual Effects
+            {"Visual/LerpGraphicColour", typeof(LerpGraphicColourExecutor)},
+            {"Visual/LerpGraphicAlpha", typeof(LerpGraphicAlphaExecutor)},
+            {"Visual/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlphaExecutor)},
+            #endregion
+
 
             #region Transform Effects
             {"Transform/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
