@@ -12,7 +12,7 @@
             EditorGUILayout.BeginVertical(); EditorGUILayout.LabelField(string.Empty); EditorGUILayout.EndVertical();
             Rect rect = GUILayoutUtility.GetLastRect();
             _flowChart = (BaseFlowChart)EditorGUI.ObjectField(rect, "Target FlowChart", _flowChart, typeof(BaseFlowChart), true);
-            instance = GetWindow<FlowChartWindowEditor>();
+            // instance = GetWindow<FlowChartWindowEditor>();
             if (_flowChart != null)
             {
                 DisableWindow();

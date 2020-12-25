@@ -244,7 +244,7 @@ namespace LinearEffectsEditor
                 }
 
                 _allBlocksArrayProperty.serializedObject.Update();
-                BlockNode duplicatedNode = NodeManager_NodeCyler_DuplicateNode(nodeToDuplicate);
+                BlockNode duplicatedNode = NodeManager_NodeCycler_DuplicateNode(nodeToDuplicate);
                 _allBlocksArrayProperty.serializedObject.ApplyModifiedProperties();
                 duplicatedNodes.Add(duplicatedNode);
             }
@@ -260,7 +260,7 @@ namespace LinearEffectsEditor
 
         }
 
-        BlockNode NodeManager_NodeCyler_DuplicateNode(BlockNode nodeToDuplicate)
+        BlockNode NodeManager_NodeCycler_DuplicateNode(BlockNode nodeToDuplicate)
         {
             //============== DUPLICATING THE SELECTED NODE'S BLOCK ============
             Block blockToDuplicate = _flowChart.Editor_GetBlock(nodeToDuplicate.Label);

@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 171151992}
   - component: {fileID: 171151991}
   - component: {fileID: 171151990}
-  - component: {fileID: 171151996}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -216,7 +215,7 @@ RectTransform:
   m_Children:
   - {fileID: 2044816529}
   - {fileID: 867511181}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1617373405}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -253,33 +252,26 @@ MonoBehaviour:
   - _blockSettings:
       BlockName: New Block 0
       BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 201, y: 141}
+      BlockPosition: {x: 17, y: 237}
+      ConnectedTowardsBlockNames:
+      - New Block 1
+      - New Block 2
+    _orderArray: []
+  - _blockSettings:
+      BlockName: New Block 1
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 272, y: 268}
       ConnectedTowardsBlockNames: []
-    _orderArray:
-    - _refHolder: {fileID: 171151996}
-      _dataElmtIndex: 0
-      ExecutorName: LerpGraphicColour
-      FullExecutorName: Visual/LerpGraphicColour
+    _orderArray: []
+  - _blockSettings:
+      BlockName: New Block 2
+      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      BlockPosition: {x: 233, y: 148}
+      ConnectedTowardsBlockNames: []
+    _orderArray: []
   _settings:
     HideExecutors: 1
   _prevHideOption: 1
---- !u!114 &171151996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171151989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f60c1263b575e243868496199dc1c22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _effectDatas:
-  - HaltUntilFinished: 0
-    _targetColour: {r: 1, g: 0, b: 0, a: 1}
-    _graphic: {fileID: 867511182}
-    _duration: 10
 --- !u!1 &374476684
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +353,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &867511180
 GameObject:
@@ -505,7 +497,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617373403
 GameObject:
@@ -595,9 +587,10 @@ Transform:
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 79.403305, y: 73.843254, z: -17.510239}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 171151993}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2044816528
 GameObject:

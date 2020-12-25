@@ -47,7 +47,7 @@
         {
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
-            instance = window;
+            // instance = window;
         }
 
         ///<Summary>Opens the window via buttons by passing in flowchart reference</Summary>
@@ -56,12 +56,13 @@
             _flowChart = flowChart;
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
-            instance = window;
+            // instance = window;
         }
 
         private void OnEnable()
         {
             _state = EditorState.UNINITIALIZE;
+            instance = this;
         }
 
         void OnDisable()

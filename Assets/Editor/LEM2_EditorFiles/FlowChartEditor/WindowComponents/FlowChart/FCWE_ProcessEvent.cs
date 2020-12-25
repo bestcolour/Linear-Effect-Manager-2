@@ -112,7 +112,7 @@
                         //========== MOUSE DOWN - RIGHTCLICK =================
                         case 1:
 
-                            _nodeMenu.ShowAsContext();
+                            _nodeMenu_ARROW.ShowAsContext();
                             break;
 
                         //No intention of calling other mouse clicks
@@ -184,7 +184,7 @@
                         //========== MOUSE DOWN - RIGHTCLICK =================
                         case 1:
 
-                            _nodeMenu.ShowAsContext();
+                            _nodeMenu_NORMAL.ShowAsContext();
                             break;
 
                         //No intention of calling other mouse clicks
@@ -233,12 +233,29 @@
 
 
         #region  Node Menu
-        GenericMenu _nodeMenu = null;
+        GenericMenu _nodeMenu_NORMAL = null
+        , _nodeMenu_ARROW = null
+        ;
+        const string NODEMENU_NEWBLOCK = "New Block"
+        , NODEMENU_DUPLICATEBLOCK = "Duplicate"
+        , NODEMENU_DELETEBLOCK = "Delete"
+        , NODEMENU_DRAWARROW = "Draw Arrow"
+        , NODEMENU_EXITARROW = "Exit Arrow Mode"
+        ;
 
         void ProcessEvent_InitializeNodeMenu()
         {
-            _nodeMenu = new GenericMenu();
-            _nodeMenu.AddItem(new GUIContent("New Block"), false, () => NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom.ContextMenu));
+            // ============== NORMAL NODE MENU =========
+            _nodeMenu_NORMAL = new GenericMenu();
+            _nodeMenu_NORMAL.AddItem(new GUIContent(NODEMENU_NEWBLOCK), false, () => NodeManager_NodeCycler_TriggerCreateNewNode(AddNewBlockFrom.ContextMenu));
+            _nodeMenu_NORMAL.AddItem(new GUIContent(NODEMENU_DUPLICATEBLOCK), false, NodeManager_NodeCycler_DuplicateSelectedNodes);
+            _nodeMenu_NORMAL.AddItem(new GUIContent(NODEMENU_DELETEBLOCK), false, NodeManager_NodeCycler_DeleteButton);
+            _nodeMenu_NORMAL.AddItem(new GUIContent(NODEMENU_DRAWARROW), false, ToolBar_TryEnterArrowState);
+
+            // ============== ARROW NODE MENU =========
+            _nodeMenu_ARROW = new GenericMenu();
+            _nodeMenu_ARROW.AddItem(new GUIContent(NODEMENU_EXITARROW), false, ToolBar_ExitArrowState);
+
         }
         #endregion
     }

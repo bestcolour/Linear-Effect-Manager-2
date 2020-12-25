@@ -89,8 +89,7 @@
             rect.x -= (BUTTONSIZE.x + TOOLBAR_BUTTON_SPACING);
             if (GUI.Button(rect, TOOLBAR_BUTTONSYMBOL_DELETE))
             {
-                //Enter arrow mode
-                _toolBarState = ToolBarState.NORMAL;
+                ToolBar_ExitArrowState();
             }
         }
 
@@ -154,6 +153,12 @@
             {
                 Debug.Log("To enter the connecting arrow mode, you can only select one node block!");
             }
+        }
+
+        void ToolBar_ExitArrowState()
+        {
+            //Exit arrow mode
+            _toolBarState = ToolBarState.NORMAL;
         }
     }
 

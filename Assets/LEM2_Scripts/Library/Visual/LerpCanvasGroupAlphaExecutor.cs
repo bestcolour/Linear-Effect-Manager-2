@@ -57,7 +57,6 @@
 
         }
 
-
         protected override void BeginExecuteEffect(LerpAlpha effectData)
         {
             effectData.BeginExecute();
