@@ -13,7 +13,7 @@
 
         #region Statics
         static GUIStyle DebugStyle;
-        static GUIContent DebugGUIContent;
+        static GUIContent DebugGUIContent, FlowChart_GUIContent;
 
         ///<Summary>Can only be get by BlockNode's draw function. Thanks</Summary>
         public static GUIStyle BlockNodeConnectButtonStyle { get; private set; }
@@ -55,6 +55,8 @@
             DebugStyle.wordWrap = true;
             DebugStyle.normal.textColor = Color.red;
             DebugGUIContent = new GUIContent();
+
+            FlowChart_GUIContent = new GUIContent();
         }
 
         void NodeManager_Drawer_OnDisable()
@@ -68,7 +70,8 @@
         void NodeManager_Drawer_OnGUI()
         {
             NodeManager_Drawer_DrawMain();
-            NodeManager_Drawer_DrawDebugger();
+            NodeManager_Drawer_DrawCurrentlyEditingFlowChart();
+            // NodeManager_Drawer_DrawDebugger();
         }
 
 
@@ -122,7 +125,7 @@
                 _selectionBox.height = e.mousePosition.y - _selectionBox.y;
 
                 Color prevColour = GUIExtensions.Start_GUI_ColourChange(SELECTIONBOX_COLOUR);
-                GUI.Box(_selectionBox, string.Empty,BlockNodeBoxStyle);
+                GUI.Box(_selectionBox, string.Empty, BlockNodeBoxStyle);
                 GUIExtensions.End_GUI_ColourChange(prevColour);
             }
         }
@@ -150,6 +153,28 @@
                 DebugGUIContent,
                 DebugStyle
             );
+        }
+
+        void NodeManager_Drawer_DrawCurrentlyEditingFlowChart()
+        {
+            Rect rect = Rect.zero;
+            //Abit of border
+            rect.x = 5f;
+            rect.y = TOOLBAR_HEIGHT;
+
+
+            string statement = $"Currently editting flowchart: {_flowChart.name}";
+
+
+            FlowChart_GUIContent.text = statement;
+            rect.size = DebugStyle.CalcSize(FlowChart_GUIContent);
+
+            bool wasPressed = GUI.Button(rect, FlowChart_GUIContent, DebugStyle);
+            if (wasPressed)
+            {
+                //Ping the flowchart object
+                EditorGUIUtility.PingObject(_flowChart);
+            }
         }
         #endregion
 
