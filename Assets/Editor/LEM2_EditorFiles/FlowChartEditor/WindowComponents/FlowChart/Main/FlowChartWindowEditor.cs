@@ -48,15 +48,24 @@
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
             // instance = window;
+            ReloadWindow();
         }
 
         ///<Summary>Opens the window via buttons by passing in flowchart reference</Summary>
         public static void OpenWindow(BaseFlowChart flowChart)
         {
-            _flowChart = flowChart;
             var window = GetWindow<FlowChartWindowEditor>();
             window.titleContent = new GUIContent("FlowChartEditor");
-            // instance = window;
+
+            if (_flowChart == flowChart)
+            {
+                return;
+            }
+
+            _flowChart = flowChart;
+
+            //Reload the window
+            ReloadWindow();
         }
 
         private void OnEnable()
@@ -104,6 +113,12 @@
         public static void EnableWindow()
         {
             instance.AssignNewInitialState();
+        }
+
+        public static void ReloadWindow()
+        {
+            DisableWindow();
+            EnableWindow();
         }
 
         //I dont put the code in OnEnable because if i want to intialize styles, i have to do in during OnGUI calls
