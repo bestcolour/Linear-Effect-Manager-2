@@ -236,6 +236,12 @@
         #region GUI Proxy Calls
         void LOADED_OnGUI()
         {
+            //Incase player accidentally deletes the flowchart gameobject
+            if (_flowChart == null)
+            {
+                AssignNewInitialState();
+                return;
+            }
             //=========== DRAW ORDER===============
             LoadedBackground_OnGUI();
             NodeManager_OnGUI();
