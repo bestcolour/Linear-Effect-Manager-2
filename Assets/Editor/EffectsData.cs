@@ -56,8 +56,23 @@
         ///<Summary>A dictionary which stores all the effects. You can add custom effect executors here.  Do note that it is unwise to rename any of the Keys or the Values of the Dictionary after using the Executor. </Summary>
         static readonly Dictionary<string, Type> ExecutorLabel_To_EffectExecutor = new Dictionary<string, Type>()
         {
+            //=================== EXAMPLE ===================
+            //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},
+            //    ^            ^                                ^
+            //    A            B                                C
+            //
+            //A: How you want to catergorise your executors, use backslash to create a folder
+            //B: What you want your Executor to be named when it shows up in the search box
+            //C: Your Executor type, reminder to not rename this once you started using it in Blocks
+
+
+
+            //============ ADD YOUR CUSTOM EXECUTORS HERE =============
+
+            #region General Effect
             {"General/Timer", typeof(TimerExecutor)},
             {"General/PlayBlock", typeof(PlayBlockExecutor)},
+            #endregion
 
             #region Visual Effects
             {"Visual/LerpGraphicColour", typeof(LerpGraphicColourExecutor)},
@@ -74,18 +89,7 @@
             {"Transform/LerpRotationAboutPivot-ToVector3", typeof(LerpRotateAboutPivot_ToVector3_Executor)},
 
             #endregion
-            //=================== EXAMPLE ===================
-            //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},
-            //    ^            ^                                ^
-            //    A            B                                C
-            //
-            //A: How you want to catergorise your executors, use backslash to create a folder
-            //B: What you want your Executor to be named when it shows up in the search box
-            //C: Your Executor type, reminder to not rename this once you started using it in Blocks
-
-
-
-            //============ ADD YOUR CUSTOM EXECUTORS HERE =============
+          
          
         };
 
