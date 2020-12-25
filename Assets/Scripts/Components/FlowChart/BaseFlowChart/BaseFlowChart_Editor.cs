@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 namespace LinearEffects
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
@@ -27,19 +28,32 @@ namespace LinearEffects
 
 
         #region Hiding In Inspector
-        [SerializeField,HideInInspector]
+        [SerializeField, HideInInspector]
         bool _prevHideOption = false;
+        bool _onAwake = true;
 
 
         protected virtual void OnValidate()
         {
+            //The very first time this script is initialized (so when it has been newly added onto a gameobject or when you open a scene,)
+            if (_onAwake)
+            {
+                _onAwake = false;
+                Editor_HideExecutors();
+                return;
+            }
+
             if (_prevHideOption == _settings.HideExecutors)
             {
                 return;
             }
 
             _prevHideOption = _settings.HideExecutors;
+            Editor_HideExecutors();
+        }
 
+        private void Editor_HideExecutors()
+        {
             HideFlags flag = _settings.HideExecutors ? HideFlags.HideInInspector : HideFlags.None;
             BaseEffectExecutor[] hideExecutors = GetComponents<BaseEffectExecutor>();
 
@@ -48,6 +62,8 @@ namespace LinearEffects
                 item.hideFlags = flag;
             }
         }
+
+
 
         #endregion
 
