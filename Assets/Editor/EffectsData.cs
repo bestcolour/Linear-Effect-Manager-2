@@ -40,7 +40,7 @@
         //For Users:
         //Dictionary key: The path of the effect executor to be shown in the SearchBox. There are two parts to the key: FullExecutorName and ExecutorName.
         //The FullExecutorName is the entire string path with all the slashes. The anything inbetween the start of the string path to the start of the ExecutorName can be changed freely
-        //The ExecutorName is whatever you call the Executor at the end of the last slash. The ExecutorName can be named differently from the Executor Type's name (which is the Dictionary's Value) but should not be renamed after the executor has been used.
+        //The ExecutorName is whatever you call the Executor at the end of the last slash. Please note that there cannot be duplicate ExecutorName in the Dictionary. The ExecutorName can be named differently from the Executor Type's name (which is the Dictionary's Value) but should not be renamed after the executor has been used.
 
         //Dictionary Value: The System type of your own custom effect executor.
 
@@ -60,9 +60,13 @@
             {"General/PlayBlock", typeof(PlayBlockExecutor)},
             {"Visual/Graphic/LerpColour", typeof(LerpGraphicColourExecutor)},
             {"Visual/Graphic/LerpAlpha", typeof(LerpGraphicAlphaExecutor)},
-            {"Transform/LerpTransform", typeof(LerpTransformExecutor)},
-            {"Transform/LerpRectTransform", typeof(LerpRectTransformExecutor)},
 
+            #region Transform Effects
+            {"Transform/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
+            {"Transform/LerpAnchoredPosition-ToVector3", typeof(LerpAnchoredPosition_ToVector3_Executor)},
+            {"Transform/LerpScaleAboutPivot-ToVector3", typeof(LerpScaleAboutPivot_ToVector3_Executor)},
+
+            #endregion
             //=================== EXAMPLE ===================
             //{"Example/DebuggerExecutor", typeof(<INSERT EXECUTOR NAME HERE>)},
             //    ^            ^                                ^

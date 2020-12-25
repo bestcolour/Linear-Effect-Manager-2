@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class LerpTransformExecutor : UpdateEffectExecutor<LerpTransformExecutor.LerpTransform>
+    public class LerpPosition_ToVector3_Executor : UpdateEffectExecutor<LerpPosition_ToVector3_Executor.LerpTransform>
     {
         [System.Serializable]
         public class LerpTransform : UpdateEffect
