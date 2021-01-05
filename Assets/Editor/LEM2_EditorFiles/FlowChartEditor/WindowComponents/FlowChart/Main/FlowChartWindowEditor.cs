@@ -41,15 +41,15 @@
 
 
         #region Unity LifeTime
-        [MenuItem(itemName: "Window/FlowChart Editor")]
-        ///<Summary>Opens the window via buttons by menu item context</Summary>
-        public static void OpenWindow()
-        {
-            var window = GetWindow<FlowChartWindowEditor>();
-            window.titleContent = new GUIContent("FlowChartEditor");
-            // instance = window;
-            ReloadWindow();
-        }
+        // [MenuItem(itemName: "Window/FlowChart Editor")]
+        // ///<Summary>Opens the window via buttons by menu item context</Summary>
+        // public static void OpenWindow()
+        // {
+        //     var window = GetWindow<FlowChartWindowEditor>();
+        //     window.titleContent = new GUIContent("FlowChartEditor");
+        //     // instance = window;
+        //     ReloadWindow();
+        // }
 
         ///<Summary>Opens the window via buttons by passing in flowchart reference</Summary>
         public static void OpenWindow(BaseFlowChart flowChart)
