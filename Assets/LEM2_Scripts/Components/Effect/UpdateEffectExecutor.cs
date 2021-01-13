@@ -9,11 +9,12 @@
     public abstract class UpdateEffectExecutor<T> : EffectExecutor<T>
     where T : UpdateEffect, new()
     {
-        ///<Summary>The method called before calling ExecuteEffect method. Then number of times this method is called depends on the number of times you decide to play the block this effect is on. Add your reset methods here for your effect classes.</Summary>
-        protected abstract void BeginExecuteEffect(T effectData);
+         ///<Summary>The method called before calling ExecuteEffect method. Then number of times this method is called depends on the number of times you decide to play the block this effect is on. Add your reset methods here for your effect classes.</Summary>
+        protected virtual void BeginExecuteEffect(T effectData){}
 
         ///<Summary>The method called when ExecuteEffect method is finally finished updating. (The frame in which ExecuteEffect returns true)</Summary>
-        protected abstract void EndExecuteEffect(T effectData);
+        protected virtual void EndExecuteEffect(T effectData){}
+
 
         public override bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow)
         {
