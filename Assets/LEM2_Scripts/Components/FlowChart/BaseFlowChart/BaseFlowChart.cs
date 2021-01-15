@@ -27,6 +27,11 @@
         protected FlowChartSettings _settings = new FlowChartSettings();
         #endregion
 
+        #region Properties
+        public bool IsPlaying => _activeBlockList.Count > 0;
+        #endregion
+
+
         #region Hidden Field
         ///<summary>A dictionary which holds all of the blocks on this flowchart. The key is the Block's Name and the value is the respective block </summary>
         protected Dictionary<string, Block> _blockDictionary = default;
