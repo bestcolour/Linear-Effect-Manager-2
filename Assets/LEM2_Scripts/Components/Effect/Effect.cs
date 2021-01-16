@@ -5,7 +5,7 @@
     [Serializable]
     public abstract class Effect { }
 
-    [Serializable,]
+    [Serializable]
     public abstract class UpdateEffect : Effect
     {
         ///<Summary>If this is set to true, the effect will essentially act like a stopper. When the Block executes all the effects sequentially and reaches this UpdateEffect, it will going down and keep updating all of the current effects until this UpdateEffect has finished executing all of its code</Summary>

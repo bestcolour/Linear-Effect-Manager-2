@@ -38,6 +38,7 @@
         int _scanFrontier = 0;
         bool _isBeingHalted = false;
 
+        ///<Summary>The indices of all the updates being updated in a block</Summary>
         List<int> _updatingEffectIndices = new List<int>();
         #endregion
 
