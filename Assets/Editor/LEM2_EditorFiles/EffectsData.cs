@@ -81,12 +81,23 @@
             #endregion
 
 
-            #region Transform Effects
-            {"Transform/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
-            {"Transform/LerpAnchoredPosition-ToVector3", typeof(LerpAnchoredPosition_ToVector3_Executor)},
-            {"Transform/LerpScaleAboutPivot-ToVector3", typeof(LerpScaleAboutPivot_ToVector3_Executor)},
-            {"Transform/LerpRotation-ToVector3", typeof(LerpRotate_ToVector3_Executor)},
-            {"Transform/LerpRotationAboutPivot-ToVector3", typeof(LerpRotateAboutPivot_ToVector3_Executor)},
+             #region Transform Effects
+            #region Position
+            {"Transform/Position/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
+            {"Transform/Position/LerpLocalPosition-ToVector3", typeof(LerpLocalPosition_ToPosition_Executor)},
+            {"Transform/Position/LerpAnchoredPosition-ToVector3", typeof(LerpAnchoredPosition_ToVector3_Executor)},
+            #endregion
+
+            #region Scale
+            {"Transform/Scale/LerpScaleAboutPivot-ToVector3", typeof(LerpScaleAboutPivot_ToVector3_Executor)},
+            {"Transform/Scale/LerpScale-ToVector3", typeof(LerpScale_ToVector3_Executor)},
+            #endregion
+
+            #region Rotation
+            {"Transform/Rotation/LerpRotation-ToVector3", typeof(LerpRotate_ToVector3_Executor)},
+            // {"Transform/Rotation/LerpRotationAbout-LocalVector3Pivot", typeof(LerpRotateAboutPivot_ToVector3_Executor)},
+            // {"Transform/Rotation/LerpRotationAbout-TransformPivot", typeof(LerpRotateAboutPivot_ToTransform_Executor)},
+            #endregion
 
             #endregion
           
