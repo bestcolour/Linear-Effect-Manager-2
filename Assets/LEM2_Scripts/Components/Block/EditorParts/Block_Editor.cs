@@ -14,8 +14,8 @@ namespace LinearEffects
         {
             _blockSettings = new BlockSettings();
             _blockSettings.BlockName = blockName;
-            _blockSettings.BlockPosition = position;
-            _blockSettings.BlockColour = blockColour;
+            _blockSettings.Editor_BlockPosition = position;
+            _blockSettings.Editor_BlockColour = blockColour;
         }
 
         //Used in FCWE_NodeManager_NodeCreation.cs
@@ -23,7 +23,7 @@ namespace LinearEffects
         {
             EditorProperties_DefaultConstruction();
             _blockSettings.BlockName = blockName;
-            _blockSettings.BlockPosition = position;
+            _blockSettings.Editor_BlockPosition = position;
         }
 
         //Used in BlockScriptableInstance.cs
@@ -35,7 +35,7 @@ namespace LinearEffects
         void EditorProperties_DefaultConstruction()
         {
             _blockSettings = new BlockSettings();
-            _blockSettings.BlockColour = DEFAULT_BLOCK_COLOUR;
+            _blockSettings.Editor_BlockColour = EDITOR_DEFAULT_BLOCK_COLOUR;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace LinearEffects
         {
 
             //Call Insert copy functions
-            orderData.OnInsertCopy();
+            orderData.Editor_OnInsertCopy();
             ArrayExtension.Insert(ref _orderArray, index, orderData);
         }
 
@@ -81,10 +81,10 @@ namespace LinearEffects
         {
             Block.EffectOrder o = new Block.EffectOrder();
 
-            o.ExecutorName = executorName;
-            o.FullExecutorName = fullExecutorName;
+            o.Editor_ExecutorName = executorName;
+            o.Editor_FullExecutorName = fullExecutorName;
 
-            o.OnAddNew(executor);
+            o.Editor_OnAddNew(executor);
             return o;
         }
         #endregion
@@ -104,23 +104,23 @@ namespace LinearEffects
         public virtual void EditorProperties_RemoveOrderElementAt(int index)
         {
             //Call callbacks
-            _orderArray[index].OnRemove();
+            _orderArray[index].Editor_OnRemove();
             ArrayExtension.RemoveAt(ref _orderArray, index);
         }
 
         public virtual void EditorProperties_ManualOnRemovalCheck(int removedEffectOrderIndex, string executorSearchBoxName)
         {
             EffectOrder removedEffectOrder = _orderArray[removedEffectOrderIndex];
-            int removedDataElmtIndex = removedEffectOrder.DataElementIndex;
+            int removedDataElmtIndex = removedEffectOrder.Editor_DataElementIndex;
             foreach (var item in _orderArray)
             {
                 //Check if the effect order has the same executor name as the one that the removed effect was situated in
-                if (item.ExecutorName != executorSearchBoxName)
+                if (item.Editor_ExecutorName != executorSearchBoxName)
                 {
                     continue;
                 }
 
-                item.ManualRemovalCheck(removedEffectOrderIndex);
+                item.Editor_ManualRemovalCheck(removedEffectOrderIndex);
             }
         }
 

@@ -144,12 +144,12 @@
         //Loads the block's cached variables into this node 
         void LoadFrom()
         {
-            _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-            _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            _rect.position = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+            _label = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockColour = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _rect.position = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKPOSITION).vector2Value;
 
             //Loading connection lines
-            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
             ConnectedTowardsBlockNamesHashset.Clear();
             for (int i = 0; i < connectedNamesProperty.arraySize; i++)
             {
@@ -161,13 +161,13 @@
         public void Save()
         {
             BlockProperty.serializedObject.Update();
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _label;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockColour;
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
+            BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue = _label;
+            BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockColour;
+            BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
 
             //Saving Connection lines
             //Loading connection lines
-            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            SerializedProperty connectedNamesProperty = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
             connectedNamesProperty.ClearArray();
 
             int index = 0;
@@ -185,8 +185,8 @@
 
         public void ReloadNodeProperties()
         {
-            _label = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-            _blockColour = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _label = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockColour = BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKCOLOUR).colorValue;
 
             // ConnectedTowardsBlockNames = BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
         }
@@ -212,7 +212,7 @@
         public void ProcessMouseUp()
         {
             BlockProperty.serializedObject.Update();
-            BlockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
+            BlockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKPOSITION).vector2Value = _rect.position;
             BlockProperty.serializedObject.ApplyModifiedProperties();
         }
 

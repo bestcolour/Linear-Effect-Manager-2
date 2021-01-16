@@ -9,30 +9,30 @@ namespace LinearEffects
     public abstract partial class BaseEffectExecutor
     {
         //This is stored here because EffectExecutor class is a generic class
-        public const string PROPERTYNAME_EFFECTDATAS = "_effectDatas";
+        public const string EDITOR_PROPERTYNAME_EFFECTDATAS = "_effectDatas";
 
-        public delegate void ChangeObjectArrayCallBack(int objectIndex, string effectName);
+        public delegate void Editor_ChangeObjectArrayCallBack(int objectIndex, string effectName);
 
         #region Subscribing to EventList
-        protected ChangeObjectArrayCallBack OnRemoveObject = null;
+        protected Editor_ChangeObjectArrayCallBack OnRemoveObject = null;
 
-        public virtual void InitializeSubs(ChangeObjectArrayCallBack onRemove)
+        public virtual void Editor_InitializeSubs(Editor_ChangeObjectArrayCallBack onRemove)
         {
             OnRemoveObject = onRemove;
         }
         #endregion
 
-        public abstract int AddNewObject();
+        public abstract int Editor_AddNewObject();
 
-        public abstract void RemoveObjectAt(int index, string executorSearchBoxName);
+        public abstract void Editor_RemoveObjectAt(int index, string executorSearchBoxName);
 
-        public abstract int DuplicateDataElement(int index);
+        public abstract int Editor_DuplicateDataElement(int index);
 
         ///<Summary>Used to check whether the T generic type has the System.Serializable attribute on it. Returns true if there is Serializable Attribute on the Effect ClassType</Summary>
-        public bool CheckAttributeImplementation(out string errorLog)
+        public bool Editor_CheckAttributeImplementation(out string errorLog)
         {
             errorLog = string.Empty;
-            Type effectClassType = EffectClassType;
+            Type effectClassType = Editor_EffectClassType;
 
             if (Attribute.IsDefined(effectClassType, typeof(SerializableAttribute)))
             {
@@ -43,7 +43,7 @@ namespace LinearEffects
             return false;
         }
 
-        protected abstract Type EffectClassType { get; }
+        protected abstract Type Editor_EffectClassType { get; }
 
     }
 

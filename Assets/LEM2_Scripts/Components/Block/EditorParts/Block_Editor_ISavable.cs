@@ -9,27 +9,27 @@ namespace LinearEffects
     {
         public partial class BlockSettings
         {
-            public Color BlockColour;
+            public Color Editor_BlockColour;
             [HideInInspector]
-            public Vector2 BlockPosition;
+            public Vector2 Editor_BlockPosition;
             [HideInInspector]
-            public string[] ConnectedTowardsBlockNames = new string[0];
+            public string[] Editor_ConnectedTowardsBlockNames = new string[0];
         }
 
 
         #region Constants
         //Being used in FCWE_NodeManager_NodeCycler.cs
-        public const string DEFAULT_BLOCK_NAME = "New Block";
+        public const string EDITOR_DEFAULT_BLOCK_NAME = "New Block";
 
         //All the default and propertypath name constants will be stored here in the Unity_editor section
-        static readonly Color DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
+        static readonly Color EDITOR_DEFAULT_BLOCK_COLOUR = new Color(0, 0.4f, 0.8f, 1f);
 
         //========================= BLOCK PROPERTYNAMES CONSTANTS =========================================
-        public const string PROPERTYNAME_SETTINGS = "_blockSettings";
-        public const string PROPERTYPATH_BLOCKNAME = PROPERTYNAME_SETTINGS + ".BlockName";
-        public const string PROPERTYPATH_BLOCKCOLOUR = PROPERTYNAME_SETTINGS + ".BlockColour";
-        public const string PROPERTYPATH_BLOCKPOSITION = PROPERTYNAME_SETTINGS + ".BlockPosition";
-        public const string PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME = PROPERTYNAME_SETTINGS + ".ConnectedTowardsBlockNames";
+        public const string EDITOR_PROPERTYNAME_SETTINGS = "_blockSettings";
+        public const string EDITOR_PROPERTYPATH_BLOCKNAME = EDITOR_PROPERTYNAME_SETTINGS + ".BlockName";
+        public const string EDITOR_PROPERTYPATH_BLOCKCOLOUR = EDITOR_PROPERTYNAME_SETTINGS + ".Editor_BlockColour";
+        public const string EDITOR_PROPERTYPATH_BLOCKPOSITION = EDITOR_PROPERTYNAME_SETTINGS + ".Editor_BlockPosition";
+        public const string EDITOR_PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME = EDITOR_PROPERTYNAME_SETTINGS + ".Editor_ConnectedTowardsBlockNames";
 
         public const string PROPERTYNAME_ORDERARRAY = "_orderArray";
         #endregion
@@ -46,17 +46,17 @@ namespace LinearEffects
             }
 
             //================ BLOCK SETTINGS ========================
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.BlockColour;
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
-            blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.BlockPosition;
+            blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKCOLOUR).colorValue = _blockSettings.Editor_BlockColour;
+            blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue = _blockSettings.BlockName;
+            blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKPOSITION).vector2Value = _blockSettings.Editor_BlockPosition;
 
             //-------- Connection Lines Array ----------
-            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
             connectionLinesArrayProperty.ClearArray();
-            for (int i = 0; i < _blockSettings.ConnectedTowardsBlockNames.Length; i++)
+            for (int i = 0; i < _blockSettings.Editor_ConnectedTowardsBlockNames.Length; i++)
             {
                 connectionLinesArrayProperty.InsertArrayElementAtIndex(i);
-                connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue = _blockSettings.ConnectedTowardsBlockNames[i];
+                connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue = _blockSettings.Editor_ConnectedTowardsBlockNames[i];
             }
             // blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue = _blockSettings.ConnectedTowardsBlockName;
 
@@ -82,17 +82,17 @@ namespace LinearEffects
                 return;
             }
 
-            _blockSettings.BlockColour = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKCOLOUR).colorValue;
-            _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
-            _blockSettings.BlockPosition = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_BLOCKPOSITION).vector2Value;
+            _blockSettings.Editor_BlockColour = blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKCOLOUR).colorValue;
+            _blockSettings.BlockName = blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue;
+            _blockSettings.Editor_BlockPosition = blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKPOSITION).vector2Value;
 
 
             //-------- Connection Lines Array ----------
-            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
-            _blockSettings.ConnectedTowardsBlockNames = new string[connectionLinesArrayProperty.arraySize];
+            SerializedProperty connectionLinesArrayProperty = blockProperty.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME);
+            _blockSettings.Editor_ConnectedTowardsBlockNames = new string[connectionLinesArrayProperty.arraySize];
             for (int i = 0; i < connectionLinesArrayProperty.arraySize; i++)
             {
-                _blockSettings.ConnectedTowardsBlockNames[i] = connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue;
+                _blockSettings.Editor_ConnectedTowardsBlockNames[i] = connectionLinesArrayProperty.GetArrayElementAtIndex(i).stringValue;
             }
             // _blockSettings.ConnectedTowardsBlockName = blockProperty.FindPropertyRelative(Block.PROPERTYPATH_CONNECTEDTOWARDS_BLOCKNAME).stringValue;
 

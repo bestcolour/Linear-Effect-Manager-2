@@ -12,8 +12,8 @@ namespace LinearEffects
         {
             #region ISavable Methods
             #region Constants
-            public const string PROPERTYNAME_EXECUTORNAME = "ExecutorName"
-            , PROPERTYNAME_FULLEXECUTORNAME = "FullExecutorName"
+            public const string PROPERTYNAME_EXECUTORNAME = "Editor_ExecutorName"
+            , PROPERTYNAME_FULLEXECUTORNAME = "Editor_FullExecutorName"
             , PROPERTYNAME_REFHOLDER = "_refHolder"
             , PROPERTYNAME_DATAELEMENTINDEX = "_dataElmtIndex"
             ;
@@ -21,10 +21,10 @@ namespace LinearEffects
             #endregion
 
             ///<Summary>For editor use only. Please do not use it during runtime. The FullExecutorName is the entire string path with all the slashes.</Summary>
-            public string ExecutorName;
+            public string Editor_ExecutorName;
 
             ///<Summary>For editor use only. Please do not use it during runtime. The ExecutorName is whatever you call the Executor at the end of the last slash.</Summary>
-            public string FullExecutorName;
+            public string Editor_FullExecutorName;
 
             // public string ErrorLog = "Error";
 
@@ -34,8 +34,8 @@ namespace LinearEffects
                 property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue = _refHolder;
                 property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue = _dataElmtIndex;
                 // property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue = ErrorLog;
-                property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue = ExecutorName;
-                property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue = FullExecutorName;
+                property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue = Editor_ExecutorName;
+                property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue = Editor_FullExecutorName;
             }
 
             ///<Summary>For editor use only. Loads from a serializedProperty into the EffectOrder </Summary>
@@ -44,42 +44,42 @@ namespace LinearEffects
                 _refHolder = (BaseEffectExecutor)property.FindPropertyRelative(PROPERTYNAME_REFHOLDER).objectReferenceValue;
                 _dataElmtIndex = property.FindPropertyRelative(PROPERTYNAME_DATAELEMENTINDEX).intValue;
                 // ErrorLog = property.FindPropertyRelative(PROPERTYNAME_ERRORLOG).stringValue;
-                ExecutorName = property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue;
-                FullExecutorName = property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue;
+                Editor_ExecutorName = property.FindPropertyRelative(PROPERTYNAME_EXECUTORNAME).stringValue;
+                Editor_FullExecutorName = property.FindPropertyRelative(PROPERTYNAME_FULLEXECUTORNAME).stringValue;
             }
             #endregion
 
             //All these functions are used during unity editor time to manage the Holder's array as well as the OrderData itself
             //none of these will be used in the actual build except for the variables stored
-            public virtual void OnAddNew(BaseEffectExecutor holder)
+            public virtual void Editor_OnAddNew(BaseEffectExecutor holder)
             {
                 _refHolder = holder;
-                _dataElmtIndex = _refHolder.AddNewObject();
+                _dataElmtIndex = _refHolder.Editor_AddNewObject();
             }
 
             //To be called before removing the order intsance from the list
-            public virtual void OnRemove()
+            public virtual void Editor_OnRemove()
             {
-                _refHolder.RemoveObjectAt(_dataElmtIndex, ExecutorName);
+                _refHolder.Editor_RemoveObjectAt(_dataElmtIndex, Editor_ExecutorName);
             }
 
             //For when the holder is not null
-            public virtual void OnInsertCopy()
+            public virtual void Editor_OnInsertCopy()
             {
                 //Tell the holder to do a copy of my current data index details and add it to the end of the array
-                _dataElmtIndex = _refHolder.DuplicateDataElement(_dataElmtIndex);
+                _dataElmtIndex = _refHolder.Editor_DuplicateDataElement(_dataElmtIndex);
             }
 
-            public virtual void OnInsertCopy(BaseEffectExecutor holder)
+            public virtual void Editor_OnInsertCopy(BaseEffectExecutor holder)
             {
                 _refHolder = holder;
-                OnInsertCopy();
+                Editor_OnInsertCopy();
             }
 
-            public int DataElementIndex => _dataElmtIndex;
+            public int Editor_DataElementIndex => _dataElmtIndex;
 
             ///<Summary>Does a manual removal check in the case where the FlowChart editor's OnRemoval event does not include the block in which this EffectOrder is being serialized on</Summary>
-            public virtual void ManualRemovalCheck(int removedIndex)
+            public virtual void Editor_ManualRemovalCheck(int removedIndex)
             {
                 if (removedIndex < _dataElmtIndex)
                 {

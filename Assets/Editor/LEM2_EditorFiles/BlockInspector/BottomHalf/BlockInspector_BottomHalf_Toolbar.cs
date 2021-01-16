@@ -126,7 +126,7 @@ namespace LinearEffectsEditor
             {
                 int index = startingIndex - i;
 
-                string removedExecutorName = _target.Block.OrderArray[index].ExecutorName;
+                string removedExecutorName = _target.Block.OrderArray[index].Editor_ExecutorName;
                 //Self check all the block order data and do a manaul removal check here
                 _target.Block.EditorProperties_ManualOnRemovalCheck(index, removedExecutorName);
                 //MUST ALSO UPDATE THE SCRIPTABLE INSTANCE'S BLOCK VALUE or at least dont save using this scriptableinstance!

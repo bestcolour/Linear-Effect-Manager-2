@@ -96,7 +96,7 @@ namespace LinearEffectsEditor
         {
             //Ensure that block gets a unique label name every time a new node is added
 
-            Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName(Block.DEFAULT_BLOCK_NAME));
+            Block b = new Block(position, NodeManager_NodeCycler_GetUniqueBlockName(Block.EDITOR_DEFAULT_BLOCK_NAME));
 
             SerializedProperty newBlockProperty = _allBlocksArrayProperty.AddToSerializedPropertyArray(b);
             BlockNode node = NodeManager_NodeCycler_CreateNewNodeConstructor(newBlockProperty);
@@ -216,7 +216,7 @@ namespace LinearEffectsEditor
                    (
                        (x) =>
                        {
-                           string a = x.FindPropertyRelative(Block.PROPERTYPATH_BLOCKNAME).stringValue;
+                           string a = x.FindPropertyRelative(Block.EDITOR_PROPERTYPATH_BLOCKNAME).stringValue;
                            return a == blockNode.Label;
                        }
                    );

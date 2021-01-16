@@ -48,7 +48,7 @@
             BaseEffectExecutor[] effectExecutors = _flowChart.GetComponents<BaseEffectExecutor>();
             foreach (var item in effectExecutors)
             {
-                item.InitializeSubs(StaticMethods_HandleOnRemoveEvent);
+                item.Editor_InitializeSubs(StaticMethods_HandleOnRemoveEvent);
             }
 
             //======================== LOADING BLOCK NODES FROM BLOCKS ARRAY =============================

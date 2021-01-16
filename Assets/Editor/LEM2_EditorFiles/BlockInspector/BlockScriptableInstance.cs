@@ -14,7 +14,7 @@ namespace LinearEffectsEditor
 
         #region Constants
         const string PROPERTYNAME_BLOCKPROPERTY = "<Block>k__BackingField";
-        public const string PROPERTYPATH_SETTINGS = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_SETTINGS;
+        public const string PROPERTYPATH_SETTINGS = PROPERTYNAME_BLOCKPROPERTY + "." + Block.EDITOR_PROPERTYNAME_SETTINGS;
         public const string PROPERTYPATH_ORDERARRAY = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
         public const string PROPERTYPATH_ORDER = PROPERTYNAME_BLOCKPROPERTY + "." + Block.PROPERTYNAME_ORDERARRAY;
 

@@ -30,7 +30,7 @@
 
                 if (CheckHolderSerializableImplementation(holder))
                 {
-                    holder.InitializeSubs(StaticMethods_HandleOnRemoveEvent);
+                    holder.Editor_InitializeSubs(StaticMethods_HandleOnRemoveEvent);
                     return holder;
                 }
 
@@ -46,7 +46,7 @@
         ///<Summary>Returns true if holder's effect type has a System.Serializable attribute on it. If false, it will destroy the holder component</Summary>
         static bool CheckHolderSerializableImplementation(BaseEffectExecutor holder)
         {
-            if (holder.CheckAttributeImplementation(out string errorLog))
+            if (holder.Editor_CheckAttributeImplementation(out string errorLog))
             {
                 return true;
             }

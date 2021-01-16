@@ -79,7 +79,7 @@ namespace LinearEffectsEditor
             SerializedObject holderObject = new SerializedObject(holder);
 
             //Get the effectDatas array as serializedProperty
-            SerializedProperty effectDataArray = holderObject.FindProperty(BaseEffectExecutor.PROPERTYNAME_EFFECTDATAS);
+            SerializedProperty effectDataArray = holderObject.FindProperty(BaseEffectExecutor.EDITOR_PROPERTYNAME_EFFECTDATAS);
 
             //Get dataelementindex from orderElement in block
             int dataElementIndex = orderElement.FindPropertyRelative(Block.EffectOrder.PROPERTYNAME_DATAELEMENTINDEX).intValue;
