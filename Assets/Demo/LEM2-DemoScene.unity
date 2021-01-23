@@ -252,14 +252,14 @@ MonoBehaviour:
   _blocks:
   - _blockSettings:
       BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 256, y: 118}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 171151996}
       _dataElmtIndex: 0
-      ExecutorName: LerpGraphicAlpha
-      FullExecutorName: Visual/LerpGraphicAlpha
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
   _settings:
     HideExecutors: 1
   _prevHideOption: 1
@@ -458,36 +458,36 @@ MonoBehaviour:
   _blocks:
   - _blockSettings:
       BlockName: Lerp block back & forth
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 248, y: 40}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 698193605}
       _dataElmtIndex: 0
-      ExecutorName: LerpPosition-ToVector3
-      FullExecutorName: Transform/LerpPosition-ToVector3
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
     - _refHolder: {fileID: 698193605}
       _dataElmtIndex: 1
-      ExecutorName: LerpPosition-ToVector3
-      FullExecutorName: Transform/LerpPosition-ToVector3
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
     - _refHolder: {fileID: 698193606}
       _dataElmtIndex: 0
-      ExecutorName: PlayBlock
-      FullExecutorName: General/PlayBlock
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
   - _blockSettings:
       BlockName: Wait 5 Seconds
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 255, y: 203}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 698193607}
       _dataElmtIndex: 0
-      ExecutorName: Timer
-      FullExecutorName: General/Timer
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
     - _refHolder: {fileID: 698193606}
       _dataElmtIndex: 1
-      ExecutorName: PlayBlock
-      FullExecutorName: General/PlayBlock
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
   _settings:
     HideExecutors: 1
   _prevHideOption: 1
@@ -1051,6 +1051,114 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209753917}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1272078404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1272078408}
+  - component: {fileID: 1272078409}
+  - component: {fileID: 1272078407}
+  - component: {fileID: 1272078406}
+  - component: {fileID: 1272078405}
+  m_Layer: 0
+  m_Name: GETEFFECTDATA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1272078405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272078404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1312df9c45f4f54eb60230c0a14450c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas:
+  - Animator: {fileID: 0}
+    Name: ParameterName
+    Bool: 0
+--- !u!95 &1272078406
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272078404}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1272078407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272078404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d496c865bfb9842a7815da02762d1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blocks:
+  - _blockSettings:
+      BlockName: Block1
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 162, y: 103}
+      Editor_ConnectedTowardsBlockNames: []
+    _orderArray:
+    - _refHolder: {fileID: 1272078405}
+      _dataElmtIndex: 0
+      Editor_ExecutorName: SetBool
+      Editor_FullExecutorName: Animator/SetBool
+  _settings:
+    HideExecutors: 0
+  _prevHideOption: 0
+--- !u!4 &1272078408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272078404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1272078409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272078404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a170e056f9a2943aa0971da088daff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anim: {fileID: 1272078406}
 --- !u!1 &1617373403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1273,9 +1381,9 @@ MonoBehaviour:
   _blocks:
   - _blockSettings:
       BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 205, y: 146}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray: []
   _settings:
     HideExecutors: 1
@@ -1419,32 +1527,32 @@ MonoBehaviour:
   _blocks:
   - _blockSettings:
       BlockName: New Block 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 85, y: 163}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 1948962203}
       _dataElmtIndex: 0
-      ExecutorName: LerpRotation-ToVector3
-      FullExecutorName: Transform/Rotation/LerpRotation-ToVector3
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
     - _refHolder: {fileID: 1948962199}
       _dataElmtIndex: 0
-      ExecutorName: PlayBlock
-      FullExecutorName: General/PlayBlock
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
   - _blockSettings:
       BlockName: New Block 0 0
-      BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      BlockPosition: {x: 279, y: 152}
-      ConnectedTowardsBlockNames: []
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 0, y: 0}
+      Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 1948962203}
       _dataElmtIndex: 1
-      ExecutorName: LerpRotation-ToVector3
-      FullExecutorName: Transform/Rotation/LerpRotation-ToVector3
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
     - _refHolder: {fileID: 1948962199}
       _dataElmtIndex: 1
-      ExecutorName: PlayBlock
-      FullExecutorName: General/PlayBlock
+      Editor_ExecutorName: 
+      Editor_FullExecutorName: 
   _settings:
     HideExecutors: 0
   _prevHideOption: 0

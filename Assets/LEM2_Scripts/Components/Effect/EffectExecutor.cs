@@ -13,6 +13,9 @@
         [SerializeField]
         protected T[] _effectDatas = new T[0];
 
+        ///<Summary>Returns a effect data instance at the given index</Summary>
+        public T GetEffectData(int index) { return _effectDatas[index]; }
+
         ///<Summary>The method which will called every frame after StartExecuteEffect is called. Returns true if Effect has been completely finished executing.</Summary>
         protected abstract bool ExecuteEffect(T effectData);
 

@@ -6,19 +6,19 @@
 
     //Flow chart is the class which holds/creates blocks
     // which can be called at different times (ie when game starts, game ends , )
-    #if UNITY_EDITOR    
+#if UNITY_EDITOR
     [DisallowMultipleComponent]
-    #endif
+#endif
     public partial class BaseFlowChart : MonoBehaviour
     {
-        #region Definitions
+        #region ------------ Definitions -------------
         [System.Serializable]
         //Incase i ever want to add stuff to the flowchart in the future
         protected partial class FlowChartSettings { }
 
         #endregion
 
-        #region Exposed Field
+        #region ---------- Exposed Field ---------------
         [SerializeField]
         protected Block[] _blocks = new Block[0];
 
@@ -27,12 +27,11 @@
         protected FlowChartSettings _settings = new FlowChartSettings();
         #endregion
 
-        #region Properties
+        #region ----------- Properties ---------------
         public bool IsPlaying => _activeBlockList.Count > 0;
         #endregion
 
-
-        #region Hidden Field
+        #region ------------- Runtime Field ---------------
         ///<summary>A dictionary which holds all of the blocks on this flowchart. The key is the Block's Name and the value is the respective block </summary>
         protected Dictionary<string, Block> _blockDictionary = default;
 
@@ -44,9 +43,9 @@
 
         #endregion
 
+        #region ------------------ Public Methods ---------------------------
 
-
-        #region Public Get & Play Methods
+        #region GetBlock
         ///<Summary>Get the block via index in the block array</Summary>
         public Block GetBlock(int index)
         {
@@ -58,7 +57,9 @@
         {
             return _blockDictionary[blockName];
         }
+        #endregion
 
+        #region PlayBlock
         ///<Summary>Plays a block via block index</Summary>
         public void PlayBlock(int index)
         {
@@ -83,13 +84,31 @@
 #endif
                 return;
             }
-            
+
             _activeBlockList.Add(block);
             _activeBlockHashset.Add(block);
         }
         #endregion
 
-        #region Life Cycle
+        #region Get Effect
+        public EffectType GetEffect<ExecutorType, EffectType>(string blockName, int effectIndex)
+        where ExecutorType : EffectExecutor<EffectType>
+        where EffectType : Effect, new()
+        {
+            Block block = GetBlock(blockName);
+            int dataElmtIndex = block.GetEffectDataElementIndex(effectIndex);
+
+            ExecutorType executor = GetComponent<ExecutorType>();
+
+            EffectType effectData = executor.GetEffectData(dataElmtIndex);
+            return effectData;
+        }
+        #endregion
+
+        #endregion
+
+
+        #region ------------------ Life Cycle ------------------------------------------
         ///<Summary>Proxy Awake method call. Initializes the things needed for a flowchart to work. If you want an already established script, use FlowChart.cs instead</Summary>
         public void GameAwake()
         {
@@ -121,22 +140,6 @@
 
 
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

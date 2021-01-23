@@ -111,7 +111,7 @@ namespace LinearEffects
         public virtual void EditorProperties_ManualOnRemovalCheck(int removedEffectOrderIndex, string executorSearchBoxName)
         {
             EffectOrder removedEffectOrder = _orderArray[removedEffectOrderIndex];
-            int removedDataElmtIndex = removedEffectOrder.Editor_DataElementIndex;
+            int removedDataElmtIndex = removedEffectOrder.DataElementIndex;
             foreach (var item in _orderArray)
             {
                 //Check if the effect order has the same executor name as the one that the removed effect was situated in

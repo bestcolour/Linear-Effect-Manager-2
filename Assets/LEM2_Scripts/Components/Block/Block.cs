@@ -53,10 +53,15 @@
 
         #endregion
 
+        #region ----------- Public Methods -----------------
+        #region Get Methods
+        public int GetEffectDataElementIndex(int index)
+        {
+            return _orderArray[index].DataElementIndex;
+        }
+        #endregion
 
-
-
-
+        #region Update Methods
         ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop. </Summary>
         public bool ExecuteBlockEffects()
         {
@@ -163,7 +168,11 @@
             return true;
         }
 
+
+        #endregion
     }
+
+    #endregion
 
 
 }

@@ -76,7 +76,6 @@ namespace LinearEffects
                 Editor_OnInsertCopy();
             }
 
-            public int Editor_DataElementIndex => _dataElmtIndex;
 
             ///<Summary>Does a manual removal check in the case where the FlowChart editor's OnRemoval event does not include the block in which this EffectOrder is being serialized on</Summary>
             public virtual void Editor_ManualRemovalCheck(int removedIndex)
