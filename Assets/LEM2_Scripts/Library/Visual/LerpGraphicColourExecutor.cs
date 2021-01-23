@@ -1,25 +1,23 @@
 ﻿namespace LinearEffects.DefaultEffects
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
     [System.Serializable]
-    public class LerpGraphicColourExecutor : UpdateEffectExecutor<LerpGraphicColourExecutor.LerpColourEffect>
+    ///<Summary>Lerp a graphic's color to another color value</Summary>
+    public class LerpGraphicColour_Executor : UpdateEffectExecutor<LerpGraphicColour_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpColourEffect : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
             [Header("----- Colour References -----")]
-            [SerializeField]
-            Color _targetColour = Color.white;
+            public Color TargetColor = Color.white;
 
             [SerializeField]
-            Graphic _graphic = default;
+            public Graphic TargetGraphic = default;
 
             [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1f;
+            public float Duration = 1f;
 
             //Runtime
             float _timer = default;
@@ -28,8 +26,8 @@
 
             public void StartExecute()
             {
-                _timer = _duration;
-                _startColour = _graphic.color;
+                _timer = Duration;
+                _startColour = TargetGraphic.color;
             }
 
             public bool Execute()
@@ -43,31 +41,31 @@
                 _timer -= Time.deltaTime;
 
                 //By inverting your start and target vector, you can skip the 1 - (_timer / _duration)
-                float percentage = (_timer / _duration);
-                _graphic.color = Vector4.Lerp(_targetColour, _startColour, percentage);
+                float percentage = (_timer / Duration);
+                TargetGraphic.color = Vector4.Lerp(TargetColor, _startColour, percentage);
 
                 return false;
             }
 
             public void EndExecution()
             {
-                _graphic.color = _targetColour;
+                TargetGraphic.color = TargetColor;
             }
 
         }
 
 
-        protected override void BeginExecuteEffect(LerpColourEffect effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.StartExecute();
         }
 
-        protected override void EndExecuteEffect(LerpColourEffect effectData)
+        protected override void EndExecuteEffect(MyEffect effectData)
         {
             effectData.EndExecution();
         }
 
-        protected override bool ExecuteEffect(LerpColourEffect effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }

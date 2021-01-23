@@ -1,26 +1,22 @@
 ﻿namespace LinearEffects.DefaultEffects
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class LerpGraphicAlphaExecutor : UpdateEffectExecutor<LerpGraphicAlphaExecutor.LerpAlphaEffect>
+    ///<Summary>Lerp a graphic's alpha to a value</Summary>
+    public class LerpGraphicAlpha_Executor : UpdateEffectExecutor<LerpGraphicAlpha_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpAlphaEffect : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
             [Header("----- Target -----")]
-            [SerializeField]
             [Range(0, 1)]
-            float _targeAlpha = 0;
+            public float TargetAlpha = 0;
 
-            [SerializeField]
-            Graphic _graphic = default;
+            public Graphic TargetGraphic = default;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1f;
+            public float Duration = 1f;
 
             //Runtime
             float _timer = default;
@@ -30,8 +26,8 @@
 
             public void BeginExecute()
             {
-                _timer = _duration;
-                _startAlpha = _graphic.color.a;
+                _timer = Duration;
+                _startAlpha = TargetGraphic.color.a;
             }
 
             public bool Execute()
@@ -45,35 +41,35 @@
                 _timer -= Time.deltaTime;
 
                 //By inverting your start and target vector, you can skip the 1 - (_timer / _duration)
-                float percentage = (_timer / _duration);
-                _currentColour = _graphic.color;
-                _currentColour.a = Mathf.Lerp(_targeAlpha, _startAlpha, percentage);
-                _graphic.color = _currentColour;
+                float percentage = (_timer / Duration);
+                _currentColour = TargetGraphic.color;
+                _currentColour.a = Mathf.Lerp(TargetAlpha, _startAlpha, percentage);
+                TargetGraphic.color = _currentColour;
 
                 return false;
             }
 
             public void EndExecution()
             {
-                _currentColour = _graphic.color;
-                _currentColour.a = _targeAlpha;
-                _graphic.color = _currentColour;
+                _currentColour = TargetGraphic.color;
+                _currentColour.a = TargetAlpha;
+                TargetGraphic.color = _currentColour;
             }
 
 
         }
 
-        protected override void BeginExecuteEffect(LerpAlphaEffect effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.BeginExecute();
         }
 
-        protected override bool ExecuteEffect(LerpAlphaEffect effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }
 
-        protected override void EndExecuteEffect(LerpAlphaEffect effectData)
+        protected override void EndExecuteEffect(MyEffect effectData)
         {
             effectData.EndExecution();
         }

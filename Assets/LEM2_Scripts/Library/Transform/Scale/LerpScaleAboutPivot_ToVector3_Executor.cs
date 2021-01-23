@@ -1,25 +1,21 @@
 ﻿namespace LinearEffects.DefaultEffects
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
 
+    ///<Summary>Lerps a transform's scale towards a value about a local pivot</Summary>
     public class LerpScaleAboutPivot_ToVector3_Executor : UpdateEffectExecutor<LerpScaleAboutPivot_ToVector3_Executor.LerpScale>
     {
         [System.Serializable]
         public class LerpScale : UpdateEffect
         {
-            [SerializeField]
-            Transform _transform = default;
+            public Transform TargetTransform = default;
 
-            [SerializeField]
-            Vector3 _targetScale = default
-            , _localPivot = default
-            ;
+            public Vector3 TargetScale = default
+                , LocalPivot = default
+                ;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1;
+            public float Duration = 1;
 
             //Runtime
             Vector3 _initialScale = default
@@ -30,12 +26,12 @@
 
             public void BeginExecute()
             {
-                _initialPos = _transform.position;
+                _initialPos = TargetTransform.position;
                 // _pivotWorldPos = _transform.TransformPoint(_localPivot);
                 //Get the original direction vector (with their mags intact) from the center of the transform to the pivot point
-                _direction = _transform.TransformPoint(_localPivot) -_initialPos;
-                _initialScale = _transform.localScale;
-                _timer = _duration;
+                _direction = TargetTransform.TransformPoint(LocalPivot) - _initialPos;
+                _initialScale = TargetTransform.localScale;
+                _timer = Duration;
             }
 
             public bool Execute()
@@ -47,9 +43,9 @@
 
                 _timer -= Time.deltaTime;
 
-                float percentage = 1 - (_timer / _duration);
+                float percentage = 1 - (_timer / Duration);
                 //Lerp the scale of the cube
-                _transform.localScale = Vector3.Lerp(_initialScale, _targetScale, percentage);
+                TargetTransform.localScale = Vector3.Lerp(_initialScale, TargetScale, percentage);
 
 
                 //============= SETTING THE NEW POSITIION OF THE TRANSFORM ====================
@@ -59,7 +55,7 @@
 
                 //Translate the dir point back to pivot
                 dir += _initialPos;
-                _transform.position = dir;
+                TargetTransform.position = dir;
 
                 return false;
             }
@@ -67,7 +63,7 @@
 
             public void EndExecute()
             {
-                _transform.localScale = _targetScale;
+                TargetTransform.localScale = TargetScale;
             }
 
 

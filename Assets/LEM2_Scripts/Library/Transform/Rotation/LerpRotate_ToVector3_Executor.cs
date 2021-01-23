@@ -3,24 +3,21 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-
-    public class LerpRotate_ToVector3_Executor : UpdateEffectExecutor<LerpRotate_ToVector3_Executor.LerpRotate>
+    ///<Summary>Lerps a transform's rotation to a vector3 value</Summary>
+    public class LerpRotate_ToVector3_Executor : UpdateEffectExecutor<LerpRotate_ToVector3_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpRotate : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
-            [SerializeField]
-            Transform _transform = default;
+            public Transform TargetTransform = default;
 
-            [SerializeField]
-            Vector3 _targetRotation = default
+            public Vector3 TargetRotation = default
             ;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1;
+            public float Duration = 1;
 
-
+            //Runtime
             Quaternion _initialRot = default
            , _targetRot = default
             ;
@@ -29,9 +26,9 @@
 
             public void BeginExecute()
             {
-                _initialRot = _transform.localRotation;
-                _targetRot = Quaternion.Euler(_targetRotation);
-                _timer = _duration;
+                _initialRot = TargetTransform.localRotation;
+                _targetRot = Quaternion.Euler(TargetRotation);
+                _timer = Duration;
             }
 
             public bool Execute()
@@ -43,31 +40,31 @@
 
                 _timer -= Time.deltaTime;
 
-                float percentage = 1 - (_timer / _duration);
-                _transform.localRotation = Quaternion.Lerp(_initialRot, _targetRot, percentage);
+                float percentage = 1 - (_timer / Duration);
+                TargetTransform.localRotation = Quaternion.Lerp(_initialRot, _targetRot, percentage);
                 return false;
             }
 
 
             public void EndExecute()
             {
-                _transform.localRotation = _targetRot;
+                TargetTransform.localRotation = _targetRot;
             }
 
 
         }
 
-        protected override void BeginExecuteEffect(LerpRotate effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.BeginExecute();
         }
 
-        protected override void EndExecuteEffect(LerpRotate effectData)
+        protected override void EndExecuteEffect(MyEffect effectData)
         {
             effectData.EndExecute();
         }
 
-        protected override bool ExecuteEffect(LerpRotate effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }

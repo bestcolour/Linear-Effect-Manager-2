@@ -4,20 +4,18 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class LerpScale_ToVector3_Executor : UpdateEffectExecutor<LerpScale_ToVector3_Executor.LerpScale>
+    ///<Summary>Lerps a transform's scale to a vector3 value</Summary>
+    public class LerpScale_ToVector3_Executor : UpdateEffectExecutor<LerpScale_ToVector3_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpScale : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
-            [SerializeField]
-            Transform _transform = default;
+            public Transform TargetTransform = default;
 
-            [SerializeField]
-            Vector3 _targetScale = default;
+            public Vector3 TargetScale = default;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1;
+            public float Duration = 1;
 
             //Runtime
             Vector3 _initialScale = default;
@@ -25,8 +23,8 @@
 
             public void BeginExecute()
             {
-                _initialScale = _transform.localScale;
-                _timer = _duration;
+                _initialScale = TargetTransform.localScale;
+                _timer = Duration;
             }
 
             public bool Execute()
@@ -37,32 +35,32 @@
                 }
 
                 _timer -= Time.deltaTime;
-                
-                float percentage = _timer / _duration;
-                _transform.localScale = Vector3.Lerp(_targetScale, _initialScale, percentage);
+
+                float percentage = _timer / Duration;
+                TargetTransform.localScale = Vector3.Lerp(TargetScale, _initialScale, percentage);
                 return false;
             }
 
 
             public void EndExecute()
             {
-                _transform.localScale = _targetScale;
+                TargetTransform.localScale = TargetScale;
             }
 
 
         }
 
-        protected override void BeginExecuteEffect(LerpScale effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.BeginExecute();
         }
 
-        protected override void EndExecuteEffect(LerpScale effectData)
+        protected override void EndExecuteEffect(MyEffect effectData)
         {
             effectData.EndExecute();
         }
 
-        protected override bool ExecuteEffect(LerpScale effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }

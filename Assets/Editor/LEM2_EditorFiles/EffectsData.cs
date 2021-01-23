@@ -70,8 +70,8 @@
             //============ ADD YOUR CUSTOM EXECUTORS HERE =============
 
             #region BlockEffects Effect
-            {"General/Timer", typeof(TimerExecutor)},
-            {"General/PlayBlock", typeof(PlayBlockExecutor)},
+            {"General/Timer", typeof(Timer_Executor)},
+            {"General/PlayBlock", typeof(PlayBlock_Executor)},
             #endregion
 
             #region ----------------- Animator --------------------
@@ -83,9 +83,9 @@
             #endregion
 
             #region Visual Effects
-            {"Visual/LerpGraphicColour", typeof(LerpGraphicColourExecutor)},
-            {"Visual/LerpGraphicAlpha", typeof(LerpGraphicAlphaExecutor)},
-            {"Visual/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlphaExecutor)},
+            {"Visual/LerpGraphicColour", typeof(LerpGraphicColour_Executor)},
+            {"Visual/LerpGraphicAlpha", typeof(LerpGraphicAlpha_Executor)},
+            {"Visual/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlpha_Executor)},
             #endregion
 
 

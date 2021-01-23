@@ -6,20 +6,20 @@
     using UnityEngine;
 
     [DisallowMultipleComponent]
-    public class TimerExecutor : UpdateEffectExecutor<TimerExecutor.DebuggerEffect>
+    ///<Summary>Counts down a timer variable for a given duration. Is useful for halting flow of code</Summary>
+    public class Timer_Executor : UpdateEffectExecutor<Timer_Executor.MyEffect>
     {
         [System.Serializable]
-        public class DebuggerEffect : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
-            [SerializeField]
-            float _duration = default;
+            public float Duration = default;
 
             float _timer = -1;
 
 
             public void Reset()
             {
-                _timer = _duration;
+                _timer = Duration;
             }
 
             public bool TickDown()
@@ -35,18 +35,14 @@
 
         }
 
-        protected override bool ExecuteEffect(DebuggerEffect effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.TickDown();
         }
 
-        protected override void BeginExecuteEffect(DebuggerEffect effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.Reset();
-        }
-
-        protected override void EndExecuteEffect(DebuggerEffect effectData)
-        {
         }
     }
 

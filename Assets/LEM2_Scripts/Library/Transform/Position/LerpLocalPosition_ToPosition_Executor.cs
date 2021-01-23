@@ -4,21 +4,19 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class LerpLocalPosition_ToPosition_Executor : UpdateEffectExecutor<LerpLocalPosition_ToPosition_Executor.LerpTransform>
+    ///<Summary>Lerps a transform's localposition from its current value to a target value</Summary>
+    public class LerpLocalPosition_ToPosition_Executor : UpdateEffectExecutor<LerpLocalPosition_ToPosition_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpTransform : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
-            [SerializeField]
-            Transform _transform = default;
+            public Transform TargetTransform = default;
 
-            [SerializeField]
             [Tooltip("The local position of the target point you wish to lerp towards")]
-            Vector3 _targetLocalPos = default;
+            public Vector3 TargetLocalPos = default;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1;
+            public float Duration = 1;
 
             //Runtime
             Vector3 _initialPosition = default;
@@ -26,40 +24,36 @@
 
             public void BeginExecute()
             {
-                _initialPosition = _transform.localPosition;
-                _timer = _duration;
+                _initialPosition = TargetTransform.localPosition;
+                _timer = Duration;
             }
 
             public bool Execute()
             {
                 if (_timer <= 0)
                 {
-                    _transform.localPosition = _targetLocalPos;
+                    TargetTransform.localPosition = TargetLocalPos;
                     return true;
                 }
 
                 _timer -= Time.deltaTime;
 
-                float percentage = _timer / _duration;
-                _transform.localPosition = Vector3.Lerp(_targetLocalPos, _initialPosition, percentage);
+                float percentage = _timer / Duration;
+                TargetTransform.localPosition = Vector3.Lerp(TargetLocalPos, _initialPosition, percentage);
                 return false;
             }
 
         }
 
-        protected override void BeginExecuteEffect(LerpTransform effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.BeginExecute();
         }
 
-        protected override void EndExecuteEffect(LerpTransform effectData) { }
-
-        protected override bool ExecuteEffect(LerpTransform effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }
-
-
     }
 
 }

@@ -4,21 +4,20 @@
     using System.Collections.Generic;
     using UnityEngine;
     [System.Serializable]
-    public class PlayBlockExecutor : EffectExecutor<PlayBlockExecutor.PlayBlockEffect>
+    ///<Summary>Plays a block name from a selected flowchart</Summary>
+    public class PlayBlock_Executor : EffectExecutor<PlayBlock_Executor.PlayBlockEffect>
     {
         [System.Serializable]
         public class PlayBlockEffect : Effect
         {
             [Header("----- Play Block -----")]
-            [SerializeField]
-            BaseFlowChart _flowChart = default;
+            public BaseFlowChart FlowChart = default;
 
-            [SerializeField]
-            string _blockToPlay = default;
+            public string BlockToPlay = default;
 
             public void PlayBlock()
             {
-                _flowChart.PlayBlock(_blockToPlay);
+                FlowChart.PlayBlock(BlockToPlay);
             }
         }
 

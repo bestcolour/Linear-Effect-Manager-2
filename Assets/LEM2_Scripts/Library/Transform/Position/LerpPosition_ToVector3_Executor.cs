@@ -3,21 +3,18 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-
-    public class LerpPosition_ToVector3_Executor : UpdateEffectExecutor<LerpPosition_ToVector3_Executor.LerpTransform>
+    ///<Summary>Lerps a transform's world positon value from its current value to a target value</Summary>
+    public class LerpPosition_ToVector3_Executor : UpdateEffectExecutor<LerpPosition_ToVector3_Executor.MyEffect>
     {
         [System.Serializable]
-        public class LerpTransform : UpdateEffect
+        public class MyEffect : UpdateEffect
         {
-            [SerializeField]
-            Transform _transform = default;
+            public Transform TargetTransform = default;
 
-            [SerializeField]
-            Vector3 _targetPos = default;
+            public Vector3 TargetPosition = default;
 
-            [SerializeField]
             [Range(0, 1000)]
-            float _duration = 1;
+            public float Duration = 1;
 
             //Runtime
             Vector3 _initialPosition = default;
@@ -25,8 +22,8 @@
 
             public void BeginExecute()
             {
-                _initialPosition = _transform.position;
-                _timer = _duration;
+                _initialPosition = TargetTransform.position;
+                _timer = Duration;
             }
 
             public bool Execute()
@@ -37,32 +34,32 @@
                 }
 
                 _timer -= Time.deltaTime;
-                
-                float percentage = _timer / _duration;
-                _transform.position = Vector3.Lerp(_targetPos, _initialPosition, percentage);
+
+                float percentage = _timer / Duration;
+                TargetTransform.position = Vector3.Lerp(TargetPosition, _initialPosition, percentage);
                 return false;
             }
 
 
             public void EndExecute()
             {
-                _transform.position = _targetPos;
+                TargetTransform.position = TargetPosition;
             }
 
 
         }
 
-        protected override void BeginExecuteEffect(LerpTransform effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
             effectData.BeginExecute();
         }
 
-        protected override void EndExecuteEffect(LerpTransform effectData)
+        protected override void EndExecuteEffect(MyEffect effectData)
         {
             effectData.EndExecute();
         }
 
-        protected override bool ExecuteEffect(LerpTransform effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }
