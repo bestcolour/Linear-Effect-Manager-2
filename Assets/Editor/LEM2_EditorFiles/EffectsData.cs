@@ -69,9 +69,17 @@
 
             //============ ADD YOUR CUSTOM EXECUTORS HERE =============
 
-            #region General Effect
+            #region BlockEffects Effect
             {"General/Timer", typeof(TimerExecutor)},
             {"General/PlayBlock", typeof(PlayBlockExecutor)},
+            #endregion
+
+            #region ----------------- Animator --------------------
+            {"Animator/SetBool", typeof(SetAnimatorBool_Executor)},
+            {"Animator/SetFloat", typeof(SetAnimatorFloat_Executor)},
+            {"Animator/SetInt", typeof(SetAnimatorInt_Executor)},
+            {"Animator/SetTrigger", typeof(SetAnimatorTrigger_Executor)},
+
             #endregion
 
             #region Visual Effects
@@ -81,7 +89,7 @@
             #endregion
 
 
-             #region Transform Effects
+            #region Transform Effects
             #region Position
             {"Transform/Position/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
             {"Transform/Position/LerpLocalPosition-ToVector3", typeof(LerpLocalPosition_ToPosition_Executor)},
