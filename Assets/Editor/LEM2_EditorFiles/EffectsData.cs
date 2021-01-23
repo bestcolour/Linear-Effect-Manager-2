@@ -71,7 +71,7 @@
 
             #region BlockEffects Effect
             {"General/Timer", typeof(Timer_Executor)},
-            {"General/PlayBlock", typeof(PlayBlock_Executor)},
+            {"General/PlayBlock", typeof(PlayBlock_Executor)},{"General/PlayOnThisBlock", typeof(PlayThisBlock_Executor)},
             #endregion
 
             #region ----------------- Animator --------------------
