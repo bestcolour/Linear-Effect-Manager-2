@@ -73,11 +73,11 @@
             {"General/Timer", typeof(Timer_Executor)},
             {"General/PlayBlock", typeof(PlayBlock_Executor)},
             {"General/PlayOnThisBlock", typeof(PlayThisBlock_Executor)},
+            {"General/WaitForBlock", typeof(WaitForBlock_Executor)},
+            {"General/WaitForThisBlock", typeof(WaitForThisBlock_Executor)},
             {"UnityEvent", typeof(UnityEvent_Executor)},
             #endregion
 
-            #region ------------ GameObject -----------------------
-            #endregion
 
             #region ----------------- Animator --------------------
             {"Animator/SetBool", typeof(SetAnimatorBool_Executor)},
