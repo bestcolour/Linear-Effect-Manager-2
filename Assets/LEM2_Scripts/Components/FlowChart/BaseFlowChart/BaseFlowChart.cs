@@ -28,6 +28,7 @@
         #endregion
 
         #region ----------- Properties ---------------
+        ///<summary>Checks if this flowchart is playing any block effects</summary>
         public bool IsPlaying => _activeBlockList.Count > 0;
         #endregion
 
@@ -70,6 +71,9 @@
         ///<Summary>Plays a block via block name</Summary>
         public void PlayBlock(string blockName)
         {
+#if UNITY_EDITOR
+            Debug.Assert(_blockDictionary.ContainsKey(blockName), $"The flowchart {name} does not have the blockname {blockName}", this);
+#endif
             Block intendedToPlayBlock = _blockDictionary[blockName];
             PlayBlock(intendedToPlayBlock);
         }
@@ -102,6 +106,25 @@
 
             EffectType effectData = executor.GetEffectData(dataElmtIndex);
             return effectData;
+        }
+        #endregion
+
+        #region Checks
+        ///<Summary>Checks if a block is playing or not</Summary>
+        public bool CheckBlockIsPlaying(int index)
+        {
+            Block block = _blocks[index];
+            return _activeBlockHashset.Contains(block);
+        }
+
+        ///<Summary>Checks if a block is playing or not</Summary>
+        public bool CheckBlockIsPlaying(string blockName)
+        {
+#if UNITY_EDITOR
+            Debug.Assert(_blockDictionary.ContainsKey(blockName), $"The flowchart {name} does not have the blockname {blockName}", this);
+#endif
+            Block block = _blockDictionary[blockName];
+            return _activeBlockHashset.Contains(block);
         }
         #endregion
 
