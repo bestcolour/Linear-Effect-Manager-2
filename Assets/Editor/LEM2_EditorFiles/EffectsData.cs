@@ -69,9 +69,14 @@
 
             //============ ADD YOUR CUSTOM EXECUTORS HERE =============
 
-            #region BlockEffects Effect
+            #region --------------- General Effects ------------------
             {"General/Timer", typeof(Timer_Executor)},
-            {"General/PlayBlock", typeof(PlayBlock_Executor)},{"General/PlayOnThisBlock", typeof(PlayThisBlock_Executor)},
+            {"General/PlayBlock", typeof(PlayBlock_Executor)},
+            {"General/PlayOnThisBlock", typeof(PlayThisBlock_Executor)},
+            {"UnityEvent", typeof(UnityEvent_Executor)},
+            #endregion
+
+            #region ------------ GameObject -----------------------
             #endregion
 
             #region ----------------- Animator --------------------
@@ -82,14 +87,13 @@
 
             #endregion
 
-            #region Visual Effects
-            {"Visual/LerpGraphicColour", typeof(LerpGraphicColour_Executor)},
-            {"Visual/LerpGraphicAlpha", typeof(LerpGraphicAlpha_Executor)},
-            {"Visual/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlpha_Executor)},
+            #region ------------------- UI -------------------
+            {"UI/LerpGraphicColour", typeof(LerpGraphicColour_Executor)},
+            {"UI/LerpGraphicAlpha", typeof(LerpGraphicAlpha_Executor)},
+            {"UI/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlpha_Executor)},
             #endregion
 
-
-            #region Transform Effects
+            #region ------------------- Transform ------------------------
             #region Position
             {"Transform/Position/LerpPosition-ToVector3", typeof(LerpPosition_ToVector3_Executor)},
             {"Transform/Position/LerpLocalPosition-ToVector3", typeof(LerpLocalPosition_ToPosition_Executor)},
