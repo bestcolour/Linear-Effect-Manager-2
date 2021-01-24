@@ -14,17 +14,12 @@
             public BaseFlowChart FlowChart = default;
 
             public string BlockToPlay = default;
-
-            public void PlayBlock()
-            {
-                FlowChart.PlayBlock(BlockToPlay);
-            }
         }
 
 
         protected override bool ExecuteEffect(PlayBlockEffect effectData)
         {
-            effectData.PlayBlock();
+            effectData.FlowChart.PlayBlock(effectData.BlockToPlay);
             return true;
         }
 

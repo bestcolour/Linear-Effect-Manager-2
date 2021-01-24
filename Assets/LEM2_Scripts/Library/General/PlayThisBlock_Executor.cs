@@ -15,7 +15,7 @@
 
         protected override bool ExecuteEffect(MyEffect effectData)
         {
-            FlowChart flowChart = GetComponent<FlowChart>();
+            BaseFlowChart flowChart = GetComponent<BaseFlowChart>();
             flowChart.PlayBlock(effectData.BlockToPlay);
             return true;
         }
