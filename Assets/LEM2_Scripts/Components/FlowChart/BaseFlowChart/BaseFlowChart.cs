@@ -94,6 +94,16 @@
         }
         #endregion
 
+        #region StopBlock Methods
+        public void TryStopBlock(string blockName)
+        {
+            if (!CheckBlockIsPlaying(blockName)) return;
+
+            Block block = GetBlock(blockName);
+            block.EndBlockEffect();
+        }
+        #endregion
+
         #region Get Effect
         public EffectType GetEffect<ExecutorType, EffectType>(string blockName, int effectIndex)
         where ExecutorType : EffectExecutor<EffectType>
@@ -110,14 +120,14 @@
         #endregion
 
         #region Checks
-        ///<Summary>Checks if a block is playing or not</Summary>
+        ///<Summary>Checks if a block is playing or not. Returns true if block is playing</Summary>
         public bool CheckBlockIsPlaying(int index)
         {
             Block block = _blocks[index];
             return _activeBlockHashset.Contains(block);
         }
 
-        ///<Summary>Checks if a block is playing or not</Summary>
+        ///<Summary>Checks if a block is playing or not. Returns true if block is playing</Summary>
         public bool CheckBlockIsPlaying(string blockName)
         {
 #if UNITY_EDITOR

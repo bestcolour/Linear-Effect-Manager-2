@@ -29,6 +29,11 @@
             return ExecuteEffect(_effectDatas[index]);
         }
 
+        ///<Summary>Effects which do not take multiple frames to complete will not need to call EndEffectExecute because it is not defined for them</Summary>
+        public override void StopEffectUpdate(int index)
+        {
+     //Effects which do not take multiple frames to complete will not need to call EndEffectExecute because it is not defined for them
+        }
 
     }
 

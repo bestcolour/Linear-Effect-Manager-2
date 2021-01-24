@@ -75,6 +75,8 @@
             {"General/PlayOnThisBlock", typeof(PlayThisBlock_Executor)},
             {"General/WaitForBlock", typeof(WaitForBlock_Executor)},
             {"General/WaitForThisBlock", typeof(WaitForThisBlock_Executor)},
+            {"General/TryStopBlock", typeof(TryStopBlock_Executor)},
+            {"General/TryStopThisBlock", typeof(TryStopThisBlock_Executor)},
             {"UnityEvent", typeof(UnityEvent_Executor)},
             #endregion
 

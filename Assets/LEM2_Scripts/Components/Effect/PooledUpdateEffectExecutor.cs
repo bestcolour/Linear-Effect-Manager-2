@@ -17,14 +17,12 @@
 
             if (!effect.FirstFrameCall)
             {
-                effect.FirstFrameCall = true;
                 BeginExecuteEffect(_effectDatas[index]);
             }
 
             if (ExecuteEffect(_effectDatas[index]))
             {
                 //When effect has finally over
-                effect.FirstFrameCall = false;
                 EndExecuteEffect(_effectDatas[index]);
                 return true;
             }
@@ -32,10 +30,17 @@
             return false;
         }
 
+        ///<Summary>Stops an effect from updating. The effect's EndExecuteEffect() will be called</Summary>
+        public override void StopEffectUpdate(int index)
+        {
+            EndExecuteEffect(_effectDatas[index]);
+        }
+
 
         ///<Summary>Removes the runtime data reference from the UpdateEffect and returns it to the pool so that other effects can reuse the runtime data.</Summary>
         protected virtual void EndExecuteEffect(Effect t)
         {
+            t.FirstFrameCall = false;
             ReturnRuntimeData(t.RuntimeData);
             t.RuntimeData = null;
         }
@@ -43,6 +48,7 @@
         ///<Summary>Adds a runtime data instance to an UpdateEffect instance. Always call this method's base before writing your overrides</Summary>
         protected virtual void BeginExecuteEffect(Effect t)
         {
+            t.FirstFrameCall = true;
             t.RuntimeData = GetRuntimeData();
         }
 
@@ -50,9 +56,9 @@
         RuntimeData GetRuntimeData()
         {
             RuntimeData runtime;
-// #if UNITY_EDITOR
+            // #if UNITY_EDITOR
             // Debug.Log($"Runtime pool count: {_runtimePool.Count} ", this);
-// #endif
+            // #endif
             if (_runtimePool.Count > 0)
             {
                 int lastIndex = _runtimePool.Count - 1;
@@ -70,7 +76,7 @@
             _runtimePool.Add(runtime);
             // #if UNITY_EDITOR
             // Debug.Log($"Runtime pool count: {_runtimePool.Count} ", this);
-// #endif
+            // #endif
         }
         #endregion
 

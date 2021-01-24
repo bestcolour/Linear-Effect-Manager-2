@@ -121,20 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!115 &223297634
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 5
-  m_Script: 
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_ExecutionOrder: 0
-  m_ClassName: LerpGraphicAlpha_Executor
-  m_Namespace: LinearEffects.DefaultEffects
 --- !u!1 &374476684
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,10 +217,11 @@ GameObject:
   - component: {fileID: 595148646}
   - component: {fileID: 595148645}
   - component: {fileID: 595148650}
-  - component: {fileID: 595148651}
-  - component: {fileID: 595148653}
-  - component: {fileID: 595148652}
   - component: {fileID: 595148649}
+  - component: {fileID: 595148651}
+  - component: {fileID: 595148652}
+  - component: {fileID: 595148654}
+  - component: {fileID: 595148653}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -334,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2adad83d64895234dbf77c91778344d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blockName: InfiniteLoopFade
+  _blockName: Start
 --- !u!114 &595148650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,9 +336,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blocks:
   - _blockSettings:
-      BlockName: Fade_0_to_1
+      BlockName: Start
       Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      Editor_BlockPosition: {x: 124, y: 147}
+      Editor_BlockPosition: {x: 346, y: 128}
+      Editor_ConnectedTowardsBlockNames: []
+    _orderArray:
+    - _refHolder: {fileID: 595148652}
+      _dataElmtIndex: 1
+      Editor_ExecutorName: PlayOnThisBlock
+      Editor_FullExecutorName: General/PlayOnThisBlock
+    - _refHolder: {fileID: 595148654}
+      _dataElmtIndex: 0
+      Editor_ExecutorName: Timer
+      Editor_FullExecutorName: General/Timer
+    - _refHolder: {fileID: 595148653}
+      _dataElmtIndex: 0
+      Editor_ExecutorName: TryStopThisBlock
+      Editor_FullExecutorName: General/TryStopThisBlock
+    - _refHolder: {fileID: 595148653}
+      _dataElmtIndex: 1
+      Editor_ExecutorName: TryStopThisBlock
+      Editor_FullExecutorName: General/TryStopThisBlock
+  - _blockSettings:
+      BlockName: 1
+      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
+      Editor_BlockPosition: {x: 195, y: 128}
       Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 595148651}
@@ -362,10 +371,14 @@ MonoBehaviour:
       _dataElmtIndex: 1
       Editor_ExecutorName: LerpGraphicAlpha
       Editor_FullExecutorName: UI/LerpGraphicAlpha
+    - _refHolder: {fileID: 595148652}
+      _dataElmtIndex: 0
+      Editor_ExecutorName: PlayOnThisBlock
+      Editor_FullExecutorName: General/PlayOnThisBlock
   - _blockSettings:
-      BlockName: Fade_1_to_0
+      BlockName: 2
       Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      Editor_BlockPosition: {x: 126, y: 212}
+      Editor_BlockPosition: {x: 193, y: 209}
       Editor_ConnectedTowardsBlockNames: []
     _orderArray:
     - _refHolder: {fileID: 595148651}
@@ -376,41 +389,23 @@ MonoBehaviour:
       _dataElmtIndex: 3
       Editor_ExecutorName: LerpGraphicAlpha
       Editor_FullExecutorName: UI/LerpGraphicAlpha
-  - _blockSettings:
-      BlockName: Fade_0_to_1_to_0
-      Editor_BlockColour: {r: 0, g: 0.4, b: 0.8, a: 1}
-      Editor_BlockPosition: {x: 269, y: 177}
-      Editor_ConnectedTowardsBlockNames: []
-    _orderArray:
     - _refHolder: {fileID: 595148652}
       _dataElmtIndex: 1
       Editor_ExecutorName: PlayOnThisBlock
       Editor_FullExecutorName: General/PlayOnThisBlock
-    - _refHolder: {fileID: 595148653}
-      _dataElmtIndex: 0
-      Editor_ExecutorName: WaitForThisBlock
-      Editor_FullExecutorName: General/WaitForThisBlock
-    - _refHolder: {fileID: 595148652}
-      _dataElmtIndex: 0
-      Editor_ExecutorName: PlayOnThisBlock
-      Editor_FullExecutorName: General/PlayOnThisBlock
-    - _refHolder: {fileID: 595148653}
-      _dataElmtIndex: 1
-      Editor_ExecutorName: WaitForThisBlock
-      Editor_FullExecutorName: General/WaitForThisBlock
   _settings:
-    HideExecutors: 1
-  _prevHideOption: 1
+    HideExecutors: 0
+  _prevHideOption: 0
 --- !u!114 &595148651
 MonoBehaviour:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595148644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 223297634}
+  m_Script: {fileID: 11500000, guid: 8c2d59fafa07f79438aa65c542801a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _effectDatas:
@@ -418,21 +413,21 @@ MonoBehaviour:
     TargetAlpha: 0
     TargetGraphic: {fileID: 963943736}
     Duration: 0
-  - HaltUntilFinished: 0
+  - HaltUntilFinished: 1
     TargetAlpha: 1
     TargetGraphic: {fileID: 963943736}
-    Duration: 2
+    Duration: 1
   - HaltUntilFinished: 0
     TargetAlpha: 1
     TargetGraphic: {fileID: 963943736}
     Duration: 0
-  - HaltUntilFinished: 0
+  - HaltUntilFinished: 1
     TargetAlpha: 0
     TargetGraphic: {fileID: 963943736}
     Duration: 1
 --- !u!114 &595148652
 MonoBehaviour:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -443,25 +438,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effectDatas:
-  - BlockToPlay: Fade_1_to_0
-  - BlockToPlay: Fade_0_to_1
+  - BlockToPlay: 2
+  - BlockToPlay: 1
+  - BlockToPlay: 1
 --- !u!114 &595148653
 MonoBehaviour:
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595148644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e085cbb1c3d48da46aafadfbbe0c9469, type: 3}
+  m_Script: {fileID: 11500000, guid: 99d2ba16e2f97ff468c316ff193aac7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _effectDatas:
-  - HaltUntilFinished: 0
-    BlockName: Fade_0_to_1
-  - HaltUntilFinished: 0
-    BlockName: Fade_1_to_0
+  - BlockToStop: 1
+  - BlockToStop: 2
+--- !u!114 &595148654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595148644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfc4c5beb172cf49b638353336f3142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectDatas:
+  - HaltUntilFinished: 1
+    Duration: 4
 --- !u!1 &963943734
 GameObject:
   m_ObjectHideFlags: 0

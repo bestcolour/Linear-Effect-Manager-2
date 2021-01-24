@@ -62,6 +62,21 @@
         #endregion
 
         #region Update Methods
+        ///<Summary>Immediately ends the block updating cycle. Whatever effects which are still updating will have their EndExecuteEffect() called </Summary>
+        public void EndBlockEffect()
+        {
+            for (int i = 0; i < _updatingEffectIndices.Count; i++)
+            {
+                int index = _updatingEffectIndices[i];
+                EffectOrder effect = _orderArray[index];
+                effect.EndEffect();
+            }
+            _updatingEffectIndices.Clear();
+
+            //End the scan frontier
+            _scanFrontier = _orderArray.Length;
+        }
+
         ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop. </Summary>
         public bool ExecuteBlockEffects()
         {
@@ -74,7 +89,9 @@
                 //If allEffects are updated finished and all block effects are scanned,
                 if (allScannedThrough && allEffectsFinished)
                 {
+                    //Reset update variables
                     _scanFrontier = 0;
+                    _updatingEffectIndices.Clear();
                     return true;
                 }
 

@@ -27,6 +27,12 @@
                 return _refHolder.ExecuteEffectAtIndex(_dataElmtIndex, out haltCodeFlow);
             }
 
+            ///<summary>Forcibly ends an effect's update call. EndExecuteEffect() will be called</summary>
+            public void EndEffect()
+            {
+                _refHolder.StopEffectUpdate(DataElementIndex);
+            }
+
         }
     }
 

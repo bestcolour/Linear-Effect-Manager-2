@@ -10,6 +10,11 @@
         ///</Summary>
         public abstract bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow);
 
+        ///<Summary>
+        ///Forcibly ends an effect's update call. EndExecuteEffect() will be called
+        ///</Summary>
+        public abstract void StopEffectUpdate(int index);
+
 
 
     }
