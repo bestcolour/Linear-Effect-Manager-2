@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    ///<Summary>This class takes in a T generic type which inherits from UpdateEffectWithRuntimeData class and a RuntimeData type which will be pooled during runtime so that effect calls can be more optimised by reusing RuntimeData objects</Summary>
+    ///<Summary>This class takes in a T generic type which inherits from UpdateEffectWithRuntimeData class and a RuntimeData type which will be pooled during runtime so that effect calls can be more optimised by reusing RuntimeData objects. Since the UpdateEffectWithRuntimeData class uses a pointer to reference the RuntimeData instance, the pointer size is 4 bytes on a 32 OS and 8 bytes on a 64 OS. Use this if you have runtime variables exceeding 4/8 bytes</Summary>
     public abstract class PooledUpdateEffectExecutor<Effect, RuntimeData> : EffectExecutor<Effect>
     where Effect : UpdateEffectWithRuntimeData<RuntimeData>, new()
     where RuntimeData : class, new()

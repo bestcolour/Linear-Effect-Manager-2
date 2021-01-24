@@ -4,10 +4,18 @@
     using UnityEngine.UI;
 
     ///<Summary>Lerp a graphic's alpha to a value</Summary>
-    public class LerpGraphicAlpha_Executor : UpdateEffectExecutor<LerpGraphicAlpha_Executor.MyEffect>
+    public class LerpGraphicAlpha_Executor : PooledUpdateEffectExecutor<LerpGraphicAlpha_Executor.MyEffect, LerpGraphicAlpha_Executor.MyRuntimeData>
     {
+        public class MyRuntimeData
+        {
+            //Runtime
+            public float Timer = default;
+            public float StartAlpha = default;
+            public Color CurrentColor = default;
+
+        }
         [System.Serializable]
-        public class MyEffect : UpdateEffect
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
         {
             [Header("----- Target -----")]
             [Range(0, 1)]
@@ -18,42 +26,36 @@
             [Range(0, 1000)]
             public float Duration = 1f;
 
-            //Runtime
-            float _timer = default;
-            float _startAlpha = default;
-            Color _currentColour = default;
 
 
             public void BeginExecute()
             {
-                _timer = Duration;
-                _startAlpha = TargetGraphic.color.a;
+                RuntimeData.Timer = Duration;
+                RuntimeData.StartAlpha = TargetGraphic.color.a;
             }
 
             public bool Execute()
             {
-                if (_timer <= 0)
+                if (RuntimeData.Timer <= 0)
                 {
+                    SetCurrentColorAlpha(TargetAlpha);
                     return true;
                 }
 
                 //Count down the timer
-                _timer -= Time.deltaTime;
+                RuntimeData.Timer -= Time.deltaTime;
 
                 //By inverting your start and target vector, you can skip the 1 - (_timer / _duration)
-                float percentage = (_timer / Duration);
-                _currentColour = TargetGraphic.color;
-                _currentColour.a = Mathf.Lerp(TargetAlpha, _startAlpha, percentage);
-                TargetGraphic.color = _currentColour;
-
+                float percentage = (RuntimeData.Timer / Duration);
+                SetCurrentColorAlpha(Mathf.Lerp(TargetAlpha, RuntimeData.StartAlpha, percentage));
                 return false;
             }
 
-            public void EndExecution()
+            void SetCurrentColorAlpha(float alpha)
             {
-                _currentColour = TargetGraphic.color;
-                _currentColour.a = TargetAlpha;
-                TargetGraphic.color = _currentColour;
+                RuntimeData.CurrentColor = TargetGraphic.color;
+                RuntimeData.CurrentColor.a = alpha;
+                TargetGraphic.color = RuntimeData.CurrentColor;
             }
 
 
@@ -61,6 +63,7 @@
 
         protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.BeginExecute();
         }
 
@@ -69,10 +72,7 @@
             return effectData.Execute();
         }
 
-        protected override void EndExecuteEffect(MyEffect effectData)
-        {
-            effectData.EndExecution();
-        }
+
 
     }
 

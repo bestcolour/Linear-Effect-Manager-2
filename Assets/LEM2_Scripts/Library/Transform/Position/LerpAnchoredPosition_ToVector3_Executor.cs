@@ -5,10 +5,17 @@
     using UnityEngine;
 
     ///<Summary>Lerps a recttransform's anchored value from its current value to a target value</Summary>
-    public class LerpAnchoredPosition_ToVector3_Executor : UpdateEffectExecutor<LerpAnchoredPosition_ToVector3_Executor.MyEffect>
+    public class LerpAnchoredPosition_ToVector3_Executor : PooledUpdateEffectExecutor<LerpAnchoredPosition_ToVector3_Executor.MyEffect, LerpAnchoredPosition_ToVector3_Executor.MyRuntimeData>
     {
+        public class MyRuntimeData
+        {
+            //Runtime
+            public Vector3 InitialPosition = default;
+            public float Timer = default;
+        }
+
         [System.Serializable]
-        public class MyEffect : UpdateEffect
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
         {
             public RectTransform TargetTransform = default;
 
@@ -17,47 +24,38 @@
             [Range(0, 1000)]
             public float Duration = 1;
 
-            //Runtime
-            Vector3 _initialPosition = default;
-            float _timer = default;
+
 
             public void BeginExecute()
             {
-                _initialPosition = TargetTransform.anchoredPosition;
-                _timer = Duration;
+                RuntimeData.InitialPosition = TargetTransform.anchoredPosition;
+                RuntimeData.Timer = Duration;
             }
 
             public bool Execute()
             {
-                if (_timer <= 0)
+                if (RuntimeData.Timer <= 0)
                 {
+                TargetTransform.anchoredPosition = TargetPosition;
                     return true;
                 }
 
-                _timer -= Time.deltaTime;
+                RuntimeData.Timer -= Time.deltaTime;
 
-                float percentage = _timer / Duration;
-                TargetTransform.anchoredPosition = Vector3.Lerp(TargetPosition, _initialPosition, percentage);
+                float percentage = RuntimeData.Timer / Duration;
+                TargetTransform.anchoredPosition = Vector3.Lerp(TargetPosition, RuntimeData.InitialPosition, percentage);
                 return false;
             }
 
 
-            public void EndExecute()
-            {
-                TargetTransform.anchoredPosition = TargetPosition;
-            }
-
-
         }
+
+
 
         protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.BeginExecute();
-        }
-
-        protected override void EndExecuteEffect(MyEffect effectData)
-        {
-            effectData.EndExecute();
         }
 
         protected override bool ExecuteEffect(MyEffect effectData)

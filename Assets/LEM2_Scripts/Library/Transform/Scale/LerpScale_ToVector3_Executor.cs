@@ -5,10 +5,17 @@
     using UnityEngine;
 
     ///<Summary>Lerps a transform's scale to a vector3 value</Summary>
-    public class LerpScale_ToVector3_Executor : UpdateEffectExecutor<LerpScale_ToVector3_Executor.MyEffect>
+    public class LerpScale_ToVector3_Executor : PooledUpdateEffectExecutor<LerpScale_ToVector3_Executor.MyEffect, LerpScale_ToVector3_Executor.MyRuntimeData>
     {
+        public class MyRuntimeData
+        {
+            //Runtime
+            public Vector3 _initialScale = default;
+            public float _timer = default;
+        }
+
         [System.Serializable]
-        public class MyEffect : UpdateEffect
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
         {
             public Transform TargetTransform = default;
 
@@ -17,47 +24,34 @@
             [Range(0, 1000)]
             public float Duration = 1;
 
-            //Runtime
-            Vector3 _initialScale = default;
-            float _timer = default;
+
 
             public void BeginExecute()
             {
-                _initialScale = TargetTransform.localScale;
-                _timer = Duration;
+                RuntimeData._initialScale = TargetTransform.localScale;
+                RuntimeData._timer = Duration;
             }
 
             public bool Execute()
             {
-                if (_timer <= 0)
+                if (RuntimeData._timer <= 0)
                 {
+                    TargetTransform.localScale = TargetScale;
                     return true;
                 }
 
-                _timer -= Time.deltaTime;
+                RuntimeData._timer -= Time.deltaTime;
 
-                float percentage = _timer / Duration;
-                TargetTransform.localScale = Vector3.Lerp(TargetScale, _initialScale, percentage);
+                float percentage = RuntimeData._timer / Duration;
+                TargetTransform.localScale = Vector3.Lerp(TargetScale, RuntimeData._initialScale, percentage);
                 return false;
             }
-
-
-            public void EndExecute()
-            {
-                TargetTransform.localScale = TargetScale;
-            }
-
-
         }
 
         protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.BeginExecute();
-        }
-
-        protected override void EndExecuteEffect(MyEffect effectData)
-        {
-            effectData.EndExecute();
         }
 
         protected override bool ExecuteEffect(MyEffect effectData)

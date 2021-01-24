@@ -3,10 +3,20 @@
     using UnityEngine;
 
     ///<Summary>Lerps a transform's scale towards a value about a local pivot</Summary>
-    public class LerpScaleAboutPivot_ToVector3_Executor : UpdateEffectExecutor<LerpScaleAboutPivot_ToVector3_Executor.LerpScale>
+    public class LerpScaleAboutPivot_ToVector3_Executor : PooledUpdateEffectExecutor<LerpScaleAboutPivot_ToVector3_Executor.MyEffect, LerpScaleAboutPivot_ToVector3_Executor.MyRuntimeData>
     {
+        public class MyRuntimeData
+        {
+            //Runtime
+            public Vector3 InitialScale = default
+                , Direction = default
+                , InitialPosition = default
+                ;
+            public float Timer = default;
+        }
+
         [System.Serializable]
-        public class LerpScale : UpdateEffect
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
         {
             public Transform TargetTransform = default;
 
@@ -17,69 +27,57 @@
             [Range(0, 1000)]
             public float Duration = 1;
 
-            //Runtime
-            Vector3 _initialScale = default
-            , _direction = default
-            , _initialPos = default
-            ;
-            float _timer = default;
+
 
             public void BeginExecute()
             {
-                _initialPos = TargetTransform.position;
+                RuntimeData.InitialPosition = TargetTransform.position;
                 // _pivotWorldPos = _transform.TransformPoint(_localPivot);
                 //Get the original direction vector (with their mags intact) from the center of the transform to the pivot point
-                _direction = TargetTransform.TransformPoint(LocalPivot) - _initialPos;
-                _initialScale = TargetTransform.localScale;
-                _timer = Duration;
+                RuntimeData.Direction = TargetTransform.TransformPoint(LocalPivot) - RuntimeData.InitialPosition;
+                RuntimeData.InitialScale = TargetTransform.localScale;
+                RuntimeData.Timer = Duration;
             }
 
             public bool Execute()
             {
-                if (_timer <= 0)
+                if (RuntimeData.Timer <= 0)
                 {
+                    TargetTransform.localScale = TargetScale;
                     return true;
                 }
 
-                _timer -= Time.deltaTime;
+                RuntimeData.Timer -= Time.deltaTime;
 
-                float percentage = 1 - (_timer / Duration);
+                float percentage = 1 - (RuntimeData.Timer / Duration);
                 //Lerp the scale of the cube
-                TargetTransform.localScale = Vector3.Lerp(_initialScale, TargetScale, percentage);
+                TargetTransform.localScale = Vector3.Lerp(RuntimeData.InitialScale, TargetScale, percentage);
 
 
                 //============= SETTING THE NEW POSITIION OF THE TRANSFORM ====================
                 //Invert the direction so that we can change the transform's position in the scaleddirection
-                Vector3 dir = -_direction;
+                Vector3 dir = -RuntimeData.Direction;
                 dir *= percentage;
 
                 //Translate the dir point back to pivot
-                dir += _initialPos;
+                dir += RuntimeData.InitialPosition;
                 TargetTransform.position = dir;
 
                 return false;
             }
 
 
-            public void EndExecute()
-            {
-                TargetTransform.localScale = TargetScale;
-            }
 
 
         }
 
-        protected override void BeginExecuteEffect(LerpScale effectData)
+        protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.BeginExecute();
         }
 
-        protected override void EndExecuteEffect(LerpScale effectData)
-        {
-            effectData.EndExecute();
-        }
-
-        protected override bool ExecuteEffect(LerpScale effectData)
+        protected override bool ExecuteEffect(MyEffect effectData)
         {
             return effectData.Execute();
         }

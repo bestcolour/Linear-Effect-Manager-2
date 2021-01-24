@@ -5,10 +5,17 @@
     using UnityEngine;
 
     ///<Summary>Lerps a transform's localposition from its current value to a target value</Summary>
-    public class LerpLocalPosition_ToPosition_Executor : UpdateEffectExecutor<LerpLocalPosition_ToPosition_Executor.MyEffect>
+    public class LerpLocalPosition_ToPosition_Executor : PooledUpdateEffectExecutor<LerpLocalPosition_ToPosition_Executor.MyEffect, LerpLocalPosition_ToPosition_Executor.MyRuntimeData>
     {
+        public class MyRuntimeData
+        {
+            //Runtime
+            public Vector3 InitialPosition = default;
+            public float Timer = default;
+        }
+
         [System.Serializable]
-        public class MyEffect : UpdateEffect
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
         {
             public Transform TargetTransform = default;
 
@@ -18,28 +25,26 @@
             [Range(0, 1000)]
             public float Duration = 1;
 
-            //Runtime
-            Vector3 _initialPosition = default;
-            float _timer = default;
+
 
             public void BeginExecute()
             {
-                _initialPosition = TargetTransform.localPosition;
-                _timer = Duration;
+                RuntimeData.InitialPosition = TargetTransform.localPosition;
+                RuntimeData.Timer = Duration;
             }
 
             public bool Execute()
             {
-                if (_timer <= 0)
+                if (RuntimeData.Timer <= 0)
                 {
                     TargetTransform.localPosition = TargetLocalPos;
                     return true;
                 }
 
-                _timer -= Time.deltaTime;
+                RuntimeData.Timer -= Time.deltaTime;
 
-                float percentage = _timer / Duration;
-                TargetTransform.localPosition = Vector3.Lerp(TargetLocalPos, _initialPosition, percentage);
+                float percentage = RuntimeData.Timer / Duration;
+                TargetTransform.localPosition = Vector3.Lerp(TargetLocalPos, RuntimeData.InitialPosition, percentage);
                 return false;
             }
 
@@ -47,6 +52,7 @@
 
         protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.BeginExecute();
         }
 
