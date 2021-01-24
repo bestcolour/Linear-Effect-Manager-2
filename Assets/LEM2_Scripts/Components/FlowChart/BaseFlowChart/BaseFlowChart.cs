@@ -118,6 +118,19 @@
             EffectType effectData = executor.GetEffectData(dataElmtIndex);
             return effectData;
         }
+
+        public EffectType GetLastEffect<ExecutorType, EffectType>(string blockName)
+      where ExecutorType : EffectExecutor<EffectType>
+      where EffectType : Effect, new()
+        {
+            Block block = GetBlock(blockName);
+            int dataElmtIndex = block.GetLastEffectDataElementIndex();
+
+            ExecutorType executor = GetComponent<ExecutorType>();
+
+            EffectType effectData = executor.GetEffectData(dataElmtIndex);
+            return effectData;
+        }
         #endregion
 
         #region Checks

@@ -59,6 +59,11 @@
         {
             return _orderArray[index].DataElementIndex;
         }
+
+        public int GetLastEffectDataElementIndex()
+        {
+            return _orderArray[_orderArray.Length - 1].DataElementIndex;
+        }
         #endregion
 
         #region Update Methods
