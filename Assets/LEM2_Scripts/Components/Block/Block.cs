@@ -82,7 +82,7 @@
             _scanFrontier = 0;
         }
 
-        ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop. </Summary>
+        ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop if effect requires more than one frame to carry out. </Summary>
         public bool ExecuteBlockEffects()
         {
             bool allScannedThrough = ScanBlockEffects();

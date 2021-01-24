@@ -44,9 +44,9 @@
 
         #endregion
 
-        #region ------------------ Public Methods ---------------------------
+        #region ================== Public Methods ===========================
 
-        #region GetBlock
+        #region --------------------- GetBlock --------------------------------
         ///<Summary>Get the block via index in the block array</Summary>
         public Block GetBlock(int index)
         {
@@ -60,7 +60,7 @@
         }
         #endregion
 
-        #region PlayBlock
+        #region --------------------- PlayBlock ---------------------
         ///<Summary>Plays a block via block index</Summary>
         public void PlayBlock(int index)
         {
@@ -89,12 +89,16 @@
                 return;
             }
 
-            _activeBlockList.Add(block);
-            _activeBlockHashset.Add(block);
+            //Plays the block. If the block does not need multiple frames to carryout, they will not be addedd to the update loop
+            if (!block.ExecuteBlockEffects())
+            {
+                _activeBlockList.Add(block);
+                _activeBlockHashset.Add(block);
+            }
         }
         #endregion
 
-        #region StopBlock Methods
+        #region --------------------- StopBlock Methods ---------------------
         public void TryStopBlock(string blockName)
         {
             if (!CheckBlockIsPlaying(blockName)) return;
@@ -105,7 +109,7 @@
         }
         #endregion
 
-        #region Get Effect
+        #region --------------------- Get Effect ---------------------
         public EffectType GetEffect<ExecutorType, EffectType>(string blockName, int effectIndex)
         where ExecutorType : EffectExecutor<EffectType>
         where EffectType : Effect, new()
@@ -133,7 +137,7 @@
         }
         #endregion
 
-        #region Checks
+        #region --------------------- Checks ---------------------
         ///<Summary>Checks if a block is playing or not. Returns true if block is playing</Summary>
         public bool CheckBlockIsPlaying(int index)
         {
