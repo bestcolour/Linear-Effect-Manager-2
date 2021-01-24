@@ -98,9 +98,10 @@
         public void TryStopBlock(string blockName)
         {
             if (!CheckBlockIsPlaying(blockName)) return;
-
             Block block = GetBlock(blockName);
             block.EndBlockEffect();
+            _activeBlockHashset.Remove(block);
+            _activeBlockList.Remove(block);
         }
         #endregion
 

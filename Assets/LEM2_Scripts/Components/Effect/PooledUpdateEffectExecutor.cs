@@ -10,26 +10,6 @@
     {
         List<RuntimeData> _runtimePool = new List<RuntimeData>();
 
-        public override bool ExecuteEffectAtIndex(int index, out bool haltCodeFlow)
-        {
-            UpdateEffect effect = _effectDatas[index];
-            haltCodeFlow = effect.HaltUntilFinished;
-
-            if (!effect.FirstFrameCall)
-            {
-                BeginExecuteEffect(_effectDatas[index]);
-            }
-
-            if (ExecuteEffect(_effectDatas[index]))
-            {
-                //When effect has finally over
-                EndExecuteEffect(_effectDatas[index]);
-                return true;
-            }
-
-            return false;
-        }
-
         ///<Summary>Stops an effect from updating. The effect's EndExecuteEffect() will be called</Summary>
         public override void StopEffectUpdate(int index)
         {

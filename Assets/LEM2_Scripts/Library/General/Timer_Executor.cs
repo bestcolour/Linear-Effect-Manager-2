@@ -40,6 +40,7 @@
 
         protected override void BeginExecuteEffect(MyEffect effectData)
         {
+            base.BeginExecuteEffect(effectData);
             effectData.Reset();
         }
     }

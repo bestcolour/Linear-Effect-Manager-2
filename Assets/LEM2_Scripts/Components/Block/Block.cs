@@ -73,8 +73,8 @@
             }
             _updatingEffectIndices.Clear();
 
-            //End the scan frontier
-            _scanFrontier = _orderArray.Length;
+            //Reset the scan frontier
+            _scanFrontier = 0;
         }
 
         ///<Summary>Runs all of the effect code on the block by sequentially going down the Effect Order array. Returns true when all of the block's effects have been fully finished. This should be called inside an update loop. </Summary>
