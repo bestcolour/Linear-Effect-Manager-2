@@ -6,8 +6,11 @@
 
     public class FlowChart : BaseFlowChart
     {
-        private void Awake()
+        protected override void Awake()
         {
+#if UNITY_EDITOR
+            base.Awake();
+#endif
             GameAwake();
         }
 

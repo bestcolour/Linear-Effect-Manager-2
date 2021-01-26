@@ -14,7 +14,7 @@ namespace LinearEffects
         {
             [Tooltip("If this is set to true, all Exectuor components will be hidden in the inspector window")]
             [SerializeField]
-            public bool HideExecutors = true;
+            public bool HideExecutors = false;
         }
 
         public const string PROPERTYNAME_BLOCKARRAY = "_blocks";
@@ -27,22 +27,19 @@ namespace LinearEffects
         }
 
 
-        #region Hiding In Inspector
+        #region ----------------- Hiding In Inspector -----------------------
         [SerializeField, HideInInspector]
         bool _prevHideOption = false;
-        bool _onAwake = true;
+
+        protected virtual void Editor_Awake()
+        {
+            if (_settings.HideExecutors)
+                Editor_HideExecutors();
+        }
 
 
         protected virtual void OnValidate()
         {
-            //The very first time this script is initialized (so when it has been newly added onto a gameobject or when you open a scene,)
-            if (_onAwake)
-            {
-                _onAwake = false;
-                Editor_HideExecutors();
-                return;
-            }
-
             if (_prevHideOption == _settings.HideExecutors)
             {
                 return;
@@ -51,6 +48,18 @@ namespace LinearEffects
             _prevHideOption = _settings.HideExecutors;
             Editor_HideExecutors();
         }
+
+
+        protected virtual void Reset()
+        {
+            Editor_ResetFlowChart();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Editor_ResetFlowChart();
+        }
+
 
         private void Editor_HideExecutors()
         {

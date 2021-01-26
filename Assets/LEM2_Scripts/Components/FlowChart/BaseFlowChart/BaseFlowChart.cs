@@ -7,7 +7,7 @@
     //Flow chart is the class which holds/creates blocks
     // which can be called at different times (ie when game starts, game ends , )
 #if UNITY_EDITOR
-    [DisallowMultipleComponent]
+    [DisallowMultipleComponent,ExecuteInEditMode]
 #endif
     public partial class BaseFlowChart : MonoBehaviour
     {
