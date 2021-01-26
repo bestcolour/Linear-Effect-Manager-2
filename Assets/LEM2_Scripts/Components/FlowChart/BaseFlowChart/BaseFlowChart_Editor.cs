@@ -84,6 +84,7 @@ namespace LinearEffects
             BaseEffectExecutor[] allExecutorsOnFlowChart = GetComponents<BaseEffectExecutor>();
             foreach (var item in allExecutorsOnFlowChart)
             {
+                //Ignore the DestroyImmediate error
                 DestroyImmediate(item);
             }
         }
