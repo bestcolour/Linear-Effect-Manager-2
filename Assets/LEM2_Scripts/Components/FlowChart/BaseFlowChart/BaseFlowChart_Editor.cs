@@ -34,7 +34,7 @@ namespace LinearEffects
         protected virtual void Editor_Awake()
         {
             if (_settings.HideExecutors)
-                Editor_HideExecutors();
+                Editor_HideExecutors(_settings.HideExecutors);
         }
 
 
@@ -46,7 +46,7 @@ namespace LinearEffects
             }
 
             _prevHideOption = _settings.HideExecutors;
-            Editor_HideExecutors();
+            Editor_HideExecutors(_prevHideOption);
         }
 
 
@@ -57,13 +57,13 @@ namespace LinearEffects
 
         protected virtual void OnDestroy()
         {
-            Editor_ResetFlowChart();
+            Editor_HideExecutors(false);
         }
 
 
-        private void Editor_HideExecutors()
+        private void Editor_HideExecutors(bool state)
         {
-            HideFlags flag = _settings.HideExecutors ? HideFlags.HideInInspector : HideFlags.None;
+            HideFlags flag = state ? HideFlags.HideInInspector : HideFlags.None;
             BaseEffectExecutor[] hideExecutors = GetComponents<BaseEffectExecutor>();
 
             foreach (var item in hideExecutors)
