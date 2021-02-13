@@ -96,6 +96,11 @@
             {"UI/LerpGraphicColour", typeof(LerpGraphicColour_Executor)},
             {"UI/LerpGraphicAlpha", typeof(LerpGraphicAlpha_Executor)},
             {"UI/LerpCanvasGroupAlpha", typeof(LerpCanvasGroupAlpha_Executor)},
+
+            #region ---------------- Text ----------------------
+            {"UI/Text/SetText", typeof(SetText_Executor)},
+            {"UI/Text/SetTextMeshPro", typeof(SetText_TMP_Executor)},
+            #endregion
             #endregion
 
             #region ------------------- Transform ------------------------
