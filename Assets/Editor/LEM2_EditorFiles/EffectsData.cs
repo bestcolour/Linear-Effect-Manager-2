@@ -80,6 +80,9 @@
             {"UnityEvent", typeof(UnityEvent_Executor)},
             #endregion
 
+            #region --------------- GameObject ----------------
+            {"GameObject/SetActive", typeof(SetActive_Executor)},
+            #endregion
 
             #region ----------------- Animator --------------------
             {"Animator/SetBool", typeof(SetAnimatorBool_Executor)},
@@ -102,12 +105,12 @@
             {"Transform/Position/LerpAnchoredPosition-ToVector3", typeof(LerpAnchoredPosition_ToVector3_Executor)},
             #endregion
 
-            #region Scale
+            #region ----------------- Scale ----------------
             {"Transform/Scale/LerpScaleAboutPivot-ToVector3", typeof(LerpScaleAboutPivot_ToVector3_Executor)},
             {"Transform/Scale/LerpScale-ToVector3", typeof(LerpScale_ToVector3_Executor)},
             #endregion
 
-            #region Rotation
+            #region ----------------- Rotation -----------------
             {"Transform/Rotation/LerpRotation-ToVector3", typeof(LerpRotate_ToVector3_Executor)},
             // {"Transform/Rotation/LerpRotationAbout-LocalVector3Pivot", typeof(LerpRotateAboutPivot_ToVector3_Executor)},
             // {"Transform/Rotation/LerpRotationAbout-TransformPivot", typeof(LerpRotateAboutPivot_ToTransform_Executor)},
