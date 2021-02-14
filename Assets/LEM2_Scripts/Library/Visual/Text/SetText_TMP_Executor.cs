@@ -14,6 +14,7 @@
             [Header("----- Play Block -----")]
             public TMP_Text TextUI = default;
 
+            [TextArea]
             public string TextToSet = default;
         }
 
