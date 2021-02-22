@@ -6,6 +6,7 @@
     using UnityEngine;
     using LinearEffects;
     using LinearEffects.DefaultEffects;
+    using LinearEffects.ScriptableEvents;
 
     //This file stores all the data of all the types of executor as well as their label names
     public static class EffectsData
@@ -82,6 +83,13 @@
 
             #region --------------- GameObject ----------------
             {"GameObject/SetActive", typeof(SetActive_Executor)},
+            #endregion
+
+            #region -------------- Scriptable Events ------------------
+            {"ScriptableEvents/RVoid", typeof(SOEvent_RVoid_Executor)},
+            {"ScriptableEvents/RVoid_Float", typeof(SOEvent_RVoid_Float_Executor)},
+            {"ScriptableEvents/RVoid_Int", typeof(SOEvent_RVoid_Int_Executor)},
+
             #endregion
 
             #region ----------------- Animator --------------------
