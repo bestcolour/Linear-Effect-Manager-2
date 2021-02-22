@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     [System.Serializable]
-    ///<Summary>Plays a block name from a selected flowchart</Summary>
+    ///<Summary>Sets a gameobject's active state</Summary>
     public class SetActive_Executor : EffectExecutor<SetActive_Executor.MyEffect>
     {
         [System.Serializable]

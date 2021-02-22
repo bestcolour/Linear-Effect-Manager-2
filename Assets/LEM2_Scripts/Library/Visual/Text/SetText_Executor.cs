@@ -5,7 +5,7 @@
     using UnityEngine;
     using UnityEngine.UI;
     [System.Serializable]
-    ///<Summary>Plays a block name from a selected flowchart</Summary>
+    ///<Summary>Sets the UnityEngine.UI text component's text value</Summary>
     public class SetText_Executor : EffectExecutor<SetText_Executor.MyEffect>
     {
         [System.Serializable]

@@ -5,7 +5,7 @@
     using UnityEngine;
     using TMPro;
     [System.Serializable]
-    ///<Summary>Plays a block name from a selected flowchart</Summary>
+    ///<Summary>Sets the TMPro text component's text value</Summary>
     public class SetText_TMP_Executor : EffectExecutor<SetText_TMP_Executor.MyEffect>
     {
         [System.Serializable]

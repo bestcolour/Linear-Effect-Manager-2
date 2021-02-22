@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     [System.Serializable]
+    ///<Summary>Sets an animator's float parameter to a value</Summary>
     public class SetAnimatorFloat_Executor : EffectExecutor<SetAnimatorFloat_Executor.MyEffect>
     {
         [System.Serializable]

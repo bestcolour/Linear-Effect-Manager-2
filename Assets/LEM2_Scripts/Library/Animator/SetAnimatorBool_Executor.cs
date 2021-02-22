@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     [System.Serializable]
+    ///<Summary>Sets an animator's bool parameter to a value</Summary>
     public class SetAnimatorBool_Executor : EffectExecutor<SetAnimatorBool_Executor.MyEffect>
     {
         [System.Serializable]

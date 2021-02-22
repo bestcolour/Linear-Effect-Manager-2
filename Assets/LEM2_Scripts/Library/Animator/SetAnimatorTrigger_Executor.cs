@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     [System.Serializable]
+    ///<Summary>Triggers an Animator's trigger parameter</Summary>
     public class SetAnimatorTrigger_Executor : EffectExecutor<SetAnimatorTrigger_Executor.MyEffect>
     {
         [System.Serializable]
