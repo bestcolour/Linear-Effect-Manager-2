@@ -16,7 +16,7 @@
         ///<Summary>Returns a effect data instance at the given index</Summary>
         public T GetEffectData(int index) { return _effectDatas[index]; }
 
-        ///<Summary>The method which will called every frame after StartExecuteEffect is called. Returns true if Effect has been completely finished executing.</Summary>
+        ///<Summary>The method which will called every frame after StartExecuteEffect is called if executor is an updating executor. Returns true if Effect has been completely finished executing.</Summary>
         protected abstract bool ExecuteEffect(T effectData);
 
         ///<Summary>Called by Block's EffectOrder during a block's execute effects call. Returns true when the effect being executed is complete</Summary>
@@ -32,7 +32,7 @@
         ///<Summary>Effects which do not take multiple frames to complete will not need to call EndEffectExecute because it is not defined for them</Summary>
         public override void StopEffectUpdate(int index)
         {
-     //Effects which do not take multiple frames to complete will not need to call EndEffectExecute because it is not defined for them
+            //Effects which do not take multiple frames to complete will not need to call EndEffectExecute because it is not defined for them
         }
 
     }
