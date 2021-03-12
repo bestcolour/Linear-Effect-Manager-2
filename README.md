@@ -31,7 +31,11 @@ You can go to the:
 			<br/>c) [EffectExecutor Guide](#effectExecutor-guide) 
 			<br/>d) [UpdateEffectExecutor Introduction](#updateEffectExecutor-introduction) 
 			<br/>e) [UpdateEffectExecutor Guide](#updateEffectExecutor-guide) 
-			<br/>f) [Important rules to adhere to when adding to EffectsData.cs](#important-rules-to-adhere-to-when-adding-to-effectsData.cs) 
+			<br/>f) [Important rules to adhere to when adding to EffectsData](#important-rules-to-adhere-to-when-adding-to-effectsData.cs) 
+			<br/>g) [PooledUpdateEffectExecutor Introduction](#pooledUpdateEffectExecutor-introduction) 
+			<br/>h) [PooledUpdateEffectExecutor Example](#pooledUpdateEffectExecutor-example) 
+			
+			
 
 
 
@@ -311,6 +315,7 @@ public class CustomEffectExample_Executor : UpdateEffectExecutor<CustomEffectExa
 {
     //You have to create a class which inherits from either the Effect or UpdateEffect class
     //The decision for the type of class to inherit from is from the type of effect executor you are creating.
+    [System.Serializable]
     public class MyEffect : UpdateEffect
     {
         //Declare whatever variables & methods you want to use in your effect
@@ -360,6 +365,7 @@ public class CustomEffectExample_Executor : UpdateEffectExecutor<CustomEffectExa
 {
     //You have to create a class which inherits from either the Effect or UpdateEffect class
     //The decision for the type of class to inherit from is from the type of effect executor you are creating.
+    [System.Serializable]
     public class MyEffect : UpdateEffect
     {
   	//Declare whatever variables & methods you want to use in your effect
@@ -454,7 +460,7 @@ Inside of EffectsData.cs
 
 
 
-### Important rules to adhere to when adding to EffectsData.cs
+### Important rules to adhere to when adding to EffectsData
 <br/>
 Dictionary key: The path of the effect executor to be shown in the SearchBox. There are two parts to the key: FullExecutorName and ExecutorName.
 	- The FullExecutorName is the entire string path with all the slashes. The anything inbetween the start of the string path to the start of the ExecutorName can be changed freely
@@ -464,4 +470,90 @@ Dictionary key: The path of the effect executor to be shown in the SearchBox. Th
 Dictionary Value: The System type of your own custom effect executor. Do not rename this once you started using it in Blocks.
 
 	
+### PooledUpdateEffectExecutor Introduction
 
+```
+  ///<Summary>This class takes in a T generic type which inherits from UpdateEffectWithRuntimeData class and a RuntimeData type which will be pooled during runtime so that effect calls can be more optimised by reusing RuntimeData objects. Since the UpdateEffectWithRuntimeData class uses a pointer to reference the RuntimeData instance, the pointer size is 4 bytes on a 32 OS and 8 bytes on a 64 OS. Use this if you have runtime variables exceeding 4/8 bytes</Summary>
+    public abstract class PooledUpdateEffectExecutor<Effect, RuntimeData> : UpdateEffectExecutor<Effect>
+    where Effect : UpdateEffectWithRuntimeData<RuntimeData>, new()
+    where RuntimeData : class, new()
+```
+The PooledUpdateEffectExecutor is an optimized UpdateEffectExecutor class which your custom effects can inherit from.
+
+<br/>
+<br/>
+<br/>
+
+
+### PooledUpdateEffectExecutor Example
+```
+ using UnityEngine;
+    using UnityEngine.UI;
+    [System.Serializable]
+    ///<Summary>Lerp a graphic's color to another color value</Summary>
+    public class LerpGraphicColour_Executor : PooledUpdateEffectExecutor<LerpGraphicColour_Executor.MyEffect, LerpGraphicColour_Executor.MyRuntimeData>
+    {
+        public class MyRuntimeData
+        {
+            //Runtime. 
+            public float Timer = default;
+            public Color StartColor = default;
+
+        }
+        [System.Serializable]
+        public class MyEffect : UpdateEffectWithRuntimeData<MyRuntimeData>
+        {
+            [Header("----- Colour References -----")]
+            public Color TargetColor = Color.white;
+
+            [SerializeField]
+            public Graphic TargetGraphic = default;
+
+            [SerializeField]
+            [Range(0, 1000)]
+            public float Duration = 1f;
+
+
+
+            public void StartExecute()
+            {
+                RuntimeData.Timer = Duration;
+                RuntimeData.StartColor = TargetGraphic.color;
+            }
+
+            public bool Execute()
+            {
+                if (RuntimeData.Timer <= 0)
+                {
+                    TargetGraphic.color = TargetColor;
+                    return true;
+                }
+
+                //Count down the timer
+                RuntimeData.Timer -= Time.deltaTime;
+
+                //By inverting your start and target vector, you can skip the 1 - (_timer / _duration)
+                float percentage = (RuntimeData.Timer / Duration);
+                TargetGraphic.color = Vector4.Lerp(TargetColor, RuntimeData.StartColor, percentage);
+
+                return false;
+            }
+
+
+        }
+
+
+        protected override void BeginExecuteEffect(MyEffect effectData)
+        {
+            base.BeginExecuteEffect(effectData);
+            effectData.StartExecute();
+        }
+
+        protected override bool ExecuteEffect(MyEffect effectData)
+        {
+            return effectData.Execute();
+        }
+    }
+```
+
+The PooledUpdateEffectExecutor looks more complex to set up but its just like the UpdateEffectExecutor but with a few more steps. The BeginExecuteEffect(), ExecuteEffect() and EndExecuteEffect() are the same as that in UpdateEffectExecutor. The only change needed is how your custom effects classes are declared as well as the additional inclusion of the Runtime class.
