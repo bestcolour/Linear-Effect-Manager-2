@@ -13,13 +13,13 @@ using LinearEffects;
 //Else if it requires updating over multiple frames, (for eg fading a text over x number of seconds)
 //- use the UpdateEffectExecutor class
 
-public class CustomEffectExample_Executor : EffectExecutor<CustomEffectExample_Executor.CustomEffectData>
+public class CustomEffectExample_Executor : EffectExecutor<CustomEffectExample_Executor.MyEffect>
 {
 
     //Step 2)
     //You have to create a class which inherits from either the Effect or UpdateEffect class
     //The decision for the type of class to inherit from is the same as Step 1
-    public class CustomEffectData : Effect
+    public class MyEffect : Effect
     {
         //Step 3
         //Declare whatever variables & methods you want to use in your effect
@@ -37,7 +37,7 @@ public class CustomEffectExample_Executor : EffectExecutor<CustomEffectExample_E
     //This method can be auto generated (if you are using visual studio code or visual studio, there is a shortcut key for it)
     //but basically, add whatever you want to execute here to "Execute your effect" 
     //and always ensure to return true if your effect is completed
-    protected override bool ExecuteEffect(CustomEffectData effectData)
+    protected override bool ExecuteEffect(MyEffect effectData)
     {
         effectData.ExecuteEffect();
         return true;
