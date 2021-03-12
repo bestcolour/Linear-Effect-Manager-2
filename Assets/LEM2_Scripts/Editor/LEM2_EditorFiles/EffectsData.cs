@@ -61,7 +61,7 @@
             //    ^            ^                                ^
             //    A            B                                C
             //
-            //A: How you want to catergorise your executors, use backslash to create a folder
+            //A: How you want to catergorise your executors, use forwardslash to create a folder
             //B: What you want your Executor to be named when it shows up in the search box (you cannot have duplicate names)
             //C: Your Executor type, reminder to not rename this once you started using it in Blocks
 
